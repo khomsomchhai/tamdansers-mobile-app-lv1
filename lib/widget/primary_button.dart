@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tamdansers_app/constants/app_colors.dart';
 
 class PrimaryButton extends StatelessWidget {
   final String label;
+  final Color backgroundColor;
+  final Color foregroundColor;
   final VoidCallback onPressed;
-  const PrimaryButton({super.key, required this.label , required this.onPressed});
+  const PrimaryButton({
+    super.key, 
+    required this.label, 
+    required this.backgroundColor,
+    required this.foregroundColor,
+    required this.onPressed
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +20,7 @@ class PrimaryButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryMain,
+          backgroundColor: backgroundColor,
           padding: EdgeInsets.symmetric(vertical: 10)
         ),
         onPressed: onPressed, 
@@ -21,7 +28,7 @@ class PrimaryButton extends StatelessWidget {
           label,
           style: GoogleFonts.kantumruyPro(
             fontSize: 26,
-            color: AppColors.white,
+            color: foregroundColor,
             fontWeight: FontWeight.bold
           ),
         )
