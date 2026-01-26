@@ -18,6 +18,10 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor: AppColors.backgroundLight,
+        appBarTheme: AppBarTheme(
+          backgroundColor: AppColors.backgroundLight,
+          elevation: 0,
+        )
       ),
       home: Scaffold(),
       initialRoute: AppRoutes.roleSelectionScreen,
