@@ -16,4 +16,6 @@ class AppColors{
   static const Color error = Color(0xFFFF3B30);
   static const Color link = Color(0xff007AFF);
 
+  static const Color transparent = Colors.transparent;
+
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tamdansers_app/constants/app_colors.dart';
 
 class PrimaryButton extends StatelessWidget {
   final String label;
@@ -20,8 +21,9 @@ class PrimaryButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
+          shadowColor: AppColors.transparent,
           backgroundColor: backgroundColor,
-          padding: EdgeInsets.symmetric(vertical: 10)
+          padding: EdgeInsets.symmetric(vertical: 10),
         ),
         onPressed: onPressed, 
         child: Text(

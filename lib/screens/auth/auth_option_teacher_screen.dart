@@ -12,13 +12,14 @@ class AuthOptionTeacherScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
               SizedBox(
-                height: size.height*0.35,
+                height: size.height*0.4,
                 child: SvgPicture.asset(
                   AppImages.imageClassroom,
                   fit: BoxFit.contain,
