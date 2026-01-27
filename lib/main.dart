@@ -4,6 +4,7 @@ import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/screens/auth/auth_option_teacher_screen.dart';
 import 'package:tamdansers_app/screens/auth/role_selection_screen.dart';
 import 'package:tamdansers_app/screens/auth/splash_screen.dart';
+import 'package:tamdansers_app/screens/teacher/teacher_dashboard.dart';
 
 void main() {
   runApp(const MainApp());
@@ -28,7 +29,8 @@ class MainApp extends StatelessWidget {
       routes: {
         "/splash_screen": (context) => SplashScreen(),
         "/role_selection_screen": (context) => RoleSelectionScreen(),
-        "/auth_option_teacher_screen": (context) => AuthOptionTeacherScreen()
+        "/auth_option_teacher_screen": (context) => AuthOptionTeacherScreen(),
+        "/teacher_dashboard_screen": (context) => TeacherDashboard(),
       },
     );
   }

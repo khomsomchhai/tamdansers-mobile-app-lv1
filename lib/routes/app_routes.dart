@@ -4,5 +4,5 @@ class AppRoutes{
   static const String roleSelectionScreen = "/role_selection_screen";
   //teacher
   static const String authOptionTeacherScreen = "/auth_option_teacher_screen";
-  
+  static String TeacherDashboardScreen = "/teacher_dashboard_screen";
 }
