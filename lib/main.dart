@@ -4,7 +4,7 @@ import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/screens/auth/auth_option_teacher_screen.dart';
 import 'package:tamdansers_app/screens/auth/role_selection_screen.dart';
 import 'package:tamdansers_app/screens/auth/splash_screen.dart';
-import 'package:tamdansers_app/screens/teacher/teacher_dashboard.dart';
+import 'package:tamdansers_app/screens/parents/parents_dashboard.dart';
 
 void main() {
   runApp(const MainApp());
