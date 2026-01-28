@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/widget/primary_button.dart';
 
 class AuthOptionTeacherScreen extends StatelessWidget {
@@ -40,7 +41,9 @@ class AuthOptionTeacherScreen extends StatelessWidget {
                 label: "ចូលគណនី",
                 backgroundColor: AppColors.primaryMain,
                 foregroundColor: AppColors.white,
-                onPressed: (){}
+                onPressed: (){
+                  Navigator.pushNamed(context, AppRoutes.TeacherDashboardScreen);
+                }
               ),
               SizedBox(height: 20,),
               PrimaryButton(
