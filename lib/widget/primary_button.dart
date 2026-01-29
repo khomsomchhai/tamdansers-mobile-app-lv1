@@ -23,13 +23,13 @@ class PrimaryButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           shadowColor: AppColors.transparent,
           backgroundColor: backgroundColor,
-          padding: EdgeInsets.symmetric(vertical: 10),
+          padding: EdgeInsets.symmetric(vertical: 12),
         ),
         onPressed: onPressed, 
         child: Text(
           label,
           style: GoogleFonts.kantumruyPro(
-            fontSize: 26,
+            fontSize: 18,
             color: foregroundColor,
             fontWeight: FontWeight.bold
           ),

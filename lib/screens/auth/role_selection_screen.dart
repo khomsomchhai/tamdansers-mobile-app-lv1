@@ -13,57 +13,58 @@ class RoleSelectionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              SizedBox(
-                height: size.height*0.35,
-                child: SvgPicture.asset(
-                  AppImages.imageSelectRole,
-                  fit: BoxFit.contain,
-                ),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          children: [
+            SizedBox(
+              height: size.height*0.30,
+              child: SvgPicture.asset(
+                AppImages.imageSelectRole,
+                fit: BoxFit.contain,
               ),
-              Spacer(),
-              Text(
-                "សូមជ្រើសរើសមុខងារ",
-                style: AppTextStyle.title32,
-              ),
-              Text(
-                "ចូលប្រើប្រាស់",
-                style: AppTextStyle.title32,
-              ),
-              Spacer(),
-              //custom widget
-              PrimaryButton(
-                label: "គ្រូបង្រៀន",
-                backgroundColor: AppColors.primaryMain,
-                foregroundColor: AppColors.white, 
-                onPressed: (){
-                  Navigator.pushNamed(
-                    context, 
-                    AppRoutes.authOptionTeacherScreen
-                  );
-                }
-              ),
-              SizedBox(height: 20,),
-              PrimaryButton(
-                label: "សិស្ស",
-                backgroundColor: AppColors.primaryMain,
-                foregroundColor: AppColors.white,
-                onPressed: (){}
-              ),
-              SizedBox(height: 20,),
-              PrimaryButton(
-                label: "អាណាព្យាបាលសិស្ស",
-                backgroundColor: AppColors.primaryMain,
-                foregroundColor: AppColors.white,
-                onPressed: (){}
-              ),
-              SizedBox(height: 30,)
-            ],
-          ),
+            ),
+            Spacer(),
+            Text(
+              "សូមជ្រើសរើសមុខងារ",
+              style: AppTextStyle.title28,
+            ),
+            Text(
+              "ចូលប្រើប្រាស់",
+              style: AppTextStyle.title28,
+            ),
+            Spacer(),
+            //custom widget
+            PrimaryButton(
+              label: "គ្រូបង្រៀន",
+              backgroundColor: AppColors.primaryMain,
+              foregroundColor: AppColors.white, 
+              onPressed: (){
+                Navigator.pushNamed(
+                  context, 
+                  AppRoutes.loginTeacherScreen
+                );
+              }
+            ),
+            SizedBox(height: 20,),
+            PrimaryButton(
+              label: "សិស្ស",
+              backgroundColor: AppColors.primaryMain,
+              foregroundColor: AppColors.white,
+              onPressed: (){}
+            ),
+            SizedBox(height: 20,),
+            PrimaryButton(
+              label: "អាណាព្យាបាលសិស្ស",
+              backgroundColor: AppColors.primaryMain,
+              foregroundColor: AppColors.white,
+              onPressed: (){}
+            ),
+            SizedBox(height: 50,)
+          ],
         ),
       ),
     );
