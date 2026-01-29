@@ -28,7 +28,7 @@ class MainApp extends StatelessWidget {
         )
       ),
       home: Scaffold(),
-      initialRoute: AppRoutes.studentDashboard,
+      initialRoute: AppRoutes.roleSelectionScreen,
       routes: {
         "/splash_screen": (context) => SplashScreen(),
         "/role_selection_screen": (context) => RoleSelectionScreen(),
