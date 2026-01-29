@@ -34,7 +34,7 @@ class _SignUpTeacherScreenState extends State<SignUpTeacherScreen> {
         child: Column(
           children: [
             _buildHeader(size),
-            SizedBox(height: 30,),
+            SizedBox(height: 20,),
             _buildForm(),
           ],
         ),
@@ -51,6 +51,7 @@ class _SignUpTeacherScreenState extends State<SignUpTeacherScreen> {
             fit: BoxFit.contain,
           ),
         ),
+        SizedBox(height: 15,),
         Text(
           "បំពេញព័ត៌មានរបស់អ្នក",
           style: AppTextStyle.screenTitle24,
@@ -66,7 +67,11 @@ class _SignUpTeacherScreenState extends State<SignUpTeacherScreen> {
             Expanded(
               child: AuthField(
                 hintText: "បញ្ចូលនាមត្រកូល", 
-                icon: Icon(Icons.person_2_outlined), 
+                icon: Icon(
+                  Icons.person_outline_rounded,
+                  color: AppColors.secondaryText,
+                  size: 20,
+                ), 
                 textController: lastnameCtrl
               ),
             ),
@@ -74,8 +79,12 @@ class _SignUpTeacherScreenState extends State<SignUpTeacherScreen> {
             Expanded(
               child: AuthField(
                 hintText: "បញ្ចូលនាមខ្លួន", 
-                icon: Icon(Icons.person_2_outlined), 
-                textController: lastnameCtrl
+                icon: Icon(
+                  Icons.person_outline_rounded,
+                  color: AppColors.secondaryText,
+                  size: 20,
+                ), 
+                textController: firstnameCtrl
               ),
             ),
           ],
