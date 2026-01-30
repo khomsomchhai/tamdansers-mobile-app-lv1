@@ -6,6 +6,7 @@ import 'package:tamdansers_app/screens/auth/login_teacher_screen.dart';
 import 'package:tamdansers_app/screens/auth/role_selection_screen.dart';
 import 'package:tamdansers_app/screens/auth/sign_up_teacher_screen.dart';
 import 'package:tamdansers_app/screens/auth/splash_screen.dart';
+import 'package:tamdansers_app/screens/student/scedeul.dart';
 import 'package:tamdansers_app/screens/student/student_dashboard.dart';
 
 void main() {
@@ -35,7 +36,11 @@ class MainApp extends StatelessWidget {
         "/auth_option_teacher_screen": (context) => AuthOptionTeacherScreen(),
         "/login_teacher_screen": (context) => LoginTeacherScreen(),
         "/sign_up_teacher_screen": (context) => SignUpTeacherScreen(),
+
+        //student
         "/student_dashboard": (context) => StudentDashboard(),
+        "/student_scedeul": (context) => Scedeul(),
+
       },
     );
   }

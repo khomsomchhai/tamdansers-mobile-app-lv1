@@ -8,6 +8,9 @@ class AppRoutes{
   static const String signUpTeacherScreen = "/sign_up_teacher_screen";
 
 
+
+  //student
   static const String studentDashboard = "/student_dashboard";
+  static const String scedeul = "/student_scedeul";
   
 }
