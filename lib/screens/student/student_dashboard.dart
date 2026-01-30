@@ -58,6 +58,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
         },
         type: BottomNavigationBarType.fixed,
         selectedItemColor: AppColors.primaryMain,
+        selectedLabelStyle: AppTextStyle.body,
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
