@@ -3,13 +3,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 
 class AppTextStyle{
-  static final title32 = GoogleFonts.kantumruyPro(
-    fontSize: 32,
+  static final title28 = GoogleFonts.kantumruyPro(
+    fontSize: 28,
     fontWeight: FontWeight.bold,
     color: AppColors.primaryText,
   );
-  static final screenTitle28 = GoogleFonts.kantumruyPro(
-    fontSize: 28,
+  static final screenTitle24 = GoogleFonts.kantumruyPro(
+    fontSize: 24,
     fontWeight: FontWeight.w600,
     color: AppColors.primaryText,
   );
@@ -24,5 +24,10 @@ class AppTextStyle{
   static final body = GoogleFonts.kantumruyPro(
     fontSize: 16,
     fontWeight: FontWeight.w400
+  );
+  static final hintText = GoogleFonts.kantumruyPro(
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    color: AppColors.secondaryText
   );
 }
