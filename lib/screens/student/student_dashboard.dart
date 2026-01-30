@@ -15,8 +15,8 @@ class _StudentDashboardState extends State<StudentDashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading:
-            CircleAvatar(child: SvgPicture.asset("assets/images/app_logo_blue.svg")),
+        leading: CircleAvatar(
+            child: SvgPicture.asset("assets/images/app_logo_blue.svg")),
         title: Column(
           children: [
             Text(
@@ -33,7 +33,6 @@ class _StudentDashboardState extends State<StudentDashboard> {
             ),
           ],
         ),
-        
       ),
     );
   }

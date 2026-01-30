@@ -5,6 +5,7 @@ import 'package:tamdansers_app/screens/auth/auth_option_teacher_screen.dart';
 import 'package:tamdansers_app/screens/auth/role_selection_screen.dart';
 import 'package:tamdansers_app/screens/auth/splash_screen.dart';
 import 'package:tamdansers_app/screens/student/student_dashboard.dart';
+import 'package:tamdansers_app/screens/teacher/teacher_dashboard.dart';
 
 void main() {
   runApp(const MainApp());
@@ -18,15 +19,15 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: AppColors.backgroundLight,
-        appBarTheme: AppBarTheme(
-          backgroundColor: AppColors.backgroundLight,
-          elevation: 0,
-        )
-      ),
+          scaffoldBackgroundColor: AppColors.backgroundLight,
+          appBarTheme: AppBarTheme(
+            backgroundColor: AppColors.backgroundLight,
+            elevation: 0,
+          )),
       home: Scaffold(),
-      initialRoute: AppRoutes.studentDashboard,
+      initialRoute: AppRoutes.teacherDashboard,
       routes: {
+        "/teacher_dashboard": (context) => TeacherDashboard(),
         "/splash_screen": (context) => SplashScreen(),
         "/role_selection_screen": (context) => RoleSelectionScreen(),
         "/auth_option_teacher_screen": (context) => AuthOptionTeacherScreen(),
