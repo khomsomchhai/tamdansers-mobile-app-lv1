@@ -1,4 +1,4 @@
-class AppImages{
+class AppImages {
   static const String appLogoWhite = "assets/images/app_logo_white.svg";
   static const String appLogoblue = "assets/images/app_logo_blue.svg";
   //illustrator
@@ -9,4 +9,7 @@ class AppImages{
   //icon
   static const String emailIcon = "assets/icons/email.svg";
   static const String googleIcon = "assets/icons/google_icon.svg";
+
+  static const String classCardBg = "assets/images/card_class_bg.svg";
+  static const String userProfile = "assets/images/user_profile.png";
 }

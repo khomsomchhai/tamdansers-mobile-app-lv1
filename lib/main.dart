@@ -7,6 +7,8 @@ import 'package:tamdansers_app/screens/auth/role_selection_screen.dart';
 import 'package:tamdansers_app/screens/auth/sign_up_teacher_screen.dart';
 import 'package:tamdansers_app/screens/auth/splash_screen.dart';
 import 'package:tamdansers_app/screens/student/student_dashboard.dart';
+import 'package:tamdansers_app/screens/teacher/manage_all_class.dart';
+import 'package:tamdansers_app/screens/teacher/manage_class.dart';
 import 'package:tamdansers_app/screens/teacher/teacher_dashboard.dart';
 
 void main() {
@@ -21,14 +23,13 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: AppColors.backgroundLight,
-        appBarTheme: AppBarTheme(
-          backgroundColor: AppColors.backgroundLight,
-          elevation: 0,
-        )
-      ),
+          scaffoldBackgroundColor: AppColors.backgroundLight,
+          appBarTheme: AppBarTheme(
+            backgroundColor: AppColors.backgroundLight,
+            elevation: 0,
+          )),
       home: Scaffold(),
-      initialRoute: AppRoutes.studentDashboard,
+      initialRoute: AppRoutes.manageAllClass,
       routes: {
         "/teacher_dashboard": (context) => TeacherDashboard(),
         "/splash_screen": (context) => SplashScreen(),
@@ -37,6 +38,8 @@ class MainApp extends StatelessWidget {
         "/login_teacher_screen": (context) => LoginTeacherScreen(),
         "/sign_up_teacher_screen": (context) => SignUpTeacherScreen(),
         "/student_dashboard": (context) => StudentDashboard(),
+        "/manage_class": (context) => ManageClass(),
+        "/manage_all_class": (context) => ManageAllClass(),
       },
     );
   }
