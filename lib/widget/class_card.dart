@@ -5,7 +5,7 @@ import 'package:tamdansers_app/constants/text_style.dart';
 
 class ClassCard extends StatelessWidget {
   final String className;
-  final String subject;
+  final String title;
   final String students;
   final Color color;
   final VoidCallback? onTap;
@@ -13,7 +13,7 @@ class ClassCard extends StatelessWidget {
   const ClassCard({
     super.key,
     required this.className,
-    required this.subject,
+    required this.title,
     required this.students,
     required this.color,
     this.onTap,
@@ -47,7 +47,7 @@ class ClassCard extends StatelessWidget {
                     right: 10,
                     bottom: -10,
                     child: Icon(Icons.laptop_chromebook,
-                        color: Colors.white.withOpacity(0.2), size: 100),
+                        color: Colors.white.withValues(alpha: 0.2), size: 100),
                   ),
                   Padding(
                     padding: EdgeInsets.all(16),
@@ -57,8 +57,8 @@ class ClassCard extends StatelessWidget {
                       children: [
                         SizedBox(height: 8),
                         Text(className,
-                            style: AppTextStyle.sectionTitle20.copyWith(
-                                color: AppColors.white, fontSize: 18)),
+                            style: AppTextStyle.sectionTitle20
+                                .copyWith(color: AppColors.white)),
                       ],
                     ),
                   ),
@@ -80,7 +80,7 @@ class ClassCard extends StatelessWidget {
                         SizedBox(width: 8),
                         Flexible(
                           child: Text("អ្នកគ្រូ ទេព ធីតា",
-                              style: AppTextStyle.body.copyWith(fontSize: 13),
+                              style: AppTextStyle.body,
                               overflow: TextOverflow.ellipsis),
                         ),
                         SizedBox(width: 8),
@@ -91,7 +91,7 @@ class ClassCard extends StatelessWidget {
                             color: Color(0xFFE3F2FD),
                             borderRadius: BorderRadius.circular(6),
                           ),
-                          child: Text(subject,
+                          child: Text(title,
                               style: AppTextStyle.body.copyWith(
                                   fontSize: 12, color: AppColors.primaryMain)),
                         ),

@@ -55,28 +55,28 @@ class _ManageAllClassState extends State<ManageAllClass> {
               children: [
                 ClassCard(
                   className: "ថ្នាក់ទី 7A (Grade 7A)",
-                  subject: "គ្រូបន្ទុកថ្នាក់",
+                  title: "គ្រូបន្ទុកថ្នាក់",
                   students: "36 នាក់",
                   color: Color(0xFF1976D2),
                 ),
                 SizedBox(height: 12),
                 ClassCard(
                   className: "ថ្នាក់ទី 7A (Grade 7A)",
-                  subject: "គ្រូបន្ទុកថ្នាក់",
+                  title: "គ្រូបន្ទុកថ្នាក់",
                   students: "36 នាក់",
                   color: Color(0xFF00897B),
                 ),
                 SizedBox(height: 12),
                 ClassCard(
                   className: "ថ្នាក់ទី 7A (Grade 7A)",
-                  subject: "គ្រូបន្ទុកថ្នាក់",
+                  title: "គ្រូបន្ទុកថ្នាក់",
                   students: "36 នាក់",
                   color: Color(0xFF546E7A),
                 ),
                 SizedBox(height: 12),
                 ClassCard(
                   className: "ថ្នាក់ទី 7A (Grade 7A)",
-                  subject: "គ្រូបន្ទុកថ្នាក់",
+                  title: "គ្រូបន្ទុកថ្នាក់",
                   students: "36 នាក់",
                   color: Color(0xFF1976D2),
                 ),
@@ -95,7 +95,7 @@ class _ManageAllClassState extends State<ManageAllClass> {
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
-              color: AppColors.primaryMain.withOpacity(0.1),
+              color: AppColors.primaryMain.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
@@ -164,7 +164,7 @@ class _ManageAllClassState extends State<ManageAllClass> {
                 side: BorderSide(
                   color: isSelected
                       ? AppColors.primaryMain
-                      : AppColors.secondaryText.withOpacity(0.2),
+                      : AppColors.secondaryText.withValues(alpha: 0.2),
                 ),
               ),
               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),

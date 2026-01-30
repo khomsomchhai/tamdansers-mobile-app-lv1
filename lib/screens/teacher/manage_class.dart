@@ -66,7 +66,7 @@ class _ManageClassState extends State<ManageClass> {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -88,7 +88,7 @@ class _ManageClassState extends State<ManageClass> {
           ),
           SizedBox(height: 8),
           Divider(
-            color: AppColors.white.withOpacity(0.3),
+            color: AppColors.white.withValues(alpha: 0.3),
           ),
           SizedBox(height: 8),
           Row(
