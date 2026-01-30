@@ -59,9 +59,10 @@ class _StudentDashboardState extends State<StudentDashboard> {
         type: BottomNavigationBarType.fixed,
         selectedItemColor: AppColors.primaryMain,
         items: [
-          
           BottomNavigationBarItem(
-              icon: Icon(Icons.home), label: 'ទំព័រដើម',),
+            icon: Icon(Icons.home),
+            label: 'ទំព័រដើម',
+          ),
           BottomNavigationBarItem(
               icon: Icon(Icons.class_), label: 'កិច្ចការផ្ទះ'),
           BottomNavigationBarItem(
@@ -108,7 +109,7 @@ class _titleheader extends StatelessWidget {
           style: AppTextStyle.body,
         ),
         SizedBox(height: 8),
-        Text('សួស្តី Limhong! ', style: AppTextStyle.screenTitle28),
+        Text('សួស្តី Limhong! ', style: AppTextStyle.screenTitle24),
         SizedBox(height: 10),
         Text(
           'ថ្នាក់ទី 8A',
@@ -283,7 +284,7 @@ class _cardAttendance extends StatelessWidget {
               Text('វត្តមានប្រចាំខែ មករា 2026',
                   style: AppTextStyle.body.copyWith(color: AppColors.white)),
               Text('94%',
-                  style: AppTextStyle.title32.copyWith(
+                  style: AppTextStyle.title28.copyWith(
                       color: AppColors.white, fontWeight: FontWeight.bold)),
               SizedBox(height: 8),
               Row(

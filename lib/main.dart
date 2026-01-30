@@ -21,13 +21,12 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: AppColors.backgroundLight,
-        appBarTheme: AppBarTheme(
-          backgroundColor: AppColors.backgroundLight,
-          elevation: 0,
-          surfaceTintColor: AppColors.transparent,
-        )
-      ),
+          scaffoldBackgroundColor: AppColors.backgroundLight,
+          appBarTheme: AppBarTheme(
+            backgroundColor: AppColors.backgroundLight,
+            elevation: 0,
+            surfaceTintColor: AppColors.transparent,
+          )),
       home: Scaffold(),
       initialRoute: AppRoutes.roleSelectionScreen,
       routes: {
@@ -40,7 +39,6 @@ class MainApp extends StatelessWidget {
         //student
         "/student_dashboard": (context) => StudentDashboard(),
         "/student_scedeul": (context) => Scedeul(),
-
       },
     );
   }
