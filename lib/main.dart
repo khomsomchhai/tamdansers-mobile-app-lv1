@@ -4,10 +4,6 @@ import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/screens/auth/auth_option_teacher_screen.dart';
 import 'package:tamdansers_app/screens/auth/role_selection_screen.dart';
 import 'package:tamdansers_app/screens/auth/splash_screen.dart';
-import 'package:tamdansers_app/screens/student/menu/attendance.dart';
-import 'package:tamdansers_app/screens/student/menu/homepage.dart';
-import 'package:tamdansers_app/screens/student/menu/homework.dart';
-import 'package:tamdansers_app/screens/student/menu/profile.dart';
 import 'package:tamdansers_app/screens/student/student_dashboard.dart';
 import 'package:tamdansers_app/screens/teacher/manage_all_class.dart';
 import 'package:tamdansers_app/screens/teacher/manage_class.dart';
@@ -25,21 +21,23 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: AppColors.backgroundLight,
-        appBarTheme: AppBarTheme(
-          backgroundColor: AppColors.backgroundLight,
-          elevation: 0,
-          surfaceTintColor: AppColors.transparent,
-        )
-      ),
+          scaffoldBackgroundColor: AppColors.backgroundLight,
+          appBarTheme: AppBarTheme(
+            backgroundColor: AppColors.backgroundLight,
+            elevation: 0,
+            surfaceTintColor: AppColors.transparent,
+          )),
       home: Scaffold(),
       initialRoute: AppRoutes.roleSelectionScreen,
       routes: {
-        "/teacher_dashboard": (context) => TeacherDashboard(),
-        "/splash_screen": (context) => SplashScreen(),
-        "/role_selection_screen": (context) => RoleSelectionScreen(),
-        "/auth_option_teacher_screen": (context) => AuthOptionTeacherScreen(),
-        "/student_dashboard": (context) => StudentDashboard(),
+        AppRoutes.teacherDashboard: (context) => TeacherDashboard(),
+        AppRoutes.splashScreen: (context) => SplashScreen(),
+        AppRoutes.roleSelectionScreen: (context) => RoleSelectionScreen(),
+        AppRoutes.authOptionTeacherScreen: (context) =>
+            AuthOptionTeacherScreen(),
+        AppRoutes.studentDashboard: (context) => StudentDashboard(),
+        AppRoutes.manageClass: (context) => ManageClass(),
+        AppRoutes.manageAllClass: (context) => ManageAllClass(),
       },
     );
   }
