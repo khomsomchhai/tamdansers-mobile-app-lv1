@@ -32,6 +32,7 @@ class AuthOptionTeacherScreen extends StatelessWidget {
                 AppImages.imageClassroom,
                 fit: BoxFit.contain,
               ),
+<<<<<<< HEAD
             ),
             Spacer(),
             Text(
@@ -62,6 +63,37 @@ class AuthOptionTeacherScreen extends StatelessWidget {
             ),
             SizedBox(height: 30,)
           ],
+=======
+              Spacer(),
+              Text(
+                "សូមជ្រើសរើសវិធីសាស្រ្ត",
+                style: AppTextStyle.title32,
+              ),
+              Text(
+                "ចូលប្រើប្រាស់",
+                style: AppTextStyle.title32,
+              ),
+              Spacer(),
+              //custom widget
+              PrimaryButton(
+                label: "ចូលគណនី",
+                backgroundColor: AppColors.primaryMain,
+                foregroundColor: AppColors.white,
+                onPressed: (){
+                  Navigator.pushNamed(context, AppRoutes.TeacherDashboardScreen);
+                }
+              ),
+              SizedBox(height: 20,),
+              PrimaryButton(
+                label: "ចុះឈ្មោះ",
+                backgroundColor: AppColors.white,
+                foregroundColor: AppColors.primaryMain,
+                onPressed: (){}
+              ),
+              SizedBox(height: 30,)
+            ],
+          ),
+>>>>>>> 3ec662d4e7c3a33f2476dbdfc02f0d2578a4da1a
         ),
       ),
     );
