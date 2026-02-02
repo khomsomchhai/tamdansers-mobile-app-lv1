@@ -13,6 +13,10 @@ class AppRoutes{
   //student
   static const String studentDashboard = "/student_dashboard";
   static const String scedeul = "/student_scedeul";
+  static const String profile="/student_profile";
+  static const String attendance="/student_attendance";
+  static const String homework="/student_homework";
+  static const String homepage="/student_homepage";
   
 =======
   static String TeacherDashboardScreen = "/teacher_dashboard_screen";
