@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/constants/validators.dart';
 import 'package:tamdansers_app/widget/auth_field.dart';
 import 'package:tamdansers_app/widget/button_with_icon.dart';
 import 'package:tamdansers_app/widget/primary_button.dart';
@@ -22,25 +23,8 @@ class _SignUpTeacherScreenState extends State<SignUpTeacherScreen> {
   var firstnameCtrl = TextEditingController();
   var emailCtrl = TextEditingController();
   var pwdCtrl = TextEditingController();
+  var cfPwdCtrl = TextEditingController();
   String gender = "male";
-
-  String? emailValidator(value){
-    if(value!.isEmpty){
-      return "សូមបញ្ចូលអ៊ីម៉ែល";
-    }else if(!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)){
-      return "អ៊ីម៉ែលមិនត្រឹមត្រូវ";
-    }
-    return null;
-  }
-  String? pwdValidator(value){
-    if(value!.isEmpty){
-      return "សូមបញ្ចូលពាក្យសម្ងាត់";
-    }else if(!RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\-])(.{8,})$').hasMatch(value)){
-      return "ពាក្យសម្ងាត់មិនត្រឹមត្រូវ";
-    }
-    return null;
-  }
-
   var formKey = GlobalKey<FormState>();
 
   @override
@@ -63,10 +47,11 @@ class _SignUpTeacherScreenState extends State<SignUpTeacherScreen> {
           child: Column(
             children: [
               _buildHeader(size),
-              SizedBox(height: 20,),
+              SizedBox(height: 24,),
               _buildForm(),
-              SizedBox(height: 20,),
+              SizedBox(height: 24,),
               _buildFooter(),
+              SizedBox(height: 20,),
             ],
           ),
         ),
@@ -83,7 +68,7 @@ class _SignUpTeacherScreenState extends State<SignUpTeacherScreen> {
             fit: BoxFit.contain,
           ),
         ),
-        SizedBox(height: 15,),
+        SizedBox(height: 16,),
         Text(
           "បំពេញព័ត៌មានរបស់អ្នក",
           style: AppTextStyle.screenTitle24,
@@ -96,34 +81,28 @@ class _SignUpTeacherScreenState extends State<SignUpTeacherScreen> {
       key: formKey,
       child: Column(
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: AuthField(
-                  hintText: "បញ្ចូលនាមត្រកូល", 
-                  icon: Icon(
-                    Icons.person_outline_rounded,
-                    color: AppColors.secondaryText,
-                    size: 20,
-                  ), 
-                  textController: lastnameCtrl
-                ),
-              ),
-              SizedBox(width: 10,),
-              Expanded(
-                child: AuthField(
-                  hintText: "បញ្ចូលនាមខ្លួន", 
-                  icon: Icon(
-                    Icons.person_outline_rounded,
-                    color: AppColors.secondaryText,
-                    size: 20,
-                  ), 
-                  textController: firstnameCtrl
-                ),
-              ),
-            ],
+          AuthField(
+            hintText: "នាមត្រកូល", 
+            icon: Icon(
+              Icons.person_outline_rounded,
+              color: AppColors.secondaryText,
+              size: 20,
+            ), 
+            textController: lastnameCtrl,
+            validator: Validators.inputData,
           ),
-          SizedBox(height: 20,),
+          SizedBox(height: 16,),
+          AuthField(
+            hintText: "នាមខ្លួន", 
+            icon: Icon(
+              Icons.person_outline_rounded,
+              color: AppColors.secondaryText,
+              size: 20,
+            ), 
+            textController: firstnameCtrl,
+            validator: Validators.inputData,
+          ),
+          SizedBox(height: 16,),
           Row(
             children: [
               Expanded(
@@ -135,20 +114,20 @@ class _SignUpTeacherScreenState extends State<SignUpTeacherScreen> {
               ),
             ],
           ),
-          SizedBox(height: 20,),
+          SizedBox(height: 16,),
           AuthField(
-            hintText: "បញ្ចូលអ៊ីម៉ែលរបស់អ្នក", 
+            hintText: "អ៊ីម៉ែល", 
             icon: Icon(
               Icons.email_outlined,
               size: 20,
               color: AppColors.secondaryText,
             ), 
             textController: emailCtrl,
-            validator: emailValidator,
+            validator: Validators.email,
           ),
-          SizedBox(height: 20,),
+          SizedBox(height: 16,),
           AuthField(
-            hintText: "បញ្ចូលពាក្យសម្ងាត់របស់អ្នក", 
+            hintText: "ពាក្យសម្ងាត់", 
             icon: Icon(
               Icons.lock_outline_rounded,
               size: 20,
@@ -156,21 +135,21 @@ class _SignUpTeacherScreenState extends State<SignUpTeacherScreen> {
             ), 
             textController: pwdCtrl,
             isPwd: true,
-            validator: pwdValidator,
+            validator: Validators.password,
           ),
-          SizedBox(height: 20,),
+          SizedBox(height: 16,),
           AuthField(
-            hintText: "បញ្ជាក់ពាក្យសម្ងាត់របស់អ្នក", 
+            hintText: "បញ្ជាក់ពាក្យសម្ងាត់", 
             icon: Icon(
               Icons.lock_outline_rounded,
               size: 20,
               color: AppColors.secondaryText,
             ), 
-            textController: pwdCtrl,
+            textController: cfPwdCtrl,
             isPwd: true,
-            validator: pwdValidator,
+            validator: (value) => Validators.cnfPassword(value, pwdCtrl.text),
           ),
-          SizedBox(height: 20,),
+          SizedBox(height: 24,),
           PrimaryButton(
             label: "ចុះឈ្មោះ", 
             backgroundColor: AppColors.primaryMain, 
@@ -236,7 +215,7 @@ class _SignUpTeacherScreenState extends State<SignUpTeacherScreen> {
             ),
           ],
         ),
-        SizedBox(height: 15,),
+        SizedBox(height: 16,),
         SizedBox(
           width: double.infinity,
           child: ButtonWithIcon(
@@ -250,7 +229,7 @@ class _SignUpTeacherScreenState extends State<SignUpTeacherScreen> {
             )
           ),
         ),
-        SizedBox(height: 20,),
+        SizedBox(height: 12,),
         SizedBox(
           width: double.infinity,
           child: ButtonWithIcon(
@@ -265,7 +244,6 @@ class _SignUpTeacherScreenState extends State<SignUpTeacherScreen> {
             )
           ),
         ),
-        SizedBox(height: 40,),
       ],
     );
   }
@@ -292,8 +270,14 @@ class _SignUpTeacherScreenState extends State<SignUpTeacherScreen> {
             Radio(
               value: value,
               groupValue: gender,
-              hoverColor: AppColors.secondaryText,
-              activeColor: AppColors.primaryMain,
+              fillColor: MaterialStateProperty.resolveWith<Color?>(
+                (Set<MaterialState> states) {
+                  if (states.contains(MaterialState.selected)) {
+                    return AppColors.primaryMain;
+                  }
+                  return AppColors.secondaryText;
+                },
+              ),
               onChanged: (value) {
                 setState(() {
                   gender = value!;
