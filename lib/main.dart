@@ -29,7 +29,7 @@ class MainApp extends StatelessWidget {
             elevation: 0,
           )),
       home: Scaffold(),
-      initialRoute: AppRoutes.manageAllClass,
+      initialRoute: AppRoutes.teacherDashboard,
       routes: {
         "/teacher_dashboard": (context) => TeacherDashboard(),
         "/splash_screen": (context) => SplashScreen(),

@@ -16,7 +16,9 @@ class _ManageClassState extends State<ManageClass> {
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: AppColors.primaryText),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
         title: Text(
           "ថ្នាក់ទី 7A (Grade 7A)",

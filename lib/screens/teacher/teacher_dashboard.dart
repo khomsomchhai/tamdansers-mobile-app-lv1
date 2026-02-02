@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/widget/class_card.dart';
 
 class TeacherDashboard extends StatefulWidget {
@@ -246,7 +247,9 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
           children: [
             Text("ថ្នាក់ទាំងអស់", style: AppTextStyle.sectionTitle20),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, AppRoutes.manageAllClass);
+              },
               child: Text("មើលទាំងអស់",
                   style:
                       AppTextStyle.body.copyWith(color: AppColors.primaryMain)),
@@ -259,6 +262,9 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
           title: "គ្រូបន្ទុកថ្នាក់",
           students: "36 នាក់",
           color: Color(0xFF1976D2),
+          onTap: () {
+            Navigator.pushNamed(context, AppRoutes.manageClass);
+          },
         ),
         SizedBox(height: 12),
         ClassCard(
@@ -266,6 +272,9 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
           title: "គ្រូបន្ទុកថ្នាក់",
           students: "36 នាក់",
           color: Color(0xFF00897B),
+          onTap: () {
+            Navigator.pushNamed(context, AppRoutes.manageClass);
+          },
         ),
         SizedBox(height: 12),
         ClassCard(
@@ -273,6 +282,9 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
           title: "គ្រូបន្ទុកថ្នាក់",
           students: "36 នាក់",
           color: Color(0xFF546E7A),
+          onTap: () {
+            Navigator.pushNamed(context, AppRoutes.manageClass);
+          },
         ),
       ],
     );
