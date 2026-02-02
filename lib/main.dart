@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/screens/auth/auth_option_teacher_screen.dart';
+import 'package:tamdansers_app/screens/auth/login_teacher_screen.dart';
 import 'package:tamdansers_app/screens/auth/role_selection_screen.dart';
+import 'package:tamdansers_app/screens/auth/sign_up_teacher_screen.dart';
 import 'package:tamdansers_app/screens/auth/splash_screen.dart';
 import 'package:tamdansers_app/screens/student/student_dashboard.dart';
+import 'package:tamdansers_app/screens/teacher/manage_student_screen.dart';
 
 void main() {
   runApp(const MainApp());
@@ -32,6 +35,8 @@ class MainApp extends StatelessWidget {
         "/auth_option_teacher_screen": (context) => AuthOptionTeacherScreen(),
         "/login_teacher_screen": (context) => LoginTeacherScreen(),
         "/sign_up_teacher_screen": (context) => SignUpTeacherScreen(),
+        "/manage_student_screen": (context) => ManageStudentScreen(),
+
         "/student_dashboard": (context) => StudentDashboard(),
       },
     );
