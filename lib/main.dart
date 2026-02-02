@@ -6,6 +6,10 @@ import 'package:tamdansers_app/screens/auth/login_teacher_screen.dart';
 import 'package:tamdansers_app/screens/auth/role_selection_screen.dart';
 import 'package:tamdansers_app/screens/auth/sign_up_teacher_screen.dart';
 import 'package:tamdansers_app/screens/auth/splash_screen.dart';
+import 'package:tamdansers_app/screens/student/menu/attendance.dart';
+import 'package:tamdansers_app/screens/student/menu/homepage.dart';
+import 'package:tamdansers_app/screens/student/menu/homework.dart';
+import 'package:tamdansers_app/screens/student/menu/profile.dart';
 import 'package:tamdansers_app/screens/student/scedeul.dart';
 import 'package:tamdansers_app/screens/student/student_dashboard.dart';
 
@@ -28,7 +32,7 @@ class MainApp extends StatelessWidget {
             surfaceTintColor: AppColors.transparent,
           )),
       home: Scaffold(),
-      initialRoute: AppRoutes.roleSelectionScreen,
+      initialRoute: AppRoutes.scedeul,
       routes: {
         "/splash_screen": (context) => SplashScreen(),
         "/role_selection_screen": (context) => RoleSelectionScreen(),
@@ -39,6 +43,10 @@ class MainApp extends StatelessWidget {
         //student
         "/student_dashboard": (context) => StudentDashboard(),
         "/student_scedeul": (context) => Scedeul(),
+        "/student_profile": (context) => Profile(),
+        "/student_attendance": (context) => Attendance(),
+        "/student_homework": (context) => Homework(),
+        "/student_homepage": (context) => Homepage(),
       },
     );
   }
