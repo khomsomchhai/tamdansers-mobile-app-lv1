@@ -118,41 +118,46 @@ class _ScedeulState extends State<Scedeul> {
                           ],
                         ),
                         SizedBox(width: 20),
-                        Expanded(child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: 60,
-                                  height: 60,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: AppColors.primaryBg
+                        Expanded(
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 60,
+                                    height: 60,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: AppColors.primaryBg),
+                                    child: Icon(
+                                      Icons.book,
+                                      size: 40,
+                                      color: AppColors.primaryMain,
+                                    ),
                                   ),
-                                  child: Icon(Icons.book, size: 40, color: AppColors.primaryMain,),
-                                ),
-                                SizedBox(width: 10),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('ប្រវត្តិវិទ្យា',
-                                        style: AppTextStyle.sectionTitle20),
-                                    SizedBox(height: 5),
-                                    Text('គ្រូ: សុខ សុភា',
-                                        style: AppTextStyle.body
-                                            .copyWith(
-                                                color: AppColors.secondaryText)),
-                                  ],
-                                )
-                              ],
+                                  SizedBox(width: 10),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text('ប្រវត្តិវិទ្យា',
+                                          style: AppTextStyle.sectionTitle20),
+                                      SizedBox(height: 5),
+                                      Text('គ្រូ: សុខ សុភា',
+                                          style: AppTextStyle.body.copyWith(
+                                              color: AppColors.secondaryText)),
+                                    ],
+                                  )
+                                ],
+                              ),
                             ),
                           ),
-                        ),)
+                        )
                       ],
                     );
                   }),
@@ -176,39 +181,37 @@ class _ScedeulState extends State<Scedeul> {
                           ],
                         ),
                         SizedBox(width: 20),
-                        Expanded(child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Ballet Class',
-                                    style: AppTextStyle.fontsize18),
-                                SizedBox(height: 5),
-                                Text('Instructor: Jane Doe',
-                                    style: AppTextStyle.body
-                                        .copyWith(
-                                            color: AppColors.secondaryText)),
-                                SizedBox(height: 5),
-                                Text('Room 101',
-                                    style: AppTextStyle.body
-                                        .copyWith(
-                                            color: AppColors.secondaryText)),
-                              ],
+                        Expanded(
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Ballet Class',
+                                      style: AppTextStyle.fontsize18),
+                                  SizedBox(height: 5),
+                                  Text('Instructor: Jane Doe',
+                                      style: AppTextStyle.body.copyWith(
+                                          color: AppColors.secondaryText)),
+                                  SizedBox(height: 5),
+                                  Text('Room 101',
+                                      style: AppTextStyle.body.copyWith(
+                                          color: AppColors.secondaryText)),
+                                ],
+                              ),
                             ),
                           ),
-                        ),)
+                        )
                       ],
                     );
                   }),
-                
                 ],
               ),
             )
-          
           ],
         ),
       ),
