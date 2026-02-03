@@ -19,7 +19,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: AppColors.white,
+        backgroundColor: AppColors.primaryBg,
         currentIndex: index,
         onTap: (value) {
           setState(() {
@@ -27,7 +27,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
           });
         },
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: AppColors.primaryMain,
+        selectedItemColor: AppColors.white,
         selectedLabelStyle: AppTextStyle.body,
         unselectedLabelStyle: AppTextStyle.body,
         items: [

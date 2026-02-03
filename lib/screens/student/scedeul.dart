@@ -99,7 +99,78 @@ class _ScedeulState extends State<Scedeul> {
               child: ListView(
                 children: [
                   // ====Morning====
-                  Text('ព្រឹក', style: AppTextStyle.sectionTitle20),
+                  Text('វេនព្រឹក', style: AppTextStyle.sectionTitle20),
+                  SizedBox(height: 10),
+                  ...List.generate(3, (index) {
+                    return Row(
+                      children: [
+                        Column(
+                          children: [
+                            Text('8:00 - 9:00',
+                                style: AppTextStyle.hintText
+                                    .copyWith(color: AppColors.secondaryText)),
+                            SizedBox(height: 5),
+                            Container(
+                              height: 80,
+                              width: 3,
+                              color: AppColors.secondaryText,
+                            )
+                          ],
+                        ),
+                        SizedBox(width: 20),
+                        Expanded(child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(12.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: 60,
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: AppColors.primaryBg
+                                  ),
+                                  child: Icon(Icons.book, size: 40, color: AppColors.primaryMain,),
+                                ),
+                                SizedBox(width: 10),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('ប្រវត្តិវិទ្យា',
+                                        style: AppTextStyle.sectionTitle20),
+                                    SizedBox(height: 5),
+                                    Text('គ្រូ: សុខ សុភា',
+                                        style: AppTextStyle.body
+                                            .copyWith(
+                                                color: AppColors.secondaryText)),
+                                    SizedBox(height: 10),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.watch, size: 16, color: AppColors.secondaryText),
+                                        SizedBox(width: 5),
+                                        Text('8:00 AM - 9:00 AM',
+                                            style: AppTextStyle.body
+                                                .copyWith(
+                                                    color: AppColors.secondaryText)),
+                                      ],
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
+                          
+                          ),
+                        ),)
+                      ],
+                    );
+                  }),
+                  SizedBox(height: 30),
+                  // ====Affternoon====
+                  Text('វេនរសៀល', style: AppTextStyle.sectionTitle20),
                   SizedBox(height: 10),
                   ...List.generate(3, (index) {
                     return Row(
@@ -147,58 +218,22 @@ class _ScedeulState extends State<Scedeul> {
                                         style: AppTextStyle.body
                                             .copyWith(
                                                 color: AppColors.secondaryText)),
+                                    SizedBox(height: 10),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.watch, size: 16, color: AppColors.secondaryText),
+                                        SizedBox(width: 5),
+                                        Text('8:00 AM - 9:00 AM',
+                                            style: AppTextStyle.body
+                                                .copyWith(
+                                                    color: AppColors.secondaryText)),
+                                      ],
+                                    )
                                   ],
                                 )
                               ],
                             ),
-                          ),
-                        ),)
-                      ],
-                    );
-                  }),
-                  // ====Affternoon====
-                  Text('ថ្ងៃ', style: AppTextStyle.sectionTitle20),
-                  SizedBox(height: 10),
-                  ...List.generate(3, (index) {
-                    return Row(
-                      children: [
-                        Column(
-                          children: [
-                            Text('8:00 - 9:00',
-                                style: AppTextStyle.hintText
-                                    .copyWith(color: AppColors.secondaryText)),
-                            SizedBox(height: 5),
-                            Container(
-                              height: 80,
-                              width: 3,
-                              color: AppColors.secondaryText,
-                            )
-                          ],
-                        ),
-                        SizedBox(width: 20),
-                        Expanded(child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Ballet Class',
-                                    style: AppTextStyle.fontsize18),
-                                SizedBox(height: 5),
-                                Text('Instructor: Jane Doe',
-                                    style: AppTextStyle.body
-                                        .copyWith(
-                                            color: AppColors.secondaryText)),
-                                SizedBox(height: 5),
-                                Text('Room 101',
-                                    style: AppTextStyle.body
-                                        .copyWith(
-                                            color: AppColors.secondaryText)),
-                              ],
-                            ),
+                          
                           ),
                         ),)
                       ],

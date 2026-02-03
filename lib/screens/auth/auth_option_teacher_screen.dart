@@ -32,7 +32,6 @@ class AuthOptionTeacherScreen extends StatelessWidget {
                 AppImages.imageClassroom,
                 fit: BoxFit.contain,
               ),
-<<<<<<< HEAD
             ),
             Spacer(),
             Text(
@@ -61,17 +60,16 @@ class AuthOptionTeacherScreen extends StatelessWidget {
               foregroundColor: AppColors.primaryMain,
               onPressed: (){}
             ),
-            SizedBox(height: 30,)
-          ],
-=======
+            SizedBox(height: 30,),
+          
               Spacer(),
               Text(
                 "សូមជ្រើសរើសវិធីសាស្រ្ត",
-                style: AppTextStyle.title32,
+                style: AppTextStyle.title28,
               ),
               Text(
                 "ចូលប្រើប្រាស់",
-                style: AppTextStyle.title32,
+                style: AppTextStyle.title28,
               ),
               Spacer(),
               //custom widget
@@ -80,7 +78,7 @@ class AuthOptionTeacherScreen extends StatelessWidget {
                 backgroundColor: AppColors.primaryMain,
                 foregroundColor: AppColors.white,
                 onPressed: (){
-                  Navigator.pushNamed(context, AppRoutes.TeacherDashboardScreen);
+                  Navigator.pushNamed(context, AppRoutes.teacherDashboardScreen);
                 }
               ),
               SizedBox(height: 20,),
@@ -91,11 +89,10 @@ class AuthOptionTeacherScreen extends StatelessWidget {
                 onPressed: (){}
               ),
               SizedBox(height: 30,)
-            ],
+          ]
           ),
->>>>>>> 3ec662d4e7c3a33f2476dbdfc02f0d2578a4da1a
         ),
-      ),
+      
     );
   }
 }
