@@ -99,7 +99,7 @@ class _ScedeulState extends State<Scedeul> {
               child: ListView(
                 children: [
                   // ====Morning====
-                  Text('ព្រឹក', style: AppTextStyle.sectionTitle20),
+                  Text('វេនព្រឹក', style: AppTextStyle.sectionTitle20),
                   SizedBox(height: 10),
                   ...List.generate(3, (index) {
                     return Row(
@@ -118,6 +118,49 @@ class _ScedeulState extends State<Scedeul> {
                           ],
                         ),
                         SizedBox(width: 20),
+                        Expanded(child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(12.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: 60,
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: AppColors.primaryBg
+                                  ),
+                                  child: Icon(Icons.book, size: 40, color: AppColors.primaryMain,),
+                                ),
+                                SizedBox(width: 10),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('ប្រវត្តិវិទ្យា',
+                                        style: AppTextStyle.sectionTitle20),
+                                    SizedBox(height: 5),
+                                    Text('គ្រូ: សុខ សុភា',
+                                        style: AppTextStyle.body
+                                            .copyWith(
+                                                color: AppColors.secondaryText)),
+                                    SizedBox(height: 10),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.watch, size: 16, color: AppColors.secondaryText),
+                                        SizedBox(width: 5),
+                                        Text('8:00 AM - 9:00 AM',
+                                            style: AppTextStyle.body
+                                                .copyWith(
+                                                    color: AppColors.secondaryText)),
+                                      ],
+                                    )
+                                  ],
+                                )
+                              ],
                         Expanded(
                           child: Card(
                             shape: RoundedRectangleBorder(
@@ -156,13 +199,15 @@ class _ScedeulState extends State<Scedeul> {
                                 ],
                               ),
                             ),
+                          
                           ),
                         )
                       ],
                     );
                   }),
+                  SizedBox(height: 30),
                   // ====Affternoon====
-                  Text('ថ្ងៃ', style: AppTextStyle.sectionTitle20),
+                  Text('វេនរសៀល', style: AppTextStyle.sectionTitle20),
                   SizedBox(height: 10),
                   ...List.generate(3, (index) {
                     return Row(
@@ -181,6 +226,49 @@ class _ScedeulState extends State<Scedeul> {
                           ],
                         ),
                         SizedBox(width: 20),
+                        Expanded(child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: 60,
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: AppColors.primaryBg
+                                  ),
+                                  child: Icon(Icons.book, size: 40, color: AppColors.primaryMain,),
+                                ),
+                                SizedBox(width: 10),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('ប្រវត្តិវិទ្យា',
+                                        style: AppTextStyle.sectionTitle20),
+                                    SizedBox(height: 5),
+                                    Text('គ្រូ: សុខ សុភា',
+                                        style: AppTextStyle.body
+                                            .copyWith(
+                                                color: AppColors.secondaryText)),
+                                    SizedBox(height: 10),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.watch, size: 16, color: AppColors.secondaryText),
+                                        SizedBox(width: 5),
+                                        Text('8:00 AM - 9:00 AM',
+                                            style: AppTextStyle.body
+                                                .copyWith(
+                                                    color: AppColors.secondaryText)),
+                                      ],
+                                    )
+                                  ],
+                                )
+                              ],
                         Expanded(
                           child: Card(
                             shape: RoundedRectangleBorder(
@@ -204,6 +292,7 @@ class _ScedeulState extends State<Scedeul> {
                                 ],
                               ),
                             ),
+                          
                           ),
                         )
                       ],

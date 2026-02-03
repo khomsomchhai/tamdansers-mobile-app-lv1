@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/constants/validators.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/widget/auth_field.dart';
 import 'package:tamdansers_app/widget/button_with_icon.dart';
@@ -21,27 +22,11 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
   var pwdCtrl = TextEditingController();
   var formKey = GlobalKey<FormState>();
   bool isCheck = false;
-  String? emailValidator(value){
-    if(value!.isEmpty){
-      return "សូមបញ្ចូលអ៊ីម៉ែល";
-    }else if(!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)){
-      return "អ៊ីម៉ែលមិនត្រឹមត្រូវ";
-    }
-    return null;
-  }
-  String? pwdValidator(value){
-    if(value!.isEmpty){
-      return "សូមបញ្ចូលពាក្យសម្ងាត់";
-    }else if(!RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\-])(.{8,})$').hasMatch(value)){
-      return "ពាក្យសម្ងាត់មិនត្រឹមត្រូវ";
-    }
-    return null;
-  }
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => Navigator.pop(context), 
@@ -51,20 +36,43 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
           )
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            _buildHeader(size),
-            SizedBox(height: 20,),
-            _buildForm(),
-            SizedBox(height: 20,),
-            Spacer(),
-            _buildFooter(),
-            SizedBox(height: 40,),
-          ],
-        ),
+      body: CustomScrollView(
+        slivers: [
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  _buildHeader(size),
+                  SizedBox(height: 24),
+                  _buildForm(),
+                  SizedBox(height: 10),
+                  Spacer(),
+                  _buildFooter(),
+                  SizedBox(height: 26),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
+
+      // body: SingleChildScrollView(
+      //   child: Padding(
+      //     padding: const EdgeInsets.symmetric(horizontal: 20),
+      //     child: Column(
+      //       children: [
+      //         _buildHeader(size),
+      //         SizedBox(height: 24,),
+      //         _buildForm(),
+      //         SizedBox(height: 24,),
+      //         _buildFooter(),
+      //         SizedBox(height: 20,),
+      //       ],
+      //     ),
+      //   ),
+      // ),
     );
   }
 
@@ -78,7 +86,7 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
             fit: BoxFit.contain,
           ),
         ),
-        SizedBox(height: 15,),
+        SizedBox(height: 16,),
         Text(
           "ចូលគណនីរបស់អ្នក",
           style: AppTextStyle.screenTitle24,
@@ -92,7 +100,7 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
       child: Column(
         children: [
           AuthField(
-            validator: emailValidator,
+            validator: Validators.email,
             textController: emailCtrl,
             hintText: "បញ្ចូលអ៊ីម៉ែលរបស់អ្នក",
             icon: Icon(
@@ -101,9 +109,9 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
               color: AppColors.secondaryText,
             ),
           ),
-          SizedBox(height: 24,),
+          SizedBox(height: 16,),
           AuthField(
-            validator: pwdValidator,
+            validator: Validators.password,
             textController: pwdCtrl,
             hintText: "បញ្ចូលពាក្យសម្ងាត់របស់អ្នក",
             icon: Icon(
@@ -113,7 +121,6 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
             ),
             isPwd: true,
           ),
-          SizedBox(height: 10,),
           Row(
             children: [
               Checkbox(
@@ -147,7 +154,7 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
               )
             ],
           ),
-          SizedBox(height: 10,),
+          SizedBox(height: 8,),
           PrimaryButton(
             label: "ចូលគណនី", 
             backgroundColor: AppColors.primaryMain, 
@@ -188,7 +195,7 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
             ),
           ],
         ),
-        SizedBox(height: 10,),
+        SizedBox(height: 8,),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -230,7 +237,7 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
             )
           ),
         ),
-        SizedBox(height: 20,),
+        SizedBox(height: 12,),
         SizedBox(
           width: double.infinity,
           child: ButtonWithIcon(
