@@ -21,9 +21,9 @@ class RoleSelectionScreen extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(
-              height: size.height*0.30,
+              height: size.height*0.35,
               child: SvgPicture.asset(
-                AppImages.imageSelectRole,
+                AppImages.imageClassroom,
                 fit: BoxFit.contain,
               ),
             ),
@@ -49,21 +49,21 @@ class RoleSelectionScreen extends StatelessWidget {
                 );
               }
             ),
-            SizedBox(height: 20,),
+            SizedBox(height: 16,),
             PrimaryButton(
               label: "សិស្ស",
               backgroundColor: AppColors.primaryMain,
               foregroundColor: AppColors.white,
               onPressed: (){}
             ),
-            SizedBox(height: 20,),
+            SizedBox(height: 16,),
             PrimaryButton(
               label: "អាណាព្យាបាលសិស្ស",
               backgroundColor: AppColors.primaryMain,
               foregroundColor: AppColors.white,
               onPressed: (){}
             ),
-            SizedBox(height: 50,)
+            SizedBox(height: 32,)
           ],
         ),
       ),

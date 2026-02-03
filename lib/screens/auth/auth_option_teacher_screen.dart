@@ -15,19 +15,18 @@ class AuthOptionTeacherScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () => Navigator.pop(context), 
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: AppColors.primaryText,
-          )
-        ),
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: AppColors.primaryText,
+            )),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           children: [
             SizedBox(
-              height: size.height*0.35,
+              height: size.height * 0.35,
               child: SvgPicture.asset(
                 AppImages.imageClassroom,
                 fit: BoxFit.contain,
@@ -91,6 +90,23 @@ class AuthOptionTeacherScreen extends StatelessWidget {
               SizedBox(height: 30,)
           ]
           ),
+                label: "ចូលគណនី",
+                backgroundColor: AppColors.primaryMain,
+                foregroundColor: AppColors.white,
+                onPressed: () =>
+                    Navigator.pushNamed(context, AppRoutes.loginTeacherScreen)),
+            SizedBox(
+              height: 20,
+            ),
+            PrimaryButton(
+                label: "ចុះឈ្មោះ",
+                backgroundColor: AppColors.white,
+                foregroundColor: AppColors.primaryMain,
+                onPressed: () {}),
+            SizedBox(
+              height: 30,
+            )
+          ],
         ),
       
     );
