@@ -165,7 +165,9 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
       children: [
         Expanded(
           child: ElevatedButton.icon(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, AppRoutes.manageAllClass);
+            },
             icon: Icon(Icons.add, color: AppColors.white),
             label: Text("បង្កើតថ្នាក់",
                 style: AppTextStyle.body.copyWith(color: AppColors.white)),
@@ -180,7 +182,9 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
         SizedBox(width: 12),
         Expanded(
           child: OutlinedButton.icon(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, AppRoutes.manageAllClass);
+            },
             icon: Icon(Icons.event_note_outlined, color: AppColors.primaryMain),
             label: Text("ត្រូវត្រាថ្នាក់",
                 style:

@@ -28,7 +28,7 @@ class MainApp extends StatelessWidget {
             surfaceTintColor: AppColors.transparent,
           )),
       home: Scaffold(),
-      initialRoute: AppRoutes.roleSelectionScreen,
+      initialRoute: AppRoutes.teacherDashboard,
       routes: {
         AppRoutes.teacherDashboard: (context) => TeacherDashboard(),
         AppRoutes.splashScreen: (context) => SplashScreen(),

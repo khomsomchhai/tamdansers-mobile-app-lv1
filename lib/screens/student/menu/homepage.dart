@@ -13,8 +13,8 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
-      return Scaffold(
-       appBar: AppBar(
+    return Scaffold(
+      appBar: AppBar(
         leading: Container(
             decoration: BoxDecoration(
                 shape: BoxShape.circle,
@@ -69,10 +69,9 @@ class _HomepageState extends State<Homepage> {
     );
   }
 }
+
 class _titleheader extends StatelessWidget {
-  const _titleheader({
-    super.key,
-  });
+  const _titleheader();
 
   @override
   Widget build(BuildContext context) {
@@ -97,9 +96,7 @@ class _titleheader extends StatelessWidget {
 }
 
 class _homework extends StatelessWidget {
-  const _homework({
-    super.key,
-  });
+  const _homework();
 
   @override
   Widget build(BuildContext context) {
@@ -143,9 +140,7 @@ class _homework extends StatelessWidget {
 }
 
 class _classes extends StatelessWidget {
-  const _classes({
-    super.key,
-  });
+  const _classes();
 
   @override
   Widget build(BuildContext context) {
@@ -195,9 +190,7 @@ class _classes extends StatelessWidget {
 }
 
 class _grid_info extends StatelessWidget {
-  const _grid_info({
-    super.key,
-  });
+  const _grid_info();
 
   @override
   Widget build(BuildContext context) {
@@ -239,9 +232,7 @@ class _grid_info extends StatelessWidget {
 }
 
 class _cardAttendance extends StatelessWidget {
-  const _cardAttendance({
-    super.key,
-  });
+  const _cardAttendance();
 
   @override
   Widget build(BuildContext context) {

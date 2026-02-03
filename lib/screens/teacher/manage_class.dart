@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/screens/teacher/attendance_screen.dart';
+import 'package:tamdansers_app/screens/teacher/homework_screen.dart';
+import 'package:tamdansers_app/screens/teacher/student_grade_screen.dart';
+import 'package:tamdansers_app/screens/teacher/student_management_screen.dart';
 
 class ManageClass extends StatefulWidget {
   const ManageClass({super.key});
@@ -142,7 +146,13 @@ class _ManageClassState extends State<ManageClass> {
           iconBgColor: Color(0xFFE3F2FD),
           title: "គ្រប់គ្រងសិស្ស",
           subtitle: "Student Management",
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => StudentManagementScreen()),
+            );
+          },
         ),
         SizedBox(height: 12),
         _buildOptionTile(
@@ -151,7 +161,12 @@ class _ManageClassState extends State<ManageClass> {
           iconBgColor: Color(0xFFFFF3E0),
           title: "គ្រប់គ្រងវត្តមាន",
           subtitle: "Attendance Management",
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AttendanceScreen()),
+            );
+          },
         ),
         SizedBox(height: 12),
         _buildOptionTile(
@@ -160,7 +175,12 @@ class _ManageClassState extends State<ManageClass> {
           iconBgColor: Color(0xFFF3E5F5),
           title: "គ្រប់គ្រងកិច្ចការផ្ទះ",
           subtitle: "Homework Management",
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomeworkScreen()),
+            );
+          },
         ),
         SizedBox(height: 12),
         _buildOptionTile(
@@ -169,7 +189,12 @@ class _ManageClassState extends State<ManageClass> {
           iconBgColor: Color(0xFFFFEBEE),
           title: "លទ្ធផល និងចំណាត់ថ្នាក់",
           subtitle: "Result & Ranking",
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => StudentGradeScreen()),
+            );
+          },
         ),
       ],
     );
