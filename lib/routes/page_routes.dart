@@ -8,11 +8,10 @@ import 'package:tamdansers_app/screens/student/menu/homepage.dart';
 import 'package:tamdansers_app/screens/student/menu/homework.dart';
 import 'package:tamdansers_app/screens/student/menu/profile.dart';
 import 'package:tamdansers_app/screens/student/result.dart';
-import 'package:tamdansers_app/screens/student/scedeul.dart';
 import 'package:tamdansers_app/screens/student/student_dashboard.dart';
 
 class PageRoutes {
- static Map<String, Widget Function(BuildContext)> routes = {
+  static Map<String, Widget Function(BuildContext)> routes = {
     AppRoutes.splashScreen: (context) => SplashScreen(),
     AppRoutes.roleSelectionScreen: (context) => RoleSelectionScreen(),
     AppRoutes.authOptionTeacherScreen: (context) => AuthOptionTeacherScreen(),
@@ -21,8 +20,6 @@ class PageRoutes {
     AppRoutes.attendance: (context) => Attendance(),
     AppRoutes.homework: (context) => Homework(),
     AppRoutes.homepage: (context) => Homepage(),
-    AppRoutes.scedeul: (context) => Scedeul(),
-    AppRoutes.result:(context) => Result()
-   
+    AppRoutes.result: (context) => Result()
   };
 }
