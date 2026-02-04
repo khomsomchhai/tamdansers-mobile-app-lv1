@@ -9,6 +9,7 @@ import 'package:tamdansers_app/screens/auth/sign_up_teacher_screen.dart';
 import 'package:tamdansers_app/screens/auth/splash_screen.dart';
 import 'package:tamdansers_app/screens/student/student_dashboard.dart';
 import 'package:tamdansers_app/screens/teacher/manage_student_screen.dart';
+import 'package:tamdansers_app/screens/teacher/student_detail_screen.dart';
 
 void main() {
   runApp(const MainApp());
@@ -39,6 +40,7 @@ class MainApp extends StatelessWidget {
         "/login_teacher_screen": (context) => LoginTeacherScreen(),
         "/sign_up_teacher_screen": (context) => SignUpTeacherScreen(),
         "/manage_student_screen": (context) => ManageStudentScreen(),
+        "/student_detail_screen": (context) => StudentDetailScreen(),
 
         "/student_dashboard": (context) => StudentDashboard(),
       },

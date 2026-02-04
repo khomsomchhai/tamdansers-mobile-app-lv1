@@ -1,90 +1,8 @@
-// import 'package:flutter/material.dart';
-// import 'package:tamdansers_app/constants/app_colors.dart';
-// import 'package:tamdansers_app/constants/text_style.dart';
-// import 'package:tamdansers_app/widget/search_field.dart';
-
-// class ManageStudentScreen extends StatefulWidget {
-//   const ManageStudentScreen({super.key});
-
-//   @override
-//   State<ManageStudentScreen> createState() => _ManageStudentScreenState();
-// }
-
-// class _ManageStudentScreenState extends State<ManageStudentScreen> {
-//   var searchCtrl = TextEditingController();
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         leading: IconButton(
-//           onPressed: () => Navigator.pop(context), 
-//           icon: Icon(
-//             Icons.arrow_back_ios_new_rounded,
-//             color: AppColors.primaryText,
-//           ),
-//         ),
-//         title: Text(
-//           "គ្រប់គ្រងសិស្ស",
-//           style: AppTextStyle.screenTitle24,
-//         ),
-//         centerTitle: true,
-//       ),
-//       body: Padding(
-//         padding: const EdgeInsets.all(20),
-//         child: Column(
-//           children: [
-//             Row(
-//               children: [
-//                 Expanded(
-//                   child: SearchField(
-//                     controller: searchCtrl,
-//                     hintText: "ស្វែងរក...",
-//                     icon: Icon(
-//                       Icons.search_outlined,
-//                       color: AppColors.secondaryText,
-//                     ),
-//                   ),
-//                 ),
-//                 SizedBox(width: 10,),
-//                 Container(
-//                   width: 150,
-//                   padding: EdgeInsets.all(10),
-//                   decoration: BoxDecoration(
-//                     color: AppColors.primaryMain,
-//                     borderRadius: BorderRadius.circular(16)
-//                   ),
-//                   child: Row(
-//                     children: [
-//                       Container(
-//                         decoration: BoxDecoration(
-//                           shape: BoxShape.circle,
-//                           color: AppColors.white
-//                         ),
-//                         child: Icon(
-//                           Icons.add_rounded,
-//                           color: AppColors.primaryMain,
-//                         ),
-//                       ),
-                      
-//                     ],
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-
-
-// ignore_for_file: deprecated_member_use
-
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/widget/search_field.dart';
 
 class ManageStudentScreen extends StatefulWidget {
@@ -120,8 +38,7 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
         ),
         centerTitle: true,
         elevation: 0,
-        surfaceTintColor: Colors
-            .transparent,
+        surfaceTintColor: Colors.transparent,
       ),
       body: Column(
         children: [
@@ -139,17 +56,17 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
                 GestureDetector(
                   onTap: () {
 
                   },
                   child: Container(
-                    height: 44,
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    height: 46,
+                    padding:  EdgeInsets.symmetric(horizontal: 12),
                     decoration: BoxDecoration(
                       color: AppColors.primaryMain,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(26),
                     ),
                     child: Row(
                       children: [
@@ -166,11 +83,12 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
                             color: AppColors.primaryMain,
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8),
                         Text(
                           "បញ្ចូលសិស្ស",
-                          style: AppTextStyle.fontsize18.copyWith(
+                          style: AppTextStyle.body.copyWith(
                             color: AppColors.white,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
@@ -181,18 +99,18 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
             ),
           ),
 
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding:  EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               children: [
                 Text(
-                  "បញ្ជីសិស្សរបស់អ្នក",
+                  "បញ្ជីសិស្សថ្នាក់ទី 7A",
                   style: AppTextStyle.sectionTitle20.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(width: 4),
+                SizedBox(width: 4),
                 Text(
                   "32 នាក់",
                   style: AppTextStyle.sectionTitle20.copyWith(
@@ -204,18 +122,17 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
             ),
           ),
 
-          const SizedBox(height: 8),
+          SizedBox(height: 12),
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
-              itemCount: 4,
+              padding:  EdgeInsets.fromLTRB(20, 0, 20, 16),
+              itemCount: 32,
               itemBuilder: (context, index) {
                 return _studentCard(
                   name: "សុម តារី",
                   code: "ID: 2023-00$index",
-                  status: "សកម្ម",
-                  progressMath: 0.64,
-                  progressKhmer: 0.68,
+                  gender: "ប្រុស",
+                  attendance: 0.68,
                 );
               },
             ),
@@ -228,21 +145,20 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
   Widget _studentCard({
     required String name,
     required String code,
-    required String status,
-    required double progressMath,
-    required double progressKhmer,
+    required String gender,
+    required double attendance,
   }) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(12),
+      margin:  EdgeInsets.only(bottom: 12),
+      padding:  EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(26),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.04),
             blurRadius: 6,
-            offset: const Offset(0, 2),
+            offset:  Offset(0, 2),
           ),
         ],
       ),
@@ -252,17 +168,15 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CircleAvatar(
-                radius: 22,
+                radius: 30,
                 backgroundColor: AppColors.primaryMain.withOpacity(0.15),
-                child: Text(
-                  name.characters.first,
-                  style: AppTextStyle.body.copyWith(
-                    color: AppColors.primaryMain,
-                    fontWeight: FontWeight.bold,
-                  ),
+                child: Image.asset(
+                  AppImages.studentMale2,
+                  width: 40,
+                  fit: BoxFit.cover,
                 ),
               ),
-              const SizedBox(width: 10),
+              SizedBox(width: 10),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -273,7 +187,7 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4),
                     Text(
                       code,
                       style: AppTextStyle.body.copyWith(
@@ -285,50 +199,45 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
               ),
               Container(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   color: AppColors.white,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  status,
-                  style: AppTextStyle.body.copyWith(
-                    color: AppColors.success,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  gender,
+                  style: AppTextStyle.body
                 ),
               ),
             ],
           ),
 
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
 
           _progressRow(
             label: "វត្តមាន",
-            value: progressMath,
+            value: attendance,
             barColor: AppColors.success,
           ),
-          const SizedBox(height: 6),
-          _progressRow(
-            label: "អវត្តមាន",
-            value: progressKhmer,
-            barColor: AppColors.error,
-          ),
 
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
 
           Align(
-            alignment: Alignment.centerLeft,
+            alignment: Alignment.centerRight,
             child: TextButton(
               style: TextButton.styleFrom(
                 padding: EdgeInsets.zero,
-                minimumSize: const Size(0, 0),
+                minimumSize:  Size(0, 0),
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
               onPressed: () {
+                Navigator.pushNamed(
+                  context, 
+                  AppRoutes.studentDetailScreen
+                );
               },
               child: Text(
-                "មើលព័ត៌មានលម្អិត >",
+                "ព័ត៌មានលម្អិត >",
                 style: AppTextStyle.body.copyWith(
                   color: AppColors.primaryMain,
                   fontWeight: FontWeight.w600,
@@ -355,14 +264,14 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
               label,
               style: AppTextStyle.body,
             ),
-            const Spacer(),
+            Spacer(),
             Text(
               "${(value * 100).toStringAsFixed(0)}%",
               style: AppTextStyle.body,
             ),
           ],
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: 4),
         ClipRRect(
           borderRadius: BorderRadius.circular(4),
           child: LinearProgressIndicator(
