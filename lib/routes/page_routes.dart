@@ -5,6 +5,7 @@ import 'package:tamdansers_app/screens/auth/login_teacher_screen.dart';
 import 'package:tamdansers_app/screens/auth/role_selection_screen.dart';
 import 'package:tamdansers_app/screens/auth/sign_up_teacher_screen.dart';
 import 'package:tamdansers_app/screens/auth/splash_screen.dart';
+import 'package:tamdansers_app/screens/parents/parent_login.dart';
 import 'package:tamdansers_app/screens/student/menu/attendance.dart';
 import 'package:tamdansers_app/screens/student/menu/homepage.dart';
 import 'package:tamdansers_app/screens/student/menu/homework.dart';
@@ -39,6 +40,10 @@ class PageRoutes {
     AppRoutes.homework: (context) => Homework(),
     AppRoutes.homepage: (context) => Homepage(),
     // AppRoutes.scedeul: (context) => Scedeul(),
-    AppRoutes.result:(context) => Result()
+    AppRoutes.result:(context) => Result(),
+
+
+    //parent
+    AppRoutes.parentDashboardScreen:(contex)=> ParentLogin()
   };
 }
