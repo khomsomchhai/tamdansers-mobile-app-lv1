@@ -10,13 +10,50 @@ class AttendanceScreen extends StatefulWidget {
 }
 
 class _AttendanceScreenState extends State<AttendanceScreen> {
-  String _selectedDate = "២៥ មករា, ថ្ងៃនេះ";
-  final List<String> _dates = ["២៥ មករា, ថ្ងៃនេះ", "២៣ មករា", "២២ មករា"];
+  String _selectedDate = "២៥ មករា, ព្រឹក្ស";
+  final List<String> _dates = ["២៥ មករា, ព្រឹក", "២៤ មករា", "២៣ មករា"];
+
+  final List<Map<String, dynamic>> _students = [
+    {
+      "name": "ច័ន្ថ ធីតា",
+      "id": "10245",
+      "status": "present",
+      "hasNotification": true,
+      "image": "assets/images/user_profile.png"
+    },
+    {
+      "name": "ច័ន្ថ ពិសី",
+      "id": "10246",
+      "status": "absent",
+      "hasNotification": true,
+      "image": "assets/images/user_profile.png"
+    },
+    {
+      "name": "ឌូមា​ មុី",
+      "id": "10247",
+      "status": "late",
+      "hasNotification": false,
+      "image": "assets/images/user_profile.png"
+    },
+    {
+      "name": "ហុង សុភា",
+      "id": "10248",
+      "status": "absent",
+      "hasNotification": false,
+      "image": "assets/images/user_profile.png"
+    },
+    {
+      "name": "ហូលី ស្សីត",
+      "id": "10249",
+      "status": "present",
+      "hasNotification": false,
+      "image": null
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
       appBar: AppBar(
         backgroundColor: AppColors.white,
         elevation: 0,
@@ -37,59 +74,35 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         children: [
           Container(
             color: AppColors.white,
+            padding: EdgeInsets.only(top: 8),
             child: Column(
               children: [
                 _buildDateFilter(),
                 SizedBox(height: 16),
                 _buildStatsCard(),
-                SizedBox(height: 16),
+                SizedBox(height: 12),
+                _buildMarkAllButton(),
+                SizedBox(height: 12),
               ],
             ),
           ),
           Expanded(
-            child: ListView(
+            child: ListView.builder(
               padding: EdgeInsets.all(16),
-              children: [
-                _buildStudentCard(
-                  "ចន្ថា ធីតា",
-                  "ID: 10245",
-                  "present",
-                  true,
-                  "assets/images/user_profile.png",
-                ),
-                SizedBox(height: 12),
-                _buildStudentCard(
-                  "ចន្ថា ប្រើ",
-                  "ID: 10246",
-                  "absent",
-                  true,
-                  "assets/images/user_profile.png",
-                ),
-                SizedBox(height: 12),
-                _buildStudentCard(
-                  "ចន្ថា ក្រុម",
-                  "ID: 10247",
-                  "late",
-                  false,
-                  "assets/images/user_profile.png",
-                ),
-                SizedBox(height: 12),
-                _buildStudentCard(
-                  "ហាល ប្រើម្យ",
-                  "ID: 10248",
-                  "absent",
-                  false,
-                  "assets/images/user_profile.png",
-                ),
-                SizedBox(height: 12),
-                _buildStudentCard(
-                  "ហុល ស៊ីក",
-                  "ID: 10249",
-                  "present",
-                  false,
-                  null,
-                ),
-              ],
+              itemCount: _students.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: EdgeInsets.only(bottom: 12),
+                  child: _buildStudentCard(
+                    _students[index]["name"],
+                    _students[index]["id"],
+                    _students[index]["status"],
+                    _students[index]["hasNotification"],
+                    _students[index]["image"],
+                    index,
+                  ),
+                );
+              },
             ),
           ),
           _buildSubmitButton(),
@@ -139,17 +152,17 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   Widget _buildStatsCard() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16),
-      padding: EdgeInsets.all(20),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: AppColors.backgroundLight,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             "គណិតវិទ្យា • ថ្នាក់ទី 7-A",
-            style: AppTextStyle.fontsize18,
+            style: AppTextStyle.sectionTitle20.copyWith(fontSize: 18),
           ),
           SizedBox(height: 16),
           Row(
@@ -157,34 +170,9 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             children: [
               _buildStatItem("24", "សរុប", AppColors.primaryText),
               _buildStatItem("20", "មក", AppColors.success),
-              _buildStatItem("3", "អត់មក", AppColors.error),
-              _buildStatItem("1", "យឺត", Colors.orange),
+              _buildStatItem("3", "អវត្តមាន", AppColors.error),
+              _buildStatItem("1", "យឺត", Color(0xFFFFA726)),
             ],
-          ),
-          SizedBox(height: 16),
-          Center(
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              decoration: BoxDecoration(
-                color: Color(0xFFE3F2FD),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.check_circle,
-                      color: AppColors.primaryMain, size: 20),
-                  SizedBox(width: 8),
-                  Text(
-                    "តាមដានការអត់ត្មាន",
-                    style: AppTextStyle.body.copyWith(
-                      color: AppColors.primaryMain,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ),
         ],
       ),
@@ -196,20 +184,52 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       children: [
         Text(
           value,
-          style: AppTextStyle.title28.copyWith(color: color, fontSize: 24),
+          style: AppTextStyle.title28.copyWith(
+            color: color,
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         SizedBox(height: 4),
         Text(
           label,
-          style: AppTextStyle.body
-              .copyWith(fontSize: 13, color: AppColors.secondaryText),
+          style: AppTextStyle.body.copyWith(
+            fontSize: 14,
+            color: AppColors.secondaryText,
+          ),
         ),
       ],
     );
   }
 
+  Widget _buildMarkAllButton() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(vertical: 12),
+      decoration: BoxDecoration(
+        color: Color(0xFFE3F2FD),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.check_circle, color: AppColors.primaryMain, size: 20),
+          SizedBox(width: 8),
+          Text(
+            "កំណត់សិស្សមកទាំងអស់",
+            style: AppTextStyle.body.copyWith(
+              color: AppColors.primaryMain,
+              fontWeight: FontWeight.w600,
+              fontSize: 15,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildStudentCard(String name, String id, String status,
-      bool hasNotification, String? imagePath) {
+      bool hasNotification, String? imagePath, int index) {
     Color statusColor;
     Color statusBgColor;
 
@@ -223,7 +243,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         statusBgColor = Color(0xFFFFEBEE);
         break;
       case "late":
-        statusColor = Colors.orange;
+        statusColor = Color(0xFFFFA726);
         statusBgColor = Color(0xFFFFF3E0);
         break;
       default:
@@ -235,7 +255,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         children: [
@@ -244,32 +264,24 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
               Stack(
                 children: [
                   CircleAvatar(
-                    radius: 24,
+                    radius: 28,
                     backgroundImage:
                         imagePath != null ? AssetImage(imagePath) : null,
-                    backgroundColor: AppColors.primaryMain,
+                    backgroundColor: status == "present"
+                        ? Color(0xFFE8F5E9)
+                        : status == "absent"
+                            ? Color(0xFFFFEBEE)
+                            : Color(0xFFFFF3E0),
                     child: imagePath == null
                         ? Text(
                             name.substring(0, 2).toUpperCase(),
-                            style: AppTextStyle.fontsize18
-                                .copyWith(color: AppColors.white),
+                            style: AppTextStyle.fontsize18.copyWith(
+                              color: statusColor,
+                              fontWeight: FontWeight.bold,
+                            ),
                           )
                         : null,
                   ),
-                  if (status == "present")
-                    Positioned(
-                      right: 0,
-                      bottom: 0,
-                      child: Container(
-                        width: 12,
-                        height: 12,
-                        decoration: BoxDecoration(
-                          color: AppColors.success,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.white, width: 2),
-                        ),
-                      ),
-                    ),
                 ],
               ),
               SizedBox(width: 12),
@@ -277,18 +289,23 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(name, style: AppTextStyle.fontsize18),
+                    Text(name,
+                        style: AppTextStyle.fontsize18
+                            .copyWith(fontWeight: FontWeight.w600)),
+                    SizedBox(height: 2),
                     Text(
-                      id,
+                      "ID: $id",
                       style: AppTextStyle.body.copyWith(
-                          fontSize: 13, color: AppColors.secondaryText),
+                        fontSize: 13,
+                        color: AppColors.secondaryText,
+                      ),
                     ),
                   ],
                 ),
               ),
               Container(
-                width: 32,
-                height: 32,
+                width: 36,
+                height: 36,
                 decoration: BoxDecoration(
                   color: statusBgColor,
                   shape: BoxShape.circle,
@@ -300,62 +317,104 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                           ? Icons.access_time
                           : Icons.check,
                   color: statusColor,
-                  size: 18,
+                  size: 20,
                 ),
               ),
             ],
           ),
-          SizedBox(height: 12),
+          SizedBox(height: 16),
           Row(
             children: [
               Expanded(
                 child: OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      _students[index]["status"] = "present";
+                    });
+                  },
                   style: OutlinedButton.styleFrom(
                     side: BorderSide(
-                        color: AppColors.secondaryText.withValues(alpha: 0.3)),
+                      color: status == "present"
+                          ? AppColors.primaryMain
+                          : AppColors.secondaryText.withValues(alpha: 0.3),
+                    ),
+                    backgroundColor:
+                        status == "present" ? Color(0xFFE3F2FD) : null,
+                    padding: EdgeInsets.symmetric(vertical: 10),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                  ),
-                  child: Text("មក",
-                      style: AppTextStyle.body.copyWith(fontSize: 14)),
-                ),
-              ),
-              SizedBox(width: 8),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: status == "absent"
-                        ? AppColors.error
-                        : AppColors.backgroundLight,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                   child: Text(
-                    "អត់មក",
+                    "មក",
                     style: AppTextStyle.body.copyWith(
                       fontSize: 14,
-                      color: status == "absent"
-                          ? AppColors.white
+                      color: status == "present"
+                          ? AppColors.primaryMain
                           : AppColors.primaryText,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
               ),
               SizedBox(width: 8),
               Expanded(
-                child: OutlinedButton(
-                  onPressed: () {},
-                  style: OutlinedButton.styleFrom(
-                    side: BorderSide(
-                        color: AppColors.secondaryText.withValues(alpha: 0.3)),
+                child: ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      _students[index]["status"] = "absent";
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: status == "absent"
+                        ? AppColors.error
+                        : AppColors.backgroundLight,
+                    elevation: 0,
+                    padding: EdgeInsets.symmetric(vertical: 10),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
-                  child: Text("យឺត",
-                      style: AppTextStyle.body.copyWith(fontSize: 14)),
+                  child: Text(
+                    "អវត្តមាន",
+                    style: AppTextStyle.body.copyWith(
+                      fontSize: 14,
+                      color: status == "absent"
+                          ? AppColors.white
+                          : AppColors.primaryText,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(width: 8),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      _students[index]["status"] = "late";
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: status == "late"
+                        ? Color(0xFFFFA726)
+                        : AppColors.backgroundLight,
+                    elevation: 0,
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: Text(
+                    "យឺត",
+                    style: AppTextStyle.body.copyWith(
+                      fontSize: 14,
+                      color: status == "late"
+                          ? AppColors.white
+                          : AppColors.primaryText,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -365,18 +424,25 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
               padding: const EdgeInsets.only(top: 12),
               child: Row(
                 children: [
-                  Icon(Icons.notifications,
-                      color: AppColors.primaryMain, size: 18),
+                  Icon(Icons.notifications_none,
+                      color: AppColors.secondaryText, size: 20),
                   SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      "ផ្ញើសេចក្តីជូនដំណឹងការពារ",
-                      style: AppTextStyle.body.copyWith(fontSize: 13),
+                      "ផ្ញើការជូនដំណឹងទៅឪពុកម្តាយ",
+                      style: AppTextStyle.body.copyWith(
+                        fontSize: 13,
+                        color: AppColors.secondaryText,
+                      ),
                     ),
                   ),
                   Switch(
-                    value: hasNotification,
-                    onChanged: (value) {},
+                    value: _students[index]["hasNotification"],
+                    onChanged: (value) {
+                      setState(() {
+                        _students[index]["hasNotification"] = value;
+                      });
+                    },
                     activeColor: AppColors.primaryMain,
                   ),
                 ],
@@ -412,11 +478,14 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.save, color: AppColors.white),
+            Icon(Icons.save_outlined, color: AppColors.white, size: 22),
             SizedBox(width: 8),
             Text(
-              "បញ្ជូលត្មាន",
-              style: AppTextStyle.fontsize18.copyWith(color: AppColors.white),
+              "បញ្ជូនវត្តមាន",
+              style: AppTextStyle.fontsize18.copyWith(
+                color: AppColors.white,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ],
         ),

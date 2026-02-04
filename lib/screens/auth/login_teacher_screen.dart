@@ -29,12 +29,11 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () => Navigator.pop(context), 
-          icon: Icon(
-            Icons.arrow_back_ios_new_rounded,
-            color: AppColors.primaryText,
-          )
-        ),
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: AppColors.primaryText,
+            )),
       ),
       body: CustomScrollView(
         slivers: [
@@ -80,13 +79,15 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
     return Column(
       children: [
         SizedBox(
-          height: size.height*0.2,
+          height: size.height * 0.2,
           child: SvgPicture.asset(
             AppImages.imgLogin,
             fit: BoxFit.contain,
           ),
         ),
-        SizedBox(height: 16,),
+        SizedBox(
+          height: 16,
+        ),
         Text(
           "ចូលគណនីរបស់អ្នក",
           style: AppTextStyle.screenTitle24,
@@ -94,7 +95,8 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
       ],
     );
   }
-  Widget _buildForm(){
+
+  Widget _buildForm() {
     return Form(
       key: formKey,
       child: Column(
@@ -109,7 +111,9 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
               color: AppColors.secondaryText,
             ),
           ),
-          SizedBox(height: 16,),
+          SizedBox(
+            height: 16,
+          ),
           AuthField(
             validator: Validators.password,
             textController: pwdCtrl,
@@ -127,8 +131,7 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
                 value: isCheck,
                 activeColor: AppColors.primaryMain,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4) 
-                ),
+                    borderRadius: BorderRadius.circular(4)),
                 onChanged: (value) {
                   setState(() {
                     isCheck = value!;
@@ -141,33 +144,37 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
               ),
               Spacer(),
               GestureDetector(
-                onTap: () {
-                  
-                },
+                onTap: () {},
                 child: Text(
                   "ភ្លេចពាក្យសម្ងាត់?",
                   style: GoogleFonts.kantumruyPro(
-                    fontSize: 16,
-                    color: AppColors.primaryMain
-                  ),
+                      fontSize: 16, color: AppColors.primaryMain),
                 ),
               )
             ],
           ),
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
           PrimaryButton(
-            label: "ចូលគណនី", 
-            backgroundColor: AppColors.primaryMain, 
-            foregroundColor: AppColors.white, 
+            label: "ចូលគណនី",
+            backgroundColor: AppColors.primaryMain,
+            foregroundColor: AppColors.white,
             onPressed: () {
-              formKey.currentState!.validate();
+              if (formKey.currentState!.validate()) {
+                Navigator.pushReplacementNamed(
+                  context,
+                  AppRoutes.teacherDashboard,
+                );
+              }
             },
           ),
         ],
       ),
     );
   }
-  Widget _buildFooter(){
+
+  Widget _buildFooter() {
     return Column(
       children: [
         Row(
@@ -177,80 +184,75 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
               "មិនទាន់មានគណនីមែនទេ?",
               style: AppTextStyle.body,
             ),
-            SizedBox(width: 10,),
+            SizedBox(
+              width: 10,
+            ),
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(
-                  context, 
-                  AppRoutes.signUpTeacherScreen
-                );
+                Navigator.pushNamed(context, AppRoutes.signUpTeacherScreen);
               },
               child: Text(
                 "ចុះឈ្មោះ",
                 style: GoogleFonts.kantumruyPro(
-                  fontSize: 16,
-                  color: AppColors.primaryMain
-                ),
+                    fontSize: 16, color: AppColors.primaryMain),
               ),
             ),
           ],
         ),
-        SizedBox(height: 8,),
+        SizedBox(
+          height: 8,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
               child: Container(
                 height: 1,
-                decoration: BoxDecoration(
-                  color: AppColors.secondaryText
-                ),
+                decoration: BoxDecoration(color: AppColors.secondaryText),
               ),
             ),
-            SizedBox(width: 10,),
-            Text(
-              "ឬ",
-              style: AppTextStyle.body
+            SizedBox(
+              width: 10,
             ),
-            SizedBox(width: 10,),
+            Text("ឬ", style: AppTextStyle.body),
+            SizedBox(
+              width: 10,
+            ),
             Expanded(
               child: Container(
                 height: 1,
-                decoration: BoxDecoration(
-                  color: AppColors.secondaryText
-                ),
+                decoration: BoxDecoration(color: AppColors.secondaryText),
               ),
             ),
           ],
         ),
-        SizedBox(height: 15,),
         SizedBox(
-          width: double.infinity,
-          child: ButtonWithIcon(
-            onPressed: () {
-              
-            },
-            label: "ភ្ចាប់ជាមួយ Telegram",
-            icon: Icon(
-              Icons.telegram_outlined,size: 30,
-              color: AppColors.primaryMain,
-            )
-          ),
+          height: 15,
         ),
-        SizedBox(height: 12,),
         SizedBox(
           width: double.infinity,
           child: ButtonWithIcon(
-            onPressed: () {
-              
-            },
-            label: "ភ្ចាប់ជាមួយ Google",
-            icon: SvgPicture.asset(
-              AppImages.googleIcon,
-              fit: BoxFit.contain,
-              width: 30,
-            )
-          ),
+              onPressed: () {},
+              label: "ភ្ចាប់ជាមួយ Telegram",
+              icon: Icon(
+                Icons.telegram_outlined,
+                size: 30,
+                color: AppColors.primaryMain,
+              )),
+        ),
+        SizedBox(
+          height: 12,
+        ),
+        SizedBox(
+          width: double.infinity,
+          child: ButtonWithIcon(
+              onPressed: () {},
+              label: "ភ្ចាប់ជាមួយ Google",
+              icon: SvgPicture.asset(
+                AppImages.googleIcon,
+                fit: BoxFit.contain,
+                width: 30,
+              )),
         ),
       ],
     );

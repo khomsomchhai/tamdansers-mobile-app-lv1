@@ -1,87 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:tamdansers_app/constants/app_colors.dart';
-// import 'package:tamdansers_app/constants/text_style.dart';
-// import 'package:tamdansers_app/widget/search_field.dart';
-
-// class ManageStudentScreen extends StatefulWidget {
-//   const ManageStudentScreen({super.key});
-
-//   @override
-//   State<ManageStudentScreen> createState() => _ManageStudentScreenState();
-// }
-
-// class _ManageStudentScreenState extends State<ManageStudentScreen> {
-//   var searchCtrl = TextEditingController();
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         leading: IconButton(
-//           onPressed: () => Navigator.pop(context), 
-//           icon: Icon(
-//             Icons.arrow_back_ios_new_rounded,
-//             color: AppColors.primaryText,
-//           ),
-//         ),
-//         title: Text(
-//           "គ្រប់គ្រងសិស្ស",
-//           style: AppTextStyle.screenTitle24,
-//         ),
-//         centerTitle: true,
-//       ),
-//       body: Padding(
-//         padding: const EdgeInsets.all(20),
-//         child: Column(
-//           children: [
-//             Row(
-//               children: [
-//                 Expanded(
-//                   child: SearchField(
-//                     controller: searchCtrl,
-//                     hintText: "ស្វែងរក...",
-//                     icon: Icon(
-//                       Icons.search_outlined,
-//                       color: AppColors.secondaryText,
-//                     ),
-//                   ),
-//                 ),
-//                 SizedBox(width: 10,),
-//                 Container(
-//                   width: 150,
-//                   padding: EdgeInsets.all(10),
-//                   decoration: BoxDecoration(
-//                     color: AppColors.primaryMain,
-//                     borderRadius: BorderRadius.circular(16)
-//                   ),
-//                   child: Row(
-//                     children: [
-//                       Container(
-//                         decoration: BoxDecoration(
-//                           shape: BoxShape.circle,
-//                           color: AppColors.white
-//                         ),
-//                         child: Icon(
-//                           Icons.add_rounded,
-//                           color: AppColors.primaryMain,
-//                         ),
-//                       ),
-                      
-//                     ],
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-
-
-// ignore_for_file: deprecated_member_use
-
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
@@ -120,8 +36,7 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
         ),
         centerTitle: true,
         elevation: 0,
-        surfaceTintColor: Colors
-            .transparent,
+        surfaceTintColor: Colors.transparent,
       ),
       body: Column(
         children: [
@@ -141,9 +56,7 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
                 ),
                 const SizedBox(width: 10),
                 GestureDetector(
-                  onTap: () {
-
-                  },
+                  onTap: () {},
                   child: Container(
                     height: 44,
                     padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -180,7 +93,6 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
               ],
             ),
           ),
-
           const SizedBox(height: 12),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -203,7 +115,6 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
               ],
             ),
           ),
-
           const SizedBox(height: 8),
           Expanded(
             child: ListView.builder(
@@ -240,7 +151,7 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 6,
             offset: const Offset(0, 2),
           ),
@@ -253,7 +164,7 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
             children: [
               CircleAvatar(
                 radius: 22,
-                backgroundColor: AppColors.primaryMain.withOpacity(0.15),
+                backgroundColor: AppColors.primaryMain.withValues(alpha: 0.15),
                 child: Text(
                   name.characters.first,
                   style: AppTextStyle.body.copyWith(
@@ -300,9 +211,7 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
               ),
             ],
           ),
-
           const SizedBox(height: 12),
-
           _progressRow(
             label: "វត្តមាន",
             value: progressMath,
@@ -314,9 +223,7 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
             value: progressKhmer,
             barColor: AppColors.error,
           ),
-
           const SizedBox(height: 8),
-
           Align(
             alignment: Alignment.centerLeft,
             child: TextButton(
@@ -325,8 +232,7 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
                 minimumSize: const Size(0, 0),
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
-              onPressed: () {
-              },
+              onPressed: () {},
               child: Text(
                 "មើលព័ត៌មានលម្អិត >",
                 style: AppTextStyle.body.copyWith(
@@ -368,13 +274,11 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
           child: LinearProgressIndicator(
             value: value,
             minHeight: 4,
-            backgroundColor:
-                AppColors.white,
+            backgroundColor: AppColors.white,
             valueColor: AlwaysStoppedAnimation<Color>(barColor),
           ),
         ),
       ],
     );
   }
-
 }

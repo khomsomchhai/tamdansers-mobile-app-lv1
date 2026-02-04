@@ -13,7 +13,6 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
       appBar: AppBar(
         backgroundColor: AppColors.white,
         elevation: 0,
@@ -24,7 +23,7 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
         title: Column(
           children: [
             Text(
-              "ថ្នាក់ទី 90-A",
+              "ថ្នាក់ទី 7-A",
               style: AppTextStyle.fontsize18,
             ),
             Text(
@@ -96,7 +95,7 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
             children: [
               _buildHomeworkCard(
                 "Algebra Chapter 4",
-                "ប្រជាដេង៖ សម្បូកដីត្រេក្តីព",
+                "ប្រធានបទ​៖ សមីការ​ ដឺក្រេទី២",
                 "២០ កុម្ភៈ ២០២៥",
                 "២៥ / ៣៦ នាក់",
                 0.7,
@@ -106,7 +105,7 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
               SizedBox(height: 12),
               _buildHomeworkCard(
                 "Geometry Quiz Prep",
-                "ប្រជាដេង៖ អង្គ និងមុម",
+                "ប្រធានបទ​៖ រង្វង់​ និង មុំ",
                 "២៥ កុម្ភៈ ២០២៥",
                 "១៦ / ៣៦ នាក់",
                 0.45,
@@ -224,7 +223,7 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
                   ),
                   SizedBox(width: 8),
                   Text(
-                    "គិតស្តេងត្មាត្ម (REVIEW)",
+                    "ពិនិត្យឡើងវិញ (REVIEW)",
                     style: AppTextStyle.fontsize18.copyWith(fontSize: 16),
                   ),
                 ],
@@ -246,23 +245,23 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
           child: Column(
             children: [
               _buildReviewCard(
-                "សារ៉ា (Sarah Miller)",
+                "ចាន់​ ដារ៉ា",
                 "Algebra Chapter 4 •",
-                "90 ទាំងទូ",
+                "១០​ នាទីមុន",
                 "assets/images/user_profile.png",
               ),
               SizedBox(height: 12),
               _buildReviewCard(
-                "ចន្ត្រា (Chantra)",
+                "លី​ សុភាព",
                 "Algebra Chapter 4 •",
-                "២៥ ទាំងទូ",
+                "២៥ នាទីមុន",
                 "assets/images/user_profile.png",
               ),
               SizedBox(height: 12),
               _buildReviewCard(
-                "សុផាក់ (Sopheak)",
+                "ហុង សុភា",
                 "Algebra Chapter 4 •",
-                "៥៥ ទាំងទូ",
+                "៥៥ នាទីមុន",
                 null,
               ),
             ],
@@ -273,7 +272,7 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
   }
 
   Widget _buildReviewCard(
-      String name, String assignment, String score, String? imagePath) {
+      String name, String assignment, String submitTime, String? imagePath) {
     return Container(
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -297,7 +296,7 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
               children: [
                 Text(name, style: AppTextStyle.fontsize18),
                 Text(
-                  "$assignment $score",
+                  "$assignment $submitTime",
                   style: AppTextStyle.body
                       .copyWith(fontSize: 13, color: AppColors.secondaryText),
                 ),
@@ -314,7 +313,7 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             ),
             child: Text(
-              "ដាក់ពិន្ទុ (Grade Now)",
+              "ដាក់ពិន្ទុ",
               style: AppTextStyle.body
                   .copyWith(color: AppColors.white, fontSize: 13),
             ),

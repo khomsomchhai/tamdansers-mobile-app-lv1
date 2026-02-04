@@ -3,8 +3,8 @@ import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/screens/teacher/attendance_screen.dart';
 import 'package:tamdansers_app/screens/teacher/homework_screen.dart';
+import 'package:tamdansers_app/screens/teacher/manage_student_screen.dart';
 import 'package:tamdansers_app/screens/teacher/student_grade_screen.dart';
-import 'package:tamdansers_app/screens/teacher/student_management_screen.dart';
 
 class ManageClass extends StatefulWidget {
   const ManageClass({super.key});
@@ -149,8 +149,7 @@ class _ManageClassState extends State<ManageClass> {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (context) => StudentManagementScreen()),
+              MaterialPageRoute(builder: (context) => ManageStudentScreen()),
             );
           },
         ),
