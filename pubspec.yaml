@@ -9,10 +9,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  google_fonts: ^8.0.0
+  google_fonts: ^6.0.0
   flutter_bounceable: ^1.2.0
-  flutter_svg: ^2.2.3
+  flutter_svg: ^2.0.0
   table_calendar: ^3.0.9
+  percent_indicator: ^4.2.5
 
 dev_dependencies:
   flutter_test:

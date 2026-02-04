@@ -29,11 +29,11 @@ class SearchField extends StatelessWidget {
         hintStyle: AppTextStyle.hintText,
         prefixIcon: icon,
         enabledBorder: UnderlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(26),
           borderSide: BorderSide.none
         ),
         focusedBorder: UnderlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(26),
           borderSide: BorderSide.none
         )
       ),

@@ -12,4 +12,9 @@ class AppImages {
 
   static const String classCardBg = "assets/images/card_class_bg.svg";
   static const String userProfile = "assets/images/user_profile.png";
+  static const String addStudent = "assets/icons/add_student.png";
+  static const String studentMale = "assets/icons/student_male.svg";
+  static const String studentMale2 = "assets/icons/student_male2.png";
+
+  static const String imgParent = "assets/images/parent.svg";
 }
