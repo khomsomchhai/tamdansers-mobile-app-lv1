@@ -21,8 +21,9 @@ class MainApp extends StatelessWidget {
             elevation: 0,
             surfaceTintColor: AppColors.transparent,
           )),
-      initialRoute: AppRoutes.studentDetailScreen,
+      initialRoute: AppRoutes.teacherDashboard,
       routes: PageRoutes.routes,
+      home: Scaffold(),
     );
   }
 }

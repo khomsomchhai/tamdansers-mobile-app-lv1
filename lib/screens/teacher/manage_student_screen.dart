@@ -58,12 +58,10 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
                 ),
                 SizedBox(width: 10),
                 GestureDetector(
-                  onTap: () {
-
-                  },
+                  onTap: () {},
                   child: Container(
                     height: 46,
-                    padding:  EdgeInsets.symmetric(horizontal: 12),
+                    padding: EdgeInsets.symmetric(horizontal: 12),
                     decoration: BoxDecoration(
                       color: AppColors.primaryMain,
                       borderRadius: BorderRadius.circular(26),
@@ -98,10 +96,9 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
               ],
             ),
           ),
-
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           Padding(
-            padding:  EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               children: [
                 Text(
@@ -121,11 +118,10 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
               ],
             ),
           ),
-
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           Expanded(
             child: ListView.builder(
-              padding:  EdgeInsets.fromLTRB(20, 0, 20, 16),
+              padding: EdgeInsets.fromLTRB(20, 0, 20, 16),
               itemCount: 32,
               itemBuilder: (context, index) {
                 return _studentCard(
@@ -149,16 +145,16 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
     required double attendance,
   }) {
     return Container(
-      margin:  EdgeInsets.only(bottom: 12),
-      padding:  EdgeInsets.all(12),
+      margin: EdgeInsets.only(bottom: 12),
+      padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(26),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 6,
-            offset:  Offset(0, 2),
+            offset: Offset(0, 2),
           ),
         ],
       ),
@@ -198,43 +194,32 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
                 ),
               ),
               Container(
-                padding:
-                    EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   color: AppColors.white,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Text(
-                  gender,
-                  style: AppTextStyle.body
-                ),
+                child: Text(gender, style: AppTextStyle.body),
               ),
             ],
           ),
-
-          SizedBox(height: 12),
-
+          const SizedBox(height: 12),
           _progressRow(
             label: "វត្តមាន",
             value: attendance,
             barColor: AppColors.success,
           ),
-
-          SizedBox(height: 8),
-
+          const SizedBox(height: 8),
           Align(
             alignment: Alignment.centerRight,
             child: TextButton(
               style: TextButton.styleFrom(
                 padding: EdgeInsets.zero,
-                minimumSize:  Size(0, 0),
+                minimumSize: Size(0, 0),
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
               onPressed: () {
-                Navigator.pushNamed(
-                  context, 
-                  AppRoutes.studentDetailScreen
-                );
+                Navigator.pushNamed(context, AppRoutes.studentDetailScreen);
               },
               child: Text(
                 "ព័ត៌មានលម្អិត >",
@@ -277,13 +262,11 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
           child: LinearProgressIndicator(
             value: value,
             minHeight: 4,
-            backgroundColor:
-                AppColors.white,
+            backgroundColor: AppColors.white,
             valueColor: AlwaysStoppedAnimation<Color>(barColor),
           ),
         ),
       ],
     );
   }
-
 }

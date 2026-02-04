@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-class TeacherDashboard extends StatelessWidget {
-  const TeacherDashboard({super.key});
+
+class ParentsDashboard extends StatelessWidget {
+  const ParentsDashboard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +87,7 @@ class TeacherDashboard extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeight.bold)),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children:  [
+                children: [
                   Text("Grade 5A • ID: #29384"),
                   SizedBox(height: 4),
                   Text("✔ CHECKED IN • 7:45 AM",
@@ -96,7 +97,7 @@ class TeacherDashboard extends StatelessWidget {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children:  [
+              children: [
                 _stat("98%", "ATTENDANCE"),
                 _stat("A", "AVG. GRADE"),
                 _stat("Good", "BEHAVIOR"),
@@ -115,7 +116,7 @@ class TeacherDashboard extends StatelessWidget {
       physics: NeverScrollableScrollPhysics(),
       mainAxisSpacing: 12,
       crossAxisSpacing: 12,
-      children:  [
+      children: [
         _actionTile("Attendance", Icons.date_range, Colors.blue),
         _actionTile("Homework", Icons.menu_book, Colors.orange),
         _actionTile("Results", Icons.bar_chart, Colors.green),
@@ -152,8 +153,7 @@ class TeacherDashboard extends StatelessWidget {
     return Column(
       children: [
         Text(value,
-            style: const TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 16)),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
         Text(label, style: const TextStyle(fontSize: 11)),
       ],
     );
@@ -201,11 +201,15 @@ class TeacherDashboard extends StatelessWidget {
   }
 
   static Widget _bottomNav() {
-    return  BottomNavigationBar(
+    return BottomNavigationBar(
       items: [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home",backgroundColor: Colors.blue),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: "Home",
+            backgroundColor: Colors.blue),
         BottomNavigationBarItem(icon: Icon(Icons.mail), label: "Messages"),
-        BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: "Calendar"),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today), label: "Calendar"),
         BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
       ],
     );

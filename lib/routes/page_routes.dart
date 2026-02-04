@@ -11,6 +11,7 @@ import 'package:tamdansers_app/screens/student/menu/homepage.dart';
 import 'package:tamdansers_app/screens/student/menu/homework.dart';
 import 'package:tamdansers_app/screens/student/menu/profile.dart';
 import 'package:tamdansers_app/screens/student/result.dart';
+import 'package:tamdansers_app/screens/student/student_dashboard.dart';
 import 'package:tamdansers_app/screens/teacher/link_parent.dart';
 import 'package:tamdansers_app/screens/teacher/manage_all_class.dart';
 import 'package:tamdansers_app/screens/teacher/manage_class.dart';
@@ -22,8 +23,8 @@ class PageRoutes {
   static Map<String, Widget Function(BuildContext)> routes = {
     AppRoutes.splashScreen: (context) => SplashScreen(),
     AppRoutes.roleSelectionScreen: (context) => RoleSelectionScreen(),
+    // Teacher routes
     AppRoutes.authOptionTeacherScreen: (context) => AuthOptionTeacherScreen(),
-    //teacher
     AppRoutes.loginTeacherScreen: (context) => LoginTeacherScreen(),
     AppRoutes.signUpTeacherScreen: (context) => SignUpTeacherScreen(),
     AppRoutes.teacherDashboard: (context) => TeacherDashboard(),
@@ -32,18 +33,16 @@ class PageRoutes {
     AppRoutes.manageStudentScreen: (context) => ManageStudentScreen(),
     AppRoutes.studentDetailScreen: (context) => StudentDetailScreen(),
     AppRoutes.linkParentScreen: (context) => LinkParentScreen(),
-    
-    //student
-    // AppRoutes.studentDashboard: (context) => StudentDashboard(),
+
+    // Student routes
+    AppRoutes.studentDashboard: (context) => StudentDashboard(),
     AppRoutes.profile: (context) => Profile(),
     AppRoutes.attendance: (context) => Attendance(),
     AppRoutes.homework: (context) => Homework(),
     AppRoutes.homepage: (context) => Homepage(),
-    // AppRoutes.scedeul: (context) => Scedeul(),
-    AppRoutes.result:(context) => Result(),
+    AppRoutes.result: (context) => Result(),
 
-
-    //parent
-    AppRoutes.parentDashboardScreen:(contex)=> ParentLogin()
+    // Parent routes
+    AppRoutes.parentDashboardScreen: (context) => ParentLogin(),
   };
 }
