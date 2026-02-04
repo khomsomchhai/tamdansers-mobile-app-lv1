@@ -216,7 +216,7 @@ class _ParentLoginState extends State<ParentLogin> {
                 );
               },
               child: Text(
-                "ចុះឈ្មោះ",
+                "banចុះឈ្មោះ",
                 style: GoogleFonts.kantumruyPro(
                   fontSize: 16,
                   color: AppColors.primaryMain,
