@@ -44,52 +44,6 @@ class AuthOptionTeacherScreen extends StatelessWidget {
             Spacer(),
             //custom widget
             PrimaryButton(
-              label: "ចូលគណនី",
-              backgroundColor: AppColors.primaryMain,
-              foregroundColor: AppColors.white,
-              onPressed: () => Navigator.pushNamed(
-                context, 
-                AppRoutes.loginTeacherScreen
-              )
-            ),
-            SizedBox(height: 20,),
-            PrimaryButton(
-              label: "ចុះឈ្មោះ",
-              backgroundColor: AppColors.white,
-              foregroundColor: AppColors.primaryMain,
-              onPressed: (){}
-            ),
-            SizedBox(height: 30,),
-          
-              Spacer(),
-              Text(
-                "សូមជ្រើសរើសវិធីសាស្រ្ត",
-                style: AppTextStyle.title28,
-              ),
-              Text(
-                "ចូលប្រើប្រាស់",
-                style: AppTextStyle.title28,
-              ),
-              Spacer(),
-              //custom widget
-              PrimaryButton(
-                label: "ចូលគណនី",
-                backgroundColor: AppColors.primaryMain,
-                foregroundColor: AppColors.white,
-                onPressed: (){
-                  Navigator.pushNamed(context, AppRoutes.teacherDashboardScreen);
-                }
-              ),
-              SizedBox(height: 20,),
-              PrimaryButton(
-                label: "ចុះឈ្មោះ",
-                backgroundColor: AppColors.white,
-                foregroundColor: AppColors.primaryMain,
-                onPressed: (){}
-              ),
-              SizedBox(height: 30,)
-          ]
-          ),
                 label: "ចូលគណនី",
                 backgroundColor: AppColors.primaryMain,
                 foregroundColor: AppColors.white,
@@ -108,7 +62,7 @@ class AuthOptionTeacherScreen extends StatelessWidget {
             )
           ],
         ),
-      
+      ),
     );
   }
 }

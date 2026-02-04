@@ -11,6 +11,7 @@ class AppRoutes {
   static const String manageAllClass = "/manage_all_class";
   static const String manageStudentScreen = "/manage_student_screen";
   static const String studentDetailScreen = "/student_detail_screen";
+  static const String linkParentScreen="/link_parent_screen";
   //student
   static const String studentDashboard = "/student_dashboard";
   static const String scedeul = "/student_scedeul";

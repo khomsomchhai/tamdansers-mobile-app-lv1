@@ -3,6 +3,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/routes/app_routes.dart';
 
 class StudentDetailScreen extends StatelessWidget {
   const StudentDetailScreen({super.key});
@@ -27,7 +28,7 @@ class StudentDetailScreen extends StatelessWidget {
           children: [
             _buildProfileHeader(),
             const SizedBox(height: 24),
-            _buildGeneralInfo(),
+            _buildGeneralInfo(context),
             const SizedBox(height: 20),
             _buildAttendanceCard(),
             const SizedBox(height: 20),
@@ -65,7 +66,7 @@ class StudentDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildGeneralInfo() {
+  Widget _buildGeneralInfo(BuildContext context) {
     return _card(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,7 +96,10 @@ class StudentDetailScreen extends StatelessWidget {
             height: 48,
             child: ElevatedButton.icon(
               onPressed: () {
-
+                Navigator.pushNamed(
+                  context, 
+                  AppRoutes.linkParentScreen
+                );
               },
               icon: const Icon(Icons.person_add_alt_1_rounded, color: Colors.white, size: 20),
               label: Text(
