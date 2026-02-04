@@ -13,5 +13,13 @@ class AppRoutes {
   static const String studentDetailScreen = "/student_detail_screen";
   //student
   static const String studentDashboard = "/student_dashboard";
+  static const String scedeul = "/student_scedeul";
+  static const String profile="/student_profile";
+  static const String attendance="/student_attendance";
+  static const String homework="/student_homework";
+  static const String homepage="/student_homepage";
+  static const String result="/student_result";
+
+  static String teacherDashboardScreen = "/teacher_dashboard_screen";
   
 }

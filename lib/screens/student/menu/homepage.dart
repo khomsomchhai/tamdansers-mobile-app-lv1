@@ -53,15 +53,15 @@ class _HomepageState extends State<Homepage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _titleheader(),
+              _TitleHeader(),
               SizedBox(height: 20),
-              _cardAttendance(),
+              _CardAttendance(),
               SizedBox(height: 20),
-              _grid_info(),
+              _GridInfo(),
               SizedBox(height: 20),
-              _classes(),
+              _Classes(),
               SizedBox(height: 20),
-              _homework()
+              _Homework()
             ],
           ),
         ),
@@ -69,10 +69,8 @@ class _HomepageState extends State<Homepage> {
     );
   }
 }
-class _titleheader extends StatelessWidget {
-  const _titleheader({
-    super.key,
-  });
+class _TitleHeader extends StatelessWidget {
+  const _TitleHeader();
 
   @override
   Widget build(BuildContext context) {
@@ -96,10 +94,8 @@ class _titleheader extends StatelessWidget {
   }
 }
 
-class _homework extends StatelessWidget {
-  const _homework({
-    super.key,
-  });
+class _Homework extends StatelessWidget {
+  const _Homework();
 
   @override
   Widget build(BuildContext context) {
@@ -142,10 +138,8 @@ class _homework extends StatelessWidget {
   }
 }
 
-class _classes extends StatelessWidget {
-  const _classes({
-    super.key,
-  });
+class _Classes extends StatelessWidget {
+  const _Classes();
 
   @override
   Widget build(BuildContext context) {
@@ -194,10 +188,8 @@ class _classes extends StatelessWidget {
   }
 }
 
-class _grid_info extends StatelessWidget {
-  const _grid_info({
-    super.key,
-  });
+class _GridInfo extends StatelessWidget {
+  const _GridInfo();
 
   @override
   Widget build(BuildContext context) {
@@ -238,10 +230,8 @@ class _grid_info extends StatelessWidget {
   }
 }
 
-class _cardAttendance extends StatelessWidget {
-  const _cardAttendance({
-    super.key,
-  });
+class _CardAttendance extends StatelessWidget {
+  const _CardAttendance();
 
   @override
   Widget build(BuildContext context) {
