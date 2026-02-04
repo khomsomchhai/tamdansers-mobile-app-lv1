@@ -203,7 +203,7 @@ class TeacherDashboard extends StatelessWidget {
   static Widget _bottomNav() {
     return  BottomNavigationBar(
       items: [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home",backgroundColor: Colors.blue),
         BottomNavigationBarItem(icon: Icon(Icons.mail), label: "Messages"),
         BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: "Calendar"),
         BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
