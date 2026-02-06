@@ -120,7 +120,7 @@ class _ManageAllClassState extends State<ManageAllClass> {
                 SizedBox(width: 8),
                 Text(
                   "ស្វែងរក...",
-                  style: AppTextStyle.hintText.copyWith(fontSize: 15),
+                  style: AppTextStyle.hint15,
                 ),
               ],
             ),
@@ -132,10 +132,7 @@ class _ManageAllClassState extends State<ManageAllClass> {
           icon: Icon(Icons.add, color: AppColors.white, size: 20),
           label: Text(
             "បង្កើតថ្នាក់",
-            style: AppTextStyle.body.copyWith(
-              color: AppColors.white,
-              fontSize: 15,
-            ),
+            style: AppTextStyle.body15White,
           ),
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.primaryMain,
@@ -168,8 +165,7 @@ class _ManageAllClassState extends State<ManageAllClass> {
                   _selectedGrade = grade;
                 });
               },
-              labelStyle: AppTextStyle.body.copyWith(
-                fontSize: 14,
+              labelStyle: AppTextStyle.body14.copyWith(
                 color: isSelected ? AppColors.white : AppColors.primaryText,
               ),
               backgroundColor: AppColors.white,
