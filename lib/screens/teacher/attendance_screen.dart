@@ -58,8 +58,9 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColors.primaryText),
           onPressed: () => Navigator.pop(context),
+          icon: Icon(Icons.arrow_back_ios_new_rounded,
+              color: AppColors.primaryText),
         ),
         title: Text("វត្តមាន", style: AppTextStyle.fontsize18),
         centerTitle: true,
@@ -74,7 +75,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         children: [
           Container(
             color: AppColors.white,
-            padding: EdgeInsets.only(top: 8),
+            padding: const EdgeInsets.only(top: 8),
             child: Column(
               children: [
                 _buildDateFilter(),
@@ -88,11 +89,11 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           ),
           Expanded(
             child: ListView.builder(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               itemCount: _students.length,
               itemBuilder: (context, index) {
                 return Padding(
-                  padding: EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.only(bottom: 12),
                   child: _buildStudentCard(
                     _students[index]["name"],
                     _students[index]["id"],
@@ -116,13 +117,13 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       height: 50,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         itemCount: _dates.length,
         itemBuilder: (context, index) {
           final date = _dates[index];
           final isSelected = _selectedDate == date;
           return Padding(
-            padding: EdgeInsets.only(right: 8),
+            padding: const EdgeInsets.only(right: 8),
             child: ChoiceChip(
               label: Text(date),
               selected: isSelected,
@@ -141,7 +142,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             ),
           );
         },
@@ -151,8 +152,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
 
   Widget _buildStatsCard() {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16),
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: AppColors.backgroundLight,
         borderRadius: BorderRadius.circular(12),
@@ -204,8 +205,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
 
   Widget _buildMarkAllButton() {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16),
-      padding: EdgeInsets.symmetric(vertical: 12),
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
         color: Color(0xFFE3F2FD),
         borderRadius: BorderRadius.circular(8),
@@ -340,7 +341,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                     ),
                     backgroundColor:
                         status == "present" ? Color(0xFFE3F2FD) : null,
-                    padding: EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -370,7 +371,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                         ? AppColors.error
                         : AppColors.backgroundLight,
                     elevation: 0,
-                    padding: EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -400,7 +401,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                         ? Color(0xFFFFA726)
                         : AppColors.backgroundLight,
                     elevation: 0,
-                    padding: EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -455,7 +456,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
 
   Widget _buildSubmitButton() {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.white,
         boxShadow: [
@@ -470,7 +471,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         onPressed: () {},
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primaryMain,
-          padding: EdgeInsets.symmetric(vertical: 16),
+          padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),

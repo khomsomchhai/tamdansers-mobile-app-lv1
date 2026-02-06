@@ -61,7 +61,7 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
                   onTap: () {},
                   child: Container(
                     height: 46,
-                    padding: EdgeInsets.symmetric(horizontal: 12),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     decoration: BoxDecoration(
                       color: AppColors.primaryMain,
                       borderRadius: BorderRadius.circular(26),

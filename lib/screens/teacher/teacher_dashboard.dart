@@ -5,7 +5,6 @@ import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/screens/teacher/attendance_screen.dart';
 import 'package:tamdansers_app/screens/teacher/homework_screen.dart';
-import 'package:tamdansers_app/screens/teacher/student_grade_screen.dart';
 import 'package:tamdansers_app/widget/class_card.dart';
 
 class TeacherDashboard extends StatefulWidget {
@@ -110,7 +109,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding: EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Color(0xFFE3F2FD),
                     borderRadius: BorderRadius.circular(12),
@@ -140,7 +139,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding: EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Color(0xFFF3E5F5),
                     borderRadius: BorderRadius.circular(12),
@@ -175,7 +174,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                 style: AppTextStyle.body.copyWith(color: AppColors.white)),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primaryMain,
-              padding: EdgeInsets.symmetric(vertical: 14),
+              padding: const EdgeInsets.symmetric(vertical: 14),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
             ),
@@ -193,7 +192,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                     AppTextStyle.body.copyWith(color: AppColors.primaryMain)),
             style: OutlinedButton.styleFrom(
               side: BorderSide(color: AppColors.primaryMain),
-              padding: EdgeInsets.symmetric(vertical: 14),
+              padding: const EdgeInsets.symmetric(vertical: 14),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
             ),
@@ -236,12 +235,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
           "បញ្ជូលពិន្ទុ",
           Color(0xFFE8F5E9),
           Color(0xFF4CAF50),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => StudentGradeScreen()),
-            );
-          },
+          onTap: () {},
         ),
         _buildQuickActionItem(
           Icons.campaign_outlined,
