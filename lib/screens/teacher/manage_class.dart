@@ -4,7 +4,6 @@ import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/screens/teacher/attendance_screen.dart';
 import 'package:tamdansers_app/screens/teacher/homework_screen.dart';
 import 'package:tamdansers_app/screens/teacher/manage_student_screen.dart';
-import 'package:tamdansers_app/screens/teacher/student_grade_screen.dart';
 
 class ManageClass extends StatefulWidget {
   const ManageClass({super.key});
@@ -19,10 +18,11 @@ class _ManageClassState extends State<ManageClass> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColors.primaryText),
           onPressed: () {
             Navigator.pop(context);
           },
+          icon: Icon(Icons.arrow_back_ios_new_rounded,
+              color: AppColors.primaryText),
         ),
         title: Text(
           "ថ្នាក់ទី 7A (Grade 7A)",
@@ -47,7 +47,7 @@ class _ManageClassState extends State<ManageClass> {
 
   Widget _buildClassInfoCard() {
     return Container(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [AppColors.primaryMain, AppColors.primary400],
@@ -188,12 +188,7 @@ class _ManageClassState extends State<ManageClass> {
           iconBgColor: Color(0xFFFFEBEE),
           title: "លទ្ធផល និងចំណាត់ថ្នាក់",
           subtitle: "Result & Ranking",
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => StudentGradeScreen()),
-            );
-          },
+          onTap: () {},
         ),
       ],
     );
@@ -210,7 +205,7 @@ class _ManageClassState extends State<ManageClass> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(16),

@@ -17,8 +17,9 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
         backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColors.primaryText),
           onPressed: () => Navigator.pop(context),
+          icon: Icon(Icons.arrow_back_ios_new_rounded,
+              color: AppColors.primaryText),
         ),
         title: Column(
           children: [
@@ -122,7 +123,7 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
   Widget _buildHomeworkCard(String title, String description, String dueDate,
       String submissions, double progress, Color bgColor, IconData icon) {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
@@ -133,7 +134,7 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
           Row(
             children: [
               Container(
-                padding: EdgeInsets.all(12),
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: bgColor,
                   borderRadius: BorderRadius.circular(12),
@@ -274,7 +275,7 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
   Widget _buildReviewCard(
       String name, String assignment, String submitTime, String? imagePath) {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
@@ -310,7 +311,7 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             ),
             child: Text(
               "ដាក់ពិន្ទុ",
