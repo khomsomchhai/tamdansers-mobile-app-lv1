@@ -84,7 +84,7 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
               SizedBox(width: 8),
               Text(
                 "សកម្ម (ACTIVE)",
-                style: AppTextStyle.fontsize18.copyWith(fontSize: 16),
+                style: AppTextStyle.subtitle16,
               ),
             ],
           ),
@@ -147,9 +147,7 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(title, style: AppTextStyle.fontsize18),
-                    Text(description,
-                        style: AppTextStyle.body.copyWith(
-                            fontSize: 13, color: AppColors.secondaryText)),
+                    Text(description, style: AppTextStyle.caption13Secondary),
                   ],
                 ),
               ),
@@ -164,8 +162,7 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
                   children: [
                     Text(
                       "ថ្ងៃផុតកំណត់ (Due Date)",
-                      style: AppTextStyle.body.copyWith(
-                          fontSize: 12, color: AppColors.secondaryText),
+                      style: AppTextStyle.caption12Secondary,
                     ),
                     SizedBox(height: 4),
                     Text(dueDate, style: AppTextStyle.fontsize18),
@@ -178,8 +175,7 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
                   children: [
                     Text(
                       "ការបញ្ជូន (Submissions)",
-                      style: AppTextStyle.body.copyWith(
-                          fontSize: 12, color: AppColors.secondaryText),
+                      style: AppTextStyle.caption12Secondary,
                     ),
                     SizedBox(height: 4),
                     Text(submissions, style: AppTextStyle.fontsize18),
@@ -225,7 +221,7 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
                   SizedBox(width: 8),
                   Text(
                     "ពិនិត្យឡើងវិញ (REVIEW)",
-                    style: AppTextStyle.fontsize18.copyWith(fontSize: 16),
+                    style: AppTextStyle.subtitle16,
                   ),
                 ],
               ),
@@ -233,8 +229,7 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
                 onPressed: () {},
                 child: Text(
                   "មើលទាំងអស់",
-                  style:
-                      AppTextStyle.body.copyWith(color: AppColors.primaryMain),
+                  style: AppTextStyle.bodyPrimary,
                 ),
               ),
             ],
@@ -298,8 +293,7 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
                 Text(name, style: AppTextStyle.fontsize18),
                 Text(
                   "$assignment $submitTime",
-                  style: AppTextStyle.body
-                      .copyWith(fontSize: 13, color: AppColors.secondaryText),
+                  style: AppTextStyle.caption13Secondary,
                 ),
               ],
             ),
@@ -315,8 +309,7 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
             ),
             child: Text(
               "ដាក់ពិន្ទុ",
-              style: AppTextStyle.body
-                  .copyWith(color: AppColors.white, fontSize: 13),
+              style: AppTextStyle.caption13White,
             ),
           ),
         ],

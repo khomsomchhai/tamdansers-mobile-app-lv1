@@ -64,10 +64,7 @@ class _ManageClassState extends State<ManageClass> {
             children: [
               Text(
                 "សិស្សសរុប",
-                style: AppTextStyle.body.copyWith(
-                  fontSize: 12,
-                  color: AppColors.white,
-                ),
+                style: AppTextStyle.caption12White,
               ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -77,20 +74,14 @@ class _ManageClassState extends State<ManageClass> {
                 ),
                 child: Text(
                   "ឆមាសទី​ ១",
-                  style: AppTextStyle.body.copyWith(
-                    fontSize: 12,
-                    color: AppColors.white,
-                  ),
+                  style: AppTextStyle.caption12White,
                 ),
               ),
             ],
           ),
           Text(
             "៣៦ នាក់",
-            style: AppTextStyle.title28.copyWith(
-              color: AppColors.white,
-              fontWeight: FontWeight.bold,
-            ),
+            style: AppTextStyle.title28White,
           ),
           SizedBox(height: 8),
           Divider(
@@ -106,10 +97,7 @@ class _ManageClassState extends State<ManageClass> {
                     SizedBox(width: 6),
                     Text(
                       "ប្រុស: ៦០",
-                      style: AppTextStyle.body.copyWith(
-                        color: AppColors.white,
-                        fontSize: 18,
-                      ),
+                      style: AppTextStyle.body18White,
                     ),
                   ],
                 ),
@@ -122,10 +110,7 @@ class _ManageClassState extends State<ManageClass> {
                     SizedBox(width: 6),
                     Text(
                       "ស្រី: ៩៦",
-                      style: AppTextStyle.body.copyWith(
-                        color: AppColors.white,
-                        fontSize: 18,
-                      ),
+                      style: AppTextStyle.body18White,
                     ),
                   ],
                 ),
@@ -228,15 +213,12 @@ class _ManageClassState extends State<ManageClass> {
                 children: [
                   Text(
                     title,
-                    style: AppTextStyle.fontsize18.copyWith(fontSize: 16),
+                    style: AppTextStyle.subtitle16,
                   ),
                   SizedBox(height: 2),
                   Text(
                     subtitle,
-                    style: AppTextStyle.body.copyWith(
-                      fontSize: 13,
-                      color: AppColors.secondaryText,
-                    ),
+                    style: AppTextStyle.caption13Secondary,
                   ),
                 ],
               ),

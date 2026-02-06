@@ -15,7 +15,8 @@ class StudentDetailScreen extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.primaryText),
+          icon: Icon(Icons.arrow_back_ios_new_rounded,
+              color: AppColors.primaryText),
         ),
         title: Text("ព័ត៌មានលម្អិត", style: AppTextStyle.screenTitle24),
         centerTitle: true,
@@ -48,18 +49,23 @@ class StudentDetailScreen extends StatelessWidget {
         CircleAvatar(
           radius: 50,
           backgroundColor: AppColors.primaryMain.withOpacity(0.1),
-          child: Image.asset(AppImages.studentMale2, width: 70), 
+          child: Image.asset(AppImages.studentMale2, width: 70),
         ),
         const SizedBox(height: 12),
-        Text("សុខា ចាន់", style: AppTextStyle.sectionTitle20.copyWith(fontWeight: FontWeight.bold)),
-        Text("ID: 2023-001", style: AppTextStyle.body.copyWith(color: AppColors.secondaryText)),
+        Text("សុខា ចាន់",
+            style: AppTextStyle.sectionTitle20
+                .copyWith(fontWeight: FontWeight.bold)),
+        Text("ID: 2023-001",
+            style: AppTextStyle.body.copyWith(color: AppColors.secondaryText)),
         const SizedBox(height: 12),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _tag("ថ្នាក់ទី ៥A", AppColors.primaryMain.withOpacity(0.1), AppColors.primaryMain),
+            _tag("ថ្នាក់ទី ៥A", AppColors.primaryMain.withOpacity(0.1),
+                AppColors.primaryMain),
             const SizedBox(width: 8),
-            _tag("កំពុងសិក្សា", AppColors.success.withOpacity(0.1), AppColors.success),
+            _tag("កំពុងសិក្សា", AppColors.success.withOpacity(0.1),
+                AppColors.success),
           ],
         )
       ],
@@ -80,10 +86,14 @@ class StudentDetailScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          Text("ទំនាក់ទំនងអាណាព្យាបាល", style: AppTextStyle.body.copyWith(color: AppColors.secondaryText)),
+          Text("ទំនាក់ទំនងអាណាព្យាបាល",
+              style:
+                  AppTextStyle.body.copyWith(color: AppColors.secondaryText)),
           Row(
             children: [
-              Text("012 345 678", style: AppTextStyle.body.copyWith(fontWeight: FontWeight.bold, fontSize: 16)),
+              Text("012 345 678",
+                  style: AppTextStyle.body
+                      .copyWith(fontWeight: FontWeight.bold, fontSize: 16)),
               const Spacer(),
               _circleIcon(Icons.phone, AppColors.success),
               const SizedBox(width: 10),
@@ -96,19 +106,17 @@ class StudentDetailScreen extends StatelessWidget {
             height: 48,
             child: ElevatedButton.icon(
               onPressed: () {
-                Navigator.pushNamed(
-                  context, 
-                  AppRoutes.linkParentScreen
-                );
+                Navigator.pushNamed(context, AppRoutes.linkParentScreen);
               },
-              icon: const Icon(Icons.person_add_alt_1_rounded, color: Colors.white, size: 20),
-              label: Text(
-                "ភ្ជាប់អាណាព្យាបាល", 
-                style: AppTextStyle.body.copyWith(color: Colors.white, fontWeight: FontWeight.bold)
-              ),
+              icon: const Icon(Icons.person_add_alt_1_rounded,
+                  color: Colors.white, size: 20),
+              label: Text("ភ្ជាប់អាណាព្យាបាល",
+                  style: AppTextStyle.body.copyWith(
+                      color: Colors.white, fontWeight: FontWeight.bold)),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryMain,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(26)),
                 elevation: 0,
               ),
             ),
@@ -156,17 +164,14 @@ class StudentDetailScreen extends StatelessWidget {
             Text("លទ្ធផលសិក្សា", style: AppTextStyle.sectionTitle20),
             const Spacer(),
             TextButton(
-              onPressed: () {
-
-              }, 
-              child: Text(
-                "មើលទាំងអស់", 
-                style: AppTextStyle.body.copyWith(
-                  color: AppColors.primaryMain,
-                  fontWeight: FontWeight.bold,
-                ),
-              )
-            )
+                onPressed: () {},
+                child: Text(
+                  "មើលទាំងអស់",
+                  style: AppTextStyle.body.copyWith(
+                    color: AppColors.primaryMain,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ))
           ],
         ),
         const SizedBox(height: 12),
@@ -187,15 +192,19 @@ class StudentDetailScreen extends StatelessWidget {
           maxLines: 3,
           decoration: InputDecoration(
             hintText: "បញ្ចូលចំណាំ...",
-            hintStyle: AppTextStyle.body.copyWith(color: AppColors.secondaryText),
+            hintStyle:
+                AppTextStyle.body.copyWith(color: AppColors.secondaryText),
             filled: true,
             fillColor: Colors.white,
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(15), borderSide: BorderSide.none),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide.none),
           ),
         ),
       ],
     );
   }
+
   Widget _card({required Widget child}) {
     return Container(
       width: double.infinity,
@@ -203,7 +212,9 @@ class StudentDetailScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(26),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 10)],
+        boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 10)
+        ],
       ),
       child: child,
     );
@@ -214,7 +225,8 @@ class StudentDetailScreen extends StatelessWidget {
       children: [
         Icon(icon, color: AppColors.primaryMain, size: 20),
         const SizedBox(width: 8),
-        Text(label, style: AppTextStyle.body.copyWith(fontWeight: FontWeight.bold)),
+        Text(label,
+            style: AppTextStyle.body.copyWith(fontWeight: FontWeight.bold)),
       ],
     );
   }
@@ -223,8 +235,10 @@ class StudentDetailScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: AppTextStyle.body.copyWith(color: AppColors.secondaryText)),
-        Text(value, style: AppTextStyle.body.copyWith(fontWeight: FontWeight.bold)),
+        Text(label,
+            style: AppTextStyle.body.copyWith(color: AppColors.secondaryText)),
+        Text(value,
+            style: AppTextStyle.body.copyWith(fontWeight: FontWeight.bold)),
       ],
     );
   }
@@ -232,8 +246,11 @@ class StudentDetailScreen extends StatelessWidget {
   Widget _statItem(String label, String value) {
     return Column(
       children: [
-        Text(label, style: AppTextStyle.body.copyWith(fontSize: 12, color: AppColors.secondaryText)),
-        Text(value, style: AppTextStyle.body.copyWith(fontWeight: FontWeight.bold)),
+        Text(label,
+            style: AppTextStyle.body
+                .copyWith(fontSize: 12, color: AppColors.secondaryText)),
+        Text(value,
+            style: AppTextStyle.body.copyWith(fontWeight: FontWeight.bold)),
       ],
     );
   }
@@ -241,15 +258,19 @@ class StudentDetailScreen extends StatelessWidget {
   Widget _tag(String text, Color bg, Color textCol) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(10)),
-      child: Text(text, style: AppTextStyle.body.copyWith(color: textCol, fontSize: 12, fontWeight: FontWeight.bold)),
+      decoration:
+          BoxDecoration(color: bg, borderRadius: BorderRadius.circular(10)),
+      child: Text(text,
+          style: AppTextStyle.body.copyWith(
+              color: textCol, fontSize: 12, fontWeight: FontWeight.bold)),
     );
   }
 
   Widget _circleIcon(IconData icon, Color color) {
     return Container(
       padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(color: color.withOpacity(0.1), shape: BoxShape.circle),
+      decoration:
+          BoxDecoration(color: color.withOpacity(0.1), shape: BoxShape.circle),
       child: Icon(icon, color: color, size: 20),
     );
   }
@@ -258,12 +279,15 @@ class StudentDetailScreen extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(20)),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
+            decoration: BoxDecoration(
+                color: color.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12)),
             child: Icon(Icons.book, color: color),
           ),
           const SizedBox(width: 12),
@@ -271,12 +295,18 @@ class StudentDetailScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: AppTextStyle.body.copyWith(fontWeight: FontWeight.bold)),
-                Text(sub, style: AppTextStyle.body.copyWith(color: AppColors.secondaryText, fontSize: 12)),
+                Text(title,
+                    style: AppTextStyle.body
+                        .copyWith(fontWeight: FontWeight.bold)),
+                Text(sub,
+                    style: AppTextStyle.body.copyWith(
+                        color: AppColors.secondaryText, fontSize: 12)),
               ],
             ),
           ),
-          Text("$score", style: AppTextStyle.sectionTitle20.copyWith(color: AppColors.primaryMain)),
+          Text("$score",
+              style: AppTextStyle.sectionTitle20
+                  .copyWith(color: AppColors.primaryMain)),
         ],
       ),
     );

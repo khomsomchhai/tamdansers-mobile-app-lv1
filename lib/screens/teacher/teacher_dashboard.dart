@@ -69,13 +69,11 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
               RichText(
                 text: TextSpan(
                   text: "សួស្តី អ្នកគ្រូ ",
-                  style: AppTextStyle.screenTitle24
-                      .copyWith(color: AppColors.primaryText),
+                  style: AppTextStyle.screenTitle24,
                   children: [
                     TextSpan(
                       text: "ទេព ធីតា",
-                      style: AppTextStyle.screenTitle24
-                          .copyWith(color: AppColors.primaryMain),
+                      style: AppTextStyle.screenTitle24Main,
                     ),
                   ],
                 ),
@@ -118,9 +116,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                       color: AppColors.primaryMain, size: 24),
                 ),
                 SizedBox(height: 12),
-                Text("ថ្នាក់សរុប",
-                    style: AppTextStyle.body
-                        .copyWith(color: AppColors.secondaryText)),
+                Text("ថ្នាក់សរុប", style: AppTextStyle.bodySecondary),
                 SizedBox(height: 4),
                 Text("4", style: AppTextStyle.title28),
               ],
@@ -148,9 +144,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                       color: Color(0xFF9C27B0), size: 24),
                 ),
                 SizedBox(height: 12),
-                Text("សិស្សសរុប",
-                    style: AppTextStyle.body
-                        .copyWith(color: AppColors.secondaryText)),
+                Text("សិស្សសរុប", style: AppTextStyle.bodySecondary),
                 SizedBox(height: 4),
                 Text("120", style: AppTextStyle.title28),
               ],
@@ -170,8 +164,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
               Navigator.pushNamed(context, AppRoutes.manageAllClass);
             },
             icon: Icon(Icons.add, color: AppColors.white),
-            label: Text("បង្កើតថ្នាក់",
-                style: AppTextStyle.body.copyWith(color: AppColors.white)),
+            label: Text("បង្កើតថ្នាក់", style: AppTextStyle.bodyWhite),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primaryMain,
               padding: const EdgeInsets.symmetric(vertical: 14),
@@ -187,9 +180,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
               Navigator.pushNamed(context, AppRoutes.manageAllClass);
             },
             icon: Icon(Icons.event_note_outlined, color: AppColors.primaryMain),
-            label: Text("ត្រូវត្រាថ្នាក់",
-                style:
-                    AppTextStyle.body.copyWith(color: AppColors.primaryMain)),
+            label: Text("ត្រូវត្រាថ្នាក់", style: AppTextStyle.bodyPrimary),
             style: OutlinedButton.styleFrom(
               side: BorderSide(color: AppColors.primaryMain),
               padding: const EdgeInsets.symmetric(vertical: 14),
@@ -269,8 +260,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
           SizedBox(height: 8),
           Text(
             label,
-            style: AppTextStyle.body
-                .copyWith(fontSize: 12, color: AppColors.primaryText),
+            style: AppTextStyle.caption12Primary,
             textAlign: TextAlign.center,
             maxLines: 2,
           ),
@@ -291,9 +281,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
               onPressed: () {
                 Navigator.pushNamed(context, AppRoutes.manageAllClass);
               },
-              child: Text("មើលទាំងអស់",
-                  style:
-                      AppTextStyle.body.copyWith(color: AppColors.primaryMain)),
+              child: Text("មើលទាំងអស់", style: AppTextStyle.bodyPrimary),
             ),
           ],
         ),

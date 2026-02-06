@@ -132,8 +132,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                   _selectedDate = date;
                 });
               },
-              labelStyle: AppTextStyle.body.copyWith(
-                fontSize: 14,
+              labelStyle: AppTextStyle.body14.copyWith(
                 color: isSelected ? AppColors.white : AppColors.primaryText,
               ),
               backgroundColor: AppColors.backgroundLight,
@@ -163,7 +162,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         children: [
           Text(
             "គណិតវិទ្យា • ថ្នាក់ទី 7-A",
-            style: AppTextStyle.sectionTitle20.copyWith(fontSize: 18),
+            style: AppTextStyle.subtitle18,
           ),
           SizedBox(height: 16),
           Row(
@@ -185,19 +184,14 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       children: [
         Text(
           value,
-          style: AppTextStyle.title28.copyWith(
+          style: AppTextStyle.stat32Bold.copyWith(
             color: color,
-            fontSize: 32,
-            fontWeight: FontWeight.bold,
           ),
         ),
         SizedBox(height: 4),
         Text(
           label,
-          style: AppTextStyle.body.copyWith(
-            fontSize: 14,
-            color: AppColors.secondaryText,
-          ),
+          style: AppTextStyle.caption14Secondary,
         ),
       ],
     );
@@ -218,11 +212,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           SizedBox(width: 8),
           Text(
             "កំណត់សិស្សមកទាំងអស់",
-            style: AppTextStyle.body.copyWith(
-              color: AppColors.primaryMain,
-              fontWeight: FontWeight.w600,
-              fontSize: 15,
-            ),
+            style: AppTextStyle.buttonText15Primary,
           ),
         ],
       ),
@@ -483,10 +473,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             SizedBox(width: 8),
             Text(
               "បញ្ជូនវត្តមាន",
-              style: AppTextStyle.fontsize18.copyWith(
-                color: AppColors.white,
-                fontWeight: FontWeight.w600,
-              ),
+              style: AppTextStyle.buttonText18White,
             ),
           ],
         ),
