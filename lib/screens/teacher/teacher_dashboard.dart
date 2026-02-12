@@ -3,6 +3,8 @@ import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
+import 'package:tamdansers_app/screens/teacher/attendance_screen.dart';
+import 'package:tamdansers_app/screens/teacher/homework_screen.dart';
 import 'package:tamdansers_app/widget/class_card.dart';
 
 class TeacherDashboard extends StatefulWidget {
@@ -16,7 +18,6 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
       appBar: AppBar(
         elevation: 0,
         leading: Padding(
@@ -68,13 +69,11 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
               RichText(
                 text: TextSpan(
                   text: "សួស្តី អ្នកគ្រូ ",
-                  style: AppTextStyle.screenTitle24
-                      .copyWith(color: AppColors.primaryText),
+                  style: AppTextStyle.screenTitle24,
                   children: [
                     TextSpan(
                       text: "ទេព ធីតា",
-                      style: AppTextStyle.screenTitle24
-                          .copyWith(color: AppColors.primaryMain),
+                      style: AppTextStyle.screenTitle24Main,
                     ),
                   ],
                 ),
@@ -108,7 +107,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding: EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Color(0xFFE3F2FD),
                     borderRadius: BorderRadius.circular(12),
@@ -117,9 +116,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                       color: AppColors.primaryMain, size: 24),
                 ),
                 SizedBox(height: 12),
-                Text("ថ្នាក់សរុប",
-                    style: AppTextStyle.body
-                        .copyWith(color: AppColors.secondaryText)),
+                Text("ថ្នាក់សរុប", style: AppTextStyle.bodySecondary),
                 SizedBox(height: 4),
                 Text("4", style: AppTextStyle.title28),
               ],
@@ -138,7 +135,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding: EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Color(0xFFF3E5F5),
                     borderRadius: BorderRadius.circular(12),
@@ -147,9 +144,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                       color: Color(0xFF9C27B0), size: 24),
                 ),
                 SizedBox(height: 12),
-                Text("សិស្សសរុប",
-                    style: AppTextStyle.body
-                        .copyWith(color: AppColors.secondaryText)),
+                Text("សិស្សសរុប", style: AppTextStyle.bodySecondary),
                 SizedBox(height: 4),
                 Text("120", style: AppTextStyle.title28),
               ],
@@ -165,13 +160,14 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
       children: [
         Expanded(
           child: ElevatedButton.icon(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, AppRoutes.manageAllClass);
+            },
             icon: Icon(Icons.add, color: AppColors.white),
-            label: Text("បង្កើតថ្នាក់",
-                style: AppTextStyle.body.copyWith(color: AppColors.white)),
+            label: Text("បង្កើតថ្នាក់", style: AppTextStyle.bodyWhite),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primaryMain,
-              padding: EdgeInsets.symmetric(vertical: 14),
+              padding: const EdgeInsets.symmetric(vertical: 14),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
             ),
@@ -180,14 +176,14 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
         SizedBox(width: 12),
         Expanded(
           child: OutlinedButton.icon(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, AppRoutes.manageAllClass);
+            },
             icon: Icon(Icons.event_note_outlined, color: AppColors.primaryMain),
-            label: Text("ត្រូវត្រាថ្នាក់",
-                style:
-                    AppTextStyle.body.copyWith(color: AppColors.primaryMain)),
+            label: Text("ត្រូវត្រាថ្នាក់", style: AppTextStyle.bodyPrimary),
             style: OutlinedButton.styleFrom(
               side: BorderSide(color: AppColors.primaryMain),
-              padding: EdgeInsets.symmetric(vertical: 14),
+              padding: const EdgeInsets.symmetric(vertical: 14),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
             ),
@@ -201,40 +197,75 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _buildQuickActionItem(Icons.person_outline, "កត់ត្រាវត្តមាន",
-            Color(0xFFE3F2FD), AppColors.primaryMain),
-        _buildQuickActionItem(Icons.assignment_outlined, "កិច្ចការផ្ទះ",
-            Color(0xFFF3E5F5), Color(0xFF9C27B0)),
-        _buildQuickActionItem(Icons.check_circle_outline, "បញ្ជូលពិន្ទុ",
-            Color(0xFFE8F5E9), Color(0xFF4CAF50)),
-        _buildQuickActionItem(Icons.campaign_outlined, "ផ្ញើរសេចក្តីជូនដំណឹង",
-            Color(0xFFFFF3E0), Color(0xFFFF9800)),
+        _buildQuickActionItem(
+          Icons.person_outline,
+          "កត់ត្រាវត្តមាន",
+          Color(0xFFE3F2FD),
+          AppColors.primaryMain,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AttendanceScreen()),
+            );
+          },
+        ),
+        _buildQuickActionItem(
+          Icons.assignment_outlined,
+          "កិច្ចការផ្ទះ",
+          Color(0xFFF3E5F5),
+          Color(0xFF9C27B0),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomeworkScreen()),
+            );
+          },
+        ),
+        _buildQuickActionItem(
+          Icons.check_circle_outline,
+          "បញ្ជូលពិន្ទុ",
+          Color(0xFFE8F5E9),
+          Color(0xFF4CAF50),
+          onTap: () {},
+        ),
+        _buildQuickActionItem(
+          Icons.campaign_outlined,
+          "ផ្ញើរសេចក្តីជូនដំណឹង",
+          Color(0xFFFFF3E0),
+          Color(0xFFFF9800),
+          onTap: () {
+            // Navigate to notification screen when available
+          },
+        ),
       ],
     );
   }
 
   Widget _buildQuickActionItem(
-      IconData icon, String label, Color bgColor, Color iconColor) {
-    return Column(
-      children: [
-        Container(
-          width: 60,
-          height: 60,
-          decoration: BoxDecoration(
-            color: bgColor,
-            borderRadius: BorderRadius.circular(16),
+      IconData icon, String label, Color bgColor, Color iconColor,
+      {VoidCallback? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              color: bgColor,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Icon(icon, color: iconColor, size: 28),
           ),
-          child: Icon(icon, color: iconColor, size: 28),
-        ),
-        SizedBox(height: 8),
-        Text(
-          label,
-          style: AppTextStyle.body
-              .copyWith(fontSize: 12, color: AppColors.primaryText),
-          textAlign: TextAlign.center,
-          maxLines: 2,
-        ),
-      ],
+          SizedBox(height: 8),
+          Text(
+            label,
+            style: AppTextStyle.caption12Primary,
+            textAlign: TextAlign.center,
+            maxLines: 2,
+          ),
+        ],
+      ),
     );
   }
 
@@ -250,9 +281,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
               onPressed: () {
                 Navigator.pushNamed(context, AppRoutes.manageAllClass);
               },
-              child: Text("មើលទាំងអស់",
-                  style:
-                      AppTextStyle.body.copyWith(color: AppColors.primaryMain)),
+              child: Text("មើលទាំងអស់", style: AppTextStyle.bodyPrimary),
             ),
           ],
         ),

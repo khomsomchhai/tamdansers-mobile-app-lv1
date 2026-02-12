@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 
 class SearchField extends StatelessWidget {
@@ -29,11 +30,11 @@ class SearchField extends StatelessWidget {
         hintStyle: AppTextStyle.hintText,
         prefixIcon: icon,
         enabledBorder: UnderlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppNumber.radiusLarge),
           borderSide: BorderSide.none
         ),
         focusedBorder: UnderlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppNumber.radiusLarge),
           borderSide: BorderSide.none
         )
       ),

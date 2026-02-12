@@ -9,11 +9,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  google_fonts: ^8.0.0
+  google_fonts: ^6.0.0
   flutter_bounceable: ^1.2.0
-  flutter_svg: ^2.2.3
+  flutter_svg: ^2.0.0
   table_calendar: ^3.0.9
   image_picker: ^1.2.1
+  percent_indicator: ^4.2.5
+  carousel_slider: ^5.1.2
+  smooth_page_indicator: ^2.0.1
 
 dev_dependencies:
   flutter_test:

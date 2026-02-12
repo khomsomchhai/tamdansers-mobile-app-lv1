@@ -11,12 +11,15 @@ class AppColors {
 
   static const Color primaryText = Color(0xff1C1C1E);
   static const Color secondaryText = Color(0xFF6E6E73);
-
+  
+  static const Color purple = Color(0xffC95EDB);
+  static const Color orange = Color(0xffFCAA58);
   static const Color success = Color(0xFF34C759);
   static const Color successBG = Color.fromARGB(37, 118, 211, 121);
   static const Color error = Color(0xFFFF3B30);
   static const Color errorBG = Color.fromARGB(39, 255, 58, 48);
   static const Color link = Color(0xff007AFF);
+  static const Color grey = Colors.grey;
 
   static const Color lightPink = Color.fromARGB(91, 228, 175, 237);
   static const Color pepure = Color(0xff9C27B0);

@@ -14,21 +14,17 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 10),
-          child: Container(
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: AppColors.primaryMain,
-                    width: 2.0,
-                  )),
-              child: CircleAvatar(
-                  child: SvgPicture.asset("assets/images/app_logo_blue.svg"))),
-        ),
+      return Scaffold(
+       appBar: AppBar(
+        leading: Container(
+            decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: AppColors.primaryMain,
+                  width: 2.0,
+                )),
+            child: CircleAvatar(
+                child: SvgPicture.asset("assets/images/app_logo_blue.svg"))),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
