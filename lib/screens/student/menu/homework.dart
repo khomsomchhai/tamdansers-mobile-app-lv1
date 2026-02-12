@@ -13,6 +13,7 @@ class _HomeworkState extends State<Homework> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Homework'),
+        centerTitle: true,
       ),
       body: Center(
         child: Text('Homework Screen'),

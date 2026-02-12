@@ -17,293 +17,201 @@ class _ScedeulState extends State<Scedeul> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading:
-            Icon(Icons.chevron_left, size: 40, color: AppColors.secondaryText),
+        leading: Icon(
+          Icons.chevron_left,
+          size: 40,
+          color: AppColors.secondaryText,
+        ),
         title: Text('កាលវិភាគ', style: AppTextStyle.sectionTitle20),
         centerTitle: true,
         actions: [
           IconButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return Dialog(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: SizedBox(
-                        height: 400,
-                        child: TableCalendar(
-                          firstDay: DateTime.utc(2025, 1, 1),
-                          lastDay: DateTime.utc(2030, 12, 31),
-                          focusedDay: DateTime.now(),
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
-              icon: Icon(Icons.calendar_month, color: AppColors.secondaryText))
+            icon: Icon(Icons.calendar_month,
+                color: AppColors.secondaryText),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (_) => Dialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: SizedBox(
+                    height: 400,
+                    child: TableCalendar(
+                      firstDay: DateTime.utc(2025, 1, 1),
+                      lastDay: DateTime.utc(2030, 12, 31),
+                      focusedDay: DateTime.now(),
+                    ),
+                  ),
+                ),
+              );
+            },
+          )
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            /// ===== DAYS =====
             SizedBox(
               height: 100,
               child: GridView.builder(
                 itemCount: 5,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 5,
-                    crossAxisSpacing: 10,
-                    childAspectRatio: 0.7),
+                gridDelegate:
+                    const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 5,
+                  crossAxisSpacing: 10,
+                  childAspectRatio: 0.7,
+                ),
                 itemBuilder: (context, index) {
-                  final bool isSelected = selectedDay == index;
+                  final isSelected = selectedDay == index;
                   return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedDay = index;
-                        });
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          color: isSelected
-                              ? AppColors.primaryMain
-                              : AppColors.primaryBg,
-                        ),
-                        child: Column(
-                          children: [
-                            Text('ចន្ទ',
-                                style: AppTextStyle.fontsize18.copyWith(
-                                    color: isSelected
-                                        ? AppColors.white
-                                        : AppColors.primaryText)),
-                            SizedBox(height: 20),
-                            Text('11',
-                                style: AppTextStyle.fontsize18.copyWith(
-                                    color: isSelected
-                                        ? AppColors.white
-                                        : AppColors.primaryText)),
-                          ],
-                        ),
-                      ));
+                    onTap: () {
+                      setState(() => selectedDay = index);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: isSelected
+                            ? AppColors.primaryMain
+                            : AppColors.primaryBg,
+                      ),
+                      child: Column(
+                        children: [
+                          Text(
+                            'ចន្ទ',
+                            style: AppTextStyle.fontsize18.copyWith(
+                              color: isSelected
+                                  ? AppColors.white
+                                  : AppColors.primaryText,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          Text(
+                            '11',
+                            style: AppTextStyle.fontsize18.copyWith(
+                              color: isSelected
+                                  ? AppColors.white
+                                  : AppColors.primaryText,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
                 },
               ),
             ),
-            SizedBox(height: 15),
+
+            const SizedBox(height: 15),
+
+            /// ===== SCHEDULE LIST =====
             Expanded(
               child: ListView(
                 children: [
-                  // ====Morning====
+                  /// ===== MORNING =====
                   Text('វេនព្រឹក', style: AppTextStyle.sectionTitle20),
-                  SizedBox(height: 10),
-                  ...List.generate(3, (index) {
-                    return Row(
-                      children: [
-                        Column(
-                          children: [
-                            Text('8:00 - 9:00',
-                                style: AppTextStyle.hintText
-                                    .copyWith(color: AppColors.secondaryText)),
-                            SizedBox(height: 5),
-                            Container(
-                              height: 80,
-                              width: 3,
-                              color: AppColors.secondaryText,
-                            )
-                          ],
-                        ),
-                        SizedBox(width: 20),
-                        Expanded(child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.all(12.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: 60,
-                                  height: 60,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: AppColors.primaryBg
-                                  ),
-                                  child: Icon(Icons.book, size: 40, color: AppColors.primaryMain,),
-                                ),
-                                SizedBox(width: 10),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('ប្រវត្តិវិទ្យា',
-                                        style: AppTextStyle.sectionTitle20),
-                                    SizedBox(height: 5),
-                                    Text('គ្រូ: សុខ សុភា',
-                                        style: AppTextStyle.body
-                                            .copyWith(
-                                                color: AppColors.secondaryText)),
-                                    SizedBox(height: 10),
-                                    Row(
-                                      children: [
-                                        Icon(Icons.watch, size: 16, color: AppColors.secondaryText),
-                                        SizedBox(width: 5),
-                                        Text('8:00 AM - 9:00 AM',
-                                            style: AppTextStyle.body
-                                                .copyWith(
-                                                    color: AppColors.secondaryText)),
-                                      ],
-                                    )
-                                  ],
-                                )
-                              ],
-                        Expanded(
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: 60,
-                                    height: 60,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: AppColors.primaryBg),
-                                    child: Icon(
-                                      Icons.book,
-                                      size: 40,
-                                      color: AppColors.primaryMain,
-                                    ),
-                                  ),
-                                  SizedBox(width: 10),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text('ប្រវត្តិវិទ្យា',
-                                          style: AppTextStyle.sectionTitle20),
-                                      SizedBox(height: 5),
-                                      Text('គ្រូ: សុខ សុភា',
-                                          style: AppTextStyle.body.copyWith(
-                                              color: AppColors.secondaryText)),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          
-                          ),
-                        )
-                      ],
-                    );
-                  }),
-                  SizedBox(height: 30),
-                  // ====Affternoon====
+                  const SizedBox(height: 10),
+
+                  ...List.generate(3, (_) => _scheduleItem()),
+
+                  const SizedBox(height: 30),
+
+                  /// ===== AFTERNOON =====
                   Text('វេនរសៀល', style: AppTextStyle.sectionTitle20),
-                  SizedBox(height: 10),
-                  ...List.generate(3, (index) {
-                    return Row(
-                      children: [
-                        Column(
-                          children: [
-                            Text('8:00 - 9:00',
-                                style: AppTextStyle.hintText
-                                    .copyWith(color: AppColors.secondaryText)),
-                            SizedBox(height: 5),
-                            Container(
-                              height: 80,
-                              width: 3,
-                              color: AppColors.secondaryText,
-                            )
-                          ],
-                        ),
-                        SizedBox(width: 20),
-                        Expanded(child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: 60,
-                                  height: 60,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: AppColors.primaryBg
-                                  ),
-                                  child: Icon(Icons.book, size: 40, color: AppColors.primaryMain,),
-                                ),
-                                SizedBox(width: 10),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('ប្រវត្តិវិទ្យា',
-                                        style: AppTextStyle.sectionTitle20),
-                                    SizedBox(height: 5),
-                                    Text('គ្រូ: សុខ សុភា',
-                                        style: AppTextStyle.body
-                                            .copyWith(
-                                                color: AppColors.secondaryText)),
-                                    SizedBox(height: 10),
-                                    Row(
-                                      children: [
-                                        Icon(Icons.watch, size: 16, color: AppColors.secondaryText),
-                                        SizedBox(width: 5),
-                                        Text('8:00 AM - 9:00 AM',
-                                            style: AppTextStyle.body
-                                                .copyWith(
-                                                    color: AppColors.secondaryText)),
-                                      ],
-                                    )
-                                  ],
-                                )
-                              ],
-                        Expanded(
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Ballet Class',
-                                      style: AppTextStyle.fontsize18),
-                                  SizedBox(height: 5),
-                                  Text('Instructor: Jane Doe',
-                                      style: AppTextStyle.body.copyWith(
-                                          color: AppColors.secondaryText)),
-                                  SizedBox(height: 5),
-                                  Text('Room 101',
-                                      style: AppTextStyle.body.copyWith(
-                                          color: AppColors.secondaryText)),
-                                ],
-                              ),
-                            ),
-                          
-                          ),
-                        )
-                      ],
-                    );
-                  }),
+                  const SizedBox(height: 10),
+
+                  ...List.generate(3, (_) => _scheduleItem()),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  /// ===== REUSABLE SCHEDULE ITEM =====
+  Widget _scheduleItem() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Column(
+          children: [
+            Text(
+              '8:00 - 9:00',
+              style: AppTextStyle.hintText
+                  .copyWith(color: AppColors.secondaryText),
+            ),
+            const SizedBox(height: 5),
+            Container(
+              height: 80,
+              width: 3,
+              color: AppColors.secondaryText,
+            ),
+          ],
+        ),
+        const SizedBox(width: 20),
+        Expanded(
+          child: Card(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                children: [
+                  Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: AppColors.primaryBg,
+                    ),
+                    child: Icon(
+                      Icons.book,
+                      size: 40,
+                      color: AppColors.primaryMain,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('ប្រវត្តិវិទ្យា',
+                          style: AppTextStyle.sectionTitle20),
+                      const SizedBox(height: 5),
+                      Text(
+                        'គ្រូ: សុខ សុភា',
+                        style: AppTextStyle.body.copyWith(
+                          color: AppColors.secondaryText,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Icon(Icons.watch,
+                              size: 16,
+                              color: AppColors.secondaryText),
+                          const SizedBox(width: 5),
+                          Text(
+                            '8:00 AM - 9:00 AM',
+                            style: AppTextStyle.body.copyWith(
+                              color: AppColors.secondaryText,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

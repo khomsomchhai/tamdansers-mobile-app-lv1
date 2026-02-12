@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/widget/attendance_db.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -13,17 +14,21 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
-      return Scaffold(
-       appBar: AppBar(
-        leading: Container(
-            decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: AppColors.primaryMain,
-                  width: 2.0,
-                )),
-            child: CircleAvatar(
-                child: SvgPicture.asset("assets/images/app_logo_blue.svg"))),
+    return Scaffold(
+      appBar: AppBar(
+        
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: Container(
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: AppColors.primaryMain,
+                    width: 2.0,
+                  )),
+              child: CircleAvatar(
+                  child: SvgPicture.asset("assets/images/app_logo_blue.svg"))),
+        ),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -55,7 +60,7 @@ class _HomepageState extends State<Homepage> {
             children: [
               _TitleHeader(),
               SizedBox(height: 20),
-              _CardAttendance(),
+              CardAttendance(),
               SizedBox(height: 20),
               _GridInfo(),
               SizedBox(height: 20),
@@ -69,6 +74,7 @@ class _HomepageState extends State<Homepage> {
     );
   }
 }
+
 class _TitleHeader extends StatelessWidget {
   const _TitleHeader();
 
@@ -94,9 +100,14 @@ class _TitleHeader extends StatelessWidget {
   }
 }
 
-class _Homework extends StatelessWidget {
+class _Homework extends StatefulWidget {
   const _Homework();
 
+  @override
+  State<_Homework> createState() => _HomeworkState();
+}
+
+class _HomeworkState extends State<_Homework> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -104,7 +115,7 @@ class _Homework extends StatelessWidget {
       children: [
         Text(
           'កិច្ចការផ្ទះ',
-          style: AppTextStyle.sectionTitle20,
+          style: AppTextStyle.fontsize18,
         ),
         SizedBox(height: 10),
         Container(
@@ -147,10 +158,10 @@ class _Classes extends StatelessWidget {
       children: [
         Row(
           children: [
-            Text('ថ្នាក់បន្ទាប់', style: AppTextStyle.sectionTitle20),
+            Text('ថ្នាក់បន្ទាប់', style: AppTextStyle.fontsize18),
             Spacer(),
             Text('មើលទាំងអស់',
-                style: AppTextStyle.fontsize18.copyWith(color: AppColors.link)),
+                style: AppTextStyle.hintText.copyWith(color: AppColors.link)),
           ],
         ),
         SizedBox(height: 12),
@@ -220,69 +231,11 @@ class _GridInfo extends StatelessWidget {
                     color: AppColors.primary400,
                   ),
                 ),
-                Text('ស្កេន QR', style: AppTextStyle.fontsize18)
+                Text('ស្កេន QR', style: AppTextStyle.body)
               ],
             ),
           );
         },
-      ),
-    );
-  }
-}
-
-class _CardAttendance extends StatelessWidget {
-  const _CardAttendance();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.primaryMain,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('វត្តមានប្រចាំខែ មករា 2026',
-                  style: AppTextStyle.body.copyWith(color: AppColors.white)),
-              Text('94%',
-                  style: AppTextStyle.title28.copyWith(
-                      color: AppColors.white, fontWeight: FontWeight.bold)),
-              SizedBox(height: 8),
-              Row(
-                children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: AppColors.backgroundLight,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text("វត្តមាន​ 26",
-                        style: AppTextStyle.body.copyWith(
-                            color: AppColors.success,
-                            fontWeight: FontWeight.bold)),
-                  ),
-                  SizedBox(width: 10),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: AppColors.backgroundLight,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text("អវត្តមាន​ 4",
-                        style: AppTextStyle.body.copyWith(
-                            color: AppColors.error,
-                            fontWeight: FontWeight.bold)),
-                  )
-                ],
-              )
-            ],
-          ),
-          Spacer(),
-        ],
       ),
     );
   }

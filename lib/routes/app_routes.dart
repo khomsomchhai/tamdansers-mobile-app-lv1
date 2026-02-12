@@ -18,7 +18,8 @@ class AppRoutes {
   static const String homework="/student_homework";
   static const String homepage="/student_homepage";
   static const String result="/student_result";
-
+  static const String info="/student_info_personal";
   static String teacherDashboardScreen = "/teacher_dashboard_screen";
-  
+  static String subject="/subject";
+  static const String changePassword="/change_password";
 }
