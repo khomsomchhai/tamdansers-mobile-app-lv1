@@ -7,6 +7,20 @@ class Validators {
     }
     return null;
   }
+  static String? emailOrPhone(String? value) {
+    if (value == null || value.isEmpty) {
+      return "សូមបញ្ចូលអ៊ីម៉ែល ឬ លេខទូរស័ព្ទ";
+    }
+
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+    final phoneRegex = RegExp(r'^(0[0-9]{8,9}|\+855[0-9]{8,9})$');
+
+    if (emailRegex.hasMatch(value) || phoneRegex.hasMatch(value)) {
+      return null;
+    }
+    return "អ៊ីម៉ែល ឬ លេខទូរស័ព្ទមិនត្រឹមត្រូវ";
+  }
+
   static String? password(value){
     if(value!.isEmpty){
       return "សូមបញ្ចូលពាក្យសម្ងាត់";

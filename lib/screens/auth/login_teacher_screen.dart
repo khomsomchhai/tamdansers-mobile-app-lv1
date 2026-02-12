@@ -102,9 +102,9 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
       child: Column(
         children: [
           AuthField(
-            validator: Validators.email,
+            validator: Validators.emailOrPhone,
             textController: emailCtrl,
-            hintText: "បញ្ចូលអ៊ីម៉ែលរបស់អ្នក",
+            hintText: "បញ្ចូលអ៊ីម៉ែល ឬ លេខទូរស័ព្ទរបស់អ្នក",
             icon: Icon(
               Icons.email_outlined,
               size: 20,
