@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bounceable/flutter_bounceable.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_images.dart';
+import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/widget/search_field.dart';
@@ -38,7 +41,7 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
         ),
         centerTitle: true,
         elevation: 0,
-        surfaceTintColor: Colors.transparent,
+        surfaceTintColor: AppColors.transparent,
       ),
       body: Column(
         children: [
@@ -64,7 +67,7 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     decoration: BoxDecoration(
                       color: AppColors.primaryMain,
-                      borderRadius: BorderRadius.circular(26),
+                      borderRadius: BorderRadius.circular(AppNumber.radiusLarge),
                     ),
                     child: Row(
                       children: [
@@ -107,7 +110,7 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                SizedBox(width: 4),
+                const Spacer(),
                 Text(
                   "32 នាក់",
                   style: AppTextStyle.sectionTitle20.copyWith(
@@ -124,11 +127,21 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
               padding: EdgeInsets.fromLTRB(20, 0, 20, 16),
               itemCount: 32,
               itemBuilder: (context, index) {
-                return _studentCard(
-                  name: "សុម តារី",
-                  code: "ID: 2023-00$index",
-                  gender: "ប្រុស",
-                  attendance: 0.68,
+                return GestureDetector(
+                  child: Bounceable(
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context, 
+                        AppRoutes.studentDetailScreen
+                      );
+                    },
+                    child: _studentCard(
+                      name: "សុម តារី",
+                      code: "ID: 2023-00${index+1}",
+                      gender: "ប្រុស",
+                      attendance: 0.68,
+                    ),
+                  ),
                 );
               },
             ),
@@ -145,128 +158,65 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
     required double attendance,
   }) {
     return Container(
-      margin: EdgeInsets.only(bottom: 12),
+      margin: EdgeInsets.only(bottom: 16),
       padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(26),
+        borderRadius: BorderRadius.circular(AppNumber.radiusLarge),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.primaryText.withValues(alpha: 0.04),
             blurRadius: 6,
             offset: Offset(0, 2),
           ),
         ],
       ),
-      child: Column(
+      child: Row(
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CircleAvatar(
-                radius: 30,
-                backgroundColor: AppColors.primaryMain.withOpacity(0.15),
-                child: Image.asset(
-                  AppImages.studentMale2,
-                  width: 40,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      style: AppTextStyle.body.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      code,
-                      style: AppTextStyle.body.copyWith(
-                        color: AppColors.secondaryText,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(gender, style: AppTextStyle.body),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          _progressRow(
-            label: "វត្តមាន",
-            value: attendance,
-            barColor: AppColors.success,
-          ),
-          const SizedBox(height: 8),
-          Align(
-            alignment: Alignment.centerRight,
-            child: TextButton(
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.zero,
-                minimumSize: Size(0, 0),
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              ),
-              onPressed: () {
-                Navigator.pushNamed(context, AppRoutes.studentDetailScreen);
-              },
-              child: Text(
-                "ព័ត៌មានលម្អិត >",
-                style: AppTextStyle.body.copyWith(
-                  color: AppColors.primaryMain,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+          CircleAvatar(
+            radius: 30,
+            backgroundColor: AppColors.primaryMain.withOpacity(0.15),
+            child: Image.asset(
+              AppImages.studentMale2,
+              width: 40,
+              fit: BoxFit.cover,
             ),
+          ),
+          SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  style: AppTextStyle.body.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  code,
+                  style: AppTextStyle.body.copyWith(
+                    color: AppColors.secondaryText,
+                  ),
+                ),
+                Text(gender, style: AppTextStyle.body),
+              ],
+            ),
+          ),
+          CircularPercentIndicator(
+            radius: 30,
+            lineWidth: 5.0,
+            percent: attendance,
+            center: Text("${(attendance * 100).round()}%"),
+            progressColor: AppColors.success,
+            backgroundColor: AppColors.secondaryText.withValues(alpha: 0.15),
+            animation: true,
+            animationDuration: 800,
+            circularStrokeCap: CircularStrokeCap.round,
           ),
         ],
       ),
-    );
-  }
-
-  Widget _progressRow({
-    required String label,
-    required double value,
-    required Color barColor,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Text(
-              label,
-              style: AppTextStyle.body,
-            ),
-            Spacer(),
-            Text(
-              "${(value * 100).toStringAsFixed(0)}%",
-              style: AppTextStyle.body,
-            ),
-          ],
-        ),
-        SizedBox(height: 4),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(4),
-          child: LinearProgressIndicator(
-            value: value,
-            minHeight: 4,
-            backgroundColor: AppColors.white,
-            valueColor: AlwaysStoppedAnimation<Color>(barColor),
-          ),
-        ),
-      ],
     );
   }
 }

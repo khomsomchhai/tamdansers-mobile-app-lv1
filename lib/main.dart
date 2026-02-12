@@ -23,7 +23,6 @@ class MainApp extends StatelessWidget {
           )),
       initialRoute: AppRoutes.manageStudentScreen,
       routes: PageRoutes.routes,
-      home: Scaffold(),
     );
   }
 }

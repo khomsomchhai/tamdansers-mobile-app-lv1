@@ -16,6 +16,7 @@ import 'package:tamdansers_app/screens/teacher/link_parent.dart';
 import 'package:tamdansers_app/screens/teacher/manage_all_class.dart';
 import 'package:tamdansers_app/screens/teacher/manage_class.dart';
 import 'package:tamdansers_app/screens/teacher/manage_student_screen.dart';
+import 'package:tamdansers_app/screens/teacher/score_detail_screen.dart';
 import 'package:tamdansers_app/screens/teacher/student_detail_screen.dart';
 import 'package:tamdansers_app/screens/teacher/teacher_dashboard.dart';
 
@@ -33,7 +34,7 @@ class PageRoutes {
     AppRoutes.manageStudentScreen: (context) => ManageStudentScreen(),
     AppRoutes.studentDetailScreen: (context) => StudentDetailScreen(),
     AppRoutes.linkParentScreen: (context) => LinkParentScreen(),
-
+    AppRoutes.scoreDetailScreen: (context) => ScoreDetailScreen(),
     // Student routes
     AppRoutes.studentDashboard: (context) => StudentDashboard(),
     AppRoutes.profile: (context) => Profile(),

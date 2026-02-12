@@ -3,7 +3,9 @@ class AppImages {
   static const String appLogoblue = "assets/images/app_logo_blue.svg";
   //illustrator
   static const String imageSelectRole = "assets/images/image_select_role.svg";
-  static const String imageClassroom = "assets/images/img_classroom.svg";
+  static const String slider1 = "assets/images/slider1.svg";
+  static const String slider2 = "assets/images/slider2.svg";
+  static const String slider3 = "assets/images/slider3.svg";
   static const String imgLogin = "assets/images/login_img.svg";
   static const String imgSignUp = "assets/images/sign_up_img.svg";
   //icon

@@ -28,7 +28,7 @@ class AuthOptionTeacherScreen extends StatelessWidget {
             SizedBox(
               height: size.height * 0.35,
               child: SvgPicture.asset(
-                AppImages.imageClassroom,
+                AppImages.slider1,
                 fit: BoxFit.contain,
               ),
             ),
