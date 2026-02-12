@@ -11,7 +11,6 @@ class StudentDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
@@ -21,7 +20,7 @@ class StudentDetailScreen extends StatelessWidget {
         title: Text("ព័ត៌មានលម្អិត", style: AppTextStyle.screenTitle24),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -33,10 +32,9 @@ class StudentDetailScreen extends StatelessWidget {
             const SizedBox(height: 20),
             _buildAttendanceCard(),
             const SizedBox(height: 20),
-            _buildSubjectList(),
+            _buildSubjectList(context),
             const SizedBox(height: 20),
-            _buildNoteSection(),
-            const SizedBox(height: 30),
+            // _buildNoteSection(),
           ],
         ),
       ),
@@ -105,14 +103,33 @@ class StudentDetailScreen extends StatelessWidget {
             width: double.infinity,
             height: 48,
             child: ElevatedButton.icon(
-              onPressed: () {
-                Navigator.pushNamed(context, AppRoutes.linkParentScreen);
+              onPressed: () async {
+                final result = await Navigator.pushNamed(
+                  context,
+                  AppRoutes.linkParentScreen,
+                );
+
+                if (!context.mounted) return;
+
+                if (result == true) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Center(
+                        child: Text(
+                          "ភ្ជាប់អាណាព្យាបាលជោគជ័យ",
+                          style: AppTextStyle.sectionTitle20,
+                        ),
+                      ),
+                      backgroundColor: AppColors.success,
+                    ),
+                  );
+                }
               },
               icon: const Icon(Icons.person_add_alt_1_rounded,
-                  color: Colors.white, size: 20),
+                  color: AppColors.white, size: 20),
               label: Text("ភ្ជាប់អាណាព្យាបាល",
                   style: AppTextStyle.body.copyWith(
-                      color: Colors.white, fontWeight: FontWeight.bold)),
+                      color: AppColors.white, fontWeight: FontWeight.bold)),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryMain,
                 shape: RoundedRectangleBorder(
@@ -138,7 +155,7 @@ class StudentDetailScreen extends StatelessWidget {
             percent: 0.98,
             center: Text("98%", style: AppTextStyle.sectionTitle20),
             progressColor: AppColors.success,
-            backgroundColor: Colors.grey.shade100,
+            backgroundColor: AppColors.secondaryText,
             circularStrokeCap: CircularStrokeCap.round,
           ),
           const SizedBox(height: 20),
@@ -155,7 +172,7 @@ class StudentDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSubjectList() {
+  Widget _buildSubjectList(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -164,7 +181,9 @@ class StudentDetailScreen extends StatelessWidget {
             Text("លទ្ធផលសិក្សា", style: AppTextStyle.sectionTitle20),
             const Spacer(),
             TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, AppRoutes.scoreDetailScreen);
+                },
                 child: Text(
                   "មើលទាំងអស់",
                   style: AppTextStyle.body.copyWith(
@@ -175,45 +194,45 @@ class StudentDetailScreen extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 12),
-        _subjectTile("ភាសាខ្មែរ", "Average: 80", 95, Colors.blue),
-        _subjectTile("គណិតវិទ្យា", "Average: 75", 92, Colors.orange),
-        _subjectTile("វិទ្យាសាស្ត្រ", "Average: 78", 88, Colors.purple),
-      ],
+        _buildSubjectItem("ភាសាខ្មែរ", "95", "ល្អណាស់", AppColors.primaryMain),
+        _buildSubjectItem("គណិតវិទ្យា", "98", "ល្អណាស់", AppColors.primaryMain),
+        _buildSubjectItem("ប្រវត្តិវិទ្យា", "76", "ល្អ", AppColors.purple),
+],
     );
   }
 
-  Widget _buildNoteSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text("កំណត់ត្រាគ្រូ", style: AppTextStyle.sectionTitle20),
-        const SizedBox(height: 10),
-        TextField(
-          maxLines: 3,
-          decoration: InputDecoration(
-            hintText: "បញ្ចូលចំណាំ...",
-            hintStyle:
-                AppTextStyle.body.copyWith(color: AppColors.secondaryText),
-            filled: true,
-            fillColor: Colors.white,
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide.none),
-          ),
-        ),
-      ],
-    );
-  }
+  // Widget _buildNoteSection() {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       Text("កំណត់ត្រាគ្រូ", style: AppTextStyle.sectionTitle20),
+  //       const SizedBox(height: 10),
+  //       TextField(
+  //         maxLines: 3,
+  //         decoration: InputDecoration(
+  //           hintText: "បញ្ចូលចំណាំ...",
+  //           hintStyle:
+  //               AppTextStyle.body.copyWith(color: AppColors.secondaryText),
+  //           filled: true,
+  //           fillColor: AppColors.white,
+  //           border: OutlineInputBorder(
+  //               borderRadius: BorderRadius.circular(15),
+  //               borderSide: BorderSide.none),
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget _card({required Widget child}) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(26),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 10)
+          BoxShadow(color: AppColors.primaryText.withOpacity(0.04), blurRadius: 10)
         ],
       ),
       child: child,
@@ -275,38 +294,59 @@ class StudentDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _subjectTile(String title, String sub, int score, Color color) {
+  Widget _buildSubjectItem(String title, String score, String status, Color themeColor) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(20)),
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(24),
+      ),
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(10),
+            width: 50,
+            height: 50,
             decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(12)),
-            child: Icon(Icons.book, color: color),
+              color: themeColor.withOpacity(0.1), 
+              borderRadius: BorderRadius.circular(15)
+            ),
+            child: Center(
+              child: Text(
+                title[0], 
+                style: AppTextStyle.sectionTitle20.copyWith(color: themeColor)
+              ),
+            ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title,
-                    style: AppTextStyle.body
-                        .copyWith(fontWeight: FontWeight.bold)),
-                Text(sub,
-                    style: AppTextStyle.body.copyWith(
-                        color: AppColors.secondaryText, fontSize: 12)),
+                Text(title, style: AppTextStyle.subtitle16),
               ],
             ),
           ),
-          Text("$score",
-              style: AppTextStyle.sectionTitle20
-                  .copyWith(color: AppColors.primaryMain)),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                score, 
+                style: AppTextStyle.sectionTitle20.copyWith(color: themeColor, fontWeight: FontWeight.bold)
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                decoration: BoxDecoration(
+                  color: AppColors.success.withOpacity(0.1), 
+                  borderRadius: BorderRadius.circular(8)
+                ),
+                child: Text(
+                  status, 
+                  style: AppTextStyle.caption12Secondary.copyWith(color: AppColors.success, fontWeight: FontWeight.bold)
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
