@@ -18,5 +18,7 @@ class AppColors{
   static const Color link = Color(0xff007AFF);
 
   static const Color transparent = Colors.transparent;
-
+  static const Color uploadFile = Color(0xffF8FAFC);
+  static const Color teacomment = Color(0xffFFF1C2);
+  static const Color comment = Color(0xffFDAD00);
 }

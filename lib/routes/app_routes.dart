@@ -20,7 +20,9 @@ class AppRoutes {
   static const String homework="/student_homework";
   static const String homepage="/student_homepage";
   static const String result="/student_result";
-
+  static const String detail="/detailscreen";
+  static const String detailTeach="/detailteascreen";
+  static const String submitted="/submitted";
   static String teacherDashboardScreen = "/teacher_dashboard_screen";
   
 
