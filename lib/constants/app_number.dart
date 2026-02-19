@@ -29,6 +29,7 @@ class AppNumber {
 
   // Icon Sizes - Use based on context
   static const double iconSmall = 20.0; // Small icons in text
+  static const double icon16 = 16; // Small icons in text
   static const double iconMedium = 24.0; // Standard icons
   static const double iconLarge = 28.0; // Large icons (app bar, etc.)
 

@@ -43,4 +43,13 @@ class Validators {
     }
     return null;
   }
+  static String? classCode(value){
+    if(value!.isEmpty){
+      return "សូមបញ្ចូលលេខកូដថ្នាក់";
+    }
+    if(value!.length() < 4){
+      return "លេខកូដថ្នាក់ត្រូវមានយ៉ាងហោចណាស់ 4 ខ្ទង់";
+    }
+    return null;
+  }
 }
