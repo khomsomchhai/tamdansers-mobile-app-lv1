@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_images.dart';
-import 'package:tamdansers_app/constants/text_style.dart';
-import 'package:tamdansers_app/constants/validators.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
-import 'package:tamdansers_app/widget/auth_field.dart';
-import 'package:tamdansers_app/widget/button_with_icon.dart';
-import 'package:tamdansers_app/widget/primary_button.dart';
 
-class LoginTeacherScreen extends StatefulWidget {
-  const LoginTeacherScreen({super.key});
+import '../../constants/app_colors.dart';
+import '../../constants/text_style.dart';
+import '../../constants/validators.dart';
+import '../../widget/auth_field.dart';
+import '../../widget/button_with_icon.dart';
+import '../../widget/primary_button.dart';
+
+class SignInStudent extends StatefulWidget {
+  const SignInStudent({super.key});
 
   @override
-  State<LoginTeacherScreen> createState() => _LoginTeacherScreenState();
+  State<SignInStudent> createState() => _SignInStudentState();
 }
 
-class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
+class _SignInStudentState extends State<SignInStudent> {
   var emailCtrl = TextEditingController();
   var pwdCtrl = TextEditingController();
   var formKey = GlobalKey<FormState>();
@@ -56,7 +57,6 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
           ),
         ],
       ),
-
       // body: SingleChildScrollView(
       //   child: Padding(
       //     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -74,7 +74,6 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
       // ),
     );
   }
-
   Widget _buildHeader(Size size) {
     return Column(
       children: [
@@ -164,7 +163,7 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
               if (formKey.currentState!.validate()) {
                 Navigator.pushReplacementNamed(
                   context,
-                  AppRoutes.teacherDashboard,
+                  AppRoutes.studentDashboard,
                 );
               }
             },
@@ -189,7 +188,7 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, AppRoutes.signUpTeacherScreen);
+                Navigator.pushNamed(context, AppRoutes.signupStudent);
               },
               child: Text(
                 "ចុះឈ្មោះ",

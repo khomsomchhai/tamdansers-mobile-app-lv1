@@ -33,17 +33,18 @@ class _ManageAllClassState extends State<ManageAllClass> {
           style: AppTextStyle.sectionTitle20,
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColors.primaryText),
           onPressed: () {
             Navigator.pop(context);
           },
+          icon: Icon(Icons.arrow_back_ios_new_rounded,
+              color: AppColors.primaryText),
         ),
         centerTitle: true,
       ),
       body: Column(
         children: [
           Container(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               children: [
                 _buildSearchAndAddSection(),
@@ -54,7 +55,7 @@ class _ManageAllClassState extends State<ManageAllClass> {
           ),
           Expanded(
             child: ListView(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               children: [
                 ClassCard(
                   className: "ថ្នាក់ទី 7A (Grade 7A)",
@@ -108,7 +109,7 @@ class _ManageAllClassState extends State<ManageAllClass> {
       children: [
         Expanded(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
               color: AppColors.primaryMain.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
@@ -119,7 +120,7 @@ class _ManageAllClassState extends State<ManageAllClass> {
                 SizedBox(width: 8),
                 Text(
                   "ស្វែងរក...",
-                  style: AppTextStyle.hintText.copyWith(fontSize: 15),
+                  style: AppTextStyle.hint15,
                 ),
               ],
             ),
@@ -131,14 +132,11 @@ class _ManageAllClassState extends State<ManageAllClass> {
           icon: Icon(Icons.add, color: AppColors.white, size: 20),
           label: Text(
             "បង្កើតថ្នាក់",
-            style: AppTextStyle.body.copyWith(
-              color: AppColors.white,
-              fontSize: 15,
-            ),
+            style: AppTextStyle.body15White,
           ),
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.primaryMain,
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
@@ -158,7 +156,7 @@ class _ManageAllClassState extends State<ManageAllClass> {
           final grade = grades[index];
           final isSelected = _selectedGrade == grade;
           return Padding(
-            padding: EdgeInsets.only(right: 8),
+            padding: const EdgeInsets.only(right: 8),
             child: ChoiceChip(
               label: Text(grade),
               selected: isSelected,
@@ -167,8 +165,7 @@ class _ManageAllClassState extends State<ManageAllClass> {
                   _selectedGrade = grade;
                 });
               },
-              labelStyle: AppTextStyle.body.copyWith(
-                fontSize: 14,
+              labelStyle: AppTextStyle.body14.copyWith(
                 color: isSelected ? AppColors.white : AppColors.primaryText,
               ),
               backgroundColor: AppColors.white,
@@ -182,7 +179,7 @@ class _ManageAllClassState extends State<ManageAllClass> {
                       : AppColors.secondaryText.withValues(alpha: 0.2),
                 ),
               ),
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             ),
           );
         },

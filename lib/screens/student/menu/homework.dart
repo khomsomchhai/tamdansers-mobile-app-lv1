@@ -127,9 +127,10 @@ class _HomeworkState extends State<Homework> {
   required String title,
   required String subtitle,
   required String date,
-  required IconData icon,
+  IconData? icon,            // ✅ optional
+  String? imagePath,         // ✅ optional
   required Color color,
-  required TaskStatus status, 
+  required TaskStatus status,
   required bool isClosed,
 }) {
   return Container(
@@ -155,29 +156,54 @@ class _HomeworkState extends State<Homework> {
                 color: color.withOpacity(0.15),
                 borderRadius: BorderRadius.circular(14),
               ),
-              child: Icon(icon, color: color),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(14),
+                child: imagePath != null
+                    ? Image.asset(
+                        imagePath,
+                        fit: BoxFit.cover,
+                      )
+                    : icon != null
+                        ? Icon(icon, color: color)
+                        : const SizedBox(),
+              ),
             ),
+
             const SizedBox(width: 12),
+
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, AppRoutes.detailTeach,arguments: title);
+                      Navigator.pushNamed(
+                        context,
+                        AppRoutes.detailTeach,
+                        arguments: title,
+                      );
                     },
-                    child: Text(title,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16)),
+                    child: Text(
+                      title,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 4),
-                  Text(subtitle,
-                      style: const TextStyle(
-                          color: Colors.grey, fontSize: 12)),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                      color: Colors.grey,
+                      fontSize: 12,
+                    ),
+                  ),
                 ],
               ),
             ),
-          Container(
+
+            Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
                 color: _statusColor(status).withOpacity(0.15),
@@ -194,19 +220,19 @@ class _HomeworkState extends State<Homework> {
             ),
           ],
         ),
+
         const SizedBox(height: 12),
+
         Row(
           children: [
-            const Icon(Icons.calendar_month,
-                size: 16, color: Colors.grey),
-
+            const Icon(Icons.calendar_month, size: 16, color: Colors.grey),
             const SizedBox(width: 6),
-
             Text(
               isClosed ? "ឈប់ទទួល $date" : "បានផ្ញើរ $date",
               style: TextStyle(
                 color: isClosed ? Colors.red : Colors.grey,
-                fontWeight: isClosed ? FontWeight.bold : FontWeight.normal,
+                fontWeight:
+                    isClosed ? FontWeight.bold : FontWeight.normal,
               ),
             ),
             const Spacer(),
@@ -216,6 +242,7 @@ class _HomeworkState extends State<Homework> {
     ),
   );
 }
+
 Widget taskListWidget() {
   return ListView(
     padding: const EdgeInsets.all(18),
@@ -235,84 +262,124 @@ Widget taskListWidget() {
         ),
       ),
       const SizedBox(height: 15),
-      taskCard(
-        title: "រូបវិទ្យា",
-        subtitle: "បញ្ចូលទិន្នន័យ តាមឯកសារ",
-        date: "05-01-2026",
-        icon: Icons.science,
-        color: Colors.green,
-        status: TaskStatus.completed,
-        isClosed: false
+      GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, AppRoutes.detail,);
+        },
+        child: taskCard(
+          title: "រូបវិទ្យា",
+          subtitle: "បញ្ចូលទិន្នន័យ តាមឯកសារ",
+          date: "05-01-2026",
+          icon: Icons.science,
+          color: Colors.green,
+          status: TaskStatus.completed,
+          isClosed: false
+        ),
       ),
       const SizedBox(height: 15),
-      taskCard(
-        title: "ភូមវិទ្យា",
-        subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
-        date: "03-01-2026",
-        icon: Icons.public,
-        color: Colors.orange,
-        status: TaskStatus.completed,
-        isClosed: false
+      GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, AppRoutes.detail,);
+        },
+        child: taskCard(
+          title: "ភូមវិទ្យា",
+          subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
+          date: "03-01-2026",
+          icon: Icons.public,
+          color: Colors.orange,
+          status: TaskStatus.completed,
+          isClosed: false
+        ),
       ),
       const SizedBox(height: 15),
-      taskCard(
-        title: "ផែនដី",
-        subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
-        date: "03-01-2026",
-        icon: Icons.public,
-        color: Colors.orange,
-        status: TaskStatus.completed,
-        isClosed: false
+      GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, AppRoutes.detail,);
+        },
+        child: taskCard(
+          title: "ផែនដី",
+          subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
+          date: "03-01-2026",
+          icon: Icons.public,
+          color: AppColors.primaryBg,
+          status: TaskStatus.completed,
+          isClosed: false
+        ),
       ),
       const SizedBox(height: 15),
-      taskCard(
-        title: "គិំមីវិទ្យា",
-        subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
-        date: "03-01-2026",
-        icon: Icons.public,
-        color: Colors.orange,
-        status: TaskStatus.completed,
-        isClosed: false
+      GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, AppRoutes.detail,);
+        },
+        child: taskCard(
+          title: "គិំមីវិទ្យា",
+          subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
+          date: "03-01-2026",
+          icon: Icons.science_sharp,
+          color: AppColors.secondaryText,
+          status: TaskStatus.completed,
+          isClosed: false
+        ),
       ),
       const SizedBox(height: 15),
-      taskCard(
-        title: "ប្រវត្តិវិទ្យា",
-        subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
-        date: "03-01-2026",
-        icon: Icons.public,
-        color: Colors.orange,
-        status: TaskStatus.completed,
-        isClosed: false
+      GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, AppRoutes.detail,);
+        },
+        child: taskCard(
+          title: "ប្រវត្តិវិទ្យា",
+          subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
+          date: "03-01-2026",
+          imagePath: "assets/icons/history.jpg",
+          color: Colors.orange,
+          status: TaskStatus.completed,
+          isClosed: false
+        ),
       ),
       const SizedBox(height: 15),
-      taskCard(
-        title: "ភាសាខ្មែរ",
-        subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
-        date: "03-01-2026",
-        icon: Icons.public,
-        color: Colors.orange,
-        status: TaskStatus.completed,
-        isClosed: false
+      GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, AppRoutes.detail,);
+        },
+        child: taskCard(
+          title: "ភាសាខ្មែរ",
+          subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
+          date: "03-01-2026",
+          imagePath: 'assets/icons/khmer.jpg',
+          color: Colors.orange,
+          status: TaskStatus.completed,
+          isClosed: false
+        ),
       ),
       const SizedBox(height: 15),
-      taskCard(
-        title: "ជីវះវិទ្យា",
-        subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
-        date: "03-01-2026",
-        icon: Icons.public,
-        color: Colors.orange,
-        status: TaskStatus.completed,
-        isClosed: false
+      GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, AppRoutes.detail,);
+        },
+        child: taskCard(
+          title: "ជីវះវិទ្យា",
+          subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
+          date: "03-01-2026",
+          imagePath: 'assets/icons/biology.jpg',
+          color: Colors.orange,
+          status: TaskStatus.completed,
+          isClosed: false
+        ),
       ),
       const SizedBox(height: 15),
-      taskCard(
-        title: "អង់គ្លេស",
-        subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
-        date: "03-01-2026",
-        icon: Icons.public,
-        color: Colors.orange,
-        status: TaskStatus.completed,
-        isClosed: false
+      GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, AppRoutes.detail,);
+        },
+        child: taskCard(
+          title: "អង់គ្លេស",
+          subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
+          date: "03-01-2026",
+          imagePath: 'assets/icons/english.jpg',
+          color: Colors.orange,
+          status: TaskStatus.completed,
+          isClosed: false
+        ),
       ),
     ],
   );
@@ -325,38 +392,141 @@ Widget newTaskListWidget() {
   return ListView(
     padding: const EdgeInsets.all(18),
     children: [
-      taskCard(
-        title: "អង់គ្លេស (New)",
-        subtitle: "ការងារថ្មី សម្រាប់សប្តាហ៍នេះ",
-        date: "05-02-2026",
-        icon: Icons.new_releases,
-        color: Colors.purple,
-        status: TaskStatus.inProgress,
-        isClosed: true
+      GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, AppRoutes.detail,);
+        },
+        child: taskCard(
+          title: "គណិតវិទ្យា",
+          subtitle: "ពិនិត្យឯកសារ ម្តងទៀត",
+          date: "08-01-2026",
+          icon: Icons.grid_view,
+          color: Colors.blue,
+          status: TaskStatus.inProgress,
+          isClosed: true
+        ),
       ),
       const SizedBox(height: 15),
-      taskCard(
-        title: "គណិតវិទ្យា (New)",
-        subtitle: "លំហាត់ថ្មី",
-        date: "06-02-2026",
-        icon: Icons.calculate,
-        color: Colors.blue,
-        status: TaskStatus.late,
-        isClosed: true
+      GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, AppRoutes.detail,);
+        },
+        child: taskCard(
+          title: "រូបវិទ្យា",
+          subtitle: "បញ្ចូលទិន្នន័យ តាមឯកសារ",
+          date: "05-01-2026",
+          icon: Icons.science,
+          color: Colors.green,
+          status: TaskStatus.late,
+          isClosed: true
+        ),
       ),
       const SizedBox(height: 15),
-      taskCard(
-        title: "គណិតវិទ្យា (New)",
-        subtitle: "លំហាត់ថ្មី",
-        date: "06-02-2026",
-        icon: Icons.calculate,
-        color: Colors.blue,
-        status: TaskStatus.notSubmitted,
-        isClosed: true
+      GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, AppRoutes.detail,);
+        },
+        child: taskCard(
+          title: "ភូមវិទ្យា",
+          subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
+          date: "03-01-2026",
+          icon: Icons.public,
+          color: Colors.orange,
+          status: TaskStatus.notSubmitted,
+          isClosed: true
+        ),
+      ),
+      const SizedBox(height: 15),
+      GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, AppRoutes.detail,);
+        },
+        child: taskCard(
+          title: "ផែនដី",
+          subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
+          date: "03-01-2026",
+          icon: Icons.public,
+          color: AppColors.primaryBg,
+          status: TaskStatus.inProgress,
+          isClosed: true
+        ),
+      ),
+      const SizedBox(height: 15),
+      GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, AppRoutes.detail,);
+        },
+        child: taskCard(
+          title: "គិំមីវិទ្យា",
+          subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
+          date: "03-01-2026",
+          icon: Icons.science_sharp,
+          color: AppColors.secondaryText,
+          status: TaskStatus.notSubmitted,
+          isClosed: true
+        ),
+      ),
+      const SizedBox(height: 15),
+      GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, AppRoutes.detail,);
+        },
+        child: taskCard(
+          title: "ប្រវត្តិវិទ្យា",
+          subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
+          date: "03-01-2026",
+          imagePath: "assets/icons/history.jpg",
+          color: Colors.orange,
+          status: TaskStatus.late,
+          isClosed: true
+        ),
+      ),
+      const SizedBox(height: 15),
+      GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, AppRoutes.detail,);
+        },
+        child: taskCard(
+          title: "ភាសាខ្មែរ",
+          subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
+          date: "03-01-2026",
+          imagePath: 'assets/icons/khmer.jpg',
+          color: Colors.orange,
+          status: TaskStatus.inProgress,
+          isClosed: true
+        ),
+      ),
+      const SizedBox(height: 15),
+      GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, AppRoutes.detail,);
+        },
+        child: taskCard(
+          title: "ជីវះវិទ្យា",
+          subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
+          date: "03-01-2026",
+          imagePath: 'assets/icons/biology.jpg',
+          color: Colors.orange,
+          status: TaskStatus.notSubmitted,
+          isClosed: true
+        ),
+      ),
+      const SizedBox(height: 15),
+      GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, AppRoutes.detail,);
+        },
+        child: taskCard(
+          title: "អង់គ្លេស",
+          subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
+          date: "03-01-2026",
+          imagePath: 'assets/icons/english.jpg',
+          color: Colors.orange,
+          status: TaskStatus.inProgress,
+          isClosed: true
+        ),
       ),
     ],
   );
 }
-
-
 }
