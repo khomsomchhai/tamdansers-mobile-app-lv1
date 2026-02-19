@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
@@ -11,32 +12,59 @@ class Profile extends StatefulWidget {
   State<Profile> createState() => _ProfileState();
 }
 
-
 class _ProfileState extends State<Profile> {
-Future<void> getLostData() async {
-  final ImagePicker picker = ImagePicker();
-  final LostDataResponse response = await picker.retrieveLostData();
+  String imagePath = '';
 
-  if (response.isEmpty) {
-    return;
+  // ✅ Pick Image (Safe)
+  Future<void> dataChooseImg(ImageSource source) async {
+    final picker = ImagePicker();
+    final pickedImg = await picker.pickImage(
+      source: source,
+      imageQuality: 70,
+    );
+
+    if (pickedImg != null) {
+      setState(() {
+        imagePath = pickedImg.path;
+      });
+    }
   }
 
-  final List<XFile>? files = response.files;
-
-  if (files != null) {
-    _handleLostFiles(files);
-  } else {
-    _handleError(response.exception);
+  // ✅ BottomSheet 2 Option
+  void showImageOptions() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(16),
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.camera_alt, color: Colors.blue),
+                title: const Text("Take Photo"),
+                onTap: () {
+                  Navigator.pop(context);
+                  dataChooseImg(ImageSource.camera);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo, color: Colors.green),
+                title: const Text("Choose from Gallery"),
+                onTap: () {
+                  Navigator.pop(context);
+                  dataChooseImg(ImageSource.gallery);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
-}
 
-void _handleLostFiles(List<XFile> files) {
-  print("Recovered files: $files");
-}
-
-void _handleError(Object? error) {
-  print("Error: $error");
-}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,56 +74,59 @@ void _handleError(Object? error) {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Center(
-            child: Column(
-              children: [
-                SizedBox(height: 20),
-                ImageProfile(onCameraTap: () {
-                  getLostData();
-                },),
-                SizedBox(height: 60),
-                ProfileMenu(
-                  icon: Icons.person,
-                  iconBgColor: AppColors.primaryBg,
-                  iconColor: AppColors.primaryMain,
-                  title: 'ព័ត៍មានផ្ទាល់ខ្លួន',
-                  onTap: () {
-                    Navigator.pushNamed(context, '/student_info_personal');
-                    
-                  },
-                ),
-                SizedBox(height: 20),
-                ProfileMenu(
-                  icon: Icons.lock,
-                  iconBgColor: AppColors.lightPink,
-                  iconColor: AppColors.pepure,
-                  title: 'ប្ដូរពាក្យសម្ងាត់',
-                  onTap: () {
-                    Navigator.pushNamed(context, '/change_password');
-                  },
-                ),
-                SizedBox(height: 20),
-                ProfileMenu(
-                  icon: Icons.person,
-                  iconBgColor: AppColors.primaryBg,
-                  iconColor: AppColors.primaryMain,
-                  title: 'ព័ត៍មានផ្ទាល់ខ្លួន',
-                  onTap: () {},
-                ),
-                SizedBox(height: 20),
-                ProfileMenu(
-                  icon: Icons.logout,
-                  // iconBgColor: AppColors.lightPink,
-                  iconColor: AppColors.error,
-                  title: 'ចាកចេញ',
-                  showChevron: false,
-                  titleColor: AppColors.error,
-                  center: true,
-                  onTap: () {},
-                ),
-              ],
-            ),
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+
+              // ✅ Pass BottomSheet function
+              ImageProfile(
+                
+              ),
+
+              const SizedBox(height: 60),
+
+              ProfileMenu(
+                icon: Icons.person,
+                iconBgColor: AppColors.primaryBg,
+                iconColor: AppColors.primaryMain,
+                title: 'ព័ត៍មានផ្ទាល់ខ្លួន',
+                onTap: () {
+                  Navigator.pushNamed(context, '/student_info_personal');
+                },
+              ),
+              const SizedBox(height: 20),
+              ProfileMenu(
+                icon: Icons.lock,
+                iconBgColor: AppColors.lightPink,
+                iconColor: AppColors.pepure,
+                title: 'ប្ដូរពាក្យសម្ងាត់',
+                onTap: () {
+                  Navigator.pushNamed(context, '/change_password');
+                },
+              ),
+              const SizedBox(height: 20),
+              ProfileMenu(
+                icon: Icons.notifications,
+                iconColor: AppColors.orange,
+                iconBgColor: const Color.fromARGB(37, 252, 170, 88),
+                title: 'ការជូនដំណឹង',
+                onTap: () {
+                  Navigator.pushNamed(context, '/notifications');
+                },
+              ),
+              const SizedBox(height: 20),
+              ProfileMenu(
+                icon: Icons.logout,
+                iconColor: AppColors.error,
+                title: 'ចាកចេញ',
+                showChevron: false,
+                titleColor: AppColors.error,
+                center: true,
+                BgColor: AppColors.errorBG,
+                onTap: () {},
+              ),
+            ],
           ),
         ),
       ),
@@ -103,67 +134,119 @@ void _handleError(Object? error) {
   }
 }
 
-class ImageProfile extends StatelessWidget {
-  final VoidCallback onCameraTap;
-  const ImageProfile({
-    super.key,
-    required this.onCameraTap
-  });
+class ImageProfile extends StatefulWidget {
+  const ImageProfile({super.key});
+
+  @override
+  State<ImageProfile> createState() => _ImageProfileState();
+}
+
+class _ImageProfileState extends State<ImageProfile> {
+  String imagePath = '';
+
+  // ✅ Pick Image
+  Future<void> dataChooseImg(ImageSource source) async {
+    final picker = ImagePicker();
+    final pickedImg = await picker.pickImage(
+      source: source,
+      imageQuality: 70,
+    );
+
+    if (pickedImg != null) {
+      setState(() {
+        imagePath = pickedImg.path;
+      });
+    }
+  }
+
+  // ✅ BottomSheet Options
+  void showImageOptions() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(16),
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.camera_alt, color: Colors.blue),
+                title: const Text("Take Photo"),
+                onTap: () {
+                  Navigator.pop(context);
+                  dataChooseImg(ImageSource.camera);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo, color: Colors.green),
+                title: const Text("Choose from Gallery"),
+                onTap: () {
+                  Navigator.pop(context);
+                  dataChooseImg(ImageSource.gallery);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Stack(alignment: Alignment.bottomRight, children: [
-          Container(
-            width: 120,
-            height: 120,
-            decoration: BoxDecoration(
+        Stack(
+          alignment: Alignment.bottomRight,
+          children: [
+            Container(
+              width: 120,
+              height: 120,
+              decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(width: 4, color: Colors.white),
-                image: DecorationImage(
-                    image: AssetImage('assets/images/mylove.jpg'),
-                    fit: BoxFit.cover)),
-          ),
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
+                image: imagePath.isNotEmpty
+                    ? DecorationImage(
+                        image: FileImage(File(imagePath)),
+                        fit: BoxFit.cover,
+                      )
+                    : null,
+              ),
+              child: imagePath.isEmpty
+                  ? const Icon(Icons.person,
+                      size: 60, color: Colors.grey)
+                  : null,
+            ),
+
+            Material(
               color: AppColors.primary300,
+              shape: const CircleBorder(),
+              child: InkWell(
+                customBorder: const CircleBorder(),
+                onTap: showImageOptions, // 👈 call inside class
+                child: const SizedBox(
+                  width: 40,
+                  height: 40,
+                  child: Icon(
+                    Icons.camera_alt_outlined,
+                    color: Colors.white,
+                    size: 20,
+                  ),
+                ),
+              ),
             ),
-            child: IconButton(
-              onPressed: () {
-                onCameraTap();
-              },
-              padding: EdgeInsets.zero,
-              icon: Icon(Icons.camera_alt_outlined,
-                  color: AppColors.white),
-            ),
-          )
-        ]),
-        SizedBox(height: 10),
+          ],
+        ),
+        const SizedBox(height: 10),
         Text('Run Limhong', style: AppTextStyle.screenTitle24),
         Text('ID: 12345678', style: AppTextStyle.body),
-        SizedBox(height: 10),
-        Container(
-          width: 120,
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-          decoration: BoxDecoration(
-            color: AppColors.primaryBg,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Text(
-            'ថ្នាក់ទី 8A',
-            style: AppTextStyle.body
-                .copyWith(color: AppColors.primaryMain),
-            textAlign: TextAlign.center,
-          ),
-        ),
       ],
     );
   }
 }
+
 
 class ProfileMenu extends StatelessWidget {
   final IconData icon;
@@ -174,6 +257,7 @@ class ProfileMenu extends StatelessWidget {
   final bool showChevron;
   final bool center;
   final Color? titleColor;
+  final Color? BgColor;
   const ProfileMenu(
       {super.key,
       required this.icon,
@@ -183,16 +267,18 @@ class ProfileMenu extends StatelessWidget {
       required this.onTap,
       this.showChevron = true,
       this.center = false,
-      this.titleColor});
+      this.titleColor,
+      this.BgColor
+      });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: BgColor?? AppColors.white,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(

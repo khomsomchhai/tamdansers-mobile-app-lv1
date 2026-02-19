@@ -25,7 +25,6 @@ class AppRoutes {
   static String teacherDashboardScreen = "/teacher_dashboard_screen";
   static String subject="/subject";
   static const String changePassword="/change_password";
-
-
   static String parentDashboardScreen = "/parent_dashboard_screen";
+  static String notifications="/notifications";
 }

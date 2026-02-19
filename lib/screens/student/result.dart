@@ -14,16 +14,16 @@ class _ResultState extends State<Result> {
   double maxScore = 50;
 
   late double progress = score / maxScore; // 0.42
+  
+  int selectIndex=0;
 
+  List<double>scores=[400,444,350,300,250,200,150,388,450,500,480,420];
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: Icon(
-            Icons.chevron_left,
-            size: 40,
-            color: AppColors.secondaryText,
-          ),
+          
           title: Text('លទ្ធផល', style: AppTextStyle.sectionTitle20),
           centerTitle: true,
         ),
@@ -64,7 +64,7 @@ class _ResultState extends State<Result> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   border:
-                      Border.all(color: AppColors.secondaryText, width: 1),
+                      Border.all(color: AppColors.primaryMain, width: 1),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,10 +126,12 @@ class _ResultState extends State<Result> {
         Container(
           padding: EdgeInsets.all(20),
           height: 100,
+          
           width: double.infinity,
           decoration: BoxDecoration(
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: AppColors.secondaryText, width: 1),
+            border: Border.all(color: AppColors.white, width: 1),
           ),
           child: Text('Status'),
         )
@@ -161,15 +163,16 @@ class _ResultState extends State<Result> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
+                flex: 3,
                 child: Column(
                   children: [
                     Text('ពិន្ទុសរុប',
-                        style: AppTextStyle.fontsize18
+                        style: AppTextStyle.subtitle16
                             .copyWith(color: AppColors.white)),
                     SizedBox(height: 20),
-                    Text('400\nof 500',
+                    Text('400 of 500',
                         textAlign: TextAlign.center,
-                        style: AppTextStyle.fontsize18
+                        style: AppTextStyle.body
                             .copyWith(color: AppColors.white)),
                   ],
                 ),
@@ -180,10 +183,11 @@ class _ResultState extends State<Result> {
                 color: AppColors.white,
               ),
               Expanded(
+                flex: 4,
                 child: Column(
                   children: [
                     Text('ចំណាត់ថ្នាក់',
-                        style: AppTextStyle.sectionTitle20
+                        style: AppTextStyle.fontsize18
                             .copyWith(color: AppColors.white)),
                     SizedBox(height: 10),
                     Text('5',
@@ -198,10 +202,11 @@ class _ResultState extends State<Result> {
                 color: AppColors.white,
               ),
               Expanded(
+                flex: 3,
                 child: Column(
                   children: [
                     Text('មធ្យមភាគ',
-                        style: AppTextStyle.fontsize18
+                        style: AppTextStyle.subtitle16
                             .copyWith(color: AppColors.white)),
                     SizedBox(height: 20),
                     Text('43.25',
@@ -218,6 +223,20 @@ class _ResultState extends State<Result> {
   }
 
   Widget _list_month() {
+    List<String> months = [
+      'ខែមករា',
+      'កុម្ភៈ',
+      'មីនា',
+      'មេសា',
+      'ឧសភា',
+      'មិថុនា',
+      'កក្កដា',
+      'សីហា',
+      'កញ្ញា',
+      'តុលា',
+      'វិច្ឆិកា',
+      'ធ្នូ'
+    ];
     return SizedBox(
       height: 40,
       child: ListView.separated(
@@ -230,18 +249,28 @@ class _ResultState extends State<Result> {
         },
         itemCount: 12,
         itemBuilder: (context, index) {
-          return Container(
-            height: 30,
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                selectIndex = index;
+              });
+            },
+            child: Container(
+              height: 30,
             width: 100,
             decoration: BoxDecoration(
-                color: AppColors.primaryMain,
+                color: index==selectIndex?AppColors.primary400:AppColors.white,
                 borderRadius: BorderRadius.circular(12)),
             child: Center(
               child: Text(
-                'ខែមករា',
-                style: AppTextStyle.fontsize18.copyWith(color: AppColors.white),
+                months[index],
+                style: AppTextStyle.subtitle16.copyWith(
+                    color: index == selectIndex
+                        ? AppColors.white
+                        : AppColors.secondaryText),
               ),
             ),
+            )
           );
         },
       ),

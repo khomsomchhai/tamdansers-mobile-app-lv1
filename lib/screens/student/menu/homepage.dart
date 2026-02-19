@@ -12,42 +12,12 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+  bool isExpend = false;
+  final totalClass = 10;
   @override
   Widget build(BuildContext context) {
-      return Scaffold(
-       appBar: AppBar(
-        leading: Container(
-            decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: AppColors.primaryMain,
-                  width: 2.0,
-                )),
-            child: CircleAvatar(
-                child: SvgPicture.asset("assets/images/app_logo_blue.svg"))),
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Run Limhong',
-              style: AppTextStyle.sectionTitle20,
-            ),
-            Text(
-              'ID: 12345678',
-              style: AppTextStyle.body.copyWith(color: AppColors.secondaryText),
-            ),
-          ],
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.notifications,
-              color: AppColors.primaryText,
-            ),
-          )
-        ],
-      ),
+    return Scaffold(
+      appBar: _buil_appbar(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
@@ -67,6 +37,40 @@ class _HomepageState extends State<Homepage> {
           ),
         ),
       ),
+    );
+  }
+
+  AppBar _buil_appbar() {
+    return AppBar(
+      leading: Container(
+        margin: EdgeInsets.only(left: 16),
+          decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: AppColors.primaryMain,
+                width: 2.0,
+              )),
+          child: CircleAvatar(
+            child: SvgPicture.asset("assets/images/app_logo_blue.svg"))),
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Run Limhong',
+            style: AppTextStyle.sectionTitle20,
+          ),
+          
+        ],
+      ),
+      actions: [
+        IconButton(
+          onPressed: () {},
+          icon: Icon(
+            Icons.notifications,
+            color: AppColors.primaryText,
+          ),
+        )
+      ],
     );
   }
 }
@@ -119,7 +123,7 @@ class _HomeworkState extends State<_Homework> {
           decoration: BoxDecoration(
             color: AppColors.white,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.secondaryText, width: 0.5),
+            border: Border.all(color: AppColors.white, width: 0.5),
           ),
           child: Center(
             child: ListTile(
@@ -128,7 +132,7 @@ class _HomeworkState extends State<_Homework> {
                 child: Icon(Icons.calculate_outlined,
                     size: 40, color: AppColors.primary400),
               ),
-              title: Text('គណិតវិទ្យា', style: AppTextStyle.fontsize18),
+              title: Text('គណិតវិទ្យា', style: AppTextStyle.body.copyWith(fontWeight: FontWeight.bold)),
               subtitle: Text(
                 '11-1-2026',
                 style: AppTextStyle.body,
@@ -156,8 +160,13 @@ class _Classes extends StatelessWidget {
           children: [
             Text('ថ្នាក់បន្ទាប់', style: AppTextStyle.fontsize18),
             Spacer(),
-            Text('មើលទាំងអស់',
-                style: AppTextStyle.hintText.copyWith(color: AppColors.link)),
+            TextButton(
+              onPressed: () {
+                
+              },
+              child: Text('មើលទាំងអស់',
+                  style: AppTextStyle.hintText.copyWith(color: AppColors.link)),
+            )
           ],
         ),
         SizedBox(height: 12),
@@ -167,7 +176,7 @@ class _Classes extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.white,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.secondaryText, width: 0.5),
+            border: Border.all(color: AppColors.white, width: 0.5),
           ),
           child: Row(
             children: [
@@ -180,10 +189,10 @@ class _Classes extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('គណិតវិទ្យា', style: AppTextStyle.fontsize18),
+                  Text('គណិតវិទ្យា', style: AppTextStyle.body.copyWith(fontWeight: FontWeight.bold)),
                   Text(
                     'គ្រូបង្រៀន​: លោក សុខា',
-                    style: AppTextStyle.body,
+                    style: AppTextStyle.hint15,
                   ),
                 ],
               )
@@ -200,6 +209,7 @@ class _GridInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<String> titles = ['កាលវិភាគ', 'លទ្ធផល','ថ្នាក់រៀន'];
     return Container(
       child: GridView.builder(
         shrinkWrap: true,
@@ -209,26 +219,40 @@ class _GridInfo extends StatelessWidget {
           crossAxisSpacing: 12,
         ),
         itemBuilder: (context, index) {
-          return Container(
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: AppColors.primaryBg),
-                  child: Icon(
-                    Icons.qr_code,
-                    size: 40,
-                    color: AppColors.primary400,
+          return GestureDetector(
+            onTap: () {
+              if(index==0){
+                Navigator.pushNamed(context, '/student_scedeul');
+              }
+              if(index==1){
+                Navigator.pushNamed(context, '/student_result');
+              }
+              if(index==2){
+                Navigator.pushNamed(context, '/student_classes');
+              }
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: AppColors.primaryBg),
+                    child: Icon(
+                      Icons.qr_code,
+                      size: 30,
+                      color: AppColors.primary400,
+                    ),
                   ),
-                ),
-                Text('ស្កេន QR', style: AppTextStyle.body)
-              ],
+                  SizedBox(height: 12),
+                  Text(titles[index], style: AppTextStyle.body)
+                ],
+              ),
             ),
           );
         },

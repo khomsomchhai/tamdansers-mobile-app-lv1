@@ -17,17 +17,11 @@ class _ScedeulState extends State<Scedeul> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(
-          Icons.chevron_left,
-          size: 40,
-          color: AppColors.secondaryText,
-        ),
         title: Text('កាលវិភាគ', style: AppTextStyle.sectionTitle20),
         centerTitle: true,
         actions: [
           IconButton(
-            icon: Icon(Icons.calendar_month,
-                color: AppColors.secondaryText),
+            icon: Icon(Icons.calendar_month, color: AppColors.secondaryText),
             onPressed: () {
               showDialog(
                 context: context,
@@ -59,8 +53,7 @@ class _ScedeulState extends State<Scedeul> {
               height: 100,
               child: GridView.builder(
                 itemCount: 5,
-                gridDelegate:
-                    const SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 5,
                   crossAxisSpacing: 10,
                   childAspectRatio: 0.7,
@@ -193,8 +186,7 @@ class _ScedeulState extends State<Scedeul> {
                       Row(
                         children: [
                           Icon(Icons.watch,
-                              size: 16,
-                              color: AppColors.secondaryText),
+                              size: 16, color: AppColors.secondaryText),
                           const SizedBox(width: 5),
                           Text(
                             '8:00 AM - 9:00 AM',

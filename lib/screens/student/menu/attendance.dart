@@ -9,7 +9,7 @@ class Attendance extends StatefulWidget {
   @override
   State<Attendance> createState() => _AttendanceState();
 }
-
+List<String>attendance=['វត្តមាន','អវត្តមាន'];
 class _AttendanceState extends State<Attendance> {
   @override
   Widget build(BuildContext context) {
@@ -61,18 +61,19 @@ class _AttendanceState extends State<Attendance> {
                           padding:
                               EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                           decoration: BoxDecoration(
-                              color: AppColors.successBG,
+                              color: attendance[index] == 'វត្តមាន'? AppColors.successBG : AppColors.errorBG,
                               borderRadius: BorderRadius.circular(20)),
                           child: Text(
-                            'វត្តមាន',
-                            style: AppTextStyle.fontsize18
-                                .copyWith(color: AppColors.success),
+                            attendance[index],
+                            style: AppTextStyle.subtitle16.copyWith(
+                                color: attendance[index] == 'វត្តមាន'? AppColors.success : AppColors.error),
                             textAlign: TextAlign.center,
                           ),
                         ),
                       );
                     },
                   )
+                
                 ],
               )
             ],
