@@ -7,6 +7,20 @@ class Validators {
     }
     return null;
   }
+  static String? emailOrPhone(String? value) {
+    if (value == null || value.isEmpty) {
+      return "សូមបញ្ចូលអ៊ីម៉ែល ឬ លេខទូរស័ព្ទ";
+    }
+
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+    final phoneRegex = RegExp(r'^(0[0-9]{8,9}|\+855[0-9]{8,9})$');
+
+    if (emailRegex.hasMatch(value) || phoneRegex.hasMatch(value)) {
+      return null;
+    }
+    return "អ៊ីម៉ែល ឬ លេខទូរស័ព្ទមិនត្រឹមត្រូវ";
+  }
+
   static String? password(value){
     if(value!.isEmpty){
       return "សូមបញ្ចូលពាក្យសម្ងាត់";
@@ -26,6 +40,15 @@ class Validators {
   static String? inputData(value){
     if(value!.isEmpty){
       return "សូមបញ្ចូលទិន្នន័យ";
+    }
+    return null;
+  }
+  static String? classCode(value){
+    if(value!.isEmpty){
+      return "សូមបញ្ចូលលេខកូដថ្នាក់";
+    }
+    if(value!.length() < 4){
+      return "លេខកូដថ្នាក់ត្រូវមានយ៉ាងហោចណាស់ 4 ខ្ទង់";
     }
     return null;
   }

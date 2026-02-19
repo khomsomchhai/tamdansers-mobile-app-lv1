@@ -156,12 +156,25 @@ class AppTextStyle {
     fontWeight: FontWeight.w600,
     color: AppColors.white,
   );
+  static final buttonText18Black = GoogleFonts.kantumruyPro(
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    color: AppColors.primaryText,
+  );
 
   static final buttonText15Primary = GoogleFonts.kantumruyPro(
     fontSize: 15,
     fontWeight: FontWeight.w600,
     color: AppColors.primaryMain,
   );
+
+  static final buttonText16White = GoogleFonts.kantumruyPro(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: AppColors.white,
+  );
+
+
 
   // ==================== HINTS ====================
 

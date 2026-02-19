@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 
 class AuthField extends StatefulWidget {
@@ -58,23 +59,23 @@ class _AuthFieldState extends State<AuthField> {
           : null,
           hintStyle: AppTextStyle.hintText,
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(26),
+            borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
             borderSide: BorderSide.none,
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(26),
+            borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
             borderSide: BorderSide(
               color: AppColors.primaryMain,
             )
           ),
           errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(26),
+            borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
             borderSide: BorderSide(
               color: AppColors.error,
             )
           ),
           focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(26),
+            borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
             borderSide: BorderSide(
               color: AppColors.error,
             )

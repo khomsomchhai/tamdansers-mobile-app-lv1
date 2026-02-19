@@ -134,14 +134,14 @@ class _SignUpTeacherScreenState extends State<SignUpTeacherScreen> {
             height: 16,
           ),
           AuthField(
-            hintText: "អ៊ីម៉ែល",
+            hintText: "អ៊ីម៉ែល ឬ លេខទូរស័ព្ទ",
             icon: Icon(
               Icons.email_outlined,
               size: 20,
               color: AppColors.secondaryText,
             ),
             textController: emailCtrl,
-            validator: Validators.email,
+            validator: Validators.emailOrPhone,
           ),
           SizedBox(
             height: 16,
