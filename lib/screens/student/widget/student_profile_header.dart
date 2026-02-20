@@ -15,9 +15,10 @@ class StudentProfileHeader extends StatelessWidget {
       children: [
         CircleAvatar(
           radius: AppNumber.avatarSmall,
-          backgroundColor: AppColors.grey.withValues(alpha: 0.3),
+          backgroundColor: AppColors.white,
           backgroundImage: AssetImage(
-            AppIcon.maleAvatar
+            AppIcon.maleAvatar,
+  
           ),
         ),
         SizedBox(width: 10,),

@@ -52,4 +52,13 @@ class Validators {
     }
     return null;
   }
+  static String? invCode(value){
+    if(value!.isEmpty){
+      return "សូមបញ្ចូលលេខកូដភ្ជាប់";
+    }
+    if(value!.length() < 4){
+      return "លេខកូដភ្ជាប់ត្រូវមានយ៉ាងហោចណាស់ 4 ខ្ទង់";
+    }
+    return null;
+  }
 }

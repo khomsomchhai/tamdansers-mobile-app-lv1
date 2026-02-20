@@ -28,6 +28,8 @@ class AppRoutes {
   static String teacherDashboardScreen = "/teacher_dashboard_screen";
 
   static String parentFirstScreen = "/parent_first_screen";
+  static String parentConnectStudent = "/parent_connect_student";
+
   static String parentDashboardScreen = "/parent_dashboard_screen";
 
 }
