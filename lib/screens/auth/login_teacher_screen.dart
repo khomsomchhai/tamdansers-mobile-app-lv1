@@ -8,6 +8,7 @@ import 'package:tamdansers_app/constants/validators.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/widget/auth_field.dart';
 import 'package:tamdansers_app/widget/button_with_icon.dart';
+import 'package:tamdansers_app/widget/button_with_icon.dart';
 import 'package:tamdansers_app/widget/primary_button.dart';
 
 class LoginTeacherScreen extends StatefulWidget {
@@ -26,7 +27,7 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
             onPressed: () => Navigator.pop(context),
@@ -35,26 +36,19 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
               color: AppColors.primaryText,
             )),
       ),
-      body: CustomScrollView(
-        slivers: [
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  _buildHeader(size),
-                  SizedBox(height: 24),
-                  _buildForm(),
-                  SizedBox(height: 10),
-                  Spacer(),
-                  _buildFooter(),
-                  SizedBox(height: 26),
-                ],
-              ),
-            ),
-          ),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          children: [
+            _buildHeader(size),
+            SizedBox(height: 20,),
+            _buildForm(),
+            SizedBox(height: 20,),
+            Spacer(),
+            _buildFooter(),
+            SizedBox(height: 40,),
+          ],
+        ),
       ),
     );
   }
@@ -69,9 +63,7 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
             fit: BoxFit.contain,
           ),
         ),
-        SizedBox(
-          height: 16,
-        ),
+        SizedBox(height: 15,),
         Text(
           "ចូលគណនីរបស់អ្នក",
           style: AppTextStyle.screenTitle24,
@@ -95,9 +87,7 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
               color: AppColors.secondaryText,
             ),
           ),
-          SizedBox(
-            height: 16,
-          ),
+          SizedBox(height: 24,),
           AuthField(
             validator: Validators.password,
             textController: pwdCtrl,
@@ -109,6 +99,7 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
             ),
             isPwd: true,
           ),
+          SizedBox(height: 10,),
           Row(
             children: [
               Checkbox(
@@ -137,9 +128,7 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
               )
             ],
           ),
-          SizedBox(
-            height: 8,
-          ),
+          SizedBox(height: 10,),
           PrimaryButton(
             label: "ចូលគណនី",
             backgroundColor: AppColors.primaryMain,
@@ -157,8 +146,7 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
       ),
     );
   }
-
-  Widget _buildFooter() {
+  Widget _buildFooter(){
     return Column(
       children: [
         Row(
@@ -168,75 +156,80 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
               "មិនទាន់មានគណនីមែនទេ?",
               style: AppTextStyle.body,
             ),
-            SizedBox(
-              width: 10,
-            ),
+            SizedBox(width: 10,),
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, AppRoutes.signUpTeacherScreen);
+                Navigator.pushNamed(
+                  context, 
+                  AppRoutes.signUpTeacherScreen
+                );
               },
               child: Text(
                 "ចុះឈ្មោះ",
                 style: GoogleFonts.kantumruyPro(
-                    fontSize: 16, color: AppColors.primaryMain),
+                  fontSize: 16,
+                  color: AppColors.primaryMain
+                ),
               ),
             ),
           ],
         ),
-        SizedBox(
-          height: 8,
-        ),
+        SizedBox(height: 10,),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
               child: Container(
                 height: 1,
-                decoration: BoxDecoration(color: AppColors.secondaryText),
+                decoration: BoxDecoration(
+                  color: AppColors.secondaryText
+                ),
               ),
             ),
-            SizedBox(
-              width: 10,
+            SizedBox(width: 10,),
+            Text(
+              "ឬ",
+              style: AppTextStyle.body
             ),
-            Text("ឬ", style: AppTextStyle.body),
-            SizedBox(
-              width: 10,
-            ),
+            SizedBox(width: 10,),
             Expanded(
               child: Container(
                 height: 1,
-                decoration: BoxDecoration(color: AppColors.secondaryText),
+                decoration: BoxDecoration(
+                  color: AppColors.secondaryText
+                ),
               ),
             ),
           ],
         ),
-        SizedBox(
-          height: 15,
-        ),
+        SizedBox(height: 15,),
         SizedBox(
           width: double.infinity,
           child: ButtonWithIcon(
-              onPressed: () {},
-              label: "ភ្ចាប់ជាមួយ Telegram",
-              icon: Icon(
-                Icons.telegram_outlined,
-                size: 30,
-                color: AppColors.primaryMain,
-              )),
+            onPressed: () {
+              
+            },
+            label: "ភ្ចាប់ជាមួយ Telegram",
+            icon: Icon(
+              Icons.telegram_outlined,size: 30,
+              color: AppColors.primaryMain,
+            )
+          ),
         ),
-        SizedBox(
-          height: 12,
-        ),
+        SizedBox(height: 20,),
         SizedBox(
           width: double.infinity,
           child: ButtonWithIcon(
-              onPressed: () {},
-              label: "ភ្ចាប់ជាមួយ Google",
-              icon: SvgPicture.asset(
-                AppImages.googleIcon,
-                fit: BoxFit.contain,
-                width: 30,
-              )),
+            onPressed: () {
+              
+            },
+            label: "ភ្ចាប់ជាមួយ Google",
+            icon: SvgPicture.asset(
+              AppImages.googleIcon,
+              fit: BoxFit.contain,
+              width: 30,
+            )
+          ),
         ),
       ],
     );
