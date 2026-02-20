@@ -27,7 +27,7 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         leading: IconButton(
             onPressed: () => Navigator.pop(context),
@@ -36,20 +36,43 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
               color: AppColors.primaryText,
             )),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            _buildHeader(size),
-            SizedBox(height: 20,),
-            _buildForm(),
-            SizedBox(height: 20,),
-            Spacer(),
-            _buildFooter(),
-            SizedBox(height: 40,),
-          ],
-        ),
+      body: CustomScrollView(
+        slivers: [
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  _buildHeader(size),
+                  SizedBox(height: 24),
+                  _buildForm(),
+                  SizedBox(height: 10),
+                  Spacer(),
+                  _buildFooter(),
+                  SizedBox(height: 26),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
+
+      // body: SingleChildScrollView(
+      //   child: Padding(
+      //     padding: const EdgeInsets.symmetric(horizontal: 20),
+      //     child: Column(
+      //       children: [
+      //         _buildHeader(size),
+      //         SizedBox(height: 24,),
+      //         _buildForm(),
+      //         SizedBox(height: 24,),
+      //         _buildFooter(),
+      //         SizedBox(height: 20,),
+      //       ],
+      //     ),
+      //   ),
+      // ),
     );
   }
 
@@ -63,7 +86,7 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
             fit: BoxFit.contain,
           ),
         ),
-        SizedBox(height: 15,),
+        SizedBox(height: 16,),
         Text(
           "ចូលគណនីរបស់អ្នក",
           style: AppTextStyle.screenTitle24,
@@ -87,7 +110,7 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
               color: AppColors.secondaryText,
             ),
           ),
-          SizedBox(height: 24,),
+          SizedBox(height: 16,),
           AuthField(
             validator: Validators.password,
             textController: pwdCtrl,
@@ -99,7 +122,6 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
             ),
             isPwd: true,
           ),
-          SizedBox(height: 10,),
           Row(
             children: [
               Checkbox(
@@ -128,7 +150,7 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
               )
             ],
           ),
-          SizedBox(height: 10,),
+          SizedBox(height: 8,),
           PrimaryButton(
             label: "ចូលគណនី",
             backgroundColor: AppColors.primaryMain,
@@ -174,7 +196,7 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
             ),
           ],
         ),
-        SizedBox(height: 10,),
+        SizedBox(height: 8,),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -216,7 +238,7 @@ class _LoginTeacherScreenState extends State<LoginTeacherScreen> {
             )
           ),
         ),
-        SizedBox(height: 20,),
+        SizedBox(height: 12,),
         SizedBox(
           width: double.infinity,
           child: ButtonWithIcon(
