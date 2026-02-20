@@ -43,7 +43,7 @@ class _ParentFirstScreenState extends State<ParentFirstScreen> {
           );
         },
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadiusGeometry.circular(AppNumber.radiusMedium)
+          borderRadius: BorderRadius.circular(AppNumber.radiusMedium)
         ),
         backgroundColor: AppColors.primaryMain,
         child: Icon(
