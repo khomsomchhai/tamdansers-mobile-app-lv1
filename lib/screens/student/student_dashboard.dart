@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/screens/student/menu/attendance.dart';
@@ -19,7 +18,6 @@ class _StudentDashboardState extends State<StudentDashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: AppColors.primaryBg,
         currentIndex: index,
@@ -34,7 +32,10 @@ class _StudentDashboardState extends State<StudentDashboard> {
         unselectedLabelStyle: AppTextStyle.body,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home,size: 28,),
+            icon: Icon(
+              Icons.home,
+              size: 28,
+            ),
             label: 'ទំព័រដើម',
           ),
           BottomNavigationBarItem(
@@ -42,7 +43,11 @@ class _StudentDashboardState extends State<StudentDashboard> {
           BottomNavigationBarItem(
               icon: Icon(Icons.assignment), label: "វត្តមាន"),
           BottomNavigationBarItem(
-              icon: Icon(Icons.person,size: 30,), label: 'ប្រវត្តិរូប'),
+              icon: Icon(
+                Icons.person,
+                size: 30,
+              ),
+              label: 'ប្រវត្តិរូប'),
         ],
       ),
       body: IndexedStack(
@@ -53,8 +58,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
           Attendance(),
           Profile(),
         ],
-      
-    ),
+      ),
     );
   }
 }
