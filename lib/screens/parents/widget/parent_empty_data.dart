@@ -6,9 +6,8 @@ import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 
-class StudentEmptyClass extends StatelessWidget {
-  // final VoidCallback onJoinPressed;
-  const StudentEmptyClass({super.key,});
+class ParentEmptyData extends StatelessWidget {
+  const ParentEmptyData({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,23 +20,24 @@ class StudentEmptyClass extends StatelessWidget {
           ),
         ),
         Text(
-          "មិនទាន់មានថ្នាក់រៀន",
+          "មិនទាន់ភ្ចាប់ទៅកាន់គណនីរបស់សិស្ស",
           style: AppTextStyle.subtitle18,
+          overflow: TextOverflow.ellipsis,
         ),
         SizedBox(height: 20,),
         Text(
-          "សូមចូលថ្នាក់រៀនដើម្បីចាប់ផ្ដើម",
+          "សូមភ្ជាប់ទៅកាន់គណនីរបស់សិស្សដើម្បីចាប់ផ្ដើម",
           style: AppTextStyle.body,
         ),
         SizedBox(height: 30,),
         SizedBox(
           height: 40,
-          width: 160,
+          width: 120,
           child: ElevatedButton(
             onPressed: (){
               Navigator.pushNamed(
                 context, 
-                AppRoutes.joinClassSreen
+                AppRoutes.parentConnectStudent
               );
             },
             style: ElevatedButton.styleFrom(
@@ -50,13 +50,13 @@ class StudentEmptyClass extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  Icons.class_outlined,
+                  Icons.link,
                   color: AppColors.white,
-                  size: AppNumber.icon16,
+                  size: AppNumber.iconMedium,
                 ),
                 SizedBox(width: 10,),
                 Text(
-                  "ចូលថ្នាក់រៀន",
+                  "ភ្ជាប់",
                   style: AppTextStyle.buttonText16White,
                 )
               ],

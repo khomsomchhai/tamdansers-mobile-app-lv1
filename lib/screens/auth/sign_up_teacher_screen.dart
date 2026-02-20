@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_images.dart';
+import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/constants/validators.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
@@ -285,7 +286,9 @@ class _SignUpTeacherScreenState extends State<SignUpTeacherScreen> {
       },
       child: Container(
         decoration: BoxDecoration(
-            color: AppColors.white, borderRadius: BorderRadius.circular(26)),
+            color: AppColors.white, 
+            borderRadius: BorderRadius.circular(AppNumber.radiusMedium)
+          ),
         padding: EdgeInsets.only(left: 15, top: 4, bottom: 4),
         child: Row(
           children: [

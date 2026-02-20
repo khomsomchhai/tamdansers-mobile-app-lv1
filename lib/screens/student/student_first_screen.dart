@@ -48,7 +48,7 @@ class _StudentFirstScreenState extends State<StudentFirstScreen> {
         child: Icon(
           Icons.add,
           color: AppColors.white,
-          size: AppNumber.iconMedium,
+          size: AppNumber.iconLarge,
         ),
       )
     );

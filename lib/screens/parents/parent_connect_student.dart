@@ -9,17 +9,17 @@ import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/widget/auth_field.dart';
 import 'package:tamdansers_app/widget/primary_button.dart';
 
-class JoinClassScreen extends StatefulWidget {
-  const JoinClassScreen({super.key});
+class ParentConnectStudent extends StatefulWidget {
+  const ParentConnectStudent({super.key});
 
   @override
-  State<JoinClassScreen> createState() => _JoinClassScreenState();
+  State<ParentConnectStudent> createState() => _ParentConnectStudentState();
 }
 
-class _JoinClassScreenState extends State<JoinClassScreen> {
-  var classCodeCtrl = TextEditingController();
+class _ParentConnectStudentState extends State<ParentConnectStudent> {
   var formKey = GlobalKey<FormState>();
-  
+  var invCodeCtrl = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +33,7 @@ class _JoinClassScreenState extends State<JoinClassScreen> {
           ),
         ),
         title: Text(
-          "ចូលថ្នាក់រៀន",
+          "ភ្ជាប់គណនីសិស្ស",
           style: AppTextStyle.sectionTitle20,
         ),
         centerTitle: true,
@@ -59,7 +59,7 @@ class _JoinClassScreenState extends State<JoinClassScreen> {
         Padding(
           padding: const EdgeInsets.all(20),
           child: PrimaryButton(
-            label: "ចូល", 
+            label: "ភ្ជាប់", 
             backgroundColor: AppColors.primaryMain, 
             foregroundColor: AppColors.white, 
             onPressed: (){
@@ -82,17 +82,17 @@ class _JoinClassScreenState extends State<JoinClassScreen> {
         SizedBox(
           height: MediaQuery.of(context).size.height*0.30,
           child: SvgPicture.asset(
-            AppImages.joinClass
+            AppImages.connection
           ),
         ),
         SizedBox(height: 40,),
         Text(
-          "ចូលរួមថ្នាក់ថ្មី",
+          "ភ្ជាប់ទៅកាន់គណនីរបស់សិស្ស",
           style: AppTextStyle.sectionTitle20,
         ),
         SizedBox(height: 20,),
         Text(
-          "សូមបញ្ចូលលេខកូដដែលគ្រូបន្ទុកថ្នាក់បានផ្ដល់ឱ្យ",
+          "សូមបញ្ចូលលេខកូដភ្ជាប់ដែលកូនរបស់អ្នកបានផ្ដល់ឱ្យ",
           style: AppTextStyle.body,
           overflow: TextOverflow.ellipsis,
         ),
@@ -104,13 +104,13 @@ class _JoinClassScreenState extends State<JoinClassScreen> {
     return Column(
       children: [
         AuthField(
-          hintText: "លេខកូដថ្នាក់", 
+          hintText: "លេខកូដភ្ជាប់", 
           icon: Icon(
             Icons.key_outlined, 
             color: AppColors.secondaryText,
           ), 
-          textController: classCodeCtrl,
-          validator: Validators.classCode,
+          textController: invCodeCtrl,
+          validator: Validators.invCode,
         ),
         SizedBox(height: 10,)
       ],
