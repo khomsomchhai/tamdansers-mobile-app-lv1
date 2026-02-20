@@ -5,7 +5,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_images.dart';
+import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/constants/validators.dart';
+import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/widget/auth_field.dart';
 import 'package:tamdansers_app/widget/button_with_icon.dart';
 import 'package:tamdansers_app/widget/primary_button.dart';
@@ -22,25 +25,8 @@ class _SignUpTeacherScreenState extends State<SignUpTeacherScreen> {
   var firstnameCtrl = TextEditingController();
   var emailCtrl = TextEditingController();
   var pwdCtrl = TextEditingController();
+  var cfPwdCtrl = TextEditingController();
   String gender = "male";
-
-  String? emailValidator(value){
-    if(value!.isEmpty){
-      return "សូមបញ្ចូលអ៊ីម៉ែល";
-    }else if(!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)){
-      return "អ៊ីម៉ែលមិនត្រឹមត្រូវ";
-    }
-    return null;
-  }
-  String? pwdValidator(value){
-    if(value!.isEmpty){
-      return "សូមបញ្ចូលពាក្យសម្ងាត់";
-    }else if(!RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\-])(.{8,})$').hasMatch(value)){
-      return "ពាក្យសម្ងាត់មិនត្រឹមត្រូវ";
-    }
-    return null;
-  }
-
   var formKey = GlobalKey<FormState>();
 
   @override
@@ -50,12 +36,11 @@ class _SignUpTeacherScreenState extends State<SignUpTeacherScreen> {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () => Navigator.pop(context), 
-          icon: Icon(
-            Icons.arrow_back_ios_new_rounded,
-            color: AppColors.primaryText,
-          )
-        ),
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: AppColors.primaryText,
+            )),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -63,17 +48,25 @@ class _SignUpTeacherScreenState extends State<SignUpTeacherScreen> {
           child: Column(
             children: [
               _buildHeader(size),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 24,
+              ),
               _buildForm(),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 24,
+              ),
               _buildFooter(),
+              SizedBox(
+                height: 20,
+              ),
             ],
           ),
         ),
       ),
     );
   }
-  Widget _buildHeader(Size size){
+
+  Widget _buildHeader(Size size) {
     return Column(
       children: [
         SizedBox(
@@ -83,7 +76,9 @@ class _SignUpTeacherScreenState extends State<SignUpTeacherScreen> {
             fit: BoxFit.contain,
           ),
         ),
-        SizedBox(height: 15,),
+        SizedBox(
+          height: 16,
+        ),
         Text(
           "បំពេញព័ត៌មានរបស់អ្នក",
           style: AppTextStyle.screenTitle24,
@@ -91,99 +86,114 @@ class _SignUpTeacherScreenState extends State<SignUpTeacherScreen> {
       ],
     );
   }
-  Widget _buildForm(){
+
+  Widget _buildForm() {
     return Form(
       key: formKey,
       child: Column(
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: AuthField(
-                  hintText: "បញ្ចូលនាមត្រកូល", 
-                  icon: Icon(
-                    Icons.person_outline_rounded,
-                    color: AppColors.secondaryText,
-                    size: 20,
-                  ), 
-                  textController: lastnameCtrl
-                ),
-              ),
-              SizedBox(width: 10,),
-              Expanded(
-                child: AuthField(
-                  hintText: "បញ្ចូលនាមខ្លួន", 
-                  icon: Icon(
-                    Icons.person_outline_rounded,
-                    color: AppColors.secondaryText,
-                    size: 20,
-                  ), 
-                  textController: firstnameCtrl
-                ),
-              ),
-            ],
+          AuthField(
+            hintText: "នាមត្រកូល",
+            icon: Icon(
+              Icons.person_outline_rounded,
+              color: AppColors.secondaryText,
+              size: 20,
+            ),
+            textController: lastnameCtrl,
+            validator: Validators.inputData,
           ),
-          SizedBox(height: 20,),
+          SizedBox(
+            height: 16,
+          ),
+          AuthField(
+            hintText: "នាមខ្លួន",
+            icon: Icon(
+              Icons.person_outline_rounded,
+              color: AppColors.secondaryText,
+              size: 20,
+            ),
+            textController: firstnameCtrl,
+            validator: Validators.inputData,
+          ),
+          SizedBox(
+            height: 16,
+          ),
           Row(
             children: [
               Expanded(
                 child: _buildRadio(label: "ប្រុស", value: "male"),
               ),
-              SizedBox(width: 10,),
+              SizedBox(
+                width: 10,
+              ),
               Expanded(
                 child: _buildRadio(label: "ស្រី", value: "female"),
               ),
             ],
           ),
-          SizedBox(height: 20,),
+          SizedBox(
+            height: 16,
+          ),
           AuthField(
-            hintText: "បញ្ចូលអ៊ីម៉ែលរបស់អ្នក", 
+            hintText: "អ៊ីម៉ែល ឬ លេខទូរស័ព្ទ",
             icon: Icon(
               Icons.email_outlined,
               size: 20,
               color: AppColors.secondaryText,
-            ), 
+            ),
             textController: emailCtrl,
-            validator: emailValidator,
+            validator: Validators.emailOrPhone,
           ),
-          SizedBox(height: 20,),
+          SizedBox(
+            height: 16,
+          ),
           AuthField(
-            hintText: "បញ្ចូលពាក្យសម្ងាត់របស់អ្នក", 
+            hintText: "ពាក្យសម្ងាត់",
             icon: Icon(
               Icons.lock_outline_rounded,
               size: 20,
               color: AppColors.secondaryText,
-            ), 
+            ),
             textController: pwdCtrl,
             isPwd: true,
-            validator: pwdValidator,
+            validator: Validators.password,
           ),
-          SizedBox(height: 20,),
+          SizedBox(
+            height: 16,
+          ),
           AuthField(
-            hintText: "បញ្ជាក់ពាក្យសម្ងាត់របស់អ្នក", 
+            hintText: "បញ្ជាក់ពាក្យសម្ងាត់",
             icon: Icon(
               Icons.lock_outline_rounded,
               size: 20,
               color: AppColors.secondaryText,
-            ), 
-            textController: pwdCtrl,
+            ),
+            textController: cfPwdCtrl,
             isPwd: true,
-            validator: pwdValidator,
+            validator: (value) => Validators.cnfPassword(value, pwdCtrl.text),
           ),
-          SizedBox(height: 20,),
+          SizedBox(
+            height: 24,
+          ),
           PrimaryButton(
-            label: "ចុះឈ្មោះ", 
-            backgroundColor: AppColors.primaryMain, 
-            foregroundColor: AppColors.white, 
+            label: "ចុះឈ្មោះ",
+            backgroundColor: AppColors.primaryMain,
+            foregroundColor: AppColors.white,
             onPressed: () {
-              formKey.currentState!.validate();
+              if (formKey.currentState!.validate()) {
+                Navigator.pushReplacementNamed(
+                  context,
+                  AppRoutes.teacherDashboard,
+                );
+              }
             },
           ),
         ],
       ),
     );
   }
-  Widget _buildFooter(){
+
+  Widget _buildFooter() {
     return Column(
       children: [
         Row(
@@ -193,7 +203,9 @@ class _SignUpTeacherScreenState extends State<SignUpTeacherScreen> {
               "មានគណនីហើយមែនទេ?",
               style: AppTextStyle.body,
             ),
-            SizedBox(width: 10,),
+            SizedBox(
+              width: 10,
+            ),
             GestureDetector(
               onTap: () {
                 Navigator.pop(context);
@@ -201,74 +213,70 @@ class _SignUpTeacherScreenState extends State<SignUpTeacherScreen> {
               child: Text(
                 "ចូលគណនី",
                 style: GoogleFonts.kantumruyPro(
-                  fontSize: 16,
-                  color: AppColors.primaryMain
-                ),
+                    fontSize: 16, color: AppColors.primaryMain),
               ),
             ),
           ],
         ),
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
               child: Container(
                 height: 1,
-                decoration: BoxDecoration(
-                  color: AppColors.secondaryText
-                ),
+                decoration: BoxDecoration(color: AppColors.secondaryText),
               ),
             ),
-            SizedBox(width: 10,),
-            Text(
-              "ឬ",
-              style: AppTextStyle.body
+            SizedBox(
+              width: 10,
             ),
-            SizedBox(width: 10,),
+            Text("ឬ", style: AppTextStyle.body),
+            SizedBox(
+              width: 10,
+            ),
             Expanded(
               child: Container(
                 height: 1,
-                decoration: BoxDecoration(
-                  color: AppColors.secondaryText
-                ),
+                decoration: BoxDecoration(color: AppColors.secondaryText),
               ),
             ),
           ],
         ),
-        SizedBox(height: 15,),
+        SizedBox(
+          height: 16,
+        ),
         SizedBox(
           width: double.infinity,
           child: ButtonWithIcon(
-            onPressed: () {
-              
-            },
-            label: "ភ្ចាប់ជាមួយ Telegram",
-            icon: Icon(
-              Icons.telegram_outlined,size: 30,
-              color: AppColors.primaryMain,
-            )
-          ),
+              onPressed: () {},
+              label: "ភ្ចាប់ជាមួយ Telegram",
+              icon: Icon(
+                Icons.telegram_outlined,
+                size: 30,
+                color: AppColors.primaryMain,
+              )),
         ),
-        SizedBox(height: 20,),
+        SizedBox(
+          height: 12,
+        ),
         SizedBox(
           width: double.infinity,
           child: ButtonWithIcon(
-            onPressed: () {
-              
-            },
-            label: "ភ្ចាប់ជាមួយ Google",
-            icon: SvgPicture.asset(
-              AppImages.googleIcon,
-              fit: BoxFit.contain,
-              width: 30,
-            )
-          ),
+              onPressed: () {},
+              label: "ភ្ចាប់ជាមួយ Google",
+              icon: SvgPicture.asset(
+                AppImages.googleIcon,
+                fit: BoxFit.contain,
+                width: 30,
+              )),
         ),
-        SizedBox(height: 40,),
       ],
     );
   }
+
   Widget _buildRadio({required String label, required String value}) {
     return GestureDetector(
       onTap: () {
@@ -278,10 +286,10 @@ class _SignUpTeacherScreenState extends State<SignUpTeacherScreen> {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(26)
-        ),
-        padding: EdgeInsets.only(left: 15,top: 4, bottom: 4),
+            color: AppColors.white, 
+            borderRadius: BorderRadius.circular(AppNumber.radiusMedium)
+          ),
+        padding: EdgeInsets.only(left: 15, top: 4, bottom: 4),
         child: Row(
           children: [
             Text(
@@ -292,14 +300,19 @@ class _SignUpTeacherScreenState extends State<SignUpTeacherScreen> {
             Radio(
               value: value,
               groupValue: gender,
-              hoverColor: AppColors.secondaryText,
-              activeColor: AppColors.primaryMain,
+              fillColor: MaterialStateProperty.resolveWith<Color?>(
+                (Set<MaterialState> states) {
+                  if (states.contains(MaterialState.selected)) {
+                    return AppColors.primaryMain;
+                  }
+                  return AppColors.secondaryText;
+                },
+              ),
               onChanged: (value) {
                 setState(() {
                   gender = value!;
                 });
               },
-
             ),
           ],
         ),
