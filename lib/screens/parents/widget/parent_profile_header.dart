@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_icon.dart';
 import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
@@ -41,6 +42,7 @@ class ParentProfileHeader extends StatelessWidget {
   }
   @override
   Widget build(BuildContext context) {
+    
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(
@@ -52,33 +54,22 @@ class ParentProfileHeader extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  // Text(
-                  //   getFormattedDate(),
-                  //   style: AppTextStyle.bodyWhite
-                  // ),
-                  SizedBox(height: 6),
-                  Text(
-                    "${getGreeting()},\n${getPrefix()} $name!",
-                    style: AppTextStyle.title28White
-                  ), 
-                ],
+              child: Text(
+                "${getGreeting()},\n${getPrefix()} $name!",
+                style: AppTextStyle.title28White
               ),
             ),
             _circleIcon(SvgPicture.asset(
               AppImages.notification,
-
             )),
             SizedBox(width: 10),
             CircleAvatar(
-              backgroundColor: AppColors.white,
-              child: Icon(
-                Icons.person,
-                color: AppColors.primaryText,
-              )),
+              // radius: 20,
+              backgroundColor: AppColors.white.withValues(alpha: 0.5),
+              backgroundImage: AssetImage(
+                AppIcon.profileParent
+              ),
+            ),
           ],
         ),
       ),
@@ -86,7 +77,8 @@ class ParentProfileHeader extends StatelessWidget {
   }
   Widget _circleIcon(Widget icon) {
     return CircleAvatar(
-      backgroundColor: AppColors.white,
+      radius: 20,
+      backgroundColor: AppColors.white.withValues(alpha: 0.5),
       child: icon,
     );
   }

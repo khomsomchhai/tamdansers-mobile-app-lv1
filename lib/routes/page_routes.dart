@@ -5,6 +5,9 @@ import 'package:tamdansers_app/screens/auth/login_teacher_screen.dart';
 import 'package:tamdansers_app/screens/auth/role_selection_screen.dart';
 import 'package:tamdansers_app/screens/auth/sign_up_teacher_screen.dart';
 import 'package:tamdansers_app/screens/auth/splash_screen.dart';
+import 'package:tamdansers_app/screens/parents/parent_connect_student.dart';
+import 'package:tamdansers_app/screens/parents/parent_first_screen.dart';
+import 'package:tamdansers_app/screens/parents/parent_login.dart';
 import 'package:tamdansers_app/screens/student/join_class_screen.dart';
 import 'package:tamdansers_app/screens/student/student_dashboard.dart';
 import 'package:tamdansers_app/screens/student/student_first_screen.dart';
@@ -44,5 +47,11 @@ class PageRoutes {
     AppRoutes.homework: (context) => Homework(),
     AppRoutes.detail: (context) => Deatilscreen(),
     AppRoutes.detailTeach: (context) => DeatilTeacher(),
+    
+    // Parent routes
+    AppRoutes.parentFirstScreen: (context) => ParentFirstScreen(),
+    AppRoutes.parentConnectStudent: (context) => ParentConnectStudent(),
+    
+    AppRoutes.parentDashboardScreen: (context) => ParentLogin(),
   };
 }

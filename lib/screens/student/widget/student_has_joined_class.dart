@@ -50,19 +50,7 @@ class StudentHasJoinedClass extends StatelessWidget {
                   );
                 },
               ),
-              SizedBox(height: 12),
-              ClassCard(
-                className: "ថ្នាក់ទី 7A (Grade 7A)",
-                title: "គ្រូបន្ទុកថ្នាក់",
-                students: "36 នាក់",
-                color: Color(0xFF1976D2),
-                onTap: () {
-                  Navigator.pushNamed(
-                    context, 
-                    AppRoutes.studentDashboard
-                  );
-                },
-              ),
+              
             ],
           ),
         ),
