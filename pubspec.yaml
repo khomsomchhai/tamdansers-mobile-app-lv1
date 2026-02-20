@@ -16,7 +16,7 @@ dependencies:
   percent_indicator: ^4.2.5
   carousel_slider: ^5.1.2
   smooth_page_indicator: ^2.0.1
-  lottie: ^3.3.2
+  lottie: ^3.3.1
   intl: ^0.20.2
 
 dev_dependencies:
