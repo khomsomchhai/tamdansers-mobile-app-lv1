@@ -70,7 +70,7 @@ class _SubmmitScreenState extends State<SubmmitScreen> {
               const SizedBox(height: 15),
               noteCard(
                 controller: noteController,
-                hintText: "បញ្ចូលព័តមាននៅទីនេះ...",
+                hintText: "បញ្ចូលព័តមាននៅទីនេះ......",
                 borderColor: AppColors.backgroundLight,
               ),
               const SizedBox(height: 15),
