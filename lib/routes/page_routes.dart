@@ -6,7 +6,9 @@ import 'package:tamdansers_app/screens/auth/role_selection_screen.dart';
 import 'package:tamdansers_app/screens/auth/sign_in_student.dart';
 import 'package:tamdansers_app/screens/auth/sign_up_teacher_screen.dart';
 import 'package:tamdansers_app/screens/auth/splash_screen.dart';
+import 'package:tamdansers_app/screens/parents/parent_first_screen.dart';
 import 'package:tamdansers_app/screens/parents/parents_dashboard.dart';
+import 'package:tamdansers_app/screens/student/join_class_screen.dart';
 import 'package:tamdansers_app/screens/student/menu/attendance.dart';
 import 'package:tamdansers_app/screens/student/menu/deatil_teacher.dart';
 import 'package:tamdansers_app/screens/student/menu/deatilscreen.dart';
@@ -16,6 +18,7 @@ import 'package:tamdansers_app/screens/student/menu/profile.dart';
 import 'package:tamdansers_app/screens/student/menu/submmit_screen.dart';
 import 'package:tamdansers_app/screens/student/result.dart';
 import 'package:tamdansers_app/screens/student/student_dashboard.dart';
+import 'package:tamdansers_app/screens/student/student_first_screen.dart';
 import 'package:tamdansers_app/screens/teacher/link_parent.dart';
 import 'package:tamdansers_app/screens/teacher/manage_all_class.dart';
 import 'package:tamdansers_app/screens/teacher/manage_class.dart';
@@ -42,6 +45,8 @@ class PageRoutes {
     AppRoutes.linkParentScreen: (context) => LinkParentScreen(),
     AppRoutes.scoreDetailScreen: (context) => ScoreDetailScreen(),
     // Student routes
+    AppRoutes.studentFirstScreen: (context) => StudentFirstScreen(),
+    AppRoutes.joinClassSreen: (context) => JoinClassScreen(),
     AppRoutes.studentDashboard: (context) => StudentDashboard(),
     AppRoutes.profile: (context) => Profile(),
     AppRoutes.attendance: (context) => Attendance(),
@@ -55,5 +60,7 @@ class PageRoutes {
     AppRoutes.signupStudent:(context)=>SignUpStudent(),
     //parent
     AppRoutes.parentDashboardScreen: (context) => ParentsDashboard(),
+    // Parent routes
+    AppRoutes.parentFirstScreen: (context) => ParentFirstScreen(),
   };
 }

@@ -14,6 +14,8 @@ class AppRoutes {
   static const String linkParentScreen = "/link_parent_screen";
   static const String scoreDetailScreen = "/score_detail_screen";
   //student
+  static const String studentFirstScreen = "/student_first_sreen";
+  static const String joinClassSreen = "/join_class_screen";
   static const String studentDashboard = "/student_dashboard";
   static const String scedeul = "/student_scedeul";
   static const String profile="/student_profile";
@@ -28,4 +30,9 @@ class AppRoutes {
   static const String signupStudent="/signupstudent";
   //parent
   static const String parentDashboardScreen = "/parent_dashboard_screen";
+
+  static String teacherDashboardScreen = "/teacher_dashboard_screen";
+
+  static String parentFirstScreen = "/parent_first_screen";
+
 }

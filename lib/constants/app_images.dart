@@ -8,9 +8,12 @@ class AppImages {
   static const String slider3 = "assets/images/slider3.svg";
   static const String imgLogin = "assets/images/login_img.svg";
   static const String imgSignUp = "assets/images/sign_up_img.svg";
+  static const String noData = "assets/images/no_data.svg";
+  static const String joinClass = "assets/images/join_class.svg";
   //icon
   static const String emailIcon = "assets/icons/email.svg";
   static const String googleIcon = "assets/icons/google_icon.svg";
+  static const String notification = "assets/icons/notification.svg";
 
   static const String classCardBg = "assets/images/card_class_bg.svg";
   static const String userProfile = "assets/images/user_profile.png";
