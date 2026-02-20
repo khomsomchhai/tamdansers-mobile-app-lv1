@@ -79,10 +79,7 @@ class _ProfileState extends State<Profile> {
             children: [
               const SizedBox(height: 20),
 
-              // ✅ Pass BottomSheet function
-              ImageProfile(
-                
-              ),
+              ImageProfile(),
 
               const SizedBox(height: 60),
 

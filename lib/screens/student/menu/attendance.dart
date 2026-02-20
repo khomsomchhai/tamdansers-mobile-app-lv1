@@ -9,7 +9,7 @@ class Attendance extends StatefulWidget {
   @override
   State<Attendance> createState() => _AttendanceState();
 }
-List<String>attendance=['វត្តមាន','អវត្តមាន'];
+bool attendance=true;
 class _AttendanceState extends State<Attendance> {
   @override
   Widget build(BuildContext context) {
@@ -55,18 +55,18 @@ class _AttendanceState extends State<Attendance> {
                         ),
                         title: Text('17 មករា 2026',
                             style: AppTextStyle.sectionTitle20),
-                        subtitle: Text('ថ្ងៃច័ន្ទ', style: AppTextStyle.body),
+                        subtitle: Text('គណិតវិទ្យា', style: AppTextStyle.body),
                         trailing: Container(
                           width: 100,
                           padding:
                               EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                           decoration: BoxDecoration(
-                              color: attendance[index] == 'វត្តមាន'? AppColors.successBG : AppColors.errorBG,
+                              color: attendance? AppColors.successBG : AppColors.errorBG,
                               borderRadius: BorderRadius.circular(20)),
                           child: Text(
-                            attendance[index],
+                            attendance ? 'វត្តមាន' : 'អវត្តមាន',
                             style: AppTextStyle.subtitle16.copyWith(
-                                color: attendance[index] == 'វត្តមាន'? AppColors.success : AppColors.error),
+                                color: attendance? AppColors.success : AppColors.error),
                             textAlign: TextAlign.center,
                           ),
                         ),

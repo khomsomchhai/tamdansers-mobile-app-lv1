@@ -30,8 +30,5 @@ class AppRoutes {
   static String parentDashboardScreen = "/parent_dashboard_screen";
   static String notifications="/notifications";
 
-
   static String parentFirstScreen = "/parent_first_screen";
-  
-
 }

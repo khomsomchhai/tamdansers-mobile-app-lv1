@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/screens/student/menu/data_list_homepage.dart';
 import 'package:tamdansers_app/widget/attendance_db.dart';
 
 class Homepage extends StatefulWidget {
@@ -59,7 +60,7 @@ class _HomepageState extends State<Homepage> {
             'Run Limhong',
             style: AppTextStyle.sectionTitle20,
           ),
-          
+          Text('ID: 123456789', style: AppTextStyle.body.copyWith(color: AppColors.secondaryText))
         ],
       ),
       actions: [
@@ -209,27 +210,19 @@ class _GridInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String> titles = ['កាលវិភាគ', 'លទ្ធផល','ថ្នាក់រៀន'];
     return Container(
       child: GridView.builder(
         shrinkWrap: true,
-        itemCount: 3,
+        itemCount: items.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
           crossAxisSpacing: 12,
         ),
         itemBuilder: (context, index) {
+          final item=items[index];
           return GestureDetector(
             onTap: () {
-              if(index==0){
-                Navigator.pushNamed(context, '/student_scedeul');
-              }
-              if(index==1){
-                Navigator.pushNamed(context, '/student_result');
-              }
-              if(index==2){
-                Navigator.pushNamed(context, '/student_classes');
-              }
+              Navigator.pushNamed(context, item.route);
             },
             child: Container(
               decoration: BoxDecoration(
@@ -242,15 +235,15 @@ class _GridInfo extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: AppColors.primaryBg),
+                        shape: BoxShape.circle, color: item.bgColor),
                     child: Icon(
-                      Icons.qr_code,
+                      item.icon,
                       size: 30,
-                      color: AppColors.primary400,
+                      color: item.iconColor,
                     ),
                   ),
                   SizedBox(height: 12),
-                  Text(titles[index], style: AppTextStyle.body)
+                  Text(item.title, style: AppTextStyle.body)
                 ],
               ),
             ),
