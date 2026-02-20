@@ -3,20 +3,9 @@ import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/screens/auth/auth_option_teacher_screen.dart';
 import 'package:tamdansers_app/screens/auth/login_teacher_screen.dart';
 import 'package:tamdansers_app/screens/auth/role_selection_screen.dart';
-import 'package:tamdansers_app/screens/auth/sign_in_student.dart';
 import 'package:tamdansers_app/screens/auth/sign_up_teacher_screen.dart';
 import 'package:tamdansers_app/screens/auth/splash_screen.dart';
-import 'package:tamdansers_app/screens/parents/parent_first_screen.dart';
-import 'package:tamdansers_app/screens/parents/parents_dashboard.dart';
 import 'package:tamdansers_app/screens/student/join_class_screen.dart';
-import 'package:tamdansers_app/screens/student/menu/attendance.dart';
-import 'package:tamdansers_app/screens/student/menu/deatil_teacher.dart';
-import 'package:tamdansers_app/screens/student/menu/deatilscreen.dart';
-import 'package:tamdansers_app/screens/student/menu/homepage.dart';
-import 'package:tamdansers_app/screens/student/menu/homework.dart';
-import 'package:tamdansers_app/screens/student/menu/profile.dart';
-import 'package:tamdansers_app/screens/student/menu/submmit_screen.dart';
-import 'package:tamdansers_app/screens/student/result.dart';
 import 'package:tamdansers_app/screens/student/student_dashboard.dart';
 import 'package:tamdansers_app/screens/student/student_first_screen.dart';
 import 'package:tamdansers_app/screens/teacher/link_parent.dart';
@@ -27,7 +16,10 @@ import 'package:tamdansers_app/screens/teacher/score_detail_screen.dart';
 import 'package:tamdansers_app/screens/teacher/student_detail_screen.dart';
 import 'package:tamdansers_app/screens/teacher/teacher_dashboard.dart';
 
-import '../screens/auth/sign_up_student.dart';
+import '../screens/student/menu/deatil_teacher.dart';
+import '../screens/student/menu/deatilscreen.dart';
+import '../screens/student/menu/homework.dart';
+import '../screens/student/menu/submmit_screen.dart';
 
 class PageRoutes {
   static Map<String, Widget Function(BuildContext)> routes = {
@@ -48,6 +40,9 @@ class PageRoutes {
     AppRoutes.studentFirstScreen: (context) => StudentFirstScreen(),
     AppRoutes.joinClassSreen: (context) => JoinClassScreen(),
     AppRoutes.studentDashboard: (context) => StudentDashboard(),
-   
+    AppRoutes.submitted: (context) => SubmmitScreen(),
+    AppRoutes.homework: (context) => Homework(),
+    AppRoutes.detail: (context) => Deatilscreen(),
+    AppRoutes.detailTeach: (context) => DeatilTeacher(),
   };
 }

@@ -8,7 +8,6 @@ import 'package:tamdansers_app/constants/validators.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/widget/auth_field.dart';
 import 'package:tamdansers_app/widget/button_with_icon.dart';
-import 'package:tamdansers_app/widget/button_with_icon.dart';
 import 'package:tamdansers_app/widget/primary_button.dart';
 
 class LoginTeacherScreen extends StatefulWidget {
