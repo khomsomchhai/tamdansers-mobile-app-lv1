@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
-class AppColors{
-
+class AppColors {
   static const Color backgroundLight = Color(0xffF4F4F4);
   static const Color white = Color(0xffFFFFFF);
 
-  static const Color primaryBg = Color.fromARGB(103, 66, 134, 244);
+  static const Color primaryBg = Color.fromARGB(27, 66, 134, 244);
   static const Color primaryMain = Color(0xff4285F4);
   static const Color primary300 = Color(0xff0E63EF);
   static const Color primary400 = Color(0xff0B4DB9);
@@ -16,7 +15,9 @@ class AppColors{
   static const Color purple = Color(0xffC95EDB);
   static const Color orange = Color(0xffFCAA58);
   static const Color success = Color(0xFF34C759);
+  static const Color successBG = Color.fromARGB(37, 118, 211, 121);
   static const Color error = Color(0xFFFF3B30);
+  static const Color errorBG = Color.fromARGB(39, 255, 58, 48);
   static const Color link = Color(0xff007AFF);
   static const Color grey = Colors.grey;
 
@@ -24,4 +25,8 @@ class AppColors{
   static const Color uploadFile = Color(0xffF8FAFC);
   static const Color teacomment = Color(0xffFFF1C2);
   static const Color comment = Color(0xffFDAD00);
+
+  static const Color lightPink = Color.fromARGB(91, 228, 175, 237);
+  static const Color pepure = Color(0xff9C27B0);
+
 }
