@@ -48,19 +48,6 @@ class PageRoutes {
     AppRoutes.studentFirstScreen: (context) => StudentFirstScreen(),
     AppRoutes.joinClassSreen: (context) => JoinClassScreen(),
     AppRoutes.studentDashboard: (context) => StudentDashboard(),
-    AppRoutes.profile: (context) => Profile(),
-    AppRoutes.attendance: (context) => Attendance(),
-    AppRoutes.homework: (context) => Homework(),
-    AppRoutes.homepage: (context) => Homepage(),
-    AppRoutes.result:(context) => Result(),
-    AppRoutes.detail:(context)=> Deatilscreen(),
-    AppRoutes.detailTeach:(context)=> DeatilTeacher(),
-    AppRoutes.submitted:(context)=>SubmmitScreen(),
-    AppRoutes.signinStudent:(context)=>SignInStudent(),
-    AppRoutes.signupStudent:(context)=>SignUpStudent(),
-    //parent
-    AppRoutes.parentDashboardScreen: (context) => ParentsDashboard(),
-    // Parent routes
-    AppRoutes.parentFirstScreen: (context) => ParentFirstScreen(),
+   
   };
 }
