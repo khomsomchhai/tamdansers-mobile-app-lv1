@@ -21,6 +21,8 @@ import 'package:tamdansers_app/screens/teacher/manage_all_class.dart';
 import 'package:tamdansers_app/screens/teacher/score_detail_screen.dart';
 import 'package:tamdansers_app/screens/teacher/teacher_dashboard.dart';
 
+import '../screens/parents/menu/Comment_signature .dart';
+import '../screens/parents/menu/Monthy_result_Ranking.dart';
 import '../screens/student/menu/deatil_teacher.dart';
 import '../screens/student/menu/deatilscreen.dart';
 import '../screens/student/menu/submmit_screen.dart';
@@ -54,5 +56,7 @@ class PageRoutes {
     AppRoutes.parentConnectStudent: (context) => ParentConnectStudent(),
     
     AppRoutes.parentDashboardScreen: (context) => ParentLogin(),
+    AppRoutes.monthly: (context) => CustomScreen(),
+    AppRoutes.commentScreen: (context) => CommentSignature(),
   };
 }

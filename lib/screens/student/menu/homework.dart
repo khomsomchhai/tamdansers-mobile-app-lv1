@@ -12,13 +12,13 @@ enum TaskStatus {
 Color _statusColor(TaskStatus status) {
   switch (status) {
     case TaskStatus.completed:
-      return Colors.green;
+      return AppColors.success;
     case TaskStatus.notSubmitted:
-      return Colors.red;
+      return AppColors.error;
     case TaskStatus.inProgress:
-      return Colors.blue;
+      return AppColors.primaryMain;
     case TaskStatus.late:
-      return Colors.orange;
+      return AppColors.orange;
   }
 }
 
@@ -43,9 +43,8 @@ class Homework extends StatefulWidget {
 }
 
 class _HomeworkState extends State<Homework> {
-  
-  int selectedIndex = 1;
-  
+  int selectedIndex = 0; 
+
   @override
   Widget build(BuildContext context) {
     
@@ -72,52 +71,84 @@ class _HomeworkState extends State<Homework> {
       )
     );
   }
-  Widget tabWidget() {
+
+Widget tabWidget() {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 18),
     child: Container(
+      height: 52, // fixed height for better control
       padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
         color: const Color(0xFFEFF2F6),
         borderRadius: BorderRadius.circular(18),
       ),
-      child: Row(
+      child: Stack(
+        alignment: Alignment.center,
         children: [
-          Expanded(
-            child: tabButton(
-              "បានបញ្ចប់",
-              selectedIndex == 0,
-              () => setState(() => selectedIndex = 0),
+          // Animated sliding indicator (white pill)
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 320),
+            curve: Curves.easeInOutCubicEmphasized, // modern smooth curve
+            left: selectedIndex == 0 ? 5 : null,
+            right: selectedIndex == 1 ? 5 : null,
+            top: 5,
+            bottom: 5,
+            width: (MediaQuery.sizeOf(context).width - 36 - 10) / 2, // dynamic half width
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.07),
+                    blurRadius: 10,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
             ),
           ),
-          Expanded(
-            child: tabButton(
-              "កំពុងបន្ត",
-              selectedIndex == 1,
-              () => setState(() => selectedIndex = 1),
-            ),
+
+          // Invisible layer for taps + text
+          Row(
+            children: [
+              Expanded(
+                child: _buildTabButton(
+                  label: "បានបញ្ចប់",
+                  isActive: selectedIndex == 0,
+                  onTap: () => setState(() => selectedIndex = 0),
+                ),
+              ),
+              Expanded(
+                child: _buildTabButton(
+                  label: "កំពុងបន្ត",
+                  isActive: selectedIndex == 1,
+                  onTap: () => setState(() => selectedIndex = 1),
+                ),
+              ),
+            ],
           ),
         ],
       ),
     ),
   );
 }
- Widget tabButton(String text, bool active, VoidCallback onPressed) {
-  return ElevatedButton(
-    onPressed: onPressed,
-    style: ElevatedButton.styleFrom(
-      elevation: 0,
-      backgroundColor: active ? Colors.white : Colors.transparent,
-      foregroundColor: active ? Colors.blue : Colors.grey,
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-    ),
-    child: Text(
-      text,
-      style: const TextStyle(
-        fontWeight: FontWeight.bold,
+
+Widget _buildTabButton({
+  required String label,
+  required bool isActive,
+  required VoidCallback onTap,
+}) {
+  return GestureDetector(
+    behavior: HitTestBehavior.opaque, // better tap area
+    onTap: onTap,
+    child: Center(
+      child: AnimatedDefaultTextStyle(
+        duration: const Duration(milliseconds: 280),
+        style: AppTextStyle.subtitle18.copyWith(
+          color: isActive ? AppColors.primaryMain : AppColors.secondaryText,
+        ),
+        child: Text(label),
       ),
     ),
   );
@@ -127,8 +158,8 @@ class _HomeworkState extends State<Homework> {
   required String title,
   required String subtitle,
   required String date,
-  IconData? icon,            // ✅ optional
-  String? imagePath,         // ✅ optional
+  IconData? icon,            
+  String? imagePath,         
   required Color color,
   required TaskStatus status,
   required bool isClosed,
@@ -185,19 +216,13 @@ class _HomeworkState extends State<Homework> {
                     },
                     child: Text(
                       title,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
+                      style: AppTextStyle.fontsize18,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     subtitle,
-                    style: const TextStyle(
-                      color: Colors.grey,
-                      fontSize: 12,
-                    ),
+                    style: AppTextStyle.caption14Secondary
                   ),
                 ],
               ),
@@ -230,7 +255,7 @@ class _HomeworkState extends State<Homework> {
             Text(
               isClosed ? "ឈប់ទទួល $date" : "បានផ្ញើរ $date",
               style: TextStyle(
-                color: isClosed ? Colors.red : Colors.grey,
+                color: isClosed ? AppColors.error : AppColors.secondaryText,
                 fontWeight:
                     isClosed ? FontWeight.bold : FontWeight.normal,
               ),
@@ -301,7 +326,7 @@ Widget taskListWidget() {
           subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
           date: "03-01-2026",
           icon: Icons.public,
-          color: AppColors.primaryBg,
+          color: AppColors.primary400,
           status: TaskStatus.completed,
           isClosed: false
         ),
@@ -446,7 +471,7 @@ Widget newTaskListWidget() {
           subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
           date: "03-01-2026",
           icon: Icons.public,
-          color: AppColors.primaryBg,
+          color: AppColors.primary400,
           status: TaskStatus.inProgress,
           isClosed: true
         ),

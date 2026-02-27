@@ -41,6 +41,6 @@ class AppRoutes {
 
   static String parentConnectStudent = "/parent_connect_student";
 
-  
-
+  static String monthly = "/monthly_result_ranking";
+  static String commentScreen = "/comment_screen";
 }

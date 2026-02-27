@@ -13,7 +13,6 @@ dependencies:
   flutter_bounceable: ^1.2.0
   flutter_svg: ^2.0.0
   table_calendar: ^3.0.9
-  image_picker: ^1.2.1
   percent_indicator: ^4.2.5
   dotted_border: ^2.0.0
   carousel_slider: ^5.0.0  
