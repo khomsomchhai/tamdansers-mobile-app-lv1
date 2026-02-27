@@ -11,7 +11,9 @@ class DeatilTeacher extends StatefulWidget {
 }
 
 class _DeatilTeacherState extends State<DeatilTeacher> {
-  // ✅ Example lessons (replace with API later)
+  bool _showAllLessons = false;
+
+  // Example lessons (replace with API later)
   final List<Map<String, dynamic>> allLessons = [
     {
       "title": "មេរៀន ១៖ ចំនួនគត់",
@@ -37,26 +39,23 @@ class _DeatilTeacherState extends State<DeatilTeacher> {
 
   @override
   Widget build(BuildContext context) {
-    // ✅ accept both String and Map arguments (avoid crash)
+    // Support both old String and new Map arguments
     final Object? rawArgs = ModalRoute.of(context)?.settings.arguments;
-
     String titleAppBar = "មុខវិជ្ជា";
-    bool showAll = false;
 
     if (rawArgs is String) {
-      // old style: arguments: "គណិតវិទ្យា"
       titleAppBar = rawArgs;
     } else if (rawArgs is Map) {
-      // new style: arguments: {"title": "...", "showAll": true}
       titleAppBar = (rawArgs["title"] ?? "មុខវិជ្ជា").toString();
-      showAll = rawArgs["showAll"] == true;
     }
 
-    final lessonsToShow = showAll ? allLessons : allLessons.take(2).toList();
+    final lessonsToShow = _showAllLessons ? allLessons : allLessons.take(2).toList();
+
+    final bool canShowMore = allLessons.length > 2;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(titleAppBar),
+        title: Text(titleAppBar, style: AppTextStyle.screenTitle24),
         centerTitle: true,
         actions: const [Icon(Icons.menu)],
       ),
@@ -67,6 +66,7 @@ class _DeatilTeacherState extends State<DeatilTeacher> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               taskCard(),
+
               Row(
                 children: [
                   Padding(
@@ -74,27 +74,28 @@ class _DeatilTeacherState extends State<DeatilTeacher> {
                     child: Text("មេរៀន", style: AppTextStyle.sectionTitle20),
                   ),
                   const Spacer(),
-                  if (!showAll)
+                  if (canShowMore)
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            AppRoutes.detailTeach,
-                            arguments: {
-                              "title": titleAppBar,
-                              "showAll": true,
-                            },
-                          );
+                          setState(() {
+                            _showAllLessons = !_showAllLessons;
+                          });
                         },
-                        child: Text("មើលទាំងអស់", style: AppTextStyle.til16),
+                        child: Text(
+                          _showAllLessons ? "បង្ហាញតិច" : "មើលទាំងអស់",
+                          style: AppTextStyle.til16.copyWith(
+                            color: AppColors.link,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
                     ),
                 ],
               ),
 
-              // ✅ render lessons
+              // Lessons list
               Column(
                 children: lessonsToShow.map((l) {
                   return Padding(
@@ -114,7 +115,10 @@ class _DeatilTeacherState extends State<DeatilTeacher> {
                 padding: const EdgeInsets.all(16.0),
                 child: Text("កិច្ចការផ្ទះ", style: AppTextStyle.sectionTitle20),
               ),
-              subMitted(title: "លំហាត់មេរៀនទី២", subtitle: "ផុតកំណត់ថ្ងៃស្អែក"),
+              subMitted(
+                title: "លំហាត់មេរៀនទី២",
+                subtitle: "ផុតកំណត់ថ្ងៃស្អែក",
+              ),
 
               Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -175,36 +179,24 @@ class _DeatilTeacherState extends State<DeatilTeacher> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   "គណិតវិទ្យា",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF0B1220),
-                  ),
+                  style: AppTextStyle.fontsize18,
                 ),
                 const SizedBox(height: 4),
-                const Text(
+                Text(
                   "សុង ម៉េង (ថ្នាក់ទី៩)",
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black54,
-                  ),
+                  style: AppTextStyle.caption14Secondary,
                 ),
                 const SizedBox(height: 14),
                 Row(
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children:  [
                         Text(
                           "មធ្យមភាគ",
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black45,
-                          ),
+                          style: AppTextStyle.caption12Primary,
                         ),
                         SizedBox(height: 6),
                         Text(
@@ -222,14 +214,10 @@ class _DeatilTeacherState extends State<DeatilTeacher> {
                     const SizedBox(width: 14),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children:  [
                         Text(
                           "វត្តមាន",
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black45,
-                          ),
+                          style: AppTextStyle.caption12Primary,
                         ),
                         SizedBox(height: 6),
                         Text(
@@ -365,8 +353,7 @@ class _DeatilTeacherState extends State<DeatilTeacher> {
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: const Center(
-                  child:
-                      Icon(Icons.menu_book_rounded, color: Colors.red, size: 22),
+                  child: Icon(Icons.menu_book_rounded, color: Colors.red, size: 22),
                 ),
               ),
               const SizedBox(width: 14),

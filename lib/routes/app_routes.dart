@@ -40,6 +40,6 @@ class AppRoutes {
   static const String parentFirstScreen = "/parent_first_screen";
   static const String parentConnectStudent = "/parent_connect_student";
 
-  
-
+  static String monthly = "/monthly_result_ranking";
+  static String commentScreen = "/comment_screen";
 }

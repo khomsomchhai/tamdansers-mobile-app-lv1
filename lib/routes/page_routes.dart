@@ -23,6 +23,9 @@ import 'package:tamdansers_app/screens/teacher/link_parent.dart';
 import 'package:tamdansers_app/screens/teacher/manage_all_class.dart';
 import 'package:tamdansers_app/screens/teacher/score_detail_screen.dart';
 import 'package:tamdansers_app/screens/teacher/teacher_dashboard.dart';
+
+import '../screens/parents/menu/Comment_signature .dart';
+import '../screens/parents/menu/Monthy_result_Ranking.dart';
 import '../screens/student/menu/deatil_teacher.dart';
 import '../screens/student/menu/deatilscreen.dart';
 import '../screens/student/menu/submmit_screen.dart';
@@ -109,4 +112,36 @@ class PageRoutes {
         return null;
     }
   }
+  static Map<String, Widget Function(BuildContext)> routes = {
+    AppRoutes.splashScreen: (context) => SplashScreen(),
+    AppRoutes.authOptionTeacherScreen: (context) => AuthOptionTeacherScreen(),
+    AppRoutes.teacherDashboard: (context) => TeacherDashboard(),
+    AppRoutes.manageAllClass: (context) => ManageAllClass(),
+    AppRoutes.linkParentScreen: (context) => LinkParentScreen(),
+    AppRoutes.scoreDetailScreen: (context) => ScoreDetailScreen(),
+    // Student routes
+    AppRoutes.studentFirstScreen: (context) => StudentFirstScreen(),
+    AppRoutes.joinClassSreen: (context) => JoinClassScreen(),
+    AppRoutes.studentDashboard: (context) => StudentDashboard(),
+    AppRoutes.submitted: (context) => SubmmitScreen(),
+    AppRoutes.homework: (context) => Homework(),
+    AppRoutes.detail: (context) => Deatilscreen(),
+    AppRoutes.detailTeach: (context) => DeatilTeacher(),
+    
+    AppRoutes.homepage: (context) => Homepage(),
+    AppRoutes.scedeul: (context) => Scedeul(),
+    AppRoutes.result: (context) => Result(),
+    AppRoutes.changePassword: (context) => ChangePw(),
+    AppRoutes.info:(contex)=>InfoPersonal(),
+    AppRoutes.subject: (context) => Subjects(),
+    AppRoutes.notifications:(contex)=>Notifications(),
+    // Parent routes
+    AppRoutes.parentFirstScreen: (context) => ParentFirstScreen(),
+    AppRoutes.parentConnectStudent: (context) => ParentConnectStudent(),
+    
+    AppRoutes.parentDashboardScreen: (context) => ParentLogin(),
+    AppRoutes.monthly: (context) => CustomScreen(),
+    AppRoutes.commentScreen: (context) => CommentSignature(),
+  };
 }
+  
