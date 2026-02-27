@@ -4,15 +4,16 @@ import 'package:tamdansers_app/constants/app_colors.dart';
 
 class Item {
   final String title;
-  final IconData icon;
-  final Color iconColor;
+  final String img;
+  final Color imgColor;
   final Color bgColor;
   final String route;
+  
   Item({
     required this.title,
-    required this.icon,
+    required this.img,
     required this.bgColor,
-    required this.iconColor,
+    required this.imgColor,
     required this.route,
   });
 }
@@ -20,20 +21,20 @@ class Item {
 final List<Item> items = [
   Item(
       title: 'កាលវិភាគ',
-      icon: Icons.schedule,
+      img: 'assets/icons/schedule.png',
       bgColor: AppColors.primaryBg,
-      iconColor: AppColors.primary400,
+      imgColor: AppColors.primary400,
       route: '/student_scedeul'),
   Item(
       title: 'លទ្ធផល',
-      icon: Icons.bar_chart,
+      img: 'assets/icons/result.png',
       bgColor: AppColors.errorBG,
-      iconColor: AppColors.error,
+      imgColor: AppColors.error,
       route: '/student_result'),
   Item(
       title: 'ដំណឹង',
-      icon: Icons.bookmark,
+      img: 'assets/icons/bell.png',
       bgColor: AppColors.lightPink,
-      iconColor: AppColors.pepure,
-      route: '/notifications'),
+      imgColor: AppColors.pepure,
+      route: '/subject'),
 ];

@@ -50,7 +50,9 @@ class _HomeworkState extends State<Homework> {
   Widget build(BuildContext context) {
     
     return Scaffold(
+      
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text('កិច្ចការផ្ទះ',style: AppTextStyle.screenTitle24,),
         actions: [
           Icon(Icons.notifications_sharp,color: AppColors.primaryText,)

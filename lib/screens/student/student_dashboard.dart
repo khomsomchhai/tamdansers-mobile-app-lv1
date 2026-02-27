@@ -39,7 +39,9 @@ class _StudentDashboardState extends State<StudentDashboard> {
             label: 'ទំព័រដើម',
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.class_), label: 'កិច្ចការផ្ទះ'),
+            icon: Icon(Icons.class_),
+            label: 'កិច្ចការផ្ទះ',
+          ),
           BottomNavigationBarItem(
               icon: Icon(Icons.assignment), label: "វត្តមាន"),
           BottomNavigationBarItem(

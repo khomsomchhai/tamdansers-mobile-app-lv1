@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
-import 'package:tamdansers_app/routes/page_routes.dart';
+import 'package:tamdansers_app/routes/page_animations.dart';
 
 void main() {
   runApp(const MainApp());
@@ -22,7 +22,7 @@ class MainApp extends StatelessWidget {
             surfaceTintColor: AppColors.transparent,
           )),
       initialRoute: AppRoutes.studentDashboard,
-      routes: PageRoutes.routes,
+      onGenerateRoute: PageAnimations.onGenerateRoute,
     );
   }
 }

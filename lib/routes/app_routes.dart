@@ -32,14 +32,13 @@ class AppRoutes {
   static const String parentDashboardScreen = "/parent_dashboard_screen";
 
   static const String info="/student_info_personal";
-  static String teacherDashboardScreen = "/teacher_dashboard_screen";
-  static String subject="/subject";
+  static const String teacherDashboardScreen = "/teacher_dashboard_screen";
+  static const String subject="/subject";
   static const String changePassword="/change_password";
-  static String notifications="/notifications";
+  static const String notifications="/notifications";
 
-  static String parentFirstScreen = "/parent_first_screen";
-
-  static String parentConnectStudent = "/parent_connect_student";
+  static const String parentFirstScreen = "/parent_first_screen";
+  static const String parentConnectStudent = "/parent_connect_student";
 
   
 

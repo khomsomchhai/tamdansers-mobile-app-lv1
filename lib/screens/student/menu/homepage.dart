@@ -44,7 +44,7 @@ class _HomepageState extends State<Homepage> {
   AppBar _buil_appbar() {
     return AppBar(
       leading: Container(
-        margin: EdgeInsets.only(left: 16),
+          margin: EdgeInsets.only(left: 16),
           decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
@@ -52,7 +52,7 @@ class _HomepageState extends State<Homepage> {
                 width: 2.0,
               )),
           child: CircleAvatar(
-            child: SvgPicture.asset("assets/images/app_logo_blue.svg"))),
+              child: SvgPicture.asset("assets/images/app_logo_blue.svg"))),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -60,7 +60,8 @@ class _HomepageState extends State<Homepage> {
             'Run Limhong',
             style: AppTextStyle.sectionTitle20,
           ),
-          Text('ID: 123456789', style: AppTextStyle.body.copyWith(color: AppColors.secondaryText))
+          Text('ID: 123456789',
+              style: AppTextStyle.body.copyWith(color: AppColors.secondaryText))
         ],
       ),
       actions: [
@@ -76,8 +77,47 @@ class _HomepageState extends State<Homepage> {
   }
 }
 
-class _TitleHeader extends StatelessWidget {
+class _TitleHeader extends StatefulWidget {
   const _TitleHeader();
+
+  @override
+  State<_TitleHeader> createState() => _TitleHeaderState();
+}
+
+class _TitleHeaderState extends State<_TitleHeader> {
+  String getKhmerDate() {
+    DateTime now = DateTime.now();
+
+    List<String> khmerWeekDays = [
+      "ថ្ងៃច័ន្ទ",
+      "ថ្ងៃអង្គារ",
+      "ថ្ងៃពុធ",
+      "ថ្ងៃព្រហស្បតិ៍",
+      "ថ្ងៃសុក្រ",
+      "ថ្ងៃសៅរ៍",
+      "ថ្ងៃអាទិត្យ",
+    ];
+
+    List<String> khmerMonths = [
+      "មករា",
+      "កុម្ភៈ",
+      "មីនា",
+      "មេសា",
+      "ឧសភា",
+      "មិថុនា",
+      "កក្កដា",
+      "សីហា",
+      "កញ្ញា",
+      "តុលា",
+      "វិច្ឆិកា",
+      "ធ្នូ",
+    ];
+
+    String weekDay = khmerWeekDays[now.weekday - 1];
+    String month = khmerMonths[now.month - 1];
+
+    return "$weekDay ទី ${now.day} ខែ $month ឆ្នាំ ${now.year}";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +125,7 @@ class _TitleHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'ថ្ងៃច័ន្ទ ទី 5 ខែ មីនា ឆ្នាំ 2026',
+          getKhmerDate(),
           style: AppTextStyle.body,
         ),
         SizedBox(height: 8),
@@ -119,28 +159,35 @@ class _HomeworkState extends State<_Homework> {
           style: AppTextStyle.fontsize18,
         ),
         SizedBox(height: 10),
-        Container(
-          height: 80,
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.white, width: 0.5),
-          ),
-          child: Center(
-            child: ListTile(
-              leading: CircleAvatar(
-                radius: 30,
-                child: Icon(Icons.calculate_outlined,
-                    size: 40, color: AppColors.primary400),
-              ),
-              title: Text('គណិតវិទ្យា', style: AppTextStyle.body.copyWith(fontWeight: FontWeight.bold)),
-              subtitle: Text(
-                '11-1-2026',
-                style: AppTextStyle.body,
-              ),
-              trailing: Icon(
-                Icons.chevron_right,
-                size: 40,
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, '/detailscreen');
+          },
+          child: Container(
+            height: 80,
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppColors.white, width: 0.5),
+            ),
+            child: Center(
+              child: ListTile(
+                leading: CircleAvatar(
+                  radius: 30,
+                  child: Icon(Icons.calculate_outlined,
+                      size: 40, color: AppColors.primary400),
+                ),
+                title: Text('គណិតវិទ្យា',
+                    style: AppTextStyle.body
+                        .copyWith(fontWeight: FontWeight.bold)),
+                subtitle: Text(
+                  '11-1-2026',
+                  style: AppTextStyle.body,
+                ),
+                trailing: Icon(
+                  Icons.chevron_right,
+                  size: 40,
+                ),
               ),
             ),
           ),
@@ -162,42 +209,47 @@ class _Classes extends StatelessWidget {
             Text('ថ្នាក់បន្ទាប់', style: AppTextStyle.fontsize18),
             Spacer(),
             TextButton(
-              onPressed: () {
-                
-              },
+              onPressed: () {},
               child: Text('មើលទាំងអស់',
                   style: AppTextStyle.hintText.copyWith(color: AppColors.link)),
             )
           ],
         ),
         SizedBox(height: 12),
-        Container(
-          padding: EdgeInsets.all(12),
-          height: 80,
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.white, width: 0.5),
-          ),
-          child: Row(
-            children: [
-              CircleAvatar(
-                radius: 30,
-                child: Icon(Icons.calculate_outlined,
-                    size: 40, color: AppColors.primary400),
-              ),
-              SizedBox(width: 12),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('គណិតវិទ្យា', style: AppTextStyle.body.copyWith(fontWeight: FontWeight.bold)),
-                  Text(
-                    'គ្រូបង្រៀន​: លោក សុខា',
-                    style: AppTextStyle.hint15,
-                  ),
-                ],
-              )
-            ],
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, '/detailteascreen');
+          },
+          child: Container(
+            padding: EdgeInsets.all(12),
+            height: 80,
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppColors.white, width: 0.5),
+            ),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 30,
+                  child: Icon(Icons.calculate_outlined,
+                      size: 40, color: AppColors.primary400),
+                ),
+                SizedBox(width: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('គណិតវិទ្យា',
+                        style: AppTextStyle.body
+                            .copyWith(fontWeight: FontWeight.bold)),
+                    Text(
+                      'គ្រូបង្រៀន​: លោក សុខា',
+                      style: AppTextStyle.hint15,
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         )
       ],
@@ -219,7 +271,7 @@ class _GridInfo extends StatelessWidget {
           crossAxisSpacing: 12,
         ),
         itemBuilder: (context, index) {
-          final item=items[index];
+          final item = items[index];
           return GestureDetector(
             onTap: () {
               Navigator.pushNamed(context, item.route);
@@ -236,14 +288,13 @@ class _GridInfo extends StatelessWidget {
                     padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
                         shape: BoxShape.circle, color: item.bgColor),
-                    child: Icon(
-                      item.icon,
-                      size: 30,
-                      color: item.iconColor,
+                    child: Image.asset(
+                      item.img,
+                      color: item.imgColor,
                     ),
                   ),
                   SizedBox(height: 12),
-                  Text(item.title, style: AppTextStyle.body)
+                  Text(item.title, style: AppTextStyle.body.copyWith(fontWeight: FontWeight.bold))
                 ],
               ),
             ),
