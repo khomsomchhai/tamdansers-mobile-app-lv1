@@ -72,19 +72,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
           role: selectedRole,
 
         );
-        // if (result > 0) {
-        //   Navigator.pushNamed(
-        //     context, 
-        //     AppRoutes.otpScreen,
-        //     arguments: selectedRole
-        //   );
-        // } 
+        if (result > 0) {
+          Navigator.pushNamed(
+            context, 
+            AppRoutes.otpScreen,
+            arguments: selectedRole
+          );
+        } 
         
-        Navigator.pushNamed(
-          context, 
-          AppRoutes.otpScreen,
-          arguments: selectedRole
-        );
+        // Navigator.pushNamed(
+        //   context, 
+        //   AppRoutes.otpScreen,
+        //   arguments: selectedRole
+        // );
         
       }
     }
