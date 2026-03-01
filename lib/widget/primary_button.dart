@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_number.dart';
+import 'package:tamdansers_app/constants/text_style.dart';
 
 class PrimaryButton extends StatelessWidget {
   final String label;
@@ -19,22 +20,20 @@ class PrimaryButton extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            shadowColor: AppColors.transparent,
-            backgroundColor: backgroundColor,
-            padding: EdgeInsets.symmetric(vertical: 12),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-          onPressed: onPressed,
-          child: Text(
-            label,
-            style: GoogleFonts.kantumruyPro(
-                fontSize: 18,
-                color: foregroundColor,
-                fontWeight: FontWeight.bold),
-          )),
+        style: ElevatedButton.styleFrom(
+          shadowColor: AppColors.transparent,
+          backgroundColor: backgroundColor,
+          padding: EdgeInsets.symmetric(vertical: 12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppNumber.radiusMedium)
+          )
+        ),
+        onPressed: onPressed, 
+        child: Text(
+          label,
+          style: AppTextStyle.buttonText18White
+        )
+      ),
     );
   }
 }

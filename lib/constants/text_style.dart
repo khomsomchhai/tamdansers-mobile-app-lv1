@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 
@@ -30,7 +30,26 @@ class AppTextStyle {
     fontWeight: FontWeight.w600,
     color: AppColors.primaryText,
   );
-
+  static final fontsize18 =
+      GoogleFonts.kantumruyPro(fontSize: 18, fontWeight: FontWeight.w600);
+  static final size18 =
+      GoogleFonts.kantumruyPro(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.backgroundLight);
+  static final body =
+      GoogleFonts.kantumruyPro(fontSize: 16, fontWeight: FontWeight.w400);
+  static final hintText1 = GoogleFonts.kantumruyPro(
+      fontSize: 16,
+      fontWeight: FontWeight.w400,
+      color: AppColors.secondaryText);
+  static final til16 = GoogleFonts.kantumruyPro(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: AppColors.primaryMain,
+  );
+  static final tiltle16 = GoogleFonts.kantumruyPro(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: Colors.red,
+  );
   static final screenTitle24Main = GoogleFonts.kantumruyPro(
     fontSize: 24,
     fontWeight: FontWeight.w600,
@@ -42,7 +61,11 @@ class AppTextStyle {
     fontSize: 20,
     fontWeight: FontWeight.w600,
   );
-
+  static final size18Primary = GoogleFonts.kantumruyPro(
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    color: AppColors.primaryMain,
+  );
   // ==================== SUBTITLES ====================
 
   // Subtitle 18px
@@ -51,10 +74,6 @@ class AppTextStyle {
     fontWeight: FontWeight.w600,
   );
 
-  static final fontsize18 = GoogleFonts.kantumruyPro(
-    fontSize: 18,
-    fontWeight: FontWeight.w600,
-  );
 
   // Subtitle 16px
   static final subtitle16 = GoogleFonts.kantumruyPro(
@@ -69,12 +88,6 @@ class AppTextStyle {
     fontSize: 18,
     fontWeight: FontWeight.w400,
     color: AppColors.white,
-  );
-
-  // Body 16px (Default)
-  static final body = GoogleFonts.kantumruyPro(
-    fontSize: 16,
-    fontWeight: FontWeight.w400,
   );
 
   static final bodyPrimary = GoogleFonts.kantumruyPro(
@@ -156,12 +169,25 @@ class AppTextStyle {
     fontWeight: FontWeight.w600,
     color: AppColors.white,
   );
+  static final buttonText18Black = GoogleFonts.kantumruyPro(
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    color: AppColors.primaryText,
+  );
 
   static final buttonText15Primary = GoogleFonts.kantumruyPro(
     fontSize: 15,
     fontWeight: FontWeight.w600,
     color: AppColors.primaryMain,
   );
+
+  static final buttonText16White = GoogleFonts.kantumruyPro(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: AppColors.white,
+  );
+
+
 
   // ==================== HINTS ====================
 
