@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/screens/auth/auth_option_teacher_screen.dart';
-import 'package:tamdansers_app/screens/auth/login_teacher_screen.dart';
+import 'package:tamdansers_app/screens/auth/login_screen.dart';
+import 'package:tamdansers_app/screens/auth/otp_screen.dart';
 import 'package:tamdansers_app/screens/auth/role_selection_screen.dart';
-import 'package:tamdansers_app/screens/auth/sign_up_teacher_screen.dart';
+import 'package:tamdansers_app/screens/auth/sign_up_screen.dart';
 import 'package:tamdansers_app/screens/auth/splash_screen.dart';
 import 'package:tamdansers_app/screens/parents/parent_connect_student.dart';
 import 'package:tamdansers_app/screens/parents/parent_first_screen.dart';
+import 'package:tamdansers_app/screens/parents/parent_list_stu_class.dart';
 import 'package:tamdansers_app/screens/parents/parent_login.dart';
 import 'package:tamdansers_app/screens/student/join_class_screen.dart';
 import 'package:tamdansers_app/screens/student/menu/attendance.dart';
@@ -28,10 +30,11 @@ class PageRoutes {
   static Map<String, Widget Function(BuildContext)> routes = {
     AppRoutes.splashScreen: (context) => SplashScreen(),
     AppRoutes.roleSelectionScreen: (context) => RoleSelectionScreen(),
+    AppRoutes.otpScreen: (context) => OtpScreen(),
     // Teacher routes
     AppRoutes.authOptionTeacherScreen: (context) => AuthOptionTeacherScreen(),
-    AppRoutes.loginTeacherScreen: (context) => LoginTeacherScreen(),
-    AppRoutes.signUpTeacherScreen: (context) => SignUpTeacherScreen(),
+    AppRoutes.loginScreen: (context) => LoginScreen(),
+    AppRoutes.signUpScreen: (context) => SignUpScreen(),
     AppRoutes.teacherDashboard: (context) => TeacherDashboard(),
     AppRoutes.manageClass: (context) => ManageClass(),
     AppRoutes.manageAllClass: (context) => ManageAllClass(),
@@ -52,6 +55,7 @@ class PageRoutes {
     // Parent routes
     AppRoutes.parentFirstScreen: (context) => ParentFirstScreen(),
     AppRoutes.parentConnectStudent: (context) => ParentConnectStudent(),
+    AppRoutes.parentListStuClass: (context) => ParentListStuClass(),
     
     AppRoutes.parentDashboardScreen: (context) => ParentLogin(),
   };

@@ -65,7 +65,7 @@ class ParentProfileHeader extends StatelessWidget {
             SizedBox(width: 10),
             CircleAvatar(
               // radius: 20,
-              backgroundColor: AppColors.white.withValues(alpha: 0.5),
+              backgroundColor: AppColors.backgroundLight,
               backgroundImage: AssetImage(
                 AppIcon.profileParent
               ),
@@ -78,7 +78,7 @@ class ParentProfileHeader extends StatelessWidget {
   Widget _circleIcon(Widget icon) {
     return CircleAvatar(
       radius: 20,
-      backgroundColor: AppColors.white.withValues(alpha: 0.5),
+      backgroundColor: AppColors.backgroundLight,
       child: icon,
     );
   }

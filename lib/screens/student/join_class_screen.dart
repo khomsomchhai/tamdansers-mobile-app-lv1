@@ -29,7 +29,7 @@ class _JoinClassScreenState extends State<JoinClassScreen> {
           icon: Icon(
             Icons.arrow_back_ios_new_rounded,
             color: AppColors.primaryText,
-            size: AppNumber.iconSmall,
+            size: AppNumber.iconMedium,
           ),
         ),
         title: Text(
