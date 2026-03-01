@@ -19,19 +19,30 @@ class AppRoutes {
   static const String joinClassSreen = "/join_class_screen";
   static const String studentDashboard = "/student_dashboard";
   static const String scedeul = "/student_scedeul";
-  static const String profile = "/student_profile";
-  static const String attendance = "/student_attendance";
-  static const String homework = "/student_homework";
-  static const String homepage = "/student_homepage";
-  static const String result = "/student_result";
+  static const String profile="/student_profile";
+  static const String attendance="/student_attendance";
+  static const String homework="/student_homework";
+  static const String homepage="/student_homepage";
+  static const String result="/student_result";
+  static const String detail="/detailscreen";
+  static const String detailTeach="/detailteascreen";
+  static const String submitted="/submitted";
+  static const String signinStudent="/signinstudent";
+  static const String signupStudent="/signupstudent";
+  //parent
+  static const String parentDashboardScreen = "/parent_dashboard_screen";
 
-
+  static const String info="/student_info_personal";
   static String teacherDashboardScreen = "/teacher_dashboard_screen";
+  static String subject="/subject";
+  static const String changePassword="/change_password";
+  static String notifications="/notifications";
 
   static String parentFirstScreen = "/parent_first_screen";
+
   static String parentConnectStudent = "/parent_connect_student";
   static String parentListStuClass = "/parent_list_stu_class";
 
-  static String parentDashboardScreen = "/parent_dashboard_screen";
-
+  static String monthly = "/monthly_result_ranking";
+  static String commentScreen = "/comment_screen";
 }
