@@ -61,13 +61,16 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
                 ),
                 SizedBox(width: 10),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRoutes.addStudentScreen);
+                  },
                   child: Container(
                     height: 46,
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     decoration: BoxDecoration(
                       color: AppColors.primaryMain,
-                      borderRadius: BorderRadius.circular(AppNumber.radiusLarge),
+                      borderRadius:
+                          BorderRadius.circular(AppNumber.radiusMedium),
                     ),
                     child: Row(
                       children: [
@@ -131,13 +134,11 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
                   child: Bounceable(
                     onTap: () {
                       Navigator.pushNamed(
-                        context, 
-                        AppRoutes.studentDetailScreen
-                      );
+                          context, AppRoutes.studentDetailScreen);
                     },
                     child: _studentCard(
                       name: "សុម តារី",
-                      code: "ID: 2023-00${index+1}",
+                      code: "ID: 2023-00${index + 1}",
                       gender: "ប្រុស",
                       attendance: 0.68,
                     ),

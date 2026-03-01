@@ -12,6 +12,10 @@ import 'package:tamdansers_app/screens/student/menu/homework.dart';
 import 'package:tamdansers_app/screens/student/menu/profile.dart';
 import 'package:tamdansers_app/screens/student/result.dart';
 import 'package:tamdansers_app/screens/student/student_dashboard.dart';
+import 'package:tamdansers_app/screens/teacher/add_task.dart';
+import 'package:tamdansers_app/screens/teacher/add_student.dart';
+import 'package:tamdansers_app/screens/teacher/attendance_screen.dart';
+import 'package:tamdansers_app/screens/teacher/homework_screen.dart';
 import 'package:tamdansers_app/screens/teacher/link_parent.dart';
 import 'package:tamdansers_app/screens/teacher/manage_all_class.dart';
 import 'package:tamdansers_app/screens/teacher/manage_class.dart';
@@ -35,6 +39,10 @@ class PageRoutes {
     AppRoutes.studentDetailScreen: (context) => StudentDetailScreen(),
     AppRoutes.linkParentScreen: (context) => LinkParentScreen(),
     AppRoutes.scoreDetailScreen: (context) => ScoreDetailScreen(),
+    AppRoutes.teacherAttendanceScreen: (context) => AttendanceScreen(),
+    AppRoutes.teacherHomeworkScreen: (context) => HomeworkScreen(),
+    AppRoutes.addTaskScreen: (context) => AddTask(),
+    AppRoutes.addStudentScreen: (context) => AddStudent(),
     // Student routes
     AppRoutes.studentDashboard: (context) => StudentDashboard(),
     AppRoutes.profile: (context) => Profile(),

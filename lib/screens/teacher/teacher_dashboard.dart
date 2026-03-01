@@ -3,8 +3,6 @@ import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
-import 'package:tamdansers_app/screens/teacher/attendance_screen.dart';
-import 'package:tamdansers_app/screens/teacher/homework_screen.dart';
 import 'package:tamdansers_app/widget/class_card.dart';
 
 class TeacherDashboard extends StatefulWidget {
@@ -37,26 +35,17 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
           style: AppTextStyle.fontsize18,
         ),
         actions: [
-          Stack(
-            children: [
-              IconButton(
+          Padding(
+            padding: EdgeInsets.only(right: 8),
+            child: Badge(
+              smallSize: 8,
+              backgroundColor: AppColors.error,
+              child: IconButton(
                 icon: Icon(Icons.notifications_outlined,
                     color: AppColors.primaryText),
                 onPressed: () {},
               ),
-              Positioned(
-                right: 8,
-                top: 8,
-                child: Container(
-                  width: 8,
-                  height: 8,
-                  decoration: BoxDecoration(
-                    color: AppColors.error,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ],
       ),
@@ -203,10 +192,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
           Color(0xFFE3F2FD),
           AppColors.primaryMain,
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => AttendanceScreen()),
-            );
+            Navigator.pushNamed(context, AppRoutes.teacherAttendanceScreen);
           },
         ),
         _buildQuickActionItem(
@@ -215,10 +201,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
           Color(0xFFF3E5F5),
           Color(0xFF9C27B0),
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomeworkScreen()),
-            );
+            Navigator.pushNamed(context, AppRoutes.teacherHomeworkScreen);
           },
         ),
         _buildQuickActionItem(

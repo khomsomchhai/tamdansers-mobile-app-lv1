@@ -252,28 +252,24 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         children: [
           Row(
             children: [
-              Stack(
-                children: [
-                  CircleAvatar(
-                    radius: 28,
-                    backgroundImage:
-                        imagePath != null ? AssetImage(imagePath) : null,
-                    backgroundColor: status == "present"
-                        ? Color(0xFFE8F5E9)
-                        : status == "absent"
-                            ? Color(0xFFFFEBEE)
-                            : Color(0xFFFFF3E0),
-                    child: imagePath == null
-                        ? Text(
-                            name.substring(0, 2).toUpperCase(),
-                            style: AppTextStyle.fontsize18.copyWith(
-                              color: statusColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        : null,
-                  ),
-                ],
+              CircleAvatar(
+                radius: 28,
+                backgroundImage:
+                    imagePath != null ? AssetImage(imagePath) : null,
+                backgroundColor: status == "present"
+                    ? Color(0xFFE8F5E9)
+                    : status == "absent"
+                        ? Color(0xFFFFEBEE)
+                        : Color(0xFFFFF3E0),
+                child: imagePath == null
+                    ? Text(
+                        name.substring(0, 2).toUpperCase(),
+                        style: AppTextStyle.fontsize18.copyWith(
+                          color: statusColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    : null,
               ),
               SizedBox(width: 12),
               Expanded(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/routes/app_routes.dart';
 
 class HomeworkScreen extends StatefulWidget {
   const HomeworkScreen({super.key});
@@ -41,7 +42,7 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
           IconButton(
             icon:
                 Icon(Icons.add_circle, color: AppColors.primaryMain, size: 28),
-            onPressed: () {},
+            onPressed: () => Navigator.pushNamed(context, AppRoutes.addTaskScreen),
           ),
         ],
       ),

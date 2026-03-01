@@ -16,6 +16,14 @@ class StudentDashboard extends StatefulWidget {
 
 class _StudentDashboardState extends State<StudentDashboard> {
   var index = 0;
+
+  final List<Widget> _pages = [
+    Homepage(),
+    Homework(),
+    Attendance(),
+    Profile(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,14 +79,6 @@ class _StudentDashboardState extends State<StudentDashboard> {
                 label: 'ប្រវត្តិរូប'),
           ],
         ),
-        body: IndexedStack(
-          index: index,
-          children: [
-            Homepage(),
-            Homework(),
-            Attendance(),
-            Profile(),
-          ],
-        ));
+        body: _pages[index]);
   }
 }
