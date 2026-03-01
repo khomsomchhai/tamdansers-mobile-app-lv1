@@ -42,7 +42,11 @@ class AppTextStyle {
     fontSize: 20,
     fontWeight: FontWeight.w600,
   );
-
+  static final size18Primary = GoogleFonts.kantumruyPro(
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    color: AppColors.primaryMain,
+  );
   // ==================== SUBTITLES ====================
 
   // Subtitle 18px

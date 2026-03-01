@@ -18,6 +18,7 @@ class AppColors{
   static const Color success = Color(0xFF34C759);
   static const Color error = Color(0xFFFF3B30);
   static const Color link = Color(0xff007AFF);
+  static const Color neutral500 = Color(0xFFA4A4A4);
   static const Color grey = Colors.grey;
 
   static const Color transparent = Colors.transparent;

@@ -41,24 +41,42 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
             const Spacer(),
             //custom widget
             PrimaryButton(
-                label: "គ្រូបង្រៀន",
-                backgroundColor: AppColors.primaryMain,
-                foregroundColor: AppColors.white,
-                onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.loginTeacherScreen);
-                }),
+              label: "គ្រូបង្រៀន",
+              backgroundColor: AppColors.primaryMain,
+              foregroundColor: AppColors.white,
+              onPressed: () {
+                Navigator.pushNamed(
+                  context, 
+                  AppRoutes.loginScreen,
+                  arguments: "teacher"
+                );
+              }),
             const SizedBox(height: 16,),
             PrimaryButton(
-                label: "សិស្ស",
-                backgroundColor: AppColors.primaryMain,
-                foregroundColor: AppColors.white,
-                onPressed: () {}),
+              label: "សិស្ស",
+              backgroundColor: AppColors.primaryMain,
+              foregroundColor: AppColors.white,
+              onPressed: () {
+                Navigator.pushNamed(
+                  context, 
+                  AppRoutes.loginScreen,
+                  arguments: "student"
+                );
+              }
+            ),
             const SizedBox(height: 16,),
             PrimaryButton(
-                label: "អាណាព្យាបាលសិស្ស",
-                backgroundColor: AppColors.primaryMain,
-                foregroundColor: AppColors.white,
-                onPressed: () {}),
+              label: "អាណាព្យាបាលសិស្ស",
+              backgroundColor: AppColors.primaryMain,
+              foregroundColor: AppColors.white,
+              onPressed: () {
+                Navigator.pushNamed(
+                  context, 
+                  AppRoutes.loginScreen,
+                  arguments: "parent"
+                );
+              }
+            ),
             const SizedBox(height: 32,)
           ],
         ),
