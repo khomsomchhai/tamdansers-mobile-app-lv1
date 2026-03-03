@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/screens/auth/auth_option_teacher_screen.dart';
 import 'package:tamdansers_app/screens/auth/splash_screen.dart';
+import 'package:tamdansers_app/screens/parents/menu/information.dart';
+import 'package:tamdansers_app/screens/parents/menu/nothication.dart';
 import 'package:tamdansers_app/screens/parents/parent_connect_student.dart';
 import 'package:tamdansers_app/screens/parents/parent_first_screen.dart';
 import 'package:tamdansers_app/screens/parents/parent_login.dart';
@@ -54,9 +56,10 @@ class PageRoutes {
     // Parent routes
     AppRoutes.parentFirstScreen: (context) => ParentFirstScreen(),
     AppRoutes.parentConnectStudent: (context) => ParentConnectStudent(),
-    
     AppRoutes.parentDashboardScreen: (context) => ParentLogin(),
     AppRoutes.monthly: (context) => CustomScreen(),
     AppRoutes.commentScreen: (context) => CommentSignature(),
+    AppRoutes.nothication:(context)=> Nothication(),
+    AppRoutes.information:(context)=> Information()
   };
 }

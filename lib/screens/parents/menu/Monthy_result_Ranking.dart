@@ -154,21 +154,15 @@ class _CustomScreenState extends State<CustomScreen> {
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children:[
                 Text(
                   "ប៊ិន​ សុវណ្ណវង្ស",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: AppTextStyle.subtitle16.copyWith(color: AppColors.grey),
                 ),
                 SizedBox(height: 4),
                 Text(
                   "ID: STU-2023-89. ថ្នាក់ទី ១២ ក",  
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 14,
-                  ),
+                  style: AppTextStyle.body.copyWith(color: AppColors.grey),
                 ),
               ],
             ),
@@ -286,13 +280,9 @@ class _CustomScreenState extends State<CustomScreen> {
           color: AppColors.primaryMain,
           borderRadius: BorderRadius.circular(12),
         ),
-        child: const Text(
+        child: Text(
           "រក្សាទុក",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+          style: AppTextStyle.subtitle16.copyWith(color: AppColors.white),
           textAlign: TextAlign.center,
         ),
       ),

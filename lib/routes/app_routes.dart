@@ -30,17 +30,15 @@ class AppRoutes {
   static const String signupStudent="/signupstudent";
   //parent
   static const String parentDashboardScreen = "/parent_dashboard_screen";
-
   static const String info="/student_info_personal";
   static String teacherDashboardScreen = "/teacher_dashboard_screen";
   static String subject="/subject";
   static const String changePassword="/change_password";
   static String notifications="/notifications";
-
   static String parentFirstScreen = "/parent_first_screen";
-
   static String parentConnectStudent = "/parent_connect_student";
-
   static String monthly = "/monthly_result_ranking";
   static String commentScreen = "/comment_screen";
+  static String nothication = "/nothication";
+  static String information = "/information";
 }
