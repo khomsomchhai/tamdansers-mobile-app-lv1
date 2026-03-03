@@ -12,10 +12,12 @@ import 'package:tamdansers_app/repositories/user_repo.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/widget/auth_field.dart';
 import 'package:tamdansers_app/widget/button_with_icon.dart';
+import 'package:tamdansers_app/widget/custom_snackbar.dart';
 import 'package:tamdansers_app/widget/primary_button.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+  final String role;
+  const SignUpScreen({super.key, required this.role});
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -29,16 +31,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
   var cfPwdCtrl = TextEditingController();
   String gender = "male";
   var formKey = GlobalKey<FormState>();
-  var selectedRole = "";
   
+  late String selectedRole;
   @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
-    final role = ModalRoute.of(context)!.settings.arguments as String;
-    setState(() {
-      selectedRole = role;
-    });
+  void initState() {
+    super.initState();
+    selectedRole = widget.role;
   }
   
   Future<void> _register() async {
@@ -59,7 +57,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
       : await UserRepo().getUserByPhone(phone!);
       if (existingUser != null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("គណនីនេះមានរួចហើយ សូមប្រើអ៊ីម៉ែល ឬ លេខទូរស័ព្ទផ្សេង")),
+          SnackBar(
+            backgroundColor: AppColors.transparent,
+            elevation: 0,
+            margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+            content: CustomSnackbar(
+              title: "មិនអាចចុះឈ្មោះបាន!", 
+              message: "គណនីនេះមានរួចហើយ សូមប្រើអ៊ីម៉ែល ឬ លេខទូរស័ព្ទផ្សេង", 
+              icon: Icons.close, 
+              color: AppColors.error
+            )
+          ),
         );
       } else {
         var result = await UserRepo().createUser(
@@ -78,7 +86,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             AppRoutes.otpScreen,
             arguments: selectedRole
           );
-        } 
+        }
         
         // Navigator.pushNamed(
         //   context, 

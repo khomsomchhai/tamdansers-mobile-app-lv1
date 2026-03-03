@@ -3,7 +3,6 @@ import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/screens/parents/widget/parent_profile_header.dart';
-import 'package:tamdansers_app/screens/student/widget/student_has_joined_class.dart';
 
 class ParentListStuClass extends StatefulWidget {
   const ParentListStuClass({super.key});
@@ -38,7 +37,7 @@ class _ParentListStuClassState extends State<ParentListStuClass> {
           ),
           Expanded(child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: StudentHasJoinedClass(),
+            // child: StudentHasJoinedClass(userId: user['id'],),
           )),
         ],
       ),

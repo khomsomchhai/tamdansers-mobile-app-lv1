@@ -45,6 +45,18 @@ class UserRepo {
     }
     return null;
   }
+  Future<Map<String, dynamic>?> getUserById(int id) async {
+    final db = await DbHelper().initDatabase();
+    final result = await db.query(
+      "tbl_user",
+      where: "id = ?",
+      whereArgs: [id],
+    );
+    if (result.isNotEmpty) {
+      return result.first;
+    }
+    return null;
+  }
   Future<Map<String, dynamic>?> getUserByPhoneOrEmail(String identifier) async {
     final db = await DbHelper().initDatabase();
     final result = await db.query(

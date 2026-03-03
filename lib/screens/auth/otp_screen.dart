@@ -13,13 +13,15 @@ import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/widget/custom_dialog.dart';
 
 class OtpScreen extends StatefulWidget {
-  const OtpScreen({super.key});
+  final String role;
+  const OtpScreen({super.key, required this.role});
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
 }
 
 class _OtpScreenState extends State<OtpScreen> {
+  late String selectedRole;
   String currentCode = "";
   int secondRemaining = 90;
   Timer? timer;
@@ -46,6 +48,7 @@ class _OtpScreenState extends State<OtpScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    selectedRole = widget.role;
     startTimer();
   }
   @override
@@ -69,84 +72,6 @@ class _OtpScreenState extends State<OtpScreen> {
           ],
         ),
       ),
-      // bottomNavigationBar: Padding(
-      //   padding: const EdgeInsets.all(20),
-      //   child: PrimaryButton2(
-      //     label: isLoading ? "" : "បញ្ជាក់", 
-      //     backgroundColor:  AppColors.primaryMain,
-      //     foregroundColor: currentCode.length == 6 ? AppColors.white : AppColors.primaryText, 
-      //   onPressed: currentCode.length == 6
-      //     ? () async {
-      //         setState(() {
-      //           isLoading = true;
-      //         });
-      //         await Future.delayed(Duration(seconds: 2));
-      //         setState(() {
-      //           isLoading = false;
-      //         });
-      //         showDialog(
-      //           context: context, 
-      //           builder: (context) => AlertDialog(
-      //             shape: RoundedRectangleBorder(
-      //               borderRadius: BorderRadius.circular(AppNumber.radiusMedium)
-      //             ),
-      //             content: Column(
-      //               mainAxisSize: MainAxisSize.min,
-      //               children: [
-      //                 SizedBox(
-      //                   height: 150,
-      //                   child: Lottie.asset(
-      //                     AppAnimations.successful,
-      //                     repeat: false,
-      //                   ),
-      //                 ),
-      //                 SizedBox(height: 20,),
-      //                 Text(
-      //                   "សំណើរត្រូវបានដាក់ស្នើរ",
-      //                   style: AppTextStyle.sectionTitle20,
-      //                 ),
-      //                 SizedBox(height: 16,),
-      //                 Text(
-      //                   "សូមរង់ចាំការទទួលសំណើរពីសិស្ស។ អ្នកនឹងទទួលបានការជូនដំណឹងនៅពេលដែលសំណើរបស់អ្នកត្រូវបានទទួល ឬ បដិសេធ។",
-      //                   style: AppTextStyle.body,
-      //                   textAlign: TextAlign.center,
-      //                 ),
-      //               ],
-      //             ),
-      //             actions: [
-      //               SizedBox(
-      //                 width: double.infinity,
-      //                 child: ElevatedButton(
-      //                   onPressed: (){
-      //                     Navigator.pop(context);
-      //                   },
-      //                   style: ElevatedButton.styleFrom(
-      //                     backgroundColor: AppColors.primaryMain,
-      //                     shape: RoundedRectangleBorder(
-      //                       borderRadius: BorderRadius.circular(AppNumber.radiusSmall)
-      //                     )
-      //                   ),
-      //                   child: Text(
-      //                     "យល់ព្រម",
-      //                     style: AppTextStyle.buttonText16White,
-      //                   )
-      //                 ),
-      //               ),
-      //             ],
-      //           )
-      //         );
-      //       }
-      //     : null,
-      //     processIndicator: isLoading ? SizedBox(
-      //       width: 26,
-      //       height: 26,
-      //       child: CircularProgressIndicator(
-      //         color: AppColors.white,
-      //         strokeWidth: 2,
-      //       ),
-      //     ) : null,
-      //   ),
-      // ),
     );
   
   }
@@ -246,7 +171,8 @@ class _OtpScreenState extends State<OtpScreen> {
                       Navigator.pushNamedAndRemoveUntil(
                         context, 
                         AppRoutes.loginScreen, 
-                        (route) => false
+                        (route) => false,
+                        arguments: selectedRole
                       );
                     },
                   )
