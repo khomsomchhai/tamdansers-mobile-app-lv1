@@ -118,7 +118,6 @@ class _NotificationsState extends State<Notifications> {
                           style: AppTextStyle.body
                               .copyWith(fontWeight: FontWeight.bold)),
                       Spacer(),
-                      
                       CupertinoSwitch(
                         activeTrackColor: AppColors.primaryMain,
                         value: isOn[4],

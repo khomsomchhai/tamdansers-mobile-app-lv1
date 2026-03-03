@@ -1,7 +1,12 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/repositories/activity_repo.dart';
+import 'package:tamdansers_app/repositories/student_class_repo.dart';
+import 'package:tamdansers_app/screens/teacher/teacher_dashboard.dart';
 import 'package:tamdansers_app/widget/primary_button.dart';
 
 class AddStudent extends StatefulWidget {
@@ -18,6 +23,85 @@ class _AddStudentState extends State<AddStudent> {
   final TextEditingController _emailController = TextEditingController();
 
   String? _selectedGender;
+  int? _classId;
+  bool _saving = false;
+  Map<String, dynamic>? _editingStudent;
+  bool _initialized = false;
+  bool get _isEditing => _editingStudent != null;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_initialized) return;
+    _initialized = true;
+    final args = ModalRoute.of(context)?.settings.arguments;
+    if (args is Map<String, dynamic>) {
+      _editingStudent = args;
+      _firstNameController.text = args['first_name'] as String? ?? '';
+      _lastNameController.text = args['last_name'] as String? ?? '';
+      _dobController.text = args['dob'] as String? ?? '';
+      _emailController.text = args['email'] as String? ?? '';
+      _selectedGender = args['gender'] as String?;
+      _classId = args['class_id'] as int?;
+    } else {
+      _classId = args as int?;
+    }
+  }
+
+  Future<void> _save() async {
+    final firstName = _firstNameController.text.trim();
+    final lastName = _lastNameController.text.trim();
+    if (firstName.isEmpty || lastName.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('សូមបំពេញឈ្មោះ')),
+      );
+      return;
+    }
+    if (_classId == null && !_isEditing) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('មិនមានថ្នាក់ត្រូវបានជ្រើស')),
+      );
+      return;
+    }
+    setState(() => _saving = true);
+    if (_isEditing) {
+      await StudentClassRepo().updateStudent(
+        id: _editingStudent!['id'] as int,
+        firstName: firstName,
+        lastName: lastName,
+        gender: _selectedGender ?? 'ប្រុស',
+        dob: _dobController.text.trim().isEmpty
+            ? null
+            : _dobController.text.trim(),
+        email: _emailController.text.trim().isEmpty
+            ? null
+            : _emailController.text.trim(),
+      );
+    } else {
+      await StudentClassRepo().addStudent(
+        firstName: firstName,
+        lastName: lastName,
+        gender: _selectedGender ?? 'ប្រុស',
+        classId: _classId!,
+        dob: _dobController.text.trim().isEmpty
+            ? null
+            : _dobController.text.trim(),
+        email: _emailController.text.trim().isEmpty
+            ? null
+            : _emailController.text.trim(),
+      );
+      await ActivityRepo().logActivity(
+        teacherId: kTeacherId,
+        activityType: 'class',
+        title: 'សិស្សថ្មីត្រូវបានបញ្ចូល',
+        subtitle: '$firstName $lastName',
+      );
+    }
+    if (mounted) {
+      setState(() => _saving = false);
+      Navigator.pop(context);
+    }
+  }
 
   @override
   void dispose() {
@@ -43,15 +127,13 @@ class _AddStudentState extends State<AddStudent> {
           },
         ),
         title: Text(
-          'បន្ថែមសិស្ស',
+          _isEditing ? 'កែប្រែសិស្ស' : 'បន្ថែមសិស្ស',
           style: AppTextStyle.subtitle18,
         ),
         centerTitle: true,
         actions: [
           TextButton(
-            onPressed: () {
-              // Save action
-            },
+            onPressed: _saving ? null : _save,
             child: Text(
               'រក្សាទុក',
               style: AppTextStyle.bodyPrimary,
@@ -85,7 +167,7 @@ class _AddStudentState extends State<AddStudent> {
                                 height: 120,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: AppColors.grey.withOpacity(0.3),
+                                  color: AppColors.grey.withValues(alpha: 0.3),
                                 ),
                                 child: Align(
                                   alignment: Alignment.bottomRight,
@@ -156,8 +238,8 @@ class _AddStudentState extends State<AddStudent> {
                                         filled: true,
                                         fillColor: AppColors.white,
                                         border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
+                                          borderRadius: BorderRadius.circular(
+                                              AppNumber.radiusSmall),
                                           borderSide: BorderSide.none,
                                         ),
                                         contentPadding: EdgeInsets.symmetric(
@@ -183,8 +265,8 @@ class _AddStudentState extends State<AddStudent> {
                                         filled: true,
                                         fillColor: AppColors.white,
                                         border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
+                                          borderRadius: BorderRadius.circular(
+                                              AppNumber.radiusSmall),
                                           borderSide: BorderSide.none,
                                         ),
                                         contentPadding: EdgeInsets.symmetric(
@@ -216,8 +298,8 @@ class _AddStudentState extends State<AddStudent> {
                                         filled: true,
                                         fillColor: AppColors.white,
                                         border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
+                                          borderRadius: BorderRadius.circular(
+                                              AppNumber.radiusSmall),
                                           borderSide: BorderSide.none,
                                         ),
                                         contentPadding: EdgeInsets.symmetric(
@@ -256,10 +338,11 @@ class _AddStudentState extends State<AddStudent> {
                                     Container(
                                       decoration: BoxDecoration(
                                         color: AppColors.white,
-                                        borderRadius: BorderRadius.circular(8),
+                                        borderRadius: BorderRadius.circular(
+                                            AppNumber.radiusSmall),
                                         border: Border.all(
-                                          color:
-                                              AppColors.grey.withOpacity(0.3),
+                                          color: AppColors.grey
+                                              .withValues(alpha: 0.3),
                                           width: 1,
                                         ),
                                       ),
@@ -271,18 +354,18 @@ class _AddStudentState extends State<AddStudent> {
                                           filled: true,
                                           fillColor: Colors.transparent,
                                           border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8),
+                                            borderRadius: BorderRadius.circular(
+                                                AppNumber.radiusSmall),
                                             borderSide: BorderSide.none,
                                           ),
                                           enabledBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8),
+                                            borderRadius: BorderRadius.circular(
+                                                AppNumber.radiusSmall),
                                             borderSide: BorderSide.none,
                                           ),
                                           focusedBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8),
+                                            borderRadius: BorderRadius.circular(
+                                                AppNumber.radiusSmall),
                                             borderSide: BorderSide.none,
                                           ),
                                           contentPadding: EdgeInsets.symmetric(
@@ -355,7 +438,8 @@ class _AddStudentState extends State<AddStudent> {
                                   filled: true,
                                   fillColor: AppColors.white,
                                   border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                                    borderRadius: BorderRadius.circular(
+                                        AppNumber.radiusSmall),
                                     borderSide: BorderSide.none,
                                   ),
                                   contentPadding: EdgeInsets.symmetric(
@@ -382,20 +466,22 @@ class _AddStudentState extends State<AddStudent> {
               children: [
                 // Submit Button
                 PrimaryButton(
-                  label: 'បញ្ចូលព័ត៌មានសិស្ស',
+                  label: _saving
+                      ? 'កំពុងរក្សាទុក...'
+                      : _isEditing
+                          ? 'រក្សាទុកការកែប្រែ'
+                          : 'បញ្ចូលព័ត៌មានសិស្ស',
                   backgroundColor: AppColors.primaryMain,
                   foregroundColor: AppColors.backgroundLight,
                   onPressed: () {
-                    // Add student action
+                    if (!_saving) _save();
                   },
                 ),
                 SizedBox(height: AppNumber.spacingSmall),
 
                 // Link Text
                 TextButton(
-                  onPressed: () {
-                    // Navigate to another screen
-                  },
+                  onPressed: () => Navigator.pop(context),
                   child: Text(
                     'បោះបង់ការបញ្ចូល',
                     style: AppTextStyle.bodyPrimary,

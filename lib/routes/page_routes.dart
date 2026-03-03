@@ -19,16 +19,19 @@ import 'package:tamdansers_app/screens/student/menu/notification.dart';
 import 'package:tamdansers_app/screens/student/result.dart';
 import 'package:tamdansers_app/screens/student/scedeul.dart';
 import 'package:tamdansers_app/screens/student/student_dashboard.dart';
-import 'package:tamdansers_app/screens/teacher/add_task.dart';
-import 'package:tamdansers_app/screens/teacher/add_student.dart';
-import 'package:tamdansers_app/screens/teacher/attendance_screen.dart';
-import 'package:tamdansers_app/screens/teacher/homework_screen.dart';
 import 'package:tamdansers_app/screens/student/student_first_screen.dart';
 import 'package:tamdansers_app/screens/student/subjects.dart';
+import 'package:tamdansers_app/screens/teacher/add_student.dart';
+import 'package:tamdansers_app/screens/teacher/add_task.dart';
+import 'package:tamdansers_app/screens/teacher/attendance_screen.dart';
+import 'package:tamdansers_app/screens/teacher/homework_screen.dart';
 import 'package:tamdansers_app/screens/teacher/link_parent.dart';
 import 'package:tamdansers_app/screens/teacher/manage_all_class.dart';
+import 'package:tamdansers_app/screens/teacher/manage_class.dart';
+import 'package:tamdansers_app/screens/teacher/manage_student_screen.dart';
 import 'package:tamdansers_app/screens/teacher/score_detail_screen.dart';
-import 'package:tamdansers_app/screens/teacher/teacher_dashboard.dart';
+import 'package:tamdansers_app/screens/teacher/student_detail_screen.dart';
+import 'package:tamdansers_app/screens/teacher/teacher_main_screen.dart';
 
 import '../screens/parents/menu/Monthy_result_Ranking.dart';
 import '../screens/parents/menu/comment_signature .dart';
@@ -45,8 +48,13 @@ class PageRoutes {
     AppRoutes.authOptionTeacherScreen: (context) => AuthOptionTeacherScreen(),
     AppRoutes.loginScreen: (context) => LoginScreen(),
     AppRoutes.signUpScreen: (context) => SignUpScreen(),
-    AppRoutes.teacherDashboard: (context) => TeacherDashboard(),
+    AppRoutes.teacherDashboard: (context) => TeacherMainScreen(),
     AppRoutes.manageAllClass: (context) => ManageAllClass(),
+    AppRoutes.manageClass: (context) => ManageClass(),
+    AppRoutes.manageStudentScreen: (context) => ManageStudentScreen(
+          classId: ModalRoute.of(context)!.settings.arguments as int? ?? 0,
+        ),
+    AppRoutes.studentDetailScreen: (context) => StudentDetailScreen(),
     AppRoutes.linkParentScreen: (context) => LinkParentScreen(),
     AppRoutes.scoreDetailScreen: (context) => ScoreDetailScreen(),
     AppRoutes.teacherAttendanceScreen: (context) => AttendanceScreen(),
@@ -61,19 +69,19 @@ class PageRoutes {
     AppRoutes.homework: (context) => Homework(),
     AppRoutes.detail: (context) => Deatilscreen(),
     AppRoutes.detailTeach: (context) => DeatilTeacher(),
-    
+
     AppRoutes.homepage: (context) => Homepage(),
     AppRoutes.scedeul: (context) => Scedeul(),
     AppRoutes.result: (context) => Result(),
     AppRoutes.changePassword: (context) => ChangePw(),
-    AppRoutes.info:(contex)=>InfoPersonal(),
+    AppRoutes.info: (contex) => InfoPersonal(),
     AppRoutes.subject: (context) => Subjects(),
-    AppRoutes.notifications:(contex)=>Notifications(),
+    AppRoutes.notifications: (contex) => Notifications(),
     // Parent routes
     AppRoutes.parentFirstScreen: (context) => ParentFirstScreen(),
     AppRoutes.parentConnectStudent: (context) => ParentConnectStudent(),
     AppRoutes.parentListStuClass: (context) => ParentListStuClass(),
-    
+
     AppRoutes.parentDashboardScreen: (context) => ParentLogin(),
     AppRoutes.monthly: (context) => CustomScreen(),
     AppRoutes.commentScreen: (context) => CommentSignature(),

@@ -1,6 +1,12 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/repositories/activity_repo.dart';
+import 'package:tamdansers_app/repositories/homework_repo.dart';
+import 'package:tamdansers_app/screens/teacher/teacher_dashboard.dart';
 import 'package:tamdansers_app/widget/primary_button.dart';
 
 class AddTask extends StatefulWidget {
@@ -17,6 +23,114 @@ class _AddTaskState extends State<AddTask> {
   bool _notifyParents = false;
   DateTime? _dueDate;
   TimeOfDay? _dueTime;
+  int? _classId;
+  bool _saving = false;
+
+  // Edit mode
+  Map<String, dynamic>? _editingHw;
+  bool get _isEditing => _editingHw != null;
+  bool _initialized = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_initialized) return;
+    _initialized = true;
+    final args = ModalRoute.of(context)?.settings.arguments;
+    if (args is Map<String, dynamic>) {
+      // Edit mode — pre-fill from existing homework map
+      _editingHw = args;
+      _classId = args['class_id'] as int?;
+      _titleController.text = args['title'] as String? ?? '';
+      _instructionController.text = args['instructions'] as String? ?? '';
+      final subj = args['subject'] as String?;
+      if (subj != null && _subjects.contains(subj)) _selectedSubject = subj;
+      final deadline = args['deadline'] as String?;
+      if (deadline != null && deadline.isNotEmpty) {
+        final parts = deadline.split(' ');
+        final dateParts = parts[0].split('-');
+        if (dateParts.length == 3) {
+          _dueDate = DateTime(
+            int.parse(dateParts[0]),
+            int.parse(dateParts[1]),
+            int.parse(dateParts[2]),
+          );
+        }
+        if (parts.length > 1) {
+          final timeParts = parts[1].split(':');
+          if (timeParts.length == 2) {
+            _dueTime = TimeOfDay(
+              hour: int.parse(timeParts[0]),
+              minute: int.parse(timeParts[1]),
+            );
+          }
+        }
+      }
+    } else {
+      _classId = args as int?;
+    }
+  }
+
+  Future<void> _saveHomework(String status) async {
+    final title = _titleController.text.trim();
+    if (title.isEmpty) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('សូមបំពេញចម្ណងជើរ')));
+      return;
+    }
+    setState(() => _saving = true);
+    String? deadlineStr;
+    if (_dueDate != null) {
+      deadlineStr =
+          '${_dueDate!.year}-${_dueDate!.month.toString().padLeft(2, '0')}-${_dueDate!.day.toString().padLeft(2, '0')}';
+      if (_dueTime != null) {
+        deadlineStr +=
+            ' ${_dueTime!.hour.toString().padLeft(2, '0')}:${_dueTime!.minute.toString().padLeft(2, '0')}';
+      }
+    }
+    if (_isEditing) {
+      await HomeworkRepo().updateHomework(
+        id: _editingHw!['id'] as int,
+        title: title,
+        subject: _selectedSubject ?? '',
+        instructions: _instructionController.text.trim().isEmpty
+            ? null
+            : _instructionController.text.trim(),
+        deadline: deadlineStr,
+        status: status,
+      );
+      await ActivityRepo().logActivity(
+        teacherId: kTeacherId,
+        activityType: 'homework',
+        title: 'កិច្ចការត្រូវបានកែប្រែ',
+        subtitle: title,
+      );
+    } else {
+      await HomeworkRepo().createHomework(
+        title: title,
+        subject: _selectedSubject ?? '',
+        classId: _classId ?? 0,
+        teacherId: kTeacherId,
+        instructions: _instructionController.text.trim().isEmpty
+            ? null
+            : _instructionController.text.trim(),
+        deadline: deadlineStr,
+        status: status,
+      );
+      await ActivityRepo().logActivity(
+        teacherId: kTeacherId,
+        activityType: 'homework',
+        title: status == 'active'
+            ? 'កិច្ចការថ្មីត្រូវបានបង្កើត'
+            : 'សេចក្តីព្រាងត្រូវបានរក្សាទុក',
+        subtitle: title,
+      );
+    }
+    if (mounted) {
+      setState(() => _saving = false);
+      Navigator.pop(context, true);
+    }
+  }
 
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _instructionController = TextEditingController();
@@ -80,18 +194,19 @@ class _AddTaskState extends State<AddTask> {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          'បង្កើតកិច្ចការថ្មី',
+          _isEditing ? 'កែប្រែកិច្ចការ' : 'បង្កើតកិច្ចការថ្មី',
           style: AppTextStyle.fontsize18,
         ),
         centerTitle: true,
         actions: [
-          TextButton(
-            onPressed: () {},
-            child: Text(
-              'សេចក្តីព្រាង',
-              style: AppTextStyle.buttonText15Primary,
+          if (!_isEditing)
+            TextButton(
+              onPressed: _saving ? null : () => _saveHomework('draft'),
+              child: Text(
+                'សេចក្តីព្រាង',
+                style: AppTextStyle.buttonText15Primary,
+              ),
             ),
-          ),
         ],
       ),
       body: Column(
@@ -104,7 +219,9 @@ class _AddTaskState extends State<AddTask> {
                 children: [
                   // Header
                   Text(
-                    'តើអ្នកចង់ដាក់កិច្ចការអ្វីថ្ងៃនេះ?',
+                    _isEditing
+                        ? 'កែប្រែព័ត៌មានកិច្ចការ'
+                        : 'តើអ្នកចង់ដាក់កិច្ចការអ្វីថ្ងៃនេះ?',
                     style: AppTextStyle.sectionTitle20.copyWith(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -112,7 +229,9 @@ class _AddTaskState extends State<AddTask> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'បង្កើតកិច្ចការថ្មីសម្រាប់សិស្សរបស់អ្នក',
+                    _isEditing
+                        ? 'កែប្រែ ឬផ្លាស់ប្ដូរព័ត៌មានកិច្ចការ'
+                        : 'បង្កើតកិច្ចការថ្មីសម្រាប់សិស្សរបស់អ្នក',
                     style: AppTextStyle.body14.copyWith(
                       color: AppColors.primaryMain,
                     ),
@@ -195,17 +314,23 @@ class _AddTaskState extends State<AddTask> {
               color: AppColors.white,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.06),
+                  color: Colors.black.withValues(alpha: 0.06),
                   blurRadius: 10,
                   offset: const Offset(0, -4),
                 ),
               ],
             ),
             child: PrimaryButton(
-              label: 'បញ្ជូនកិច្ចការ',
+              label: _saving
+                  ? 'កំពុងរក្សាទុក...'
+                  : _isEditing
+                      ? 'រក្សាទុកការកែប្រែ'
+                      : 'បញ្ចូលកិច្ចការ',
               backgroundColor: AppColors.primaryMain,
               foregroundColor: AppColors.white,
-              onPressed: () {},
+              onPressed: () {
+                if (!_saving) _saveHomework('active');
+              },
             ),
           ),
         ],
@@ -218,42 +343,13 @@ class _AddTaskState extends State<AddTask> {
       height: 44,
       decoration: BoxDecoration(
         color: const Color(0xFFF0F0F5),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
       ),
       padding: const EdgeInsets.all(4),
-      child: Stack(
+      child: Row(
         children: [
-          // Sliding pill
-          AnimatedAlign(
-            alignment: _selectedTab == 0
-                ? Alignment.centerLeft
-                : Alignment.centerRight,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-            child: FractionallySizedBox(
-              widthFactor: 0.5,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.09),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          // Labels on top of pill
-          Row(
-            children: [
-              _buildTabLabel(0, 'កិច្ចការផ្ទះ'),
-              _buildTabLabel(1, 'ការប្រឡងខ្លីៗ'),
-            ],
-          ),
+          _buildTabLabel(0, 'កិច្ចការផ្ទះ'),
+          _buildTabLabel(1, 'ការប្រឡងខ្លីៗ'),
         ],
       ),
     );
@@ -265,17 +361,33 @@ class _AddTaskState extends State<AddTask> {
       child: GestureDetector(
         onTap: () => setState(() => _selectedTab = index),
         behavior: HitTestBehavior.opaque,
-        child: Center(
-          child: AnimatedDefaultTextStyle(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-            style: isSelected
-                ? AppTextStyle.body14.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.primaryText,
-                  )
-                : AppTextStyle.caption14Secondary,
-            child: Text(label),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          decoration: BoxDecoration(
+            color: isSelected ? AppColors.white : Colors.transparent,
+            borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
+            boxShadow: isSelected
+                ? [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.09),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ]
+                : [],
+          ),
+          child: Center(
+            child: AnimatedDefaultTextStyle(
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeInOut,
+              style: isSelected
+                  ? AppTextStyle.body14.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.primaryText,
+                    )
+                  : AppTextStyle.caption14Secondary,
+              child: Text(label),
+            ),
           ),
         ),
       ),
@@ -293,7 +405,7 @@ class _AddTaskState extends State<AddTask> {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
         border: Border.all(color: const Color(0xFFE5E5EA)),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -330,7 +442,7 @@ class _AddTaskState extends State<AddTask> {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
         border: Border.all(color: const Color(0xFFE5E5EA)),
       ),
       child: TextField(
@@ -354,7 +466,7 @@ class _AddTaskState extends State<AddTask> {
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
           border: Border.all(color: const Color(0xFFE5E5EA)),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -391,7 +503,7 @@ class _AddTaskState extends State<AddTask> {
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: const Color(0xFFF0F0F5),
-                borderRadius: BorderRadius.circular(50),
+                borderRadius: BorderRadius.circular(AppNumber.radiusPill),
               ),
               child: const Icon(Icons.attach_file_rounded,
                   color: AppColors.secondaryText, size: 22),
@@ -418,7 +530,7 @@ class _AddTaskState extends State<AddTask> {
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
         border: Border.all(color: const Color(0xFFE5E5EA)),
       ),
       child: Row(
@@ -427,7 +539,7 @@ class _AddTaskState extends State<AddTask> {
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: iconBgColor,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
             ),
             child: Icon(icon, color: AppColors.white, size: 22),
           ),

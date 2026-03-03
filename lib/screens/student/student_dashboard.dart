@@ -15,14 +15,6 @@ class StudentDashboard extends StatefulWidget {
 
 class _StudentDashboardState extends State<StudentDashboard> {
   var index = 0;
-
-  final List<Widget> _pages = [
-    Homepage(),
-    Homework(),
-    Attendance(),
-    Profile(),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +32,10 @@ class _StudentDashboardState extends State<StudentDashboard> {
         unselectedLabelStyle: AppTextStyle.body,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home,size: 28,),
+            icon: Icon(
+              Icons.home,
+              size: 28,
+            ),
             label: 'ទំព័រដើម',
           ),
           BottomNavigationBarItem(
@@ -48,7 +43,11 @@ class _StudentDashboardState extends State<StudentDashboard> {
           BottomNavigationBarItem(
               icon: Icon(Icons.assignment), label: "វត្តមាន"),
           BottomNavigationBarItem(
-              icon: Icon(Icons.person,size: 30,), label: 'ប្រវត្តិរូប'),
+              icon: Icon(
+                Icons.person,
+                size: 30,
+              ),
+              label: 'ប្រវត្តិរូប'),
         ],
       ),
       body: IndexedStack(
@@ -59,8 +58,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
           Attendance(),
           Profile(),
         ],
-      
-    ),
+      ),
     );
   }
 }

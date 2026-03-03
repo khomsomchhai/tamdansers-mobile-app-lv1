@@ -18,7 +18,10 @@ class _ParentListStuClassState extends State<ParentListStuClass> {
     return Scaffold(
       body: Column(
         children: [
-          ParentProfileHeader(name: "Piseth", gender: "male",),
+          ParentProfileHeader(
+            name: "Piseth",
+            gender: "male",
+          ),
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
             child: Row(
@@ -28,15 +31,15 @@ class _ParentListStuClassState extends State<ParentListStuClass> {
                   size: AppNumber.iconLarge,
                   color: AppColors.primaryText,
                 ),
-                SizedBox(width: 8,),
-                Text(
-                  "គណនីសិស្ស",
-                  style: AppTextStyle.subtitle18
+                SizedBox(
+                  width: 8,
                 ),
+                Text("គណនីសិស្ស", style: AppTextStyle.subtitle18),
               ],
             ),
           ),
-          Expanded(child: Padding(
+          Expanded(
+              child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: StudentHasJoinedClass(),
           )),

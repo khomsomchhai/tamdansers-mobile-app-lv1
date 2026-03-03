@@ -49,7 +49,8 @@ class _DeatilTeacherState extends State<DeatilTeacher> {
       titleAppBar = (rawArgs["title"] ?? "មុខវិជ្ជា").toString();
     }
 
-    final lessonsToShow = _showAllLessons ? allLessons : allLessons.take(2).toList();
+    final lessonsToShow =
+        _showAllLessons ? allLessons : allLessons.take(2).toList();
 
     final bool canShowMore = allLessons.length > 2;
 
@@ -193,7 +194,7 @@ class _DeatilTeacherState extends State<DeatilTeacher> {
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children:  [
+                      children: [
                         Text(
                           "មធ្យមភាគ",
                           style: AppTextStyle.caption12Primary,
@@ -214,7 +215,7 @@ class _DeatilTeacherState extends State<DeatilTeacher> {
                     const SizedBox(width: 14),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children:  [
+                      children: [
                         Text(
                           "វត្តមាន",
                           style: AppTextStyle.caption12Primary,
@@ -353,7 +354,8 @@ class _DeatilTeacherState extends State<DeatilTeacher> {
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: const Center(
-                  child: Icon(Icons.menu_book_rounded, color: Colors.red, size: 22),
+                  child: Icon(Icons.menu_book_rounded,
+                      color: Colors.red, size: 22),
                 ),
               ),
               const SizedBox(width: 14),

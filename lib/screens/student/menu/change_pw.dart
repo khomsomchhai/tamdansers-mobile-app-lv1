@@ -89,8 +89,7 @@ class _BuilTextfieldState extends State<BuilTextfield> {
               prefixIcon: Icon(widget.leadingIcon),
               suffixIcon: Icon(widget.trailingIcon),
               hintText: widget.hint,
-              hintStyle: AppTextStyle.body
-            ),
+              hintStyle: AppTextStyle.body),
         )
       ],
     );

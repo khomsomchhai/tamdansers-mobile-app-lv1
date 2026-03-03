@@ -27,24 +27,19 @@ class _ParentFirstScreenState extends State<ParentFirstScreen> {
     return Scaffold(
       body: Column(
         children: [
-          ParentProfileHeader(name: "Piseth", gender: "male",),
-          Expanded(
-            child: hasData 
-            ? ParentHasData()
-            : ParentEmptyData()
-          )
+          ParentProfileHeader(
+            name: "Piseth",
+            gender: "male",
+          ),
+          Expanded(child: hasData ? ParentHasData() : ParentEmptyData())
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          Navigator.pushNamed(
-            context, 
-            AppRoutes.parentConnectStudent
-          );
+        onPressed: () {
+          Navigator.pushNamed(context, AppRoutes.parentConnectStudent);
         },
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppNumber.radiusMedium)
-        ),
+            borderRadius: BorderRadius.circular(AppNumber.radiusMedium)),
         backgroundColor: AppColors.primaryMain,
         child: Icon(
           Icons.add,

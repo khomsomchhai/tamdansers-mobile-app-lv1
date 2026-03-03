@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_images.dart';
+import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 
@@ -46,23 +47,22 @@ class StudentDetailScreen extends StatelessWidget {
       children: [
         CircleAvatar(
           radius: 50,
-          backgroundColor: AppColors.primaryMain.withOpacity(0.1),
+          backgroundColor: AppColors.primaryMain.withValues(alpha: 0.1),
           child: Image.asset(AppImages.studentMale2, width: 70),
         ),
         const SizedBox(height: 12),
         Text("សុខា ចាន់",
             style: AppTextStyle.sectionTitle20
                 .copyWith(fontWeight: FontWeight.bold)),
-        Text("ID: 2023-001",
-            style: AppTextStyle.body.copyWith(color: AppColors.secondaryText)),
+        Text("ID: 2023-001", style: AppTextStyle.bodySecondary),
         const SizedBox(height: 12),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _tag("ថ្នាក់ទី ៥A", AppColors.primaryMain.withOpacity(0.1),
+            _tag("ថ្នាកតិ ៥A", AppColors.primaryMain.withValues(alpha: 0.1),
                 AppColors.primaryMain),
             const SizedBox(width: 8),
-            _tag("កំពុងសិក្សា", AppColors.success.withOpacity(0.1),
+            _tag("កំពុងសិក្សា", AppColors.success.withValues(alpha: 0.1),
                 AppColors.success),
           ],
         )
@@ -127,13 +127,11 @@ class StudentDetailScreen extends StatelessWidget {
               },
               icon: const Icon(Icons.person_add_alt_1_rounded,
                   color: AppColors.white, size: 20),
-              label: Text("ភ្ជាប់អាណាព្យាបាល",
-                  style: AppTextStyle.body.copyWith(
-                      color: AppColors.white, fontWeight: FontWeight.bold)),
+              label: Text("ភ្ជាប់អាណាព្យាបាល", style: AppTextStyle.bodyWhite),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryMain,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(26)),
+                    borderRadius: BorderRadius.circular(AppNumber.radiusPill)),
                 elevation: 0,
               ),
             ),
@@ -186,10 +184,7 @@ class StudentDetailScreen extends StatelessWidget {
                 },
                 child: Text(
                   "មើលទាំងអស់",
-                  style: AppTextStyle.body.copyWith(
-                    color: AppColors.primaryMain,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: AppTextStyle.bodyPrimary,
                 ))
           ],
         ),
@@ -197,7 +192,7 @@ class StudentDetailScreen extends StatelessWidget {
         _buildSubjectItem("ភាសាខ្មែរ", "95", "ល្អណាស់", AppColors.primaryMain),
         _buildSubjectItem("គណិតវិទ្យា", "98", "ល្អណាស់", AppColors.primaryMain),
         _buildSubjectItem("ប្រវត្តិវិទ្យា", "76", "ល្អ", AppColors.purple),
-],
+      ],
     );
   }
 
@@ -230,9 +225,11 @@ class StudentDetailScreen extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(26),
+        borderRadius: BorderRadius.circular(AppNumber.radiusPill),
         boxShadow: [
-          BoxShadow(color: AppColors.primaryText.withOpacity(0.04), blurRadius: 10)
+          BoxShadow(
+              color: AppColors.primaryText.withValues(alpha: 0.04),
+              blurRadius: 10)
         ],
       ),
       child: child,
@@ -244,8 +241,7 @@ class StudentDetailScreen extends StatelessWidget {
       children: [
         Icon(icon, color: AppColors.primaryMain, size: 20),
         const SizedBox(width: 8),
-        Text(label,
-            style: AppTextStyle.body.copyWith(fontWeight: FontWeight.bold)),
+        Text(label, style: AppTextStyle.subtitle16),
       ],
     );
   }
@@ -254,10 +250,8 @@ class StudentDetailScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label,
-            style: AppTextStyle.body.copyWith(color: AppColors.secondaryText)),
-        Text(value,
-            style: AppTextStyle.body.copyWith(fontWeight: FontWeight.bold)),
+        Text(label, style: AppTextStyle.bodySecondary),
+        Text(value, style: AppTextStyle.subtitle16),
       ],
     );
   }
@@ -265,11 +259,8 @@ class StudentDetailScreen extends StatelessWidget {
   Widget _statItem(String label, String value) {
     return Column(
       children: [
-        Text(label,
-            style: AppTextStyle.body
-                .copyWith(fontSize: 12, color: AppColors.secondaryText)),
-        Text(value,
-            style: AppTextStyle.body.copyWith(fontWeight: FontWeight.bold)),
+        Text(label, style: AppTextStyle.caption12Secondary),
+        Text(value, style: AppTextStyle.subtitle16),
       ],
     );
   }
@@ -277,8 +268,9 @@ class StudentDetailScreen extends StatelessWidget {
   Widget _tag(String text, Color bg, Color textCol) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-      decoration:
-          BoxDecoration(color: bg, borderRadius: BorderRadius.circular(10)),
+      decoration: BoxDecoration(
+          color: bg,
+          borderRadius: BorderRadius.circular(AppNumber.radiusSmall)),
       child: Text(text,
           style: AppTextStyle.body.copyWith(
               color: textCol, fontSize: 12, fontWeight: FontWeight.bold)),
@@ -288,19 +280,20 @@ class StudentDetailScreen extends StatelessWidget {
   Widget _circleIcon(IconData icon, Color color) {
     return Container(
       padding: const EdgeInsets.all(8),
-      decoration:
-          BoxDecoration(color: color.withOpacity(0.1), shape: BoxShape.circle),
+      decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.1), shape: BoxShape.circle),
       child: Icon(icon, color: color, size: 20),
     );
   }
 
-  Widget _buildSubjectItem(String title, String score, String status, Color themeColor) {
+  Widget _buildSubjectItem(
+      String title, String score, String status, Color themeColor) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(AppNumber.radiusPill),
       ),
       child: Row(
         children: [
@@ -308,14 +301,12 @@ class StudentDetailScreen extends StatelessWidget {
             width: 50,
             height: 50,
             decoration: BoxDecoration(
-              color: themeColor.withOpacity(0.1), 
-              borderRadius: BorderRadius.circular(15)
-            ),
+                color: themeColor.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(AppNumber.radiusLarge)),
             child: Center(
-              child: Text(
-                title[0], 
-                style: AppTextStyle.sectionTitle20.copyWith(color: themeColor)
-              ),
+              child: Text(title[0],
+                  style:
+                      AppTextStyle.sectionTitle20.copyWith(color: themeColor)),
             ),
           ),
           const SizedBox(width: 16),
@@ -330,20 +321,17 @@ class StudentDetailScreen extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(
-                score, 
-                style: AppTextStyle.sectionTitle20.copyWith(color: themeColor, fontWeight: FontWeight.bold)
-              ),
+              Text(score,
+                  style: AppTextStyle.sectionTitle20.copyWith(
+                      color: themeColor, fontWeight: FontWeight.bold)),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
-                  color: AppColors.success.withOpacity(0.1), 
-                  borderRadius: BorderRadius.circular(8)
-                ),
-                child: Text(
-                  status, 
-                  style: AppTextStyle.caption12Secondary.copyWith(color: AppColors.success, fontWeight: FontWeight.bold)
-                ),
+                    color: AppColors.success.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(AppNumber.radiusSmall)),
+                child: Text(status,
+                    style: AppTextStyle.caption12Secondary.copyWith(
+                        color: AppColors.success, fontWeight: FontWeight.bold)),
               ),
             ],
           ),

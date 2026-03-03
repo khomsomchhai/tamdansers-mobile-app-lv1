@@ -44,7 +44,7 @@ class _HomepageState extends State<Homepage> {
   AppBar _buil_appbar() {
     return AppBar(
       leading: Container(
-        margin: EdgeInsets.only(left: 16),
+          margin: EdgeInsets.only(left: 16),
           decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
@@ -52,7 +52,7 @@ class _HomepageState extends State<Homepage> {
                 width: 2.0,
               )),
           child: CircleAvatar(
-            child: SvgPicture.asset("assets/images/app_logo_blue.svg"))),
+              child: SvgPicture.asset("assets/images/app_logo_blue.svg"))),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -60,7 +60,8 @@ class _HomepageState extends State<Homepage> {
             'Run Limhong',
             style: AppTextStyle.sectionTitle20,
           ),
-          Text('ID: 123456789', style: AppTextStyle.body.copyWith(color: AppColors.secondaryText))
+          Text('ID: 123456789',
+              style: AppTextStyle.body.copyWith(color: AppColors.secondaryText))
         ],
       ),
       actions: [
@@ -133,7 +134,9 @@ class _HomeworkState extends State<_Homework> {
                 child: Icon(Icons.calculate_outlined,
                     size: 40, color: AppColors.primary400),
               ),
-              title: Text('គណិតវិទ្យា', style: AppTextStyle.body.copyWith(fontWeight: FontWeight.bold)),
+              title: Text('គណិតវិទ្យា',
+                  style:
+                      AppTextStyle.body.copyWith(fontWeight: FontWeight.bold)),
               subtitle: Text(
                 '11-1-2026',
                 style: AppTextStyle.body,
@@ -162,9 +165,7 @@ class _Classes extends StatelessWidget {
             Text('ថ្នាក់បន្ទាប់', style: AppTextStyle.fontsize18),
             Spacer(),
             TextButton(
-              onPressed: () {
-                
-              },
+              onPressed: () {},
               child: Text('មើលទាំងអស់',
                   style: AppTextStyle.hintText.copyWith(color: AppColors.link)),
             )
@@ -190,7 +191,9 @@ class _Classes extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('គណិតវិទ្យា', style: AppTextStyle.body.copyWith(fontWeight: FontWeight.bold)),
+                  Text('គណិតវិទ្យា',
+                      style: AppTextStyle.body
+                          .copyWith(fontWeight: FontWeight.bold)),
                   Text(
                     'គ្រូបង្រៀន​: លោក សុខា',
                     style: AppTextStyle.hint15,
@@ -219,7 +222,7 @@ class _GridInfo extends StatelessWidget {
           crossAxisSpacing: 12,
         ),
         itemBuilder: (context, index) {
-          final item=items[index];
+          final item = items[index];
           return GestureDetector(
             onTap: () {
               Navigator.pushNamed(context, item.route);

@@ -32,8 +32,10 @@ class AppTextStyle {
   );
   static final fontsize18 =
       GoogleFonts.kantumruyPro(fontSize: 18, fontWeight: FontWeight.w600);
-  static final size18 =
-      GoogleFonts.kantumruyPro(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.backgroundLight);
+  static final size18 = GoogleFonts.kantumruyPro(
+      fontSize: 18,
+      fontWeight: FontWeight.w600,
+      color: AppColors.backgroundLight);
   static final body =
       GoogleFonts.kantumruyPro(fontSize: 16, fontWeight: FontWeight.w400);
   static final hintText1 = GoogleFonts.kantumruyPro(
@@ -73,7 +75,6 @@ class AppTextStyle {
     fontSize: 18,
     fontWeight: FontWeight.w600,
   );
-
 
   // Subtitle 16px
   static final subtitle16 = GoogleFonts.kantumruyPro(
@@ -186,8 +187,6 @@ class AppTextStyle {
     fontWeight: FontWeight.w600,
     color: AppColors.white,
   );
-
-
 
   // ==================== HINTS ====================
 

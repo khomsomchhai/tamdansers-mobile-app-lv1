@@ -15,7 +15,11 @@ class _CommentSignatureState extends State<CommentSignature> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("ការបញ្ជាក់ទទួល",style: AppTextStyle.screenTitle24Main.copyWith(color: AppColors.primaryText),),
+        title: Text(
+          "ការបញ្ជាក់ទទួល",
+          style: AppTextStyle.screenTitle24Main
+              .copyWith(color: AppColors.primaryText),
+        ),
         centerTitle: true,
         backgroundColor: AppColors.white,
       ),
@@ -37,6 +41,7 @@ class _CommentSignatureState extends State<CommentSignature> {
       ),
     );
   }
+
   Widget _studentCard() {
     return Container(
       decoration: BoxDecoration(
@@ -72,7 +77,7 @@ class _CommentSignatureState extends State<CommentSignature> {
                 ),
                 SizedBox(height: 4),
                 Text(
-                  "ID: STU-2023-89. ថ្នាក់ទី ១២ ក",  
+                  "ID: STU-2023-89. ថ្នាក់ទី ១២ ក",
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 14,
@@ -85,6 +90,7 @@ class _CommentSignatureState extends State<CommentSignature> {
       ),
     );
   }
+
   Widget _commentCard() {
     return Container(
       padding: const EdgeInsets.all(20.0),
@@ -109,19 +115,20 @@ class _CommentSignatureState extends State<CommentSignature> {
               borderRadius: BorderRadius.circular(20),
             ),
             child: TextField(
-              maxLines: 6, 
+              maxLines: 6,
               decoration: InputDecoration(
-                hintText: 'សរសេរការឆ្លើយតប ឬសំណួរ',
-                hintStyle: AppTextStyle.subtitle16.copyWith(color: Colors.grey),
-                contentPadding: EdgeInsets.all(15),
-                border: InputBorder.none
-              ),
+                  hintText: 'សរសេរការឆ្លើយតប ឬសំណួរ',
+                  hintStyle:
+                      AppTextStyle.subtitle16.copyWith(color: Colors.grey),
+                  contentPadding: EdgeInsets.all(15),
+                  border: InputBorder.none),
             ),
           ),
         ],
       ),
     );
   }
+
   Widget _signatureCard() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,7 +142,7 @@ class _CommentSignatureState extends State<CommentSignature> {
           ),
         ),
         const SizedBox(height: 8),
-        
+
         // Sub-header Text
         const Text(
           'សូមចុះឈ្មោះក្នុងប្រអប់ខាងក្រោម ដើម្បីទទួលស្គាល់បង្កាន់ដៃ។',
@@ -145,7 +152,7 @@ class _CommentSignatureState extends State<CommentSignature> {
           ),
         ),
         const SizedBox(height: 20),
-        
+
         // Dotted Signature Box
         DottedBorder(
           color: Colors.grey.shade400,
@@ -173,7 +180,7 @@ class _CommentSignatureState extends State<CommentSignature> {
                     ),
                   ),
                 ),
-                
+
                 // Delete/Clear Icon
                 Positioned(
                   top: 15,
@@ -191,9 +198,9 @@ class _CommentSignatureState extends State<CommentSignature> {
       ],
     );
   }
+
   Widget _submitButton() {
     return ElevatedButton(
-      
       onPressed: () {
         // Handle submit action
       },

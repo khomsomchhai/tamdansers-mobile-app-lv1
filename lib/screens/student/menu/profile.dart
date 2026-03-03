@@ -1,9 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/routes/app_routes.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -78,11 +81,8 @@ class _ProfileState extends State<Profile> {
           child: Column(
             children: [
               const SizedBox(height: 20),
-
               ImageProfile(),
-
               const SizedBox(height: 60),
-
               ProfileMenu(
                 icon: Icons.person,
                 iconBgColor: AppColors.primaryBg,
@@ -121,7 +121,39 @@ class _ProfileState extends State<Profile> {
                 titleColor: AppColors.error,
                 center: true,
                 BgColor: AppColors.errorBG,
-                onTap: () {},
+                onTap: () async {
+                  final ok = await showDialog<bool>(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      title: const Text('ចាកចេញ?'),
+                      content:
+                          const Text('តើអ្នកពិតជាចង់ចាកចេញពីគណនីនេះមែនទេ?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(ctx, false),
+                          child: const Text('បោះបង់'),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.pop(ctx, true),
+                          child: Text('ចាកចេញ',
+                              style: const TextStyle(color: Colors.red)),
+                        ),
+                      ],
+                    ),
+                  );
+                  if (ok == true && context.mounted) {
+                    final pref = await SharedPreferences.getInstance();
+                    await pref.setBool('isLogin', false);
+                    await pref.remove('role');
+                    if (context.mounted) {
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        AppRoutes.roleSelectionScreen,
+                        (route) => false,
+                      );
+                    }
+                  }
+                },
               ),
             ],
           ),
@@ -212,11 +244,9 @@ class _ImageProfileState extends State<ImageProfile> {
                     : null,
               ),
               child: imagePath.isEmpty
-                  ? const Icon(Icons.person,
-                      size: 60, color: Colors.grey)
+                  ? const Icon(Icons.person, size: 60, color: Colors.grey)
                   : null,
             ),
-
             Material(
               color: AppColors.primary300,
               shape: const CircleBorder(),
@@ -244,7 +274,6 @@ class _ImageProfileState extends State<ImageProfile> {
   }
 }
 
-
 class ProfileMenu extends StatelessWidget {
   final IconData icon;
   final Color? iconBgColor;
@@ -265,8 +294,7 @@ class ProfileMenu extends StatelessWidget {
       this.showChevron = true,
       this.center = false,
       this.titleColor,
-      this.BgColor
-      });
+      this.BgColor});
 
   @override
   Widget build(BuildContext context) {
@@ -275,7 +303,7 @@ class ProfileMenu extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: BgColor?? AppColors.white,
+          color: BgColor ?? AppColors.white,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
