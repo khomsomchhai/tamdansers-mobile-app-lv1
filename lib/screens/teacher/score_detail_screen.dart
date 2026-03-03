@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 
 class ScoreDetailScreen extends StatelessWidget {
@@ -29,10 +30,14 @@ class ScoreDetailScreen extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               children: [
-                _buildSubjectItem("ភាសាខ្មែរ", "95", "ល្អណាស់", AppColors.primaryMain),
-                _buildSubjectItem("គណិតវិទ្យា", "98", "ល្អណាស់", AppColors.primaryMain),
-                _buildSubjectItem("ប្រវត្តិវិទ្យា", "76", "ល្អ", AppColors.purple),
-                _buildSubjectItem("ភាសាអង់គ្លេស", "87", "ល្អ", AppColors.success),
+                _buildSubjectItem(
+                    "ភាសាខ្មែរ", "95", "ល្អណាស់", AppColors.primaryMain),
+                _buildSubjectItem(
+                    "គណិតវិទ្យា", "98", "ល្អណាស់", AppColors.primaryMain),
+                _buildSubjectItem(
+                    "ប្រវត្តិវិទ្យា", "76", "ល្អ", AppColors.purple),
+                _buildSubjectItem(
+                    "ភាសាអង់គ្លេស", "87", "ល្អ", AppColors.success),
                 _buildSubjectItem("រូបវិទ្យា", "86", "ល្អ", AppColors.success),
                 _buildSubjectItem("គីមីវិទ្យា", "89", "ល្អ", AppColors.success),
                 _buildSubjectItem("ជីវវិទ្យា", "64", "ល្អ", AppColors.orange),
@@ -45,13 +50,14 @@ class ScoreDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSubjectItem(String title, String score, String status, Color themeColor) {
+  Widget _buildSubjectItem(
+      String title, String score, String status, Color themeColor) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(AppNumber.radiusPill),
       ),
       child: Row(
         children: [
@@ -59,14 +65,12 @@ class ScoreDetailScreen extends StatelessWidget {
             width: 50,
             height: 50,
             decoration: BoxDecoration(
-              color: themeColor.withOpacity(0.1), 
-              borderRadius: BorderRadius.circular(15)
-            ),
+                color: themeColor.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(AppNumber.radiusLarge)),
             child: Center(
-              child: Text(
-                title[0], 
-                style: AppTextStyle.sectionTitle20.copyWith(color: themeColor)
-              ),
+              child: Text(title[0],
+                  style:
+                      AppTextStyle.sectionTitle20.copyWith(color: themeColor)),
             ),
           ),
           const SizedBox(width: 16),
@@ -81,20 +85,17 @@ class ScoreDetailScreen extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(
-                score, 
-                style: AppTextStyle.sectionTitle20.copyWith(color: themeColor, fontWeight: FontWeight.bold)
-              ),
+              Text(score,
+                  style: AppTextStyle.sectionTitle20.copyWith(
+                      color: themeColor, fontWeight: FontWeight.bold)),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
-                  color: AppColors.success.withOpacity(0.1), 
-                  borderRadius: BorderRadius.circular(8)
-                ),
-                child: Text(
-                  status, 
-                  style: AppTextStyle.caption12Secondary.copyWith(color: AppColors.success, fontWeight: FontWeight.bold)
-                ),
+                    color: AppColors.success.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(AppNumber.radiusSmall)),
+                child: Text(status,
+                    style: AppTextStyle.caption12Secondary.copyWith(
+                        color: AppColors.success, fontWeight: FontWeight.bold)),
               ),
             ],
           ),
@@ -108,15 +109,19 @@ class ScoreDetailScreen extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(24, 24, 24, 40),
       decoration: const BoxDecoration(
         color: AppColors.primaryMain,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+        borderRadius:
+            BorderRadius.vertical(top: Radius.circular(AppNumber.radiusPill)),
       ),
       child: Column(
         children: [
           Row(
             children: [
-              const Icon(Icons.bar_chart_rounded, color: AppColors.white, size: 20),
+              const Icon(Icons.bar_chart_rounded,
+                  color: AppColors.white, size: 20),
               const SizedBox(width: 8),
-              Text("សេចក្តីសង្ខេបប្រចាំខែ", style: AppTextStyle.bodyWhite.copyWith(fontWeight: FontWeight.bold)),
+              Text("សេចក្តីសង្ខេបប្រចាំខែ",
+                  style: AppTextStyle.bodyWhite
+                      .copyWith(fontWeight: FontWeight.bold)),
             ],
           ),
           const SizedBox(height: 20),
@@ -139,14 +144,17 @@ class ScoreDetailScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 16),
       decoration: BoxDecoration(
         color: AppColors.white.withValues(alpha: 0.2),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppNumber.radiusRounded),
         border: Border.all(color: AppColors.white.withValues(alpha: 0.2)),
       ),
       child: Column(
         children: [
-          Text(label, style: AppTextStyle.caption12White.copyWith(color: AppColors.white)),
+          Text(label,
+              style:
+                  AppTextStyle.caption12White.copyWith(color: AppColors.white)),
           const SizedBox(height: 4),
-          Text(value, style: AppTextStyle.subtitle18.copyWith(color: AppColors.white)),
+          Text(value,
+              style: AppTextStyle.subtitle18.copyWith(color: AppColors.white)),
         ],
       ),
     );

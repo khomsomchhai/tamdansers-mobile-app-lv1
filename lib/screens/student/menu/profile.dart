@@ -1,9 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/routes/app_routes.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -69,8 +72,9 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text('គណនីអាខោន', style: AppTextStyle.screenTitle24),
-        centerTitle: true,
+        
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -78,11 +82,8 @@ class _ProfileState extends State<Profile> {
           child: Column(
             children: [
               const SizedBox(height: 20),
-
               ImageProfile(),
-
               const SizedBox(height: 60),
-
               ProfileMenu(
                 icon: Icons.person,
                 iconBgColor: AppColors.primaryBg,
@@ -121,7 +122,56 @@ class _ProfileState extends State<Profile> {
                 titleColor: AppColors.error,
                 center: true,
                 BgColor: AppColors.errorBG,
-                onTap: () {},
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) => AlertDialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
+                      ),
+                      title: Text(
+                        'បញ្ជាក់ការចាកចេញ',
+                        style: AppTextStyle.sectionTitle20,
+                      ),
+                      content:  Text(
+                        'តើអ្នកប្រាកដថាចង់ចាកចេញមែនទេ?',
+                        style: AppTextStyle.body,
+                      ),
+                      actionsPadding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context); 
+                          },
+                          style: TextButton.styleFrom(
+                            side: BorderSide(color: AppColors.secondaryText),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: Text(
+                            'បោះបង់',
+                            style: AppTextStyle.hintText.copyWith(color: Colors.black),
+                          ),
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.error,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.popAndPushNamed(context, AppRoutes.roleSelectionScreen);
+                          },
+                          child: Text('ចាកចេញ',style: AppTextStyle.hintText.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -156,7 +206,6 @@ class _ImageProfileState extends State<ImageProfile> {
     }
   }
 
-  // ✅ BottomSheet Options
   void showImageOptions() {
     showModalBottomSheet(
       context: context,
@@ -212,11 +261,9 @@ class _ImageProfileState extends State<ImageProfile> {
                     : null,
               ),
               child: imagePath.isEmpty
-                  ? const Icon(Icons.person,
-                      size: 60, color: Colors.grey)
+                  ? const Icon(Icons.person, size: 60, color: Colors.grey)
                   : null,
             ),
-
             Material(
               color: AppColors.primary300,
               shape: const CircleBorder(),
@@ -244,7 +291,6 @@ class _ImageProfileState extends State<ImageProfile> {
   }
 }
 
-
 class ProfileMenu extends StatelessWidget {
   final IconData icon;
   final Color? iconBgColor;
@@ -265,8 +311,7 @@ class ProfileMenu extends StatelessWidget {
       this.showChevron = true,
       this.center = false,
       this.titleColor,
-      this.BgColor
-      });
+      this.BgColor});
 
   @override
   Widget build(BuildContext context) {
@@ -275,7 +320,7 @@ class ProfileMenu extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: BgColor?? AppColors.white,
+          color: BgColor ?? AppColors.white,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
@@ -294,7 +339,7 @@ class ProfileMenu extends StatelessWidget {
             ),
             SizedBox(width: 16),
             Text(title,
-                style: AppTextStyle.sectionTitle20
+                style: AppTextStyle.fontsize18
                     .copyWith(color: titleColor ?? Colors.black)),
             if (!center) const Spacer(),
             if (!center && showChevron)

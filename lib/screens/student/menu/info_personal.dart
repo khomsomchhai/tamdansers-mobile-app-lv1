@@ -37,9 +37,7 @@ class _InfoPersonalState extends State<InfoPersonal> {
           child: Column(
             children: [
               SizedBox(height: 20),
-              ImageProfile(
-                
-              ),
+              ImageProfile(),
               SizedBox(height: 30),
               Card(
                   shape: RoundedRectangleBorder(

@@ -48,57 +48,56 @@ class _ParentConnectStudentState extends State<ParentConnectStudent> {
             child: Column(
               children: [
                 _buildHeader(),
-                SizedBox(height: 16,),
+                SizedBox(
+                  height: 16,
+                ),
                 _buildForm(),
               ],
             ),
           ),
         ),
       ),
-      bottomNavigationBar: 
-        Padding(
-          padding: const EdgeInsets.all(20),
-          child: PrimaryButton(
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(20),
+        child: PrimaryButton(
             label: "ដាក់ស្នើរ",
-            backgroundColor: AppColors.primaryMain, 
-            foregroundColor: AppColors.white, 
-            onPressed: (){
-              if(formKey.currentState!.validate()){
+            backgroundColor: AppColors.primaryMain,
+            foregroundColor: AppColors.white,
+            onPressed: () {
+              if (formKey.currentState!.validate()) {
                 showDialog(
-                  context: context, 
-                  builder: (context) => 
-                  CustomDialog(
-                    label: "យល់ព្រម", 
-                    title: "សំណើរត្រូវបានដាក់ស្នើរ", 
-                    description: "សូមរង់ចាំការទទួលសំណើរពីសិស្ស។ អ្នកនឹងទទួលបានការជូនដំណឹងនៅពេលដែលសំណើរបស់អ្នកត្រូវបានទទួល ឬ បដិសេធ។", 
+                  context: context,
+                  builder: (context) => CustomDialog(
+                    label: "យល់ព្រម",
+                    title: "សំណើរត្រូវបានដាក់ស្នើរ",
+                    description:
+                        "សូមរង់ចាំការទទួលសំណើរពីសិស្ស។ អ្នកនឹងទទួលបានការជូនដំណឹងនៅពេលដែលសំណើរបស់អ្នកត្រូវបានទទួល ឬ បដិសេធ។",
                     onPressed: () {
                       Navigator.pop(context);
                     },
                   ),
                 );
               }
-              
-            }
-          ),
-        ),
+            }),
+      ),
     );
   }
 
-  Widget _buildHeader(){
+  Widget _buildHeader() {
     return Column(
       children: [
         SizedBox(
-          height: MediaQuery.of(context).size.height*0.30,
-          child: SvgPicture.asset(
-            AppImages.connection
-          ),
+          height: MediaQuery.of(context).size.height * 0.30,
+          child: SvgPicture.asset(AppImages.connection),
         ),
-        SizedBox(height: 20,),
+        SizedBox(height: 20),
         Text(
           "ភ្ជាប់ទៅកាន់គណនីរបស់សិស្ស",
           style: AppTextStyle.sectionTitle20,
         ),
-        SizedBox(height: 16,),
+        SizedBox(
+          height: 16,
+        ),
         Center(
           child: Text(
             "សូមបញ្ចូលអ៊ីម៉ែល ឬ លេខទូរស័ព្ទរបស់សិស្សដែលអ្នកចង់ភ្ជាប់។ អ៊ីម៉ែល ឬ លេខទូរស័ព្ទដែលបានចុះឈ្មោះជាមួយគណនីសិស្សរួចហើយ។",
@@ -110,19 +109,21 @@ class _ParentConnectStudentState extends State<ParentConnectStudent> {
     );
   }
 
-  _buildForm(){
+  _buildForm() {
     return Column(
       children: [
         AuthField(
-          hintText: "អ៊ីម៉ែល ឬ លេខទូរស័ព្ទរបស់សិស្ស", 
+          hintText: "អ៊ីម៉ែល ឬ លេខទូរស័ព្ទរបស់សិស្ស",
           icon: Icon(
-            Icons.email_outlined, 
+            Icons.email_outlined,
             color: AppColors.secondaryText,
-          ), 
+          ),
           textController: invCodeCtrl,
           validator: Validators.emailOrPhone,
         ),
-        SizedBox(height: 10,)
+        SizedBox(
+          height: 10,
+        )
       ],
     );
   }

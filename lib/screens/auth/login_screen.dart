@@ -37,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
   
   void login() async {
     var user = await UserRepo().login(identifierCtrl.text, pwdCtrl.text);
-    if(user == null){
+    if (user == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.transparent,
@@ -57,21 +57,21 @@ class _LoginScreenState extends State<LoginScreen> {
     var pref = await SharedPreferences.getInstance();
     pref.setString("role", user["role"]);
     pref.setBool("isLogin", true);
-    if(user["role"] == "teacher"){
+    if (user["role"] == "teacher") {
       Navigator.pushReplacementNamed(
-        context, 
+        context,
         AppRoutes.teacherDashboard,
         arguments: user["id"]
       );
-    } else if(user["role"] == "student"){
+    } else if (user["role"] == "student") {
       Navigator.pushReplacementNamed(
-        context, 
+        context,
         AppRoutes.studentFirstScreen,
         arguments: user["id"]
       );
-    } else if(user["role"] == "parent"){
+    } else if (user["role"] == "parent") {
       Navigator.pushReplacementNamed(
-        context, 
+        context,
         AppRoutes.parentFirstScreen,
         arguments: user["id"]
       );
@@ -146,7 +146,9 @@ class _LoginScreenState extends State<LoginScreen> {
             fit: BoxFit.contain,
           ),
         ),
-        SizedBox(height: 16,),
+        SizedBox(
+          height: 16,
+        ),
         Text(
           "ចូលគណនីរបស់អ្នក",
           style: AppTextStyle.screenTitle24,
@@ -170,7 +172,9 @@ class _LoginScreenState extends State<LoginScreen> {
               color: AppColors.secondaryText,
             ),
           ),
-          SizedBox(height: 16,),
+          SizedBox(
+            height: 16,
+          ),
           AuthField(
             validator: Validators.password,
             textController: pwdCtrl,
@@ -210,7 +214,9 @@ class _LoginScreenState extends State<LoginScreen> {
               )
             ],
           ),
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
           PrimaryButton(
             label: "ចូលគណនី",
             backgroundColor: AppColors.primaryMain,
@@ -225,7 +231,8 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-  Widget _buildFooter(){
+
+  Widget _buildFooter() {
     return Column(
       children: [
         Row(
@@ -235,81 +242,76 @@ class _LoginScreenState extends State<LoginScreen> {
               "មិនទាន់មានគណនីមែនទេ?",
               style: AppTextStyle.body,
             ),
-            SizedBox(width: 10,),
+            SizedBox(
+              width: 10,
+            ),
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(
-                  context, 
-                  AppRoutes.signUpScreen,
-                  arguments: selectedRole
-                );
+                Navigator.pushNamed(context, AppRoutes.signUpScreen,
+                    arguments: selectedRole);
               },
               child: Text(
                 "ចុះឈ្មោះ",
                 style: GoogleFonts.kantumruyPro(
-                  fontSize: 16,
-                  color: AppColors.primaryMain
-                ),
+                    fontSize: 16, color: AppColors.primaryMain),
               ),
             ),
           ],
         ),
-        SizedBox(height: 8,),
+        SizedBox(
+          height: 8,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
               child: Container(
                 height: 1,
-                decoration: BoxDecoration(
-                  color: AppColors.secondaryText
-                ),
+                decoration: BoxDecoration(color: AppColors.secondaryText),
               ),
             ),
-            SizedBox(width: 10,),
-            Text(
-              "ឬ",
-              style: AppTextStyle.body
+            SizedBox(
+              width: 10,
             ),
-            SizedBox(width: 10,),
+            Text("ឬ", style: AppTextStyle.body),
+            SizedBox(
+              width: 10,
+            ),
             Expanded(
               child: Container(
                 height: 1,
-                decoration: BoxDecoration(
-                  color: AppColors.secondaryText
-                ),
+                decoration: BoxDecoration(color: AppColors.secondaryText),
               ),
             ),
           ],
         ),
-        SizedBox(height: 15,),
         SizedBox(
-          width: double.infinity,
-          child: ButtonWithIcon(
-            onPressed: () {
-              
-            },
-            label: "ភ្ចាប់ជាមួយ Telegram",
-            icon: Icon(
-              Icons.telegram_outlined,size: 30,
-              color: AppColors.primaryMain,
-            )
-          ),
+          height: 15,
         ),
-        SizedBox(height: 12,),
         SizedBox(
           width: double.infinity,
           child: ButtonWithIcon(
-            onPressed: () {
-              
-            },
-            label: "ភ្ចាប់ជាមួយ Google",
-            icon: SvgPicture.asset(
-              AppImages.googleIcon,
-              fit: BoxFit.contain,
-              width: 30,
-            )
-          ),
+              onPressed: () {},
+              label: "ភ្ចាប់ជាមួយ Telegram",
+              icon: Icon(
+                Icons.telegram_outlined,
+                size: 30,
+                color: AppColors.primaryMain,
+              )),
+        ),
+        SizedBox(
+          height: 12,
+        ),
+        SizedBox(
+          width: double.infinity,
+          child: ButtonWithIcon(
+              onPressed: () {},
+              label: "ភ្ចាប់ជាមួយ Google",
+              icon: SvgPicture.asset(
+                AppImages.googleIcon,
+                fit: BoxFit.contain,
+                width: 30,
+              )),
         ),
       ],
     );

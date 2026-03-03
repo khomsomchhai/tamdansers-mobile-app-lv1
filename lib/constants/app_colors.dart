@@ -17,7 +17,7 @@ class AppColors {
   static const Color success = Color(0xFF34C759);
   static const Color successBG = Color.fromARGB(37, 118, 211, 121);
   static const Color error = Color(0xFFFF3B30);
-  static const Color errorBG = Color.fromARGB(39, 255, 58, 48);
+  static const Color errorBG = Color.fromARGB(19, 255, 58, 48);
   static const Color link = Color(0xff007AFF);
   static const Color neutral500 = Color(0xFFA4A4A4);
   static const Color grey = Colors.grey;
@@ -27,7 +27,7 @@ class AppColors {
   static const Color teacomment = Color(0xffFFF1C2);
   static const Color comment = Color(0xffFDAD00);
 
-  static const Color lightPink = Color.fromARGB(91, 228, 175, 237);
+  static const Color lightPink = Color.fromARGB(47, 228, 175, 237);
   static const Color pepure = Color(0xff9C27B0);
 
 }

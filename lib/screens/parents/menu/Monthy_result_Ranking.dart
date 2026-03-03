@@ -20,39 +20,39 @@ class _CustomScreenState extends State<CustomScreen> {
     "១៤ មករា ២០២៤",
   ];
   final List<Map<String, dynamic>> subjects = [
-  {
-    "name": "គណិតវិទ្យា",
-    "teacher": "លោកគ្រូ. វិបុល",
-    "score": "៩០/១០០",
-    "grade": "ល្អណាស់",
-    "color": AppColors.success,
-    "icon": Icons.calculate,
-  },
-  {
-    "name": "ភាសាខ្មែរ",
-    "teacher": "អ្នកគ្រូ. ស្រីនាង",
-    "score": "៨៥/១០០",
-    "grade": "ល្អ",
-    "color": Colors.orange,
-    "icon": Icons.menu_book,
-  },
-  {
-    "name": "ភាសាអង់គ្លេស",
-    "teacher": "Mr. John",
-    "score": "៩៥/១០០",
-    "grade": "ល្អខ្លាំង",
-    "color": AppColors.success,
-    "icon": Icons.language,
-  },
-  {
-    "name": "រូបវិទ្យា",
-    "teacher": "លោកគ្រូ. ដារ៉ា",
-    "score": "៧៥/១០០",
-    "grade": "មធ្យម",
-    "color": Colors.red,
-    "icon": Icons.science,
-  },
-];
+    {
+      "name": "គណិតវិទ្យា",
+      "teacher": "លោកគ្រូ. វិបុល",
+      "score": "៩០/១០០",
+      "grade": "ល្អណាស់",
+      "color": AppColors.success,
+      "icon": Icons.calculate,
+    },
+    {
+      "name": "ភាសាខ្មែរ",
+      "teacher": "អ្នកគ្រូ. ស្រីនាង",
+      "score": "៨៥/១០០",
+      "grade": "ល្អ",
+      "color": Colors.orange,
+      "icon": Icons.menu_book,
+    },
+    {
+      "name": "ភាសាអង់គ្លេស",
+      "teacher": "Mr. John",
+      "score": "៩៥/១០០",
+      "grade": "ល្អខ្លាំង",
+      "color": AppColors.success,
+      "icon": Icons.language,
+    },
+    {
+      "name": "រូបវិទ្យា",
+      "teacher": "លោកគ្រូ. ដារ៉ា",
+      "score": "៧៥/១០០",
+      "grade": "មធ្យម",
+      "color": Colors.red,
+      "icon": Icons.science,
+    },
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,7 +90,8 @@ class _CustomScreenState extends State<CustomScreen> {
               const SizedBox(height: 15),
               _subjectList(),
               const SizedBox(height: 15),
-              _commentCard('ដារ៉ាបង្ហាញពីការរីកចម្រើនគួរអោយកត់សម្គាល់លើមុខវិជ្ជាគណិតវិទ្យាក្នុងខែនេះទោះជាយ៉ាងណាក៏ដោយគាត់ត្រូវផ្ដោតអារម្មណ៍បន្ថែមទៀតលើមុខវិជ្ជាប្រវត្តិវិទ្យាជាទូទៅការសិក្សារបស់គាត់មានភាពល្អប្រសើរ!'),
+              _commentCard(
+                  'ដារ៉ាបង្ហាញពីការរីកចម្រើនគួរអោយកត់សម្គាល់លើមុខវិជ្ជាគណិតវិទ្យាក្នុងខែនេះទោះជាយ៉ាងណាក៏ដោយគាត់ត្រូវផ្ដោតអារម្មណ៍បន្ថែមទៀតលើមុខវិជ្ជាប្រវត្តិវិទ្យាជាទូទៅការសិក្សារបស់គាត់មានភាពល្អប្រសើរ!'),
               SizedBox(height: 20),
               _saveCard()
             ],
@@ -164,7 +165,7 @@ class _CustomScreenState extends State<CustomScreen> {
                 ),
                 SizedBox(height: 4),
                 Text(
-                  "ID: STU-2023-89. ថ្នាក់ទី ១២ ក",  
+                  "ID: STU-2023-89. ថ្នាក់ទី ១២ ក",
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 14,
@@ -190,69 +191,67 @@ class _CustomScreenState extends State<CustomScreen> {
 
   Widget _subjectList() {
     return ListView.builder(
-    shrinkWrap: true,
-    physics: const NeverScrollableScrollPhysics(),
-    itemCount: subjects.length,
-    itemBuilder: (context, index) {
-      final subject = subjects[index];
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: subjects.length,
+      itemBuilder: (context, index) {
+        final subject = subjects[index];
 
-      return Container(
-        height: 90,
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.blue[100],
-                borderRadius: BorderRadius.circular(6),
+        return Container(
+          height: 90,
+          margin: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.blue[100],
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Icon(
+                  subject["icon"],
+                  color: AppColors.primaryMain,
+                  size: 35,
+                ),
               ),
-              child: Icon(
-                subject["icon"],
-                color: AppColors.primaryMain,
-                size: 35,
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(subject["name"], style: AppTextStyle.subtitle18),
+                    Text(
+                      "គ្រូបង្រៀន: ${subject["teacher"]}",
+                      style: AppTextStyle.bodySecondary,
+                    ),
+                  ],
+                ),
               ),
-            ),
-
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
+              Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(subject["name"],
-                      style: AppTextStyle.subtitle18),
+                  Text(subject["score"], style: AppTextStyle.subtitle18),
                   Text(
-                    "គ្រូបង្រៀន: ${subject["teacher"]}",
-                    style: AppTextStyle.bodySecondary,
+                    subject["grade"],
+                    style: AppTextStyle.bodySecondary
+                        .copyWith(color: subject["color"]),
                   ),
                 ],
               ),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(subject["score"],
-                    style: AppTextStyle.subtitle18),
-                Text(
-                  subject["grade"],
-                  style: AppTextStyle.bodySecondary
-                      .copyWith(color: subject["color"]),
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
-    },
-  );
-}
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   Widget _commentCard(String comment) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -274,7 +273,8 @@ class _CustomScreenState extends State<CustomScreen> {
       ],
     );
   }
-  Widget _saveCard(){
+
+  Widget _saveCard() {
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, AppRoutes.commentScreen);
@@ -298,7 +298,8 @@ class _CustomScreenState extends State<CustomScreen> {
       ),
     );
   }
-  Widget _rankDashboard(){
+
+  Widget _rankDashboard() {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -310,7 +311,9 @@ class _CustomScreenState extends State<CustomScreen> {
         children: [
           Row(
             children: [
-              Text("ចំណាត់ថ្នាក់ក្នុងថ្នាក់", style: AppTextStyle.subtitle18.copyWith(color: AppColors.white)),
+              Text("ចំណាត់ថ្នាក់ក្នុងថ្នាក់",
+                  style:
+                      AppTextStyle.subtitle18.copyWith(color: AppColors.white)),
               Spacer(),
               Container(
                 height: 40,
@@ -319,19 +322,27 @@ class _CustomScreenState extends State<CustomScreen> {
                   color: AppColors.primary300,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.emoji_events, color: AppColors.white, size: 30),
+                child:
+                    Icon(Icons.emoji_events, color: AppColors.white, size: 30),
               )
             ],
           ),
           SizedBox(height: 10),
           Row(
             children: [
-              Text("#៨ / ", style: AppTextStyle.screenTitle24.copyWith(color: AppColors.white)),
-              Text("៣២", style: AppTextStyle.subtitle16.copyWith(color: AppColors.white)),
+              Text("#៨ / ",
+                  style: AppTextStyle.screenTitle24
+                      .copyWith(color: AppColors.white)),
+              Text("៣២",
+                  style:
+                      AppTextStyle.subtitle16.copyWith(color: AppColors.white)),
             ],
           ),
           SizedBox(height: 15),
-          Divider(color: AppColors.white,height: 1,),
+          Divider(
+            color: AppColors.white,
+            height: 1,
+          ),
           SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -339,9 +350,17 @@ class _CustomScreenState extends State<CustomScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("មធ្យមភាគ",style: AppTextStyle.subtitle16.copyWith(color: AppColors.white),),
-                  SizedBox(height: 10,),
-                  Text("៨៥.៥", style: AppTextStyle.sectionTitle20.copyWith(color: AppColors.white))
+                  Text(
+                    "មធ្យមភាគ",
+                    style: AppTextStyle.subtitle16
+                        .copyWith(color: AppColors.white),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text("៨៥.៥",
+                      style: AppTextStyle.sectionTitle20
+                          .copyWith(color: AppColors.white))
                 ],
               ),
               Container(
@@ -354,9 +373,17 @@ class _CustomScreenState extends State<CustomScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("សរុប",style: AppTextStyle.subtitle16.copyWith(color: AppColors.white),),
-                  SizedBox(height: 10,),
-                  Text("៤៥០", style: AppTextStyle.sectionTitle20.copyWith(color: AppColors.white))
+                  Text(
+                    "សរុប",
+                    style: AppTextStyle.subtitle16
+                        .copyWith(color: AppColors.white),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text("៤៥០",
+                      style: AppTextStyle.sectionTitle20
+                          .copyWith(color: AppColors.white))
                 ],
               ),
               Container(
@@ -369,9 +396,17 @@ class _CustomScreenState extends State<CustomScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("និទ្ទេស",style: AppTextStyle.subtitle16.copyWith(color: AppColors.white),),
-                  SizedBox(height: 10,),
-                  Text("B", style: AppTextStyle.sectionTitle20.copyWith(color: AppColors.white))
+                  Text(
+                    "និទ្ទេស",
+                    style: AppTextStyle.subtitle16
+                        .copyWith(color: AppColors.white),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text("B",
+                      style: AppTextStyle.sectionTitle20
+                          .copyWith(color: AppColors.white))
                 ],
               ),
             ],
