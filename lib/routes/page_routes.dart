@@ -34,6 +34,7 @@ import 'package:tamdansers_app/screens/teacher/manage_class.dart';
 import 'package:tamdansers_app/screens/teacher/manage_student_screen.dart';
 import 'package:tamdansers_app/screens/teacher/score_detail_screen.dart';
 import 'package:tamdansers_app/screens/teacher/student_detail_screen.dart';
+import 'package:tamdansers_app/screens/teacher/teacher_dashboard.dart';
 import 'package:tamdansers_app/screens/teacher/teacher_main_screen.dart';
 
 import '../screens/parents/menu/Monthy_result_Ranking.dart';
