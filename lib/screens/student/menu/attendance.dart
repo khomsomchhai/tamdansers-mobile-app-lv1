@@ -17,11 +17,11 @@ class _AttendanceState extends State<Attendance> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'វត្តមាន',
           style: AppTextStyle.screenTitle24,
         ),
-        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Padding(

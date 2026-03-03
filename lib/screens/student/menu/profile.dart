@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 
@@ -72,8 +72,9 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text('គណនីអាខោន', style: AppTextStyle.screenTitle24),
-        centerTitle: true,
+        
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -121,38 +122,55 @@ class _ProfileState extends State<Profile> {
                 titleColor: AppColors.error,
                 center: true,
                 BgColor: AppColors.errorBG,
-                onTap: () async {
-                  final ok = await showDialog<bool>(
+                onTap: () {
+                  showDialog(
                     context: context,
-                    builder: (ctx) => AlertDialog(
-                      title: const Text('ចាកចេញ?'),
-                      content:
-                          const Text('តើអ្នកពិតជាចង់ចាកចេញពីគណនីនេះមែនទេ?'),
+                    barrierDismissible: false,
+                    builder: (context) => AlertDialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
+                      ),
+                      title: Text(
+                        'បញ្ជាក់ការចាកចេញ',
+                        style: AppTextStyle.sectionTitle20,
+                      ),
+                      content:  Text(
+                        'តើអ្នកប្រាកដថាចង់ចាកចេញមែនទេ?',
+                        style: AppTextStyle.body,
+                      ),
+                      actionsPadding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
                       actions: [
                         TextButton(
-                          onPressed: () => Navigator.pop(ctx, false),
-                          child: const Text('បោះបង់'),
+                          onPressed: () {
+                            Navigator.pop(context); 
+                          },
+                          style: TextButton.styleFrom(
+                            side: BorderSide(color: AppColors.secondaryText),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: Text(
+                            'បោះបង់',
+                            style: AppTextStyle.hintText.copyWith(color: Colors.black),
+                          ),
                         ),
-                        TextButton(
-                          onPressed: () => Navigator.pop(ctx, true),
-                          child: Text('ចាកចេញ',
-                              style: const TextStyle(color: Colors.red)),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.error,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.popAndPushNamed(context, AppRoutes.roleSelectionScreen);
+                          },
+                          child: Text('ចាកចេញ',style: AppTextStyle.hintText.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
                         ),
                       ],
                     ),
                   );
-                  if (ok == true && context.mounted) {
-                    final pref = await SharedPreferences.getInstance();
-                    await pref.setBool('isLogin', false);
-                    await pref.remove('role');
-                    if (context.mounted) {
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        AppRoutes.roleSelectionScreen,
-                        (route) => false,
-                      );
-                    }
-                  }
                 },
               ),
             ],
@@ -188,7 +206,6 @@ class _ImageProfileState extends State<ImageProfile> {
     }
   }
 
-  // ✅ BottomSheet Options
   void showImageOptions() {
     showModalBottomSheet(
       context: context,
@@ -322,7 +339,7 @@ class ProfileMenu extends StatelessWidget {
             ),
             SizedBox(width: 16),
             Text(title,
-                style: AppTextStyle.sectionTitle20
+                style: AppTextStyle.fontsize18
                     .copyWith(color: titleColor ?? Colors.black)),
             if (!center) const Spacer(),
             if (!center && showChevron)

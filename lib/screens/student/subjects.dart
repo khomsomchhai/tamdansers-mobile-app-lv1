@@ -16,11 +16,7 @@ class _SubjectsState extends State<Subjects> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(
-          Icons.chevron_left,
-          size: 40,
-          color: AppColors.secondaryText,
-        ),
+        
         title: Text('គណិតវិទ្យា', style: AppTextStyle.sectionTitle20),
         centerTitle: true,
       ),
