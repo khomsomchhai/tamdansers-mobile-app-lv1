@@ -62,6 +62,8 @@ class PageRoutes {
       case AppRoutes.signUpScreen:
         return SignUpScreen();
       
+      case AppRoutes.manageClass:
+        return ManageClass();
 
       case AppRoutes.authOptionTeacherScreen:
         return AuthOptionTeacherScreen();
@@ -108,6 +110,9 @@ class PageRoutes {
       case AppRoutes.scedeul:
         return Scedeul();
 
+      case AppRoutes.teacherMainScreen:
+        return TeacherMainScreen();
+        
       case AppRoutes.result:
         return Result();
 
@@ -145,12 +150,13 @@ class PageRoutes {
     AppRoutes.authOptionTeacherScreen: (context) => AuthOptionTeacherScreen(),
     AppRoutes.loginScreen: (context) => LoginScreen(),
     AppRoutes.signUpScreen: (context) => SignUpScreen(),
-    AppRoutes.teacherDashboard: (context) => TeacherMainScreen(),
+    AppRoutes.teacherDashboard: (context) => TeacherDashboard(),
     AppRoutes.manageAllClass: (context) => ManageAllClass(),
     AppRoutes.manageClass: (context) => ManageClass(),
     AppRoutes.manageStudentScreen: (context) => ManageStudentScreen(
           classId: ModalRoute.of(context)!.settings.arguments as int? ?? 0,
         ),
+    AppRoutes.teacherMainScreen: (context) => TeacherMainScreen(),
     AppRoutes.studentDetailScreen: (context) => StudentDetailScreen(),
     AppRoutes.linkParentScreen: (context) => LinkParentScreen(),
     AppRoutes.scoreDetailScreen: (context) => ScoreDetailScreen(),
