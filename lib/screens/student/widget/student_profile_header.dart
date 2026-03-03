@@ -7,7 +7,8 @@ import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 
 class StudentProfileHeader extends StatelessWidget {
-  const StudentProfileHeader({super.key});
+  final Map<String, dynamic>? user;
+  const StudentProfileHeader({super.key, this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -17,13 +18,21 @@ class StudentProfileHeader extends StatelessWidget {
           radius: AppNumber.avatarSmall,
           backgroundColor: AppColors.white,
           backgroundImage: AssetImage(
-            AppIcon.maleAvatar,
-  
+            (() {
+              final g = (user?['gender'] ?? '').toString().toLowerCase();
+              if (g.contains('f') || g.contains('female')) return AppIcon.femaleAvatar;
+              return AppIcon.maleAvatar;
+            })(),
           ),
         ),
         SizedBox(width: 10,),
         Text(
-          "រុន​ លីមហុង",
+          (() {
+            final first = user?['first_name'] ?? '';
+            final last = user?['last_name'] ?? '';
+            final full = ('$first $last').trim();
+            return full.isNotEmpty ? full : 'រុន​ លីមហុង';
+          })(),
           style: AppTextStyle.subtitle18
         ),
         Spacer(),

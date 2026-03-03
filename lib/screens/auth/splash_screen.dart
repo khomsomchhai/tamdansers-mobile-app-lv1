@@ -38,9 +38,10 @@ class _SplashScreenState extends State<SplashScreen> {
         );
       }
     }else{
-      Navigator.pushReplacementNamed(
+      Navigator.pushNamedAndRemoveUntil(
         context, 
-        AppRoutes.roleSelectionScreen,
+        AppRoutes.roleSelectionScreen, 
+        (route) => false,
       );
     }
   }
@@ -49,7 +50,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration(seconds: 4), (){
+    Future.delayed(Duration(seconds: 3), (){
       checkLogin();
     });
   }
@@ -61,6 +62,7 @@ class _SplashScreenState extends State<SplashScreen> {
         backgroundColor: AppColors.transparent,
         elevation: 0,
         surfaceTintColor: AppColors.transparent,
+        automaticallyImplyLeading: false,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,

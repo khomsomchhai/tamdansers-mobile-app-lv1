@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/widget/class_card.dart';
 
-class StudentHasJoinedClass extends StatelessWidget {
-  const StudentHasJoinedClass({super.key});
+class StudentHasJoinedClass extends StatefulWidget {
+  final int userId;
+  const StudentHasJoinedClass({super.key, required this.userId});
 
+  @override
+  State<StudentHasJoinedClass> createState() => _StudentHasJoinedClassState();
+}
+
+class _StudentHasJoinedClassState extends State<StudentHasJoinedClass> {
   @override
   Widget build(BuildContext context) {
     return Column(

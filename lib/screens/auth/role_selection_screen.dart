@@ -14,7 +14,6 @@ class RoleSelectionScreen extends StatefulWidget {
   @override
   State<RoleSelectionScreen> createState() => _RoleSelectionScreenState();
 }
-
 class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
   var sliderIndex = 0;
   @override
@@ -77,7 +76,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                 );
               }
             ),
-            const SizedBox(height: 32,)
+            const SizedBox(height: 20,)
           ],
         ),
       ),
