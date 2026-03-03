@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/screens/teacher/link_parent_bottom_sheet.dart';
 import 'package:tamdansers_app/widget/search_field.dart';
@@ -28,9 +29,6 @@ class _LinkParentScreenState extends State<LinkParentScreen> {
       Navigator.pop(context, result);
     }
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -62,8 +60,7 @@ class _LinkParentScreenState extends State<LinkParentScreen> {
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               children: [
-                Text("លទ្ធផលស្វែងរក",
-                    style: AppTextStyle.sectionTitle20),
+                Text("លទ្ធផលស្វែងរក", style: AppTextStyle.sectionTitle20),
                 const SizedBox(height: 12),
                 _parentTile("ចាន់ ដារ៉ា", "012 448 877"),
               ],
@@ -73,16 +70,17 @@ class _LinkParentScreenState extends State<LinkParentScreen> {
       ),
     );
   }
+
   Widget _parentTile(String name, String phone) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(26),
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(AppNumber.radiusPill),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 10,
           ),
         ],
@@ -91,21 +89,16 @@ class _LinkParentScreenState extends State<LinkParentScreen> {
         children: [
           CircleAvatar(
             radius: 25,
-            backgroundColor: Colors.orange.shade50,
-            child: Icon(Icons.person_outline,
-                color: Colors.orange.shade300),
+            backgroundColor: AppColors.orange.withValues(alpha: 0.1),
+            child: Icon(Icons.person_outline, color: AppColors.orange),
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(name,
-                    style: AppTextStyle.body
-                        .copyWith(fontWeight: FontWeight.bold)),
-                Text(phone,
-                    style: AppTextStyle.body.copyWith(
-                        color: AppColors.secondaryText, fontSize: 12)),
+                Text(name, style: AppTextStyle.subtitle16),
+                Text(phone, style: AppTextStyle.caption13Secondary),
               ],
             ),
           ),
@@ -114,19 +107,16 @@ class _LinkParentScreenState extends State<LinkParentScreen> {
               _showLinkParentSheet();
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primaryMain.withOpacity(0.1),
+              backgroundColor: AppColors.primaryMain.withValues(alpha: 0.1),
               elevation: 0,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
               ),
               minimumSize: const Size(60, 36),
             ),
             child: Text(
               "ភ្ជាប់",
-              style: AppTextStyle.body.copyWith(
-                color: AppColors.primaryMain,
-                fontWeight: FontWeight.bold,
-              ),
+              style: AppTextStyle.bodyPrimary,
             ),
           ),
         ],

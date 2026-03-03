@@ -1,67 +1,148 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/repositories/homework_repo.dart';
+import 'package:tamdansers_app/routes/app_routes.dart';
+import 'package:tamdansers_app/screens/teacher/teacher_dashboard.dart';
 
 class HomeworkScreen extends StatefulWidget {
-  const HomeworkScreen({super.key});
+  final int? classId;
+  final bool showBackButton;
+  const HomeworkScreen({
+    super.key,
+    this.classId,
+    this.showBackButton = true,
+  });
 
   @override
   State<HomeworkScreen> createState() => _HomeworkScreenState();
 }
 
 class _HomeworkScreenState extends State<HomeworkScreen> {
+  bool _loading = true;
+  List<Map<String, dynamic>> _activeHomework = [];
+  List<Map<String, dynamic>> _reviewHomework = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadHomework();
+  }
+
+  Future<void> _loadHomework() async {
+    if (mounted) setState(() => _loading = true);
+    List<Map<String, dynamic>> all;
+    if (widget.classId != null) {
+      all = await HomeworkRepo().getHomeworkByClass(widget.classId!);
+    } else {
+      all = await HomeworkRepo().getAllHomeworkByTeacher(kTeacherId);
+    }
+    if (mounted) {
+      setState(() {
+        _activeHomework = all.where((h) => h['status'] == 'active').toList();
+        _reviewHomework = all.where((h) => h['status'] != 'active').toList();
+        _loading = false;
+      });
+    }
+  }
+
+  void _editHomework(Map<String, dynamic> hw) {
+    Navigator.pushNamed(context, AppRoutes.addTaskScreen, arguments: hw)
+        .then((_) => _loadHomework());
+  }
+
+  Future<void> _confirmDelete(Map<String, dynamic> hw) async {
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('លុបកិច្ចការ?', style: AppTextStyle.subtitle18),
+        content: Text(
+          'តើអ្នកចង់លុប "${hw['title']}" មែនទេ?',
+          style: AppTextStyle.body14,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text('បោះបង់', style: AppTextStyle.bodyPrimary),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text('លុប',
+                style: AppTextStyle.subtitle16.copyWith(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+    if (ok == true && mounted) {
+      await HomeworkRepo().deleteHomework(hw['id'] as int);
+      _loadHomework();
+    }
+  }
+
+  Future<void> _setStatus(Map<String, dynamic> hw, String status) async {
+    await HomeworkRepo().updateHomeworkStatus(hw['id'] as int, status);
+    if (mounted) _loadHomework();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.white,
         elevation: 0,
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: Icon(Icons.arrow_back_ios_new_rounded,
-              color: AppColors.primaryText),
-        ),
-        title: Column(
-          children: [
-            Text(
-              "ថ្នាក់ទី 7-A",
-              style: AppTextStyle.fontsize18,
-            ),
-            Text(
-              "គណិតវិទ្យា (Mathematics)",
-              style: AppTextStyle.body.copyWith(
-                fontSize: 13,
-                color: AppColors.secondaryText,
-              ),
-            ),
-          ],
-        ),
+        leading: widget.showBackButton
+            ? IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: Icon(Icons.arrow_back_ios_new_rounded,
+                    color: AppColors.primaryText),
+              )
+            : null,
+        automaticallyImplyLeading: widget.showBackButton,
+        title: Text('កិច្ចការផ្ទះ', style: AppTextStyle.fontsize18),
         centerTitle: true,
         actions: [
-          IconButton(
-            icon:
-                Icon(Icons.add_circle, color: AppColors.primaryMain, size: 28),
-            onPressed: () {},
-          ),
+          if (widget.classId != null)
+            IconButton(
+              icon: Icon(Icons.add_circle,
+                  color: AppColors.primaryMain, size: 28),
+              onPressed: () => Navigator.pushNamed(
+                      context, AppRoutes.addTaskScreen,
+                      arguments: widget.classId)
+                  .then((_) => _loadHomework()),
+            ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Text(
-                "កិច្ចការផ្ទះ:",
-                style: AppTextStyle.screenTitle24,
-              ),
-            ),
-            _buildActiveSection(),
-            SizedBox(height: 16),
-            _buildReviewSection(),
-          ],
-        ),
-      ),
+      body: _loading
+          ? const Center(child: CircularProgressIndicator())
+          : _activeHomework.isEmpty && _reviewHomework.isEmpty
+              ? Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(32),
+                    child: Text('មិនមានកិច្ចការ', style: AppTextStyle.body),
+                  ),
+                )
+              : SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Text(
+                          "កិច្ចការផ្ទះ:",
+                          style: AppTextStyle.screenTitle24,
+                        ),
+                      ),
+                      if (_activeHomework.isNotEmpty) _buildActiveSection(),
+                      if (_activeHomework.isNotEmpty &&
+                          _reviewHomework.isNotEmpty)
+                        const SizedBox(height: 16),
+                      if (_reviewHomework.isNotEmpty) _buildReviewSection(),
+                    ],
+                  ),
+                ),
     );
   }
 
@@ -76,12 +157,12 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
               Container(
                 width: 8,
                 height: 8,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: AppColors.success,
                   shape: BoxShape.circle,
                 ),
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Text(
                 "សកម្ម (ACTIVE)",
                 style: AppTextStyle.subtitle16,
@@ -89,44 +170,53 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
             ],
           ),
         ),
-        SizedBox(height: 12),
+        const SizedBox(height: 12),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
-            children: [
-              _buildHomeworkCard(
-                "Algebra Chapter 4",
-                "ប្រធានបទ​៖ សមីការ​ ដឺក្រេទី២",
-                "២០ កុម្ភៈ ២០២៥",
-                "២៥ / ៣៦ នាក់",
-                0.7,
-                Color(0xFFE3F2FD),
+            children: List.generate(_activeHomework.length, (i) {
+              const bgColors = [Color(0xFFE3F2FD), Color(0xFFE8F5E9)];
+              const icons = [
                 Icons.functions,
-              ),
-              SizedBox(height: 12),
-              _buildHomeworkCard(
-                "Geometry Quiz Prep",
-                "ប្រធានបទ​៖ រង្វង់​ និង មុំ",
-                "២៥ កុម្ភៈ ២០២៥",
-                "១៦ / ៣៦ នាក់",
-                0.45,
-                Color(0xFFE8F5E9),
                 Icons.chat_bubble_outline,
-              ),
-            ],
+                Icons.assignment,
+                Icons.book
+              ];
+              final hw = _activeHomework[i];
+              return Padding(
+                padding:
+                    i > 0 ? const EdgeInsets.only(top: 12) : EdgeInsets.zero,
+                child: _buildHomeworkCard(
+                  hw: hw,
+                  bgColor: bgColors[i % bgColors.length],
+                  icon: icons[i % icons.length],
+                ),
+              );
+            }),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildHomeworkCard(String title, String description, String dueDate,
-      String submissions, double progress, Color bgColor, IconData icon) {
+  Widget _buildHomeworkCard({
+    required Map<String, dynamic> hw,
+    required Color bgColor,
+    required IconData icon,
+  }) {
+    final title = hw['title'] as String? ?? '';
+    final subject = hw['subject'] as String? ?? '';
+    final dueDate = hw['deadline'] as String? ?? '';
+    final submitted = (hw['submitted_count'] as int?) ?? 0;
+    final total = (hw['total_students'] as int?) ?? 0;
+    final progress = total > 0 ? submitted / total : 0.0;
+    final isActive = hw['status'] == 'active';
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppNumber.radiusLarge),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,23 +227,90 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: bgColor,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
                 ),
                 child: Icon(icon, color: AppColors.primaryMain, size: 24),
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(title, style: AppTextStyle.fontsize18),
-                    Text(description, style: AppTextStyle.caption13Secondary),
+                    Text('មុខវិជ្ជា: $subject',
+                        style: AppTextStyle.caption13Secondary),
                   ],
                 ),
               ),
+              // ⋮ popup menu
+              PopupMenuButton<String>(
+                icon: const Icon(Icons.more_vert,
+                    color: AppColors.secondaryText, size: 20),
+                onSelected: (val) {
+                  switch (val) {
+                    case 'edit':
+                      _editHomework(hw);
+                      break;
+                    case 'publish':
+                      _setStatus(hw, 'active');
+                      break;
+                    case 'unpublish':
+                      _setStatus(hw, 'review');
+                      break;
+                    case 'delete':
+                      _confirmDelete(hw);
+                      break;
+                  }
+                },
+                itemBuilder: (_) => [
+                  PopupMenuItem(
+                    value: 'edit',
+                    child: Row(children: [
+                      const Icon(Icons.edit_outlined, size: 18),
+                      const SizedBox(width: 10),
+                      Text('កែប្រែ', style: AppTextStyle.subtitle16),
+                    ]),
+                  ),
+                  if (!isActive)
+                    PopupMenuItem(
+                      value: 'publish',
+                      child: Row(children: [
+                        const Icon(Icons.publish_rounded,
+                            size: 18, color: Colors.green),
+                        const SizedBox(width: 10),
+                        Text('ផ្សព្វផ្សាយ',
+                            style: AppTextStyle.subtitle16
+                                .copyWith(color: Colors.green)),
+                      ]),
+                    ),
+                  if (isActive)
+                    PopupMenuItem(
+                      value: 'unpublish',
+                      child: Row(children: [
+                        const Icon(Icons.unpublished_outlined,
+                            size: 18, color: Colors.orange),
+                        const SizedBox(width: 10),
+                        Text('មិនសកម្ម',
+                            style: AppTextStyle.subtitle16
+                                .copyWith(color: Colors.orange)),
+                      ]),
+                    ),
+                  PopupMenuItem(
+                    value: 'delete',
+                    child: Row(children: [
+                      const Icon(Icons.delete_outline,
+                          size: 18, color: Colors.red),
+                      const SizedBox(width: 10),
+                      Text('លុប',
+                          style: AppTextStyle.subtitle16
+                              .copyWith(color: Colors.red)),
+                    ]),
+                  ),
+                ],
+              ),
             ],
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Row(
             children: [
               Expanded(
@@ -161,10 +318,10 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "ថ្ងៃផុតកំណត់ (Due Date)",
+                      'ថ្ងៃផុតកំណត់ (Due Date)',
                       style: AppTextStyle.caption12Secondary,
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     Text(dueDate, style: AppTextStyle.fontsize18),
                   ],
                 ),
@@ -174,23 +331,24 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "ការបញ្ជូន (Submissions)",
+                      'ការដញ្ជូន (Submissions)',
                       style: AppTextStyle.caption12Secondary,
                     ),
-                    SizedBox(height: 4),
-                    Text(submissions, style: AppTextStyle.fontsize18),
+                    const SizedBox(height: 4),
+                    Text('$submitted/$total', style: AppTextStyle.fontsize18),
                   ],
                 ),
               ),
             ],
           ),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           ClipRRect(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(AppNumber.radiusSmall),
             child: LinearProgressIndicator(
               value: progress,
               backgroundColor: AppColors.backgroundLight,
-              valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryMain),
+              valueColor:
+                  const AlwaysStoppedAnimation<Color>(AppColors.primaryMain),
               minHeight: 8,
             ),
           ),
@@ -213,107 +371,42 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
                   Container(
                     width: 8,
                     height: 8,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.orange,
                       shape: BoxShape.circle,
                     ),
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Text(
-                    "ពិនិត្យឡើងវិញ (REVIEW)",
+                    "ពិនិត្យម្តងវិញ (REVIEW)",
                     style: AppTextStyle.subtitle16,
                   ),
                 ],
               ),
-              TextButton(
-                onPressed: () {},
-                child: Text(
-                  "មើលទាំងអស់",
-                  style: AppTextStyle.bodyPrimary,
-                ),
-              ),
             ],
           ),
         ),
-        SizedBox(height: 12),
+        const SizedBox(height: 12),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
-            children: [
-              _buildReviewCard(
-                "ចាន់​ ដារ៉ា",
-                "Algebra Chapter 4 •",
-                "១០​ នាទីមុន",
-                "assets/images/user_profile.png",
-              ),
-              SizedBox(height: 12),
-              _buildReviewCard(
-                "លី​ សុភាព",
-                "Algebra Chapter 4 •",
-                "២៥ នាទីមុន",
-                "assets/images/user_profile.png",
-              ),
-              SizedBox(height: 12),
-              _buildReviewCard(
-                "ហុង សុភា",
-                "Algebra Chapter 4 •",
-                "៥៥ នាទីមុន",
-                null,
-              ),
-            ],
+            children: List.generate(_reviewHomework.length, (i) {
+              const bgColors = [Color(0xFFFFF3E0), Color(0xFFF3E5F5)];
+              const icons = [Icons.history, Icons.check_circle_outline];
+              final hw = _reviewHomework[i];
+              return Padding(
+                padding:
+                    i > 0 ? const EdgeInsets.only(top: 12) : EdgeInsets.zero,
+                child: _buildHomeworkCard(
+                  hw: hw,
+                  bgColor: bgColors[i % bgColors.length],
+                  icon: icons[i % icons.length],
+                ),
+              );
+            }),
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildReviewCard(
-      String name, String assignment, String submitTime, String? imagePath) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 24,
-            backgroundImage: imagePath != null ? AssetImage(imagePath) : null,
-            backgroundColor: AppColors.backgroundLight,
-            child: imagePath == null
-                ? Icon(Icons.person, color: AppColors.secondaryText)
-                : null,
-          ),
-          SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(name, style: AppTextStyle.fontsize18),
-                Text(
-                  "$assignment $submitTime",
-                  style: AppTextStyle.caption13Secondary,
-                ),
-              ],
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primaryMain,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            ),
-            child: Text(
-              "ដាក់ពិន្ទុ",
-              style: AppTextStyle.caption13White,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

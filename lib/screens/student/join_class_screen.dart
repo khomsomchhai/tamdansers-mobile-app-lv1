@@ -19,7 +19,7 @@ class JoinClassScreen extends StatefulWidget {
 class _JoinClassScreenState extends State<JoinClassScreen> {
   var classCodeCtrl = TextEditingController();
   var formKey = GlobalKey<FormState>();
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,49 +48,47 @@ class _JoinClassScreenState extends State<JoinClassScreen> {
             child: Column(
               children: [
                 _buildHeader(),
-                SizedBox(height: 30,),
+                SizedBox(
+                  height: 30,
+                ),
                 _buildForm(),
               ],
             ),
           ),
         ),
       ),
-      bottomNavigationBar: 
-        Padding(
-          padding: const EdgeInsets.all(20),
-          child: PrimaryButton(
-            label: "ចូល", 
-            backgroundColor: AppColors.primaryMain, 
-            foregroundColor: AppColors.white, 
-            onPressed: (){
-              if(formKey.currentState!.validate()){
-                Navigator.pushNamed(
-                  context, 
-                  AppRoutes.studentDashboard
-                );
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(20),
+        child: PrimaryButton(
+            label: "ចូល",
+            backgroundColor: AppColors.primaryMain,
+            foregroundColor: AppColors.white,
+            onPressed: () {
+              if (formKey.currentState!.validate()) {
+                Navigator.pushNamed(context, AppRoutes.studentDashboard);
               }
-              
-            }
-          ),
-        ),
+            }),
+      ),
     );
   }
 
-  Widget _buildHeader(){
+  Widget _buildHeader() {
     return Column(
       children: [
         SizedBox(
-          height: MediaQuery.of(context).size.height*0.30,
-          child: SvgPicture.asset(
-            AppImages.joinClass
-          ),
+          height: MediaQuery.of(context).size.height * 0.30,
+          child: SvgPicture.asset(AppImages.joinClass),
         ),
-        SizedBox(height: 40,),
+        SizedBox(
+          height: 40,
+        ),
         Text(
           "ចូលរួមថ្នាក់ថ្មី",
           style: AppTextStyle.sectionTitle20,
         ),
-        SizedBox(height: 20,),
+        SizedBox(
+          height: 20,
+        ),
         Text(
           "សូមបញ្ចូលលេខកូដដែលគ្រូបន្ទុកថ្នាក់បានផ្ដល់ឱ្យ",
           style: AppTextStyle.body,
@@ -100,19 +98,21 @@ class _JoinClassScreenState extends State<JoinClassScreen> {
     );
   }
 
-  _buildForm(){
+  _buildForm() {
     return Column(
       children: [
         AuthField(
-          hintText: "លេខកូដថ្នាក់", 
+          hintText: "លេខកូដថ្នាក់",
           icon: Icon(
-            Icons.key_outlined, 
+            Icons.key_outlined,
             color: AppColors.secondaryText,
-          ), 
+          ),
           textController: classCodeCtrl,
           validator: Validators.classCode,
         ),
-        SizedBox(height: 10,)
+        SizedBox(
+          height: 10,
+        )
       ],
     );
   }

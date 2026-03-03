@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_images.dart';
+import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 
 class LinkParentBottomSheet extends StatefulWidget {
@@ -17,7 +18,8 @@ class LinkParentBottomSheetState extends State<LinkParentBottomSheet> {
       padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(
         color: AppColors.backgroundLight,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+        borderRadius:
+            BorderRadius.vertical(top: Radius.circular(AppNumber.radiusPill)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -28,13 +30,11 @@ class LinkParentBottomSheetState extends State<LinkParentBottomSheet> {
             margin: const EdgeInsets.only(bottom: 16),
             decoration: BoxDecoration(
               color: AppColors.grey.withValues(alpha: 0.4),
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
             ),
           ),
-
           Text("ភ្ជាប់អាណាព្យាបាល", style: AppTextStyle.screenTitle24),
           const SizedBox(height: 20),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -44,7 +44,6 @@ class LinkParentBottomSheetState extends State<LinkParentBottomSheet> {
                 color: AppColors.primaryMain.withValues(alpha: 0.3),
               ),
               const SizedBox(width: 12),
-
               CircleAvatar(
                 radius: 20,
                 backgroundColor: AppColors.primaryMain.withValues(alpha: 0.2),
@@ -64,20 +63,17 @@ class LinkParentBottomSheetState extends State<LinkParentBottomSheet> {
             height: 52,
             child: ElevatedButton(
               onPressed: () {
-                Navigator.pop(context,true);
+                Navigator.pop(context, true);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryMain,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18),
+                  borderRadius: BorderRadius.circular(AppNumber.radiusRounded),
                 ),
               ),
               child: Text(
                 "យល់ព្រម",
-                style: AppTextStyle.body.copyWith(
-                  color: AppColors.white,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: AppTextStyle.bodyWhite,
               ),
             ),
           ),
@@ -90,17 +86,16 @@ class LinkParentBottomSheetState extends State<LinkParentBottomSheet> {
                 Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                shadowColor: AppColors.transparent
-              ),
+                  backgroundColor: AppColors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(AppNumber.radiusRounded),
+                  ),
+                  shadowColor: AppColors.transparent),
               child: Text(
                 "បោះបង់",
                 style: AppTextStyle.body.copyWith(
                   color: AppColors.error,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -120,7 +115,7 @@ class LinkParentBottomSheetState extends State<LinkParentBottomSheet> {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppNumber.radiusRounded),
       ),
       child: Column(
         children: [
@@ -133,7 +128,7 @@ class LinkParentBottomSheetState extends State<LinkParentBottomSheet> {
           Text(
             title,
             textAlign: TextAlign.center,
-            style: AppTextStyle.body.copyWith(fontWeight: FontWeight.bold),
+            style: AppTextStyle.subtitle16,
           ),
         ],
       ),

@@ -8,13 +8,12 @@ class PrimaryButton extends StatelessWidget {
   final Color backgroundColor;
   final Color foregroundColor;
   final VoidCallback onPressed;
-  const PrimaryButton({
-    super.key, 
-    required this.label, 
-    required this.backgroundColor,
-    required this.foregroundColor,
-    required this.onPressed
-  });
+  const PrimaryButton(
+      {super.key,
+      required this.label,
+      required this.backgroundColor,
+      required this.foregroundColor,
+      required this.onPressed});
 
   @override
   Widget build(BuildContext context) {

@@ -11,7 +11,7 @@ class Subjects extends StatefulWidget {
 
 class _SubjectsState extends State<Subjects> {
   bool isExpanded = false;
-  final totalLesson=10;
+  final totalLesson = 10;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,41 +38,44 @@ class _SubjectsState extends State<Subjects> {
 
   Widget _lesson_list() {
     return Column(
-              children: [
-                Row(
-                  children: [
-                    Text('មេរៀន', style: AppTextStyle.fontsize18),
-                    Spacer(),
-                    if(totalLesson>2)
-                    TextButton(
-                      onPressed: (){
-                        setState(() {
-                          isExpanded = !isExpanded;
-                        });
-                      },
-                      child: Text(isExpanded?'បង្ហាញតិច':'បង្ហាញទាំងអស់',style: AppTextStyle.body.copyWith(color: AppColors.success,fontWeight: FontWeight.bold),),
-                    ),
-                  ],
+      children: [
+        Row(
+          children: [
+            Text('មេរៀន', style: AppTextStyle.fontsize18),
+            Spacer(),
+            if (totalLesson > 2)
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    isExpanded = !isExpanded;
+                  });
+                },
+                child: Text(
+                  isExpanded ? 'បង្ហាញតិច' : 'បង្ហាញទាំងអស់',
+                  style: AppTextStyle.body.copyWith(
+                      color: AppColors.success, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 10),
-                Column(
-                  children: [
-                    ListView.separated(
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      separatorBuilder: (context, index) {
-                        return SizedBox(
-                          height: 10);
-                      },
-                      itemBuilder: (context, index) {
-                        return _lesson();
-                      },
-                      itemCount: isExpanded? totalLesson:2,
-                    )
-                  ],
-                )
-              ],
-            );
+              ),
+          ],
+        ),
+        SizedBox(height: 10),
+        Column(
+          children: [
+            ListView.separated(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              separatorBuilder: (context, index) {
+                return SizedBox(height: 10);
+              },
+              itemBuilder: (context, index) {
+                return _lesson();
+              },
+              itemCount: isExpanded ? totalLesson : 2,
+            )
+          ],
+        )
+      ],
+    );
   }
 
   Widget _lesson() {

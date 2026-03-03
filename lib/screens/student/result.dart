@@ -14,16 +14,28 @@ class _ResultState extends State<Result> {
   double maxScore = 50;
 
   late double progress = score / maxScore; // 0.42
-  
-  int selectIndex=0;
 
-  List<double>scores=[400,444,350,300,250,200,150,388,450,500,480,420];
-  
+  int selectIndex = 0;
+
+  List<double> scores = [
+    400,
+    444,
+    350,
+    300,
+    250,
+    200,
+    150,
+    388,
+    450,
+    500,
+    480,
+    420
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          
           title: Text('លទ្ធផល', style: AppTextStyle.sectionTitle20),
           centerTitle: true,
         ),
@@ -59,62 +71,59 @@ class _ResultState extends State<Result> {
 
   Widget _score() {
     return Container(
-                padding: EdgeInsets.all(18),
-                width: double.infinity,
+      padding: EdgeInsets.all(18),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.primaryMain, width: 1),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: EdgeInsets.all(2),
+                height: 50,
+                width: 50,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  border:
-                      Border.all(color: AppColors.primaryMain, width: 1),
+                  borderRadius: BorderRadius.circular(12),
+                  color: AppColors.primaryBg,
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(2),
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            color: AppColors.primaryBg,
-                          ),
-                          child: Image.asset(
-                            'assets/images/user_profile.png',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('ភូមិវិទ្យា',
-                                style: AppTextStyle.fontsize18),
-                            Text('លោកគ្រូ​​ : រុន លីមហុង',
-                                style: AppTextStyle.body),
-                          ],
-                        )
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(score.toString(), style: AppTextStyle.sectionTitle20),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: LinearProgressIndicator(
-                            minHeight: 8,
-                            value: score / maxScore,
-                            backgroundColor: AppColors.primaryBg,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                AppColors.primaryMain),
-                          ),
-                        )
-                      ],
-                    )
-                  ],
+                child: Image.asset(
+                  'assets/images/user_profile.png',
+                  fit: BoxFit.cover,
                 ),
-              );
+              ),
+              SizedBox(width: 10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('ភូមិវិទ្យា', style: AppTextStyle.fontsize18),
+                  Text('លោកគ្រូ​​ : រុន លីមហុង', style: AppTextStyle.body),
+                ],
+              )
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(score.toString(), style: AppTextStyle.sectionTitle20),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: LinearProgressIndicator(
+                  minHeight: 8,
+                  value: score / maxScore,
+                  backgroundColor: AppColors.primaryBg,
+                  valueColor:
+                      AlwaysStoppedAnimation<Color>(AppColors.primaryMain),
+                ),
+              )
+            ],
+          )
+        ],
+      ),
+    );
   }
 
   Widget _status() {
@@ -126,7 +135,6 @@ class _ResultState extends State<Result> {
         Container(
           padding: EdgeInsets.all(20),
           height: 100,
-          
           width: double.infinity,
           decoration: BoxDecoration(
             color: AppColors.white,
@@ -172,8 +180,8 @@ class _ResultState extends State<Result> {
                     SizedBox(height: 20),
                     Text('400 of 500',
                         textAlign: TextAlign.center,
-                        style: AppTextStyle.body
-                            .copyWith(color: AppColors.white)),
+                        style:
+                            AppTextStyle.body.copyWith(color: AppColors.white)),
                   ],
                 ),
               ),
@@ -250,28 +258,29 @@ class _ResultState extends State<Result> {
         itemCount: 12,
         itemBuilder: (context, index) {
           return GestureDetector(
-            onTap: () {
-              setState(() {
-                selectIndex = index;
-              });
-            },
-            child: Container(
-              height: 30,
-            width: 100,
-            decoration: BoxDecoration(
-                color: index==selectIndex?AppColors.primary400:AppColors.white,
-                borderRadius: BorderRadius.circular(12)),
-            child: Center(
-              child: Text(
-                months[index],
-                style: AppTextStyle.subtitle16.copyWith(
+              onTap: () {
+                setState(() {
+                  selectIndex = index;
+                });
+              },
+              child: Container(
+                height: 30,
+                width: 100,
+                decoration: BoxDecoration(
                     color: index == selectIndex
-                        ? AppColors.white
-                        : AppColors.secondaryText),
-              ),
-            ),
-            )
-          );
+                        ? AppColors.primary400
+                        : AppColors.white,
+                    borderRadius: BorderRadius.circular(12)),
+                child: Center(
+                  child: Text(
+                    months[index],
+                    style: AppTextStyle.subtitle16.copyWith(
+                        color: index == selectIndex
+                            ? AppColors.white
+                            : AppColors.secondaryText),
+                  ),
+                ),
+              ));
         },
       ),
     );

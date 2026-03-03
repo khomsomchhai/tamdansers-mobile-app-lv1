@@ -18,39 +18,37 @@ class _StudentFirstScreenState extends State<StudentFirstScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          child: Column(
-            children: [
-              StudentProfileHeader(),
-              SizedBox(height: 20,),
-              Expanded(
-                child: hasJoinedClass
-                    ? StudentHasJoinedClass()
-                    : StudentEmptyClass(),
-              ),
-            ],
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: Column(
+              children: [
+                StudentProfileHeader(),
+                SizedBox(
+                  height: 20,
+                ),
+                Expanded(
+                  child: hasJoinedClass
+                      ? StudentHasJoinedClass()
+                      : StudentEmptyClass(),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.primaryMain,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
-        ),
-        onPressed: () {
-          Navigator.pushNamed(
-            context, 
-            AppRoutes.joinClassSreen
-          );
-        },
-        child: Icon(
-          Icons.add,
-          color: AppColors.white,
-          size: AppNumber.iconLarge,
-        ),
-      )
-    );
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: AppColors.primaryMain,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
+          ),
+          onPressed: () {
+            Navigator.pushNamed(context, AppRoutes.joinClassSreen);
+          },
+          child: Icon(
+            Icons.add,
+            color: AppColors.white,
+            size: AppNumber.iconLarge,
+          ),
+        ));
   }
 }
