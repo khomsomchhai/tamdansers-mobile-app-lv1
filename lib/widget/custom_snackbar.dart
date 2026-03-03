@@ -75,7 +75,7 @@ class CustomSnackbar extends StatelessWidget {
           ),
           Container(
             height: 4,
-            width: MediaQuery.sizeOf(context).width*0.86,
+            width: MediaQuery.sizeOf(context).width*0.9,
             decoration: BoxDecoration(
               color: color,
               borderRadius: BorderRadius.vertical(

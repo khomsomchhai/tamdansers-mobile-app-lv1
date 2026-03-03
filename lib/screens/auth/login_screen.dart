@@ -15,7 +15,8 @@ import 'package:tamdansers_app/widget/custom_snackbar.dart';
 import 'package:tamdansers_app/widget/primary_button.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  final String role;
+  const LoginScreen({super.key, required this.role});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -26,23 +27,30 @@ class _LoginScreenState extends State<LoginScreen> {
   var pwdCtrl = TextEditingController();
   var formKey = GlobalKey<FormState>();
   bool isCheck = false;
-  var selectedRole = "";
+
+  late String selectedRole;
+  @override
+  void initState() {
+    super.initState();
+    selectedRole = widget.role;
+  }
+  
   void login() async {
     var user = await UserRepo().login(identifierCtrl.text, pwdCtrl.text);
     if (user == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            behavior: SnackBarBehavior.floating,
-            margin: const EdgeInsets.symmetric(
-                horizontal: 8, vertical: 16), // 👈 smaller horizontal margin
-            content: CustomSnackbar(
-                title: "មិនត្រឹមត្រូវ!",
-                message:
-                    "អ៊ីម៉ែល ឬ លេខទូរស័ព្ទ និងពាក្យសម្ងាត់មិនត្រឺមត្រូវ។ សូមព្យាយាមម្ដងទៀត",
-                icon: Icons.close,
-                color: AppColors.error)),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+          content: CustomSnackbar(
+            title: "មិនត្រឹមត្រូវ!", 
+            message: "អ៊ីម៉ែល ឬ លេខទូរស័ព្ទ និងពាក្យសម្ងាត់មិនត្រឺមត្រូវ។ សូមព្យាយាមម្ដងទៀត", 
+            icon: Icons.close, 
+            color: AppColors.error
+          )
+        ),
       );
       return;
     }
@@ -53,32 +61,23 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.pushReplacementNamed(
         context,
         AppRoutes.teacherDashboard,
+        arguments: user["id"]
       );
     } else if (user["role"] == "student") {
       Navigator.pushReplacementNamed(
         context,
         AppRoutes.studentFirstScreen,
+        arguments: user["id"]
       );
     } else if (user["role"] == "parent") {
       Navigator.pushReplacementNamed(
         context,
         AppRoutes.parentFirstScreen,
+        arguments: user["id"]
       );
     }
-  }
 
-  @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
-    final role = ModalRoute.of(context)!.settings.arguments as String?;
-    if (role != null) {
-      setState(() {
-        selectedRole = role;
-      });
-    }
   }
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
