@@ -212,7 +212,7 @@ class _ParentLoginState extends State<ParentLogin> {
               onTap: () {
                 Navigator.pushNamed(
                   context,
-                  AppRoutes.signUpTeacherScreen,
+                  AppRoutes.signUpScreen,
                 );
               },
               child: Text(

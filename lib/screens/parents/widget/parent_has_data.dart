@@ -5,17 +5,31 @@ import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 
-class ParentHasData extends StatelessWidget {
+class ParentHasData extends StatefulWidget {
   const ParentHasData({super.key});
 
+  @override
+  State<ParentHasData> createState() => _ParentHasDataState();
+}
+
+class _ParentHasDataState extends State<ParentHasData> {
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         SizedBox(height: 30,),
-        Text(
-          "តាមដានកូនរបស់អ្នក",
-          style: AppTextStyle.sectionTitle20
+        Row(
+          children: [
+            Icon(
+              Icons.account_circle_rounded,
+              size: AppNumber.iconLarge,
+              color: AppColors.primaryMain,
+            ),
+            Text(
+              "គណនីសិស្ស",
+              style: AppTextStyle.sectionTitle20
+            ),
+          ],
         ),
         // SizedBox(height: 8,),
         Expanded(
@@ -30,7 +44,7 @@ class ParentHasData extends StatelessWidget {
                 onTap: (){
                   Navigator.pushNamed(
                     context,
-                    AppRoutes.parentDashboardScreen
+                    AppRoutes.parentListStuClass
                   );
                 },
                 child: _studentCard()
@@ -42,6 +56,7 @@ class ParentHasData extends StatelessWidget {
       ],
     );
   }
+
   Widget _studentCard() {
     return Container(
       padding: EdgeInsets.all(16),

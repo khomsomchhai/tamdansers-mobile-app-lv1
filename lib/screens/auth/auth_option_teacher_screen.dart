@@ -48,7 +48,7 @@ class AuthOptionTeacherScreen extends StatelessWidget {
                 backgroundColor: AppColors.primaryMain,
                 foregroundColor: AppColors.white,
                 onPressed: () =>
-                    Navigator.pushNamed(context, AppRoutes.loginTeacherScreen)),
+                    Navigator.pushNamed(context, AppRoutes.loginScreen)),
             SizedBox(
               height: 20,
             ),

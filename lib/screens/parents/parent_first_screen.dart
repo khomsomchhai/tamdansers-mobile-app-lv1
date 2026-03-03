@@ -30,7 +30,7 @@ class _ParentFirstScreenState extends State<ParentFirstScreen> {
           ParentProfileHeader(name: "Piseth", gender: "male",),
           Expanded(
             child: hasData 
-            ? ParentHasData() 
+            ? ParentHasData()
             : ParentEmptyData()
           )
         ],

@@ -8,27 +8,87 @@ import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/constants/validators.dart';
+import 'package:tamdansers_app/repositories/user_repo.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/widget/auth_field.dart';
 import 'package:tamdansers_app/widget/button_with_icon.dart';
 import 'package:tamdansers_app/widget/primary_button.dart';
 
-class SignUpTeacherScreen extends StatefulWidget {
-  const SignUpTeacherScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<SignUpTeacherScreen> createState() => _SignUpTeacherScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _SignUpTeacherScreenState extends State<SignUpTeacherScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
   var lastnameCtrl = TextEditingController();
   var firstnameCtrl = TextEditingController();
-  var emailCtrl = TextEditingController();
+  var identifierCtrl = TextEditingController();
   var pwdCtrl = TextEditingController();
   var cfPwdCtrl = TextEditingController();
   String gender = "male";
   var formKey = GlobalKey<FormState>();
+  var selectedRole = "";
+  
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    final role = ModalRoute.of(context)!.settings.arguments as String;
+    setState(() {
+      selectedRole = role;
+    });
+  }
+  
+  Future<void> _register() async {
+    String identifier = identifierCtrl.text.trim();
+    bool isEmail = identifier.contains("@");
 
+    String? email;
+    String? phone;
+
+    if (isEmail) {
+      email = identifier;
+    } else {
+      phone = identifier;
+    }
+    if (formKey.currentState!.validate()) {
+      var existingUser = isEmail 
+      ? await UserRepo().getUserByEmail(email!) 
+      : await UserRepo().getUserByPhone(phone!);
+      if (existingUser != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("គណនីនេះមានរួចហើយ សូមប្រើអ៊ីម៉ែល ឬ លេខទូរស័ព្ទផ្សេង")),
+        );
+      } else {
+        var result = await UserRepo().createUser(
+          firstName: firstnameCtrl.text,
+          lastName: lastnameCtrl.text,
+          gender: gender,
+          phone: phone ?? "",
+          email: email ?? "",
+          password: pwdCtrl.text,
+          role: selectedRole,
+
+        );
+        if (result > 0) {
+          Navigator.pushNamed(
+            context, 
+            AppRoutes.otpScreen,
+            arguments: selectedRole
+          );
+        } 
+        
+        // Navigator.pushNamed(
+        //   context, 
+        //   AppRoutes.otpScreen,
+        //   arguments: selectedRole
+        // );
+        
+      }
+    }
+  }
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -40,6 +100,7 @@ class _SignUpTeacherScreenState extends State<SignUpTeacherScreen> {
             icon: Icon(
               Icons.arrow_back_ios_new_rounded,
               color: AppColors.primaryText,
+              size: AppNumber.iconMedium,
             )),
       ),
       body: SingleChildScrollView(
@@ -141,7 +202,7 @@ class _SignUpTeacherScreenState extends State<SignUpTeacherScreen> {
               size: 20,
               color: AppColors.secondaryText,
             ),
-            textController: emailCtrl,
+            textController: identifierCtrl,
             validator: Validators.emailOrPhone,
           ),
           SizedBox(
@@ -180,12 +241,7 @@ class _SignUpTeacherScreenState extends State<SignUpTeacherScreen> {
             backgroundColor: AppColors.primaryMain,
             foregroundColor: AppColors.white,
             onPressed: () {
-              if (formKey.currentState!.validate()) {
-                Navigator.pushReplacementNamed(
-                  context,
-                  AppRoutes.teacherDashboard,
-                );
-              }
+              _register();
             },
           ),
         ],

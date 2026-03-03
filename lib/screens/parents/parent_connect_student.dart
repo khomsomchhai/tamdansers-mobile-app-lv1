@@ -5,8 +5,8 @@ import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/constants/validators.dart';
-import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/widget/auth_field.dart';
+import 'package:tamdansers_app/widget/custom_dialog.dart';
 import 'package:tamdansers_app/widget/primary_button.dart';
 
 class ParentConnectStudent extends StatefulWidget {
@@ -29,7 +29,7 @@ class _ParentConnectStudentState extends State<ParentConnectStudent> {
           icon: Icon(
             Icons.arrow_back_ios_new_rounded,
             color: AppColors.primaryText,
-            size: AppNumber.iconSmall,
+            size: AppNumber.iconMedium,
           ),
         ),
         title: Text(
@@ -48,7 +48,7 @@ class _ParentConnectStudentState extends State<ParentConnectStudent> {
             child: Column(
               children: [
                 _buildHeader(),
-                SizedBox(height: 30,),
+                SizedBox(height: 16,),
                 _buildForm(),
               ],
             ),
@@ -59,14 +59,22 @@ class _ParentConnectStudentState extends State<ParentConnectStudent> {
         Padding(
           padding: const EdgeInsets.all(20),
           child: PrimaryButton(
-            label: "ភ្ជាប់", 
+            label: "ដាក់ស្នើរ",
             backgroundColor: AppColors.primaryMain, 
             foregroundColor: AppColors.white, 
             onPressed: (){
               if(formKey.currentState!.validate()){
-                Navigator.pushNamed(
-                  context, 
-                  AppRoutes.studentDashboard
+                showDialog(
+                  context: context, 
+                  builder: (context) => 
+                  CustomDialog(
+                    label: "យល់ព្រម", 
+                    title: "សំណើរត្រូវបានដាក់ស្នើរ", 
+                    description: "សូមរង់ចាំការទទួលសំណើរពីសិស្ស។ អ្នកនឹងទទួលបានការជូនដំណឹងនៅពេលដែលសំណើរបស់អ្នកត្រូវបានទទួល ឬ បដិសេធ។", 
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
                 );
               }
               
@@ -85,16 +93,18 @@ class _ParentConnectStudentState extends State<ParentConnectStudent> {
             AppImages.connection
           ),
         ),
-        SizedBox(height: 40,),
+        SizedBox(height: 20,),
         Text(
           "ភ្ជាប់ទៅកាន់គណនីរបស់សិស្ស",
           style: AppTextStyle.sectionTitle20,
         ),
-        SizedBox(height: 20,),
-        Text(
-          "សូមបញ្ចូលលេខកូដភ្ជាប់ដែលកូនរបស់អ្នកបានផ្ដល់ឱ្យ",
-          style: AppTextStyle.body,
-          overflow: TextOverflow.ellipsis,
+        SizedBox(height: 16,),
+        Center(
+          child: Text(
+            "សូមបញ្ចូលអ៊ីម៉ែល ឬ លេខទូរស័ព្ទរបស់សិស្សដែលអ្នកចង់ភ្ជាប់។ អ៊ីម៉ែល ឬ លេខទូរស័ព្ទដែលបានចុះឈ្មោះជាមួយគណនីសិស្សរួចហើយ។",
+            style: AppTextStyle.body,
+            textAlign: TextAlign.center,
+          ),
         ),
       ],
     );
@@ -104,13 +114,13 @@ class _ParentConnectStudentState extends State<ParentConnectStudent> {
     return Column(
       children: [
         AuthField(
-          hintText: "លេខកូដភ្ជាប់", 
+          hintText: "អ៊ីម៉ែល ឬ លេខទូរស័ព្ទរបស់សិស្ស", 
           icon: Icon(
-            Icons.key_outlined, 
+            Icons.email_outlined, 
             color: AppColors.secondaryText,
           ), 
           textController: invCodeCtrl,
-          validator: Validators.invCode,
+          validator: Validators.emailOrPhone,
         ),
         SizedBox(height: 10,)
       ],

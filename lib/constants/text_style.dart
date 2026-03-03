@@ -30,8 +30,6 @@ class AppTextStyle {
     fontWeight: FontWeight.w600,
     color: AppColors.primaryText,
   );
-  static final sectionTitle20 =
-      GoogleFonts.kantumruyPro(fontSize: 20, fontWeight: FontWeight.w600);
   static final fontsize18 =
       GoogleFonts.kantumruyPro(fontSize: 18, fontWeight: FontWeight.w600);
   static final size18 =
@@ -54,6 +52,17 @@ class AppTextStyle {
   );
   static final screenTitle24Main = GoogleFonts.kantumruyPro(
     fontSize: 24,
+    fontWeight: FontWeight.w600,
+    color: AppColors.primaryMain,
+  );
+
+  // Section Titles (20px)
+  static final sectionTitle20 = GoogleFonts.kantumruyPro(
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+  );
+  static final size18Primary = GoogleFonts.kantumruyPro(
+    fontSize: 18,
     fontWeight: FontWeight.w600,
     color: AppColors.primaryMain,
   );

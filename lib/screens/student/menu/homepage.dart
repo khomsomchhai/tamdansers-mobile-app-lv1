@@ -207,12 +207,7 @@ class _Classes extends StatelessWidget {
         Row(
           children: [
             Text('ថ្នាក់បន្ទាប់', style: AppTextStyle.fontsize18),
-            Spacer(),
-            TextButton(
-              onPressed: () {},
-              child: Text('មើលទាំងអស់',
-                  style: AppTextStyle.hintText.copyWith(color: AppColors.link)),
-            )
+            
           ],
         ),
         SizedBox(height: 12),

@@ -3,9 +3,14 @@ import 'package:tamdansers_app/routes/app_routes.dart';
 
 // import all screens
 import 'package:tamdansers_app/screens/auth/auth_option_teacher_screen.dart';
+import 'package:tamdansers_app/screens/auth/login_screen.dart';
+import 'package:tamdansers_app/screens/auth/otp_screen.dart';
+import 'package:tamdansers_app/screens/auth/role_selection_screen.dart';
+import 'package:tamdansers_app/screens/auth/sign_up_screen.dart';
 import 'package:tamdansers_app/screens/auth/splash_screen.dart';
 import 'package:tamdansers_app/screens/parents/parent_connect_student.dart';
 import 'package:tamdansers_app/screens/parents/parent_first_screen.dart';
+import 'package:tamdansers_app/screens/parents/parent_list_stu_class.dart';
 import 'package:tamdansers_app/screens/parents/parent_login.dart';
 import 'package:tamdansers_app/screens/student/join_class_screen.dart';
 import 'package:tamdansers_app/screens/student/menu/change_pw.dart';
@@ -24,8 +29,8 @@ import 'package:tamdansers_app/screens/teacher/manage_all_class.dart';
 import 'package:tamdansers_app/screens/teacher/score_detail_screen.dart';
 import 'package:tamdansers_app/screens/teacher/teacher_dashboard.dart';
 
-import '../screens/parents/menu/Comment_signature .dart';
 import '../screens/parents/menu/Monthy_result_Ranking.dart';
+import '../screens/parents/menu/comment_signature .dart';
 import '../screens/student/menu/deatil_teacher.dart';
 import '../screens/student/menu/deatilscreen.dart';
 import '../screens/student/menu/submmit_screen.dart';
@@ -37,6 +42,18 @@ class PageRoutes {
 
       case AppRoutes.splashScreen:
         return SplashScreen();
+        
+      case AppRoutes.roleSelectionScreen:
+        return RoleSelectionScreen();
+      
+      case AppRoutes.otpScreen:
+        return OtpScreen();
+      case AppRoutes.loginScreen:
+        return LoginScreen();
+
+      case AppRoutes.signUpScreen:
+        return SignUpScreen();
+      
 
       case AppRoutes.authOptionTeacherScreen:
         return AuthOptionTeacherScreen();
@@ -114,7 +131,12 @@ class PageRoutes {
   }
   static Map<String, Widget Function(BuildContext)> routes = {
     AppRoutes.splashScreen: (context) => SplashScreen(),
+    AppRoutes.roleSelectionScreen: (context) => RoleSelectionScreen(),
+    AppRoutes.otpScreen: (context) => OtpScreen(),
+    // Teacher routes
     AppRoutes.authOptionTeacherScreen: (context) => AuthOptionTeacherScreen(),
+    AppRoutes.loginScreen: (context) => LoginScreen(),
+    AppRoutes.signUpScreen: (context) => SignUpScreen(),
     AppRoutes.teacherDashboard: (context) => TeacherDashboard(),
     AppRoutes.manageAllClass: (context) => ManageAllClass(),
     AppRoutes.linkParentScreen: (context) => LinkParentScreen(),
@@ -138,6 +160,7 @@ class PageRoutes {
     // Parent routes
     AppRoutes.parentFirstScreen: (context) => ParentFirstScreen(),
     AppRoutes.parentConnectStudent: (context) => ParentConnectStudent(),
+    AppRoutes.parentListStuClass: (context) => ParentListStuClass(),
     
     AppRoutes.parentDashboardScreen: (context) => ParentLogin(),
     AppRoutes.monthly: (context) => CustomScreen(),

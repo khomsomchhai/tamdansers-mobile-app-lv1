@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/routes/app_routes.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -163,7 +164,7 @@ class _ProfileState extends State<Profile> {
                             ),
                           ),
                           onPressed: () {
-                            Navigator.pop(context); 
+                            Navigator.popAndPushNamed(context, AppRoutes.roleSelectionScreen);
                           },
                           child: Text('ចាកចេញ',style: AppTextStyle.hintText.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
                         ),

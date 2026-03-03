@@ -2,10 +2,11 @@ class AppRoutes {
   //Auth
   static const String splashScreen = "/splash_screen";
   static const String roleSelectionScreen = "/role_selection_screen";
+  static const String otpScreen = "/otp_screen";
   //teacher
   static const String authOptionTeacherScreen = "/auth_option_teacher_screen";
-  static const String loginTeacherScreen = "/login_teacher_screen";
-  static const String signUpTeacherScreen = "/sign_up_teacher_screen";
+  static const String loginScreen = "/login_screen";
+  static const String signUpScreen = "/sign_up_screen";
   static const String teacherDashboard = "/teacher_dashboard";
   static const String manageClass = "/manage_class";
   static const String manageAllClass = "/manage_all_class";
@@ -28,18 +29,21 @@ class AppRoutes {
   static const String submitted="/submitted";
   static const String signinStudent="/signinstudent";
   static const String signupStudent="/signupstudent";
+  static const String info="/student_info_personal";
   //parent
   static const String parentDashboardScreen = "/parent_dashboard_screen";
 
-  static const String info="/student_info_personal";
+  
   static const String teacherDashboardScreen = "/teacher_dashboard_screen";
   static const String subject="/subject";
   static const String changePassword="/change_password";
   static const String notifications="/notifications";
 
   static const String parentFirstScreen = "/parent_first_screen";
-  static const String parentConnectStudent = "/parent_connect_student";
 
-  static String monthly = "/monthly_result_ranking";
-  static String commentScreen = "/comment_screen";
+  static const  String parentConnectStudent = "/parent_connect_student";
+  static const String parentListStuClass = "/parent_list_stu_class";
+
+  static const String monthly = "/monthly_result_ranking";
+  static const String commentScreen = "/comment_screen";
 }
