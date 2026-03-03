@@ -6,6 +6,8 @@ class AppRoutes {
   static const String signUpScreen = "/sign_up_screen";
   static const String otpScreen = "/otp_screen";
   //teacher
+  static const String teacherMainScreen = "/teacher_main_screen";
+  
   static const String authOptionTeacherScreen = "/auth_option_teacher_screen";
   static const String teacherDashboard = "/teacher_dashboard";
   static const String manageClass = "/manage_class";

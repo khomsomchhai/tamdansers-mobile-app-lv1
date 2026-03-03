@@ -36,5 +36,5 @@ final List<Item> items = [
       img: 'assets/icons/bell.png',
       bgColor: AppColors.lightPink,
       imgColor: AppColors.pepure,
-      route: '/subject'),
+      route: '/notification'),
 ];
