@@ -38,12 +38,13 @@ class AppRoutes {
   static const String info = "/student_info_personal";
   static const String subject = "/subject";
   static const String notifications = "/notifications";
+  static const String changePassword = "/change_password";
   //parent
   static const String parentDashboardScreen = "/parent_dashboard_screen";
 
   static String teacherDashboardScreen = "/teacher_dashboard_screen";
 
-  static const String changePassword = "/change_password";
+  
 
   //parent
 
