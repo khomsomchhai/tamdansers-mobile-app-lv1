@@ -5,17 +5,23 @@ import 'package:tamdansers_app/screens/auth/otp_screen.dart';
 import 'package:tamdansers_app/screens/auth/role_selection_screen.dart';
 import 'package:tamdansers_app/screens/auth/sign_up_screen.dart';
 import 'package:tamdansers_app/screens/auth/splash_screen.dart';
+import 'package:tamdansers_app/screens/student/join_class_screen.dart';
 import 'package:tamdansers_app/screens/student/menu/attendance.dart';
+import 'package:tamdansers_app/screens/student/menu/change_pw.dart';
+import 'package:tamdansers_app/screens/student/menu/deatil_teacher.dart';
+import 'package:tamdansers_app/screens/student/menu/deatilscreen.dart';
 import 'package:tamdansers_app/screens/student/menu/homepage.dart';
 import 'package:tamdansers_app/screens/student/menu/homework.dart';
 import 'package:tamdansers_app/screens/student/menu/info_personal.dart';
 import 'package:tamdansers_app/screens/student/menu/notification.dart';
 import 'package:tamdansers_app/screens/student/menu/profile.dart';
+import 'package:tamdansers_app/screens/student/menu/submmit_screen.dart';
 import 'package:tamdansers_app/screens/student/result.dart';
 import 'package:tamdansers_app/screens/student/scedeul.dart';
 import 'package:tamdansers_app/screens/student/student_dashboard.dart';
 import 'package:tamdansers_app/screens/student/student_first_screen.dart';
 import 'package:tamdansers_app/screens/student/subjects.dart';
+import 'package:tamdansers_app/screens/teacher/student_detail_screen.dart';
 
 class AppRouter {
   static Route generateRoute(RouteSettings settings) {
@@ -69,6 +75,24 @@ class AppRouter {
         return _fadeRouter(InfoPersonal());
       case AppRoutes.subject:
         return _fadeRouter(Subjects());
+      case AppRoutes.changePassword:
+        return _fadeRouter(ChangePw());
+      case AppRoutes.detailTeach:
+        return _fadeRouter(DeatilTeacher());
+      case AppRoutes.submitted:
+        return _fadeRouter(SubmmitScreen());
+      case AppRoutes.joinClassSreen:
+        return _fadeRouter(JoinClassScreen());
+      case AppRoutes.studentDetailScreen:
+        return _fadeRouter(StudentDetailScreen());
+      case AppRoutes.detail:
+        return _fadeRouter(Deatilscreen());
+      
+      // case AppRoutes.studentFirstScreen:
+      //   final userId = settings.arguments as int;
+      //   return _fadeRouter(StudentFirstScreen(
+      //     userId: userId,
+      //   ));
       //------------ Parent -----------------
 
       default:

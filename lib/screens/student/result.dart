@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/screens/student/data_result.dart';
 
 class Result extends StatefulWidget {
   const Result({super.key});
@@ -10,30 +11,53 @@ class Result extends StatefulWidget {
 }
 
 class _ResultState extends State<Result> {
-  double score = 42;
-  double maxScore = 50;
-
-  late double progress = score / maxScore; // 0.42
-
   int selectIndex = 0;
 
-  List<double> scores = [
-    400,
-    444,
-    350,
-    300,
-    250,
-    200,
-    150,
-    388,
-    450,
-    500,
-    480,
-    420
-  ];
+  late List<MontResult> monthResults;
+  @override
+  void initState() {
+    super.initState();
+
+    monthResults = List.generate(12, (monthIndex) {
+      return MontResult(
+        totalScore: 380 + (monthIndex * 5),
+        maxScore: 500,
+        rank: monthIndex + 1,
+        average: 50 + monthIndex.toDouble(),
+        subjects: List.generate(7, (subjectIndex) {
+          List<String> subjectNames = [
+            'ភូមិវិទ្យា',
+            'គណិតវិទ្យា',
+            'រូបវិទ្យា',
+            'គីមីវិទ្យា',
+            'ជីវវិទ្យា',
+            'ប្រវត្តិវិទ្យា',
+            'ភាសាខ្មែរ',
+          ];
+
+          List<String> teacherNames = [
+            'រុន លីមហុង',
+            'ស៊ុន ដារ៉ា',
+            'ចាន់ សុភា',
+            'លី សុវណ្ណ',
+            'មឿន ស្រីនាង',
+            'ថា វិសាល',
+            'គង់ សុភ័ក្រ្ត',
+          ];
+
+          return SubjectResult(
+            subjectName: subjectNames[subjectIndex],
+            teacherName: teacherNames[subjectIndex],
+            score: 40 + subjectIndex * 3 + monthIndex.toDouble(),
+          );
+        }),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final data = monthResults[selectIndex];
     return Scaffold(
         appBar: AppBar(
           title: Text('លទ្ធផល', style: AppTextStyle.sectionTitle20),
@@ -58,9 +82,9 @@ class _ResultState extends State<Result> {
                   },
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: 7,
+                  itemCount: data.subjects.length,
                   itemBuilder: (context, index) {
-                    return _score();
+                    return _score(data.subjects[index]);
                   },
                 )
               ],
@@ -69,7 +93,8 @@ class _ResultState extends State<Result> {
         ));
   }
 
-  Widget _score() {
+  Widget _score(SubjectResult subject) {
+    double maxScore = 100;
     return Container(
       padding: EdgeInsets.all(18),
       width: double.infinity,
@@ -99,8 +124,8 @@ class _ResultState extends State<Result> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('ភូមិវិទ្យា', style: AppTextStyle.fontsize18),
-                  Text('លោកគ្រូ​​ : រុន លីមហុង', style: AppTextStyle.body),
+                  Text(subject.subjectName, style: AppTextStyle.fontsize18),
+                  Text('លោកគ្រូ​​ : ${subject.teacherName}', style: AppTextStyle.body),
                 ],
               )
             ],
@@ -108,12 +133,12 @@ class _ResultState extends State<Result> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(score.toString(), style: AppTextStyle.sectionTitle20),
+              Text(subject.score.toString(), style: AppTextStyle.sectionTitle20),
               ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: LinearProgressIndicator(
                   minHeight: 8,
-                  value: score / maxScore,
+                  value: subject.score / maxScore,
                   backgroundColor: AppColors.primaryBg,
                   valueColor:
                       AlwaysStoppedAnimation<Color>(AppColors.primaryMain),
@@ -148,6 +173,7 @@ class _ResultState extends State<Result> {
   }
 
   Widget _table_result() {
+    final data = monthResults[selectIndex];
     return Container(
       padding: EdgeInsets.all(20),
       height: 300,
@@ -178,7 +204,7 @@ class _ResultState extends State<Result> {
                         style: AppTextStyle.subtitle16
                             .copyWith(color: AppColors.white)),
                     SizedBox(height: 20),
-                    Text('400 of 500',
+                    Text('${data.totalScore} of ${data.maxScore}',
                         textAlign: TextAlign.center,
                         style:
                             AppTextStyle.body.copyWith(color: AppColors.white)),
@@ -198,7 +224,7 @@ class _ResultState extends State<Result> {
                         style: AppTextStyle.fontsize18
                             .copyWith(color: AppColors.white)),
                     SizedBox(height: 10),
-                    Text('5',
+                    Text('${data.rank}',
                         style: AppTextStyle.title28
                             .copyWith(color: AppColors.white)),
                   ],
@@ -217,7 +243,7 @@ class _ResultState extends State<Result> {
                         style: AppTextStyle.subtitle16
                             .copyWith(color: AppColors.white)),
                     SizedBox(height: 20),
-                    Text('43.25',
+                    Text('${data.average}',
                         style: AppTextStyle.fontsize18
                             .copyWith(color: AppColors.white)),
                   ],
