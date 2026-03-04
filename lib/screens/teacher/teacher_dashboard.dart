@@ -12,7 +12,8 @@ import 'package:tamdansers_app/routes/app_routes.dart';
 const int kTeacherId = 1;
 
 class TeacherDashboard extends StatefulWidget {
-  const TeacherDashboard({super.key});
+  final Map<String, dynamic>? teacher;
+  const TeacherDashboard({super.key, this.teacher});
 
   @override
   State<TeacherDashboard> createState() => _TeacherDashboardState();
@@ -23,6 +24,14 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
   int _studentCount = 0;
   List<Map<String, dynamic>> _activities = [];
   bool _loading = true;
+
+  String _getTeacherName() {
+    if (widget.teacher == null) return 'ទេព ធីតា';
+    final first = widget.teacher?['first_name'] ?? '';
+    final last = widget.teacher?['last_name'] ?? '';
+    final full = '$first $last'.trim();
+    return full.isNotEmpty ? full : 'ទេព ធីតា';
+  }
 
   @override
   void initState() {
@@ -69,7 +78,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
           ),
         ),
         title: Text(
-          "ទេព ធីតា",
+          _getTeacherName(),
           style: AppTextStyle.fontsize18,
         ),
       ),
@@ -85,7 +94,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                   style: AppTextStyle.screenTitle24,
                   children: [
                     TextSpan(
-                      text: "ទេព ធីតា",
+                      text: _getTeacherName(),
                       style: AppTextStyle.screenTitle24Main,
                     ),
                   ],

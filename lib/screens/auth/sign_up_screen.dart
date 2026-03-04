@@ -70,7 +70,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
         );
       } else {
-        var result = await UserRepo().createUser(
+        await UserRepo().createUser(
           firstName: firstnameCtrl.text,
           lastName: lastnameCtrl.text,
           gender: gender,
@@ -80,19 +80,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
           role: selectedRole,
 
         );
-        if (result > 0) {
-          Navigator.pushNamed(
-            context, 
-            AppRoutes.otpScreen,
-            arguments: selectedRole
-          );
-        }
         
-        // Navigator.pushNamed(
-        //   context, 
-        //   AppRoutes.otpScreen,
-        //   arguments: selectedRole
-        // );
+        Navigator.pushNamed(
+          context, 
+          AppRoutes.otpScreen,
+          arguments: selectedRole
+        );
         
       }
     }

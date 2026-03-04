@@ -100,7 +100,10 @@ class _ProfileState extends State<Profile> {
                 iconColor: AppColors.pepure,
                 title: 'ប្ដូរពាក្យសម្ងាត់',
                 onTap: () {
-                  Navigator.pushNamed(context, '/change_password');
+                  Navigator.pushNamed(
+                    context, 
+                    AppRoutes.changePassword
+                  );
                 },
               ),
               const SizedBox(height: 20),

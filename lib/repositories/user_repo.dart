@@ -93,4 +93,25 @@ class UserRepo {
     }
     return null;
   }
+  Future<bool> changePassword(int userId, String oldPassword, String newPassword) async {
+    final db = await DbHelper().initDatabase();
+    final result = await db.query(
+      'tbl_user',
+      where: 'id = ? AND password = ?',
+      whereArgs: [userId, oldPassword],
+    );
+    
+    if (result.isEmpty) {
+      return false;
+    }
+    
+    final updated = await db.update(
+      'tbl_user',
+      {'password': newPassword},
+      where: 'id = ?',
+      whereArgs: [userId],
+    );
+    
+    return updated > 0;
+  }
 }

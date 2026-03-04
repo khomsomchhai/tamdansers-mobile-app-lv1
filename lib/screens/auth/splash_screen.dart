@@ -16,35 +16,58 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
 
-  void checkLogin() async{
-    var pref = await SharedPreferences.getInstance();
-    var role = pref.getString("role") ?? "";
-    var isLogin = pref.getBool("isLogin") ?? false;
-    if(isLogin){
-      if(role == "teacher"){
+  void checkLogin() async {
+  final pref = await SharedPreferences.getInstance();
+
+  final role = pref.getString("role");
+  final id = pref.getInt("id");
+  final isLogin = pref.getBool("isLogin") ?? false;
+
+  if (!mounted) return;
+
+  if (isLogin && role != null && id != null) {
+
+    switch (role) {
+      case "teacher":
         Navigator.pushReplacementNamed(
-          context, 
+          context,
           AppRoutes.teacherDashboard,
+          arguments: id,
         );
-      } else if(role == "student"){
+        break;
+
+      case "student":
         Navigator.pushReplacementNamed(
-          context, 
+          context,
           AppRoutes.studentFirstScreen,
+          arguments: id,
         );
-      } else if(role == "parent"){
+        break;
+
+      case "parent":
         Navigator.pushReplacementNamed(
-          context, 
+          context,
           AppRoutes.parentFirstScreen,
+          arguments: id,
         );
-      }
-    }else{
-      Navigator.pushNamedAndRemoveUntil(
-        context, 
-        AppRoutes.roleSelectionScreen, 
-        (route) => false,
-      );
+        break;
+
+      default:
+        _goToRoleSelection();
     }
+
+  } else {
+    _goToRoleSelection();
   }
+}
+
+void _goToRoleSelection() {
+  Navigator.pushNamedAndRemoveUntil(
+    context,
+    AppRoutes.roleSelectionScreen,
+    (route) => false,
+  );
+}
 
   @override
   void initState() {

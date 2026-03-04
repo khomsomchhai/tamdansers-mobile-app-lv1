@@ -56,11 +56,12 @@ class _LoginScreenState extends State<LoginScreen> {
     }
     var pref = await SharedPreferences.getInstance();
     pref.setString("role", user["role"]);
+    pref.setInt("id", user["id"]);
     pref.setBool("isLogin", true);
     if (user["role"] == "teacher") {
       Navigator.pushReplacementNamed(
         context,
-        AppRoutes.teacherDashboard,
+        AppRoutes.teacherMainScreen,
         arguments: user["id"]
       );
     } else if (user["role"] == "student") {
@@ -247,8 +248,11 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, AppRoutes.signUpScreen,
-                    arguments: selectedRole);
+                Navigator.pushNamed(
+                  context, 
+                  AppRoutes.signUpScreen,
+                  arguments: selectedRole
+                );
               },
               child: Text(
                 "ចុះឈ្មោះ",

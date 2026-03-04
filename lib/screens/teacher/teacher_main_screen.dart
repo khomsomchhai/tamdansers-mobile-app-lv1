@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/repositories/user_repo.dart';
 import 'package:tamdansers_app/screens/teacher/homework_screen.dart';
 import 'package:tamdansers_app/screens/teacher/manage_all_class.dart';
 import 'package:tamdansers_app/screens/teacher/teacher_dashboard.dart';
 import 'package:tamdansers_app/screens/teacher/teacher_profile_screen.dart';
 
 class TeacherMainScreen extends StatefulWidget {
-  const TeacherMainScreen({super.key});
+  final int userId;
+  const TeacherMainScreen({super.key, required this.userId});
 
   @override
   State<TeacherMainScreen> createState() => _TeacherMainScreenState();
@@ -16,6 +18,8 @@ class TeacherMainScreen extends StatefulWidget {
 
 class _TeacherMainScreenState extends State<TeacherMainScreen> {
   int _index = 0;
+  Map<String, dynamic>? _teacher;
+  bool _loading = true;
 
   static const _tabs = [
     _NavItem(
@@ -41,7 +45,29 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _loadTeacherData();
+  }
+
+  Future<void> _loadTeacherData() async {
+    final teacher = await UserRepo().getUserById(widget.userId);
+    if (mounted) {
+      setState(() {
+        _teacher = teacher;
+        _loading = false;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (_loading) {
+      return Scaffold(
+        backgroundColor: AppColors.backgroundLight,
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
     return Scaffold(
       backgroundColor: AppColors.backgroundLight,
       extendBody: true,
@@ -52,11 +78,11 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
       ),
       body: IndexedStack(
         index: _index,
-        children: const [
-          TeacherDashboard(),
+        children: [
+          TeacherDashboard(teacher: _teacher),
           ManageAllClass(showBackButton: false),
           HomeworkScreen(showBackButton: false),
-          TeacherProfileScreen(),
+          TeacherProfileScreen(teacher: _teacher),
         ],
       ),
     );

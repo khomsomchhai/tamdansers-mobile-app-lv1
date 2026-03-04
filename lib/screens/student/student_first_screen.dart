@@ -16,7 +16,7 @@ class StudentFirstScreen extends StatefulWidget {
 }
 class _StudentFirstScreenState extends State<StudentFirstScreen> {
 
-  bool hasJoinedClass = false;
+  bool hasJoinedClass = true;
   Map<String, dynamic>? user;
 
   @override

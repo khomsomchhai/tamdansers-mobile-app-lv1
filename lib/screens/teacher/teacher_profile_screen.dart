@@ -9,7 +9,16 @@ import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 
 class TeacherProfileScreen extends StatelessWidget {
-  const TeacherProfileScreen({super.key});
+  final Map<String, dynamic>? teacher;
+  const TeacherProfileScreen({super.key, this.teacher});
+
+  String _getTeacherName() {
+    if (teacher == null) return 'ទេព ធីតា';
+    final first = teacher?['first_name'] ?? '';
+    final last = teacher?['last_name'] ?? '';
+    final full = '$first $last'.trim();
+    return full.isNotEmpty ? full : 'ទេព ធីតា';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,9 +84,11 @@ class TeacherProfileScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          Text("ទេព ធីតា",
-              style: AppTextStyle.sectionTitle20
-                  .copyWith(fontWeight: FontWeight.bold)),
+          Text(
+            _getTeacherName(),
+            style: AppTextStyle.sectionTitle20
+                .copyWith(fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 4),
           Text("អ្នកគ្រូ • គណិតវិទ្យា", style: AppTextStyle.bodySecondary),
           const SizedBox(height: 10),
@@ -145,7 +156,12 @@ class TeacherProfileScreen extends StatelessWidget {
               _settingsTile(
                 icon: Icons.lock_outline_rounded,
                 title: "Change Password",
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(
+                    context, 
+                    AppRoutes.changePassword
+                  );
+                },
                 showDivider: true,
               ),
               _settingsTile(
@@ -242,6 +258,7 @@ class TeacherProfileScreen extends StatelessWidget {
               final pref = await SharedPreferences.getInstance();
               await pref.setBool('isLogin', false);
               await pref.remove('role');
+              await pref.remove('id');
               if (context.mounted) {
                 Navigator.pushNamedAndRemoveUntil(
                   context,
