@@ -79,10 +79,10 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
       body: IndexedStack(
         index: _index,
         children: [
-          TeacherDashboard(teacher: _teacher),
+          TeacherDashboard(),
           ManageAllClass(showBackButton: false),
           HomeworkScreen(showBackButton: false),
-          TeacherProfileScreen(teacher: _teacher),
+          TeacherProfileScreen(),
         ],
       ),
     );

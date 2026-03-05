@@ -126,7 +126,7 @@ class AppRouter {
       return _fadeRouter(
         TeacherMainScreen(userId: userId ?? 1)
       );
-      case AppRoutes.gradeResult:
+      case AppRoutes.teacherGradeResult:
       return _slideRoute(
         GradeResult()
       );
