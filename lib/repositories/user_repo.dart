@@ -5,8 +5,8 @@ class UserRepo {
     required String firstName,
     required String lastName,
     required String gender,
-    required String phone,
-    required String email,
+    required String? phone,
+    required String? email,
     required String password,
     required String role,
   }) async {
@@ -112,6 +112,17 @@ class UserRepo {
       whereArgs: [userId],
     );
     
+    return updated > 0;
+  }
+
+  Future<bool> joinClass(int userId, int classId) async {
+    final db = await DbHelper().initDatabase();
+    final updated = await db.update(
+      'tbl_user',
+      {'class_id': classId},
+      where: 'id = ?',
+      whereArgs: [userId],
+    );
     return updated > 0;
   }
 }

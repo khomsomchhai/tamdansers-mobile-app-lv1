@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
   final pref = await SharedPreferences.getInstance();
 
   final role = pref.getString("role");
-  final id = pref.getInt("id");
+  final id = pref.getInt("userId");
   final isLogin = pref.getBool("isLogin") ?? false;
 
   if (!mounted) return;
@@ -29,9 +29,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
     switch (role) {
       case "teacher":
+        // use the main screen which contains the bottom navigation bar
         Navigator.pushReplacementNamed(
           context,
-          AppRoutes.teacherDashboard,
+          AppRoutes.teacherMainScreen,
           arguments: id,
         );
         break;

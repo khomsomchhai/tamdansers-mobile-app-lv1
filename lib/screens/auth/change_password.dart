@@ -52,7 +52,7 @@ class _ChangePasswordState extends State<ChangePassword> {
 
     try {
       final pref = await SharedPreferences.getInstance();
-      final userId = pref.getInt('id');
+      final userId = pref.getInt('userId');
 
       if (userId == null) {
         ScaffoldMessenger.of(context).showSnackBar(

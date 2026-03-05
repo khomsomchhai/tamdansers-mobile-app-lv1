@@ -79,9 +79,11 @@ class _StudentFirstScreenState extends State<StudentFirstScreen> {
           borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
         ),
         onPressed: () {
-          Navigator.pushNamed(
+          Navigator.push(
             context, 
-            AppRoutes.joinClassSreen
+            MaterialPageRoute(
+              builder: (context) => JoinClassScreen(userId: widget.userId),
+            ),
           );
         },
         child: Icon(

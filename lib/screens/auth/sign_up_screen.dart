@@ -52,9 +52,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
       phone = identifier;
     }
     if (formKey.currentState!.validate()) {
-      var existingUser = isEmail 
-      ? await UserRepo().getUserByEmail(email!) 
-      : await UserRepo().getUserByPhone(phone!);
+      Map<String, dynamic>? existingUser;
+      if (email != null) {
+        existingUser = await UserRepo().getUserByEmail(email);
+      }
+      if (existingUser == null && phone != null) {
+        existingUser = await UserRepo().getUserByPhone(phone);
+      }
       if (existingUser != null) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -74,8 +78,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           firstName: firstnameCtrl.text,
           lastName: lastnameCtrl.text,
           gender: gender,
-          phone: phone ?? "",
-          email: email ?? "",
+          phone: phone,
+          email: email,
           password: pwdCtrl.text,
           role: selectedRole,
 

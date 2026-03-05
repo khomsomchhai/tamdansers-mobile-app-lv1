@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tamdansers_app/constants/app_animation.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
@@ -12,7 +14,7 @@ import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/widget/auth_field.dart';
 import 'package:tamdansers_app/widget/button_with_icon.dart';
 import 'package:tamdansers_app/widget/custom_snackbar.dart';
-import 'package:tamdansers_app/widget/primary_button.dart';
+import 'package:tamdansers_app/widget/primary_button_2.dart';
 
 class LoginScreen extends StatefulWidget {
   final String role;
@@ -48,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
 
       if (user["role"] != selectedRole) {
-        _showError("គណនីនេះមិនមែនជា $selectedRole ទេ។ សូមជ្រើសរើសតួនាទីត្រឹមត្រូវ។");
+        _showError("គណនីនេះមិនមែនជា $selectedRole ទេ។ សូមជ្រើសរើសមុខងារឱ្យបានត្រឹមត្រូវ។");
         return;
       }
 
@@ -62,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (selectedRole == "teacher") {
         Navigator.pushReplacementNamed(
           context,
-          AppRoutes.teacherDashboard,
+          AppRoutes.teacherMainScreen,
           arguments: user["id"],
         );
       } else if (selectedRole == "student") {
@@ -236,10 +238,11 @@ class _LoginScreenState extends State<LoginScreen> {
           SizedBox(
             height: 8,
           ),
-          PrimaryButton(
+          PrimaryButton2(
             label: "ចូលគណនី",
             backgroundColor: AppColors.primaryMain,
             foregroundColor: AppColors.white,
+            processIndicator: Lottie.asset(AppAnimations.loadingCircle),
             onPressed: () {
               if (formKey.currentState!.validate()) {
                 login();

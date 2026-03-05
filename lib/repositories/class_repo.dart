@@ -9,6 +9,7 @@ class ClassRepo {
     required String colorHex,
     String semester = "ឆមាសទី ១",
     String schoolYear = "2024-2025",
+    String? classCode,
   }) async {
     final db = await DbHelper().initDatabase();
     final id = await db.insert("tbl_class", {
@@ -19,6 +20,7 @@ class ClassRepo {
       "color_hex": colorHex,
       "semester": semester,
       "school_year": schoolYear,
+      "class_code": classCode,
       "created_at": DateTime.now().toIso8601String(),
     });
     return id;
@@ -51,6 +53,17 @@ class ClassRepo {
       "tbl_class",
       where: "id = ?",
       whereArgs: [id],
+    );
+    if (result.isNotEmpty) return result.first;
+    return null;
+  }
+
+  Future<Map<String, dynamic>?> getClassByCode(String code) async {
+    final db = await DbHelper().initDatabase();
+    final result = await db.query(
+      "tbl_class",
+      where: "class_code = ?",
+      whereArgs: [code],
     );
     if (result.isNotEmpty) return result.first;
     return null;

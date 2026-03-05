@@ -17,7 +17,9 @@ class DbHelper {
         "email"      TEXT UNIQUE,
         "password"   TEXT NOT NULL,
         "role"       TEXT NOT NULL,
-        PRIMARY KEY("id" AUTOINCREMENT)
+        "class_id"   INTEGER,
+        PRIMARY KEY("id" AUTOINCREMENT),
+        FOREIGN KEY("class_id") REFERENCES "tbl_class"("id") ON DELETE SET NULL
       );
     ''');
   }
@@ -33,6 +35,7 @@ class DbHelper {
         "color_hex"   TEXT NOT NULL DEFAULT "#1976D2",
         "semester"    TEXT NOT NULL DEFAULT "ឆមាសទី ១",
         "school_year" TEXT NOT NULL DEFAULT "2024-2025",
+        "class_code"  TEXT UNIQUE,
         "created_at"  TEXT NOT NULL,
         PRIMARY KEY("id" AUTOINCREMENT)
       );
