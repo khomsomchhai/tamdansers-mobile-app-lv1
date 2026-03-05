@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tamdansers_app/constants/app_animation.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
@@ -29,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   var pwdCtrl = TextEditingController();
   var formKey = GlobalKey<FormState>();
   bool isCheck = false;
-
+  bool isLoading = false;
   late String selectedRole;
   @override
   void initState() {
@@ -53,7 +51,10 @@ class _LoginScreenState extends State<LoginScreen> {
         _showError("គណនីនេះមិនមែនជា $selectedRole ទេ។ សូមជ្រើសរើសមុខងារឱ្យបានត្រឹមត្រូវ។");
         return;
       }
-
+      setState(() {
+        isLoading = true;
+      });
+      await Future.delayed(Duration(seconds: 2));
       var pref = await SharedPreferences.getInstance();
       await pref.setString("role", user["role"]);
       await pref.setBool("isLogin", true);
@@ -239,12 +240,20 @@ class _LoginScreenState extends State<LoginScreen> {
             height: 8,
           ),
           PrimaryButton2(
-            label: "ចូលគណនី",
+            label: isLoading ? "" : "ចូលគណនី",
             backgroundColor: AppColors.primaryMain,
             foregroundColor: AppColors.white,
-            processIndicator: Lottie.asset(AppAnimations.loadingCircle),
-            onPressed: () {
+            processIndicator: isLoading ? SizedBox(
+              width: 26,
+              height: 26,
+              child: CircularProgressIndicator(
+                color: AppColors.white,
+                strokeWidth: 2,
+              ),
+            ): null,
+            onPressed: () async{
               if (formKey.currentState!.validate()) {
+                
                 login();
               }
             },

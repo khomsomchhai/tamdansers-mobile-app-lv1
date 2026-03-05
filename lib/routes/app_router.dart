@@ -141,7 +141,8 @@ class AppRouter {
       );
       case AppRoutes.joinClassSreen:
       return _slideRoute(
-        JoinClassScreen()
+        JoinClassScreen(),
+        settings: settings
       );
       case AppRoutes.studentDashboard:
       return _slideRoute(
@@ -217,8 +218,9 @@ class AppRouter {
 
 
   //slide from right
-  static PageRouteBuilder _slideRoute(Widget page) {
+  static PageRouteBuilder _slideRoute(Widget page, {RouteSettings? settings}) {
     return PageRouteBuilder(
+      settings: settings,
       pageBuilder: (context, animation, secondaryAnimation) => page,
       transitionDuration: const Duration(milliseconds: 350),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {

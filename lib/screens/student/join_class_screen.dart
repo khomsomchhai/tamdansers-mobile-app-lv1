@@ -7,7 +7,6 @@ import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/constants/validators.dart';
 import 'package:tamdansers_app/repositories/class_repo.dart';
 import 'package:tamdansers_app/repositories/user_repo.dart';
-import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/widget/auth_field.dart';
 import 'package:tamdansers_app/widget/primary_button.dart';
 
@@ -67,25 +66,31 @@ class _JoinClassScreenState extends State<JoinClassScreen> {
             backgroundColor: AppColors.primaryMain,
             foregroundColor: AppColors.white,
             onPressed: () async {
-              if (formKey.currentState!.validate()) {
-                // Join class
-                final classData = await ClassRepo().getClassByCode(classCodeCtrl.text.trim());
-                if (classData != null) {
-                  final success = await UserRepo().joinClass(widget.userId, classData['id']);
-                  if (success) {
-                    Navigator.pop(context); // Go back to first screen
+              try {
+                if (formKey.currentState!.validate()) {
+                  // Join class
+                  final classData = await ClassRepo().getClassByCode(classCodeCtrl.text.trim());
+                  if (classData != null) {
+                    final success = await UserRepo().joinClass(widget.userId, classData['id']);
+                    if (success) {
+                      Navigator.pop(context, true); // Go back to first screen with success
+                    } else {
+                      // Show error
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Failed to join class')),
+                      );
+                    }
                   } else {
-                    // Show error
+                    // Invalid code
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Failed to join class')),
+                      SnackBar(content: Text('Invalid class code')),
                     );
                   }
-                } else {
-                  // Invalid code
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Invalid class code')),
-                  );
                 }
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Error: $e')),
+                );
               }
             }),
       ),

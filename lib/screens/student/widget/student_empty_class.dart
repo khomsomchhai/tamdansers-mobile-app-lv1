@@ -7,9 +7,10 @@ import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 
 class StudentEmptyClass extends StatelessWidget {
-  // final VoidCallback onJoinPressed;
+  final int userId;
   const StudentEmptyClass({
     super.key,
+    required this.userId,
   });
 
   @override
@@ -39,7 +40,11 @@ class StudentEmptyClass extends StatelessWidget {
           width: 160,
           child: ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, AppRoutes.joinClassSreen);
+                Navigator.pushNamed(
+                context,
+                AppRoutes.joinClassSreen,
+                arguments: userId,
+              );
               },
               style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primaryMain,
