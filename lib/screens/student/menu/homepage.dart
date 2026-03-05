@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/screens/student/menu/data_list_homepage.dart';
@@ -15,6 +16,20 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   bool isExpend = false;
   final totalClass = 10;
+  @override
+void initState() {
+  super.initState();
+  loadName();
+}
+
+String fullName = "";
+
+void loadName() async {
+  var pref = await SharedPreferences.getInstance();
+  setState(() {
+    fullName = pref.getString("fullName") ?? "";
+  });
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,6 +57,7 @@ class _HomepageState extends State<Homepage> {
   }
 
   AppBar _buil_appbar() {
+  
     return AppBar(
       leading: Container(
           margin: EdgeInsets.only(left: 16),
@@ -57,7 +73,7 @@ class _HomepageState extends State<Homepage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Run Limhong',
+            fullName,
             style: AppTextStyle.sectionTitle20,
           ),
           Text('ID: 123456789',
