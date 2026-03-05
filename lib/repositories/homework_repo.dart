@@ -158,6 +158,26 @@ class HomeworkRepo {
     );
   }
 
+  /// Returns every student in [classId] with a `submitted` flag (1/0)
+  /// and their `submitted_at` timestamp (null if not submitted).
+  Future<List<Map<String, dynamic>>> getStudentsWithSubmissionStatus(
+      {required int homeworkId, required int classId}) async {
+    final db = await DbHelper().initDatabase();
+    return await db.rawQuery(
+      '''
+      SELECT sc.id, sc.first_name, sc.last_name, sc.gender,
+             CASE WHEN sub.id IS NOT NULL THEN 1 ELSE 0 END AS submitted,
+             sub.submitted_at
+      FROM tbl_student_class sc
+      LEFT JOIN tbl_submission sub
+        ON sub.student_id = sc.id AND sub.homework_id = ?
+      WHERE sc.class_id = ?
+      ORDER BY sc.first_name ASC
+      ''',
+      [homeworkId, classId],
+    );
+  }
+
   Future<List<Map<String, dynamic>>> getSubmissionsByHomework(
       int homeworkId) async {
     final db = await DbHelper().initDatabase();
