@@ -58,7 +58,7 @@ class _CreateClassDialogState extends State<CreateClassDialog> {
         _sectionCtrl.text.trim().isEmpty) return;
     setState(() => _saving = true);
     try {
-      final classId = await ClassRepo().createClass(
+      await ClassRepo().createClass(
         name: _nameCtrl.text.trim(),
         grade: _grade!,
         section: _sectionCtrl.text.trim().toUpperCase(),
@@ -67,7 +67,6 @@ class _CreateClassDialogState extends State<CreateClassDialog> {
         semester: _semester,
         schoolYear: _schoolYearCtrl.text.trim(),
       );
-      final createdClass = await ClassRepo().getClassById(classId);
       await ActivityRepo().logActivity(
         teacherId: kTeacherId,
         activityType: "class",
@@ -75,10 +74,7 @@ class _CreateClassDialogState extends State<CreateClassDialog> {
         subtitle:
             "${_nameCtrl.text.trim()} — $_grade ${_sectionCtrl.text.trim().toUpperCase()}",
       );
-      if (mounted) {
-        Navigator.pop(context, true);
-        _showClassCodeDialog(createdClass!['class_code']);
-      }
+      if (mounted) Navigator.pop(context, true);
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -223,38 +219,6 @@ class _CreateClassDialogState extends State<CreateClassDialog> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  void _showClassCodeDialog(String classCode) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("ថ្នាក់ត្រូវបានបង្កើតដោយជោគជ័យ"),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text("លេខកូដថ្នាក់សម្រាប់សិស្សចូលរួម:"),
-            SizedBox(height: 10),
-            Text(
-              classCode,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: AppColors.primaryMain,
-              ),
-            ),
-            SizedBox(height: 10),
-            Text("ចែករំលែកលេខកូដនេះទៅកាន់សិស្សរបស់អ្នក។"),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text("យល់ព្រម"),
-          ),
-        ],
       ),
     );
   }

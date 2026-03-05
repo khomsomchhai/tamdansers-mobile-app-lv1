@@ -26,7 +26,10 @@ class _ManageClassState extends State<ManageClass> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _classId = ModalRoute.of(context)?.settings.arguments as int?;
+    if (_classId != null) return; // already loaded, don't re-read
+    final arg = ModalRoute.of(context)?.settings.arguments;
+    _classId =
+        arg is int ? arg : (arg != null ? int.tryParse(arg.toString()) : null);
     if (_classId != null) {
       _loadClass(_classId!);
     } else {
@@ -165,14 +168,16 @@ class _ManageClassState extends State<ManageClass> {
           iconBgColor: const Color(0xFFE3F2FD),
           title: "គ្រប់គ្រងសិស្ស",
           subtitle: "Student Management",
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => ManageStudentScreen(classId: _classId!),
-              ),
-            ).then((_) => _loadClass(_classId!));
-          },
+          onTap: _classId == null
+              ? null
+              : () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ManageStudentScreen(classId: _classId!),
+                    ),
+                  ).then((_) => _loadClass(_classId!));
+                },
         ),
         const SizedBox(height: 12),
         _buildOptionTile(
@@ -181,14 +186,16 @@ class _ManageClassState extends State<ManageClass> {
           iconBgColor: const Color(0xFFFFF3E0),
           title: "គ្រប់គ្រងវត្តមាន",
           subtitle: "Attendance Management",
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => AttendanceScreen(classId: _classId!),
-              ),
-            );
-          },
+          onTap: _classId == null
+              ? null
+              : () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => AttendanceScreen(classId: _classId!),
+                    ),
+                  );
+                },
         ),
         const SizedBox(height: 12),
         _buildOptionTile(
@@ -197,14 +204,16 @@ class _ManageClassState extends State<ManageClass> {
           iconBgColor: const Color(0xFFF3E5F5),
           title: "គ្រប់គ្រងកិច្ចការផ្ទះ",
           subtitle: "Homework Management",
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => HomeworkScreen(classId: _classId!),
-              ),
-            );
-          },
+          onTap: _classId == null
+              ? null
+              : () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => HomeworkScreen(classId: _classId!),
+                    ),
+                  );
+                },
         ),
         const SizedBox(height: 12),
         _buildOptionTile(
@@ -225,41 +234,44 @@ class _ManageClassState extends State<ManageClass> {
     required Color iconBgColor,
     required String title,
     required String subtitle,
-    required VoidCallback onTap,
+    VoidCallback? onTap,
   }) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(AppNumber.radiusLarge),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: iconBgColor,
-                borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
+      child: Opacity(
+        opacity: onTap == null ? 0.5 : 1.0,
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(AppNumber.radiusLarge),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: iconBgColor,
+                  borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
+                ),
+                child: Icon(icon, color: iconColor, size: 24),
               ),
-              child: Icon(icon, color: iconColor, size: 24),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(title, style: AppTextStyle.subtitle16),
-                  const SizedBox(height: 2),
-                  Text(subtitle, style: AppTextStyle.caption13Secondary),
-                ],
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title, style: AppTextStyle.subtitle16),
+                    const SizedBox(height: 2),
+                    Text(subtitle, style: AppTextStyle.caption13Secondary),
+                  ],
+                ),
               ),
-            ),
-            const Icon(Icons.chevron_right,
-                color: AppColors.secondaryText, size: 24),
-          ],
+              const Icon(Icons.chevron_right,
+                  color: AppColors.secondaryText, size: 24),
+            ],
+          ),
         ),
       ),
     );

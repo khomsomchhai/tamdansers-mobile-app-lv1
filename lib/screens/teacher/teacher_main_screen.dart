@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
-import 'package:tamdansers_app/repositories/user_repo.dart';
+import 'package:tamdansers_app/routes/app_router.dart';
 import 'package:tamdansers_app/screens/teacher/homework_screen.dart';
 import 'package:tamdansers_app/screens/teacher/manage_all_class.dart';
 import 'package:tamdansers_app/screens/teacher/teacher_dashboard.dart';
@@ -18,8 +18,15 @@ class TeacherMainScreen extends StatefulWidget {
 
 class _TeacherMainScreenState extends State<TeacherMainScreen> {
   int _index = 0;
-  Map<String, dynamic>? _teacher;
-  bool _loading = true;
+  final _dashboardRefresh = ValueNotifier<int>(0);
+  final _homeworkRefresh = ValueNotifier<int>(0);
+
+  final List<GlobalKey<NavigatorState>> _navKeys = [
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
+  ];
 
   static const _tabs = [
     _NavItem(
@@ -45,45 +52,76 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
   ];
 
   @override
-  void initState() {
-    super.initState();
-    _loadTeacherData();
-  }
-
-  Future<void> _loadTeacherData() async {
-    final teacher = await UserRepo().getUserById(widget.userId);
-    if (mounted) {
-      setState(() {
-        _teacher = teacher;
-        _loading = false;
-      });
-    }
+  void dispose() {
+    _dashboardRefresh.dispose();
+    _homeworkRefresh.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_loading) {
-      return Scaffold(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop) return;
+        final nav = _navKeys[_index].currentState;
+        if (nav != null && nav.canPop()) nav.pop();
+      },
+      child: Scaffold(
         backgroundColor: AppColors.backgroundLight,
-        body: const Center(child: CircularProgressIndicator()),
-      );
-    }
-    return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
-      extendBody: true,
-      bottomNavigationBar: _TeacherBottomNav(
-        currentIndex: _index,
-        onTap: (i) => setState(() => _index = i),
-        tabs: _tabs,
-      ),
-      body: IndexedStack(
-        index: _index,
-        children: [
-          TeacherDashboard(),
-          ManageAllClass(showBackButton: false),
-          HomeworkScreen(showBackButton: false),
-          TeacherProfileScreen(),
-        ],
+        bottomNavigationBar: _TeacherBottomNav(
+          currentIndex: _index,
+          onTap: (i) {
+            if (i == _index) {
+              // Same tab tapped — pop to root if on a sub-screen
+              _navKeys[i].currentState?.popUntil((r) => r.isFirst);
+              return;
+            }
+            if (i == 0) {
+              _dashboardRefresh.value++;
+            }
+            if (i == 2) {
+              _homeworkRefresh.value++;
+            }
+            setState(() => _index = i);
+          },
+          tabs: _tabs,
+        ),
+        body: IndexedStack(
+          index: _index,
+          children: List.generate(
+            _tabs.length,
+            (i) => Navigator(
+              key: _navKeys[i],
+              onGenerateRoute: (settings) {
+                if (settings.name == Navigator.defaultRouteName) {
+                  return MaterialPageRoute(
+                    builder: (_) {
+                      if (i == 0) {
+                        return TeacherDashboard(
+                            refreshTrigger: _dashboardRefresh);
+                      } else if (i == 1) {
+                        return ManageAllClass(
+                          showBackButton: false,
+                          dashboardRefresh: _dashboardRefresh,
+                        );
+                      } else if (i == 2) {
+                        return HomeworkScreen(
+                          showBackButton: false,
+                          refreshTrigger: _homeworkRefresh,
+                        );
+                      } else {
+                        return const TeacherProfileScreen();
+                      }
+                    },
+                    settings: settings,
+                  );
+                }
+                return AppRouter.generateRoute(settings);
+              },
+            ),
+          ),
+        ),
       ),
     );
   }
