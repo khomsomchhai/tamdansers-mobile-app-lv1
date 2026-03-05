@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
@@ -7,12 +7,14 @@ import 'package:tamdansers_app/repositories/activity_repo.dart';
 import 'package:tamdansers_app/repositories/class_repo.dart';
 import 'package:tamdansers_app/repositories/student_class_repo.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
+import 'package:tamdansers_app/widget/create_class_dialog.dart';
 
 // Temporary teacher ID — replace with session value once auth is complete
 const int kTeacherId = 1;
 
 class TeacherDashboard extends StatefulWidget {
-  const TeacherDashboard({super.key});
+  final ValueNotifier<int>? refreshTrigger;
+  const TeacherDashboard({super.key, this.refreshTrigger});
 
   @override
   State<TeacherDashboard> createState() => _TeacherDashboardState();
@@ -28,6 +30,13 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
   void initState() {
     super.initState();
     _loadData();
+    widget.refreshTrigger?.addListener(_loadData);
+  }
+
+  @override
+  void dispose() {
+    widget.refreshTrigger?.removeListener(_loadData);
+    super.dispose();
   }
 
   Future<void> _loadData() async {
@@ -108,13 +117,23 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
 
   // ─── Create Class Dialog ──────────────────────────────────────────────────
 
+  static const _grades = [
+    "ថ្នាក់ទី 7",
+    "ថ្នាក់ទី 8",
+    "ថ្នាក់ទី 9",
+    "ថ្នាក់ទី 10",
+    "ថ្នាក់ទី 11",
+    "ថ្នាក់ទី 12",
+  ];
+
   Future<void> _showCreateClassDialog() async {
-    final saved = await showDialog<bool>(
+    await showDialog<bool>(
       context: context,
       barrierDismissible: false,
-      builder: (_) => const _DashboardCreateClassDialog(),
+      barrierColor: Colors.black.withValues(alpha: 0.45),
+      builder: (_) => CreateClassDialog(grades: _grades),
     );
-    if (saved == true && mounted) _loadData();
+    if (mounted) _loadData();
   }
 
   Widget _buildStatsCards() {
@@ -444,199 +463,4 @@ class _ActivityItem {
     required this.subtitle,
     required this.time,
   });
-}
-
-// ─── Dashboard Create Class Dialog ────────────────────────────────────────
-
-class _DashboardCreateClassDialog extends StatefulWidget {
-  const _DashboardCreateClassDialog();
-
-  @override
-  State<_DashboardCreateClassDialog> createState() =>
-      _DashboardCreateClassDialogState();
-}
-
-class _DashboardCreateClassDialogState
-    extends State<_DashboardCreateClassDialog> {
-  final _nameCtrl = TextEditingController();
-  final _sectionCtrl = TextEditingController();
-  final _schoolYearCtrl = TextEditingController(text: "2024-2025");
-
-  String? _grade;
-  String _semester = "ឆមាសទី ១";
-  String _color = "#1976D2";
-  bool _saving = false;
-
-  static const _grades = [
-    "ថ្នាក់ទី 7",
-    "ថ្នាក់ទី 8",
-    "ថ្នាក់ទី 9",
-    "ថ្នាក់ទី 10",
-    "ថ្នាក់ទី 11",
-    "ថ្នាក់ទី 12",
-  ];
-
-  static const _classColors = [
-    "#1976D2",
-    "#00897B",
-    "#546E7A",
-    "#7B1FA2",
-    "#C62828",
-    "#E65100",
-    "#558B2F",
-    "#283593",
-  ];
-
-  @override
-  void dispose() {
-    _nameCtrl.dispose();
-    _sectionCtrl.dispose();
-    _schoolYearCtrl.dispose();
-    super.dispose();
-  }
-
-  Color _hexToColor(String hex) =>
-      Color(int.parse(hex.replaceFirst('#', '0xFF')));
-
-  Future<void> _save() async {
-    if (_nameCtrl.text.trim().isEmpty ||
-        _grade == null ||
-        _sectionCtrl.text.trim().isEmpty) return;
-    setState(() => _saving = true);
-    await ClassRepo().createClass(
-      name: _nameCtrl.text.trim(),
-      grade: _grade!,
-      section: _sectionCtrl.text.trim().toUpperCase(),
-      teacherId: kTeacherId,
-      colorHex: _color,
-      semester: _semester,
-      schoolYear: _schoolYearCtrl.text.trim(),
-    );
-    await ActivityRepo().logActivity(
-      teacherId: kTeacherId,
-      activityType: "class",
-      title: "ថ្នាក់ត្រូវបានបង្កើត",
-      subtitle:
-          "${_nameCtrl.text.trim()} — $_grade ${_sectionCtrl.text.trim().toUpperCase()}",
-    );
-    if (mounted) Navigator.pop(context, true);
-  }
-
-  InputDecoration _fieldDeco({String? hint}) => InputDecoration(
-        hintText: hint,
-        hintStyle: AppTextStyle.bodySecondary,
-        filled: true,
-        fillColor: Colors.white,
-        border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
-            borderSide: BorderSide.none),
-        focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
-            borderSide:
-                const BorderSide(color: AppColors.primaryMain, width: 1.5)),
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      );
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: const Color(0xFFF0ECF8),
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppNumber.radiusLarge)),
-      title: Text("បង្កើតថ្នាក់ថ្មី", style: AppTextStyle.sectionTitle20),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("ឈ្មោះថ្នាក់", style: AppTextStyle.bodySecondary),
-            const SizedBox(height: 6),
-            TextField(
-              controller: _nameCtrl,
-              decoration: _fieldDeco(hint: "ឧ. 7A, Grade 7A"),
-            ),
-            const SizedBox(height: 14),
-            Text("ថ្នាក់ទី", style: AppTextStyle.bodySecondary),
-            const SizedBox(height: 6),
-            DropdownButtonFormField<String>(
-              value: _grade,
-              hint: Text("ជ្រើសថ្នាក់ទី", style: AppTextStyle.bodySecondary),
-              decoration: _fieldDeco(),
-              items: _grades
-                  .map((g) => DropdownMenuItem(value: g, child: Text(g)))
-                  .toList(),
-              onChanged: (v) => setState(() => _grade = v),
-            ),
-            const SizedBox(height: 14),
-            Text("ផ្នែក (A, B, C…)", style: AppTextStyle.bodySecondary),
-            const SizedBox(height: 6),
-            TextField(
-              controller: _sectionCtrl,
-              decoration: _fieldDeco(hint: "A"),
-            ),
-            const SizedBox(height: 14),
-            Text("ឆមាស", style: AppTextStyle.bodySecondary),
-            const SizedBox(height: 6),
-            DropdownButtonFormField<String>(
-              value: _semester,
-              decoration: _fieldDeco(),
-              items: ["ឆមាសទី ១", "ឆមាសទី ២"]
-                  .map((s) => DropdownMenuItem(value: s, child: Text(s)))
-                  .toList(),
-              onChanged: (v) => setState(() => _semester = v!),
-            ),
-            const SizedBox(height: 14),
-            Text("ពណ៌", style: AppTextStyle.bodySecondary),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: _classColors.map((hex) {
-                final color = _hexToColor(hex);
-                return GestureDetector(
-                  onTap: () => setState(() => _color = hex),
-                  child: Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: color,
-                      shape: BoxShape.circle,
-                      border: _color == hex
-                          ? Border.all(color: AppColors.primaryText, width: 2.5)
-                          : null,
-                    ),
-                    child: _color == hex
-                        ? const Icon(Icons.check, size: 18, color: Colors.white)
-                        : null,
-                  ),
-                );
-              }).toList(),
-            ),
-          ],
-        ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text("បោះបង់", style: AppTextStyle.bodySecondary),
-        ),
-        ElevatedButton(
-          onPressed: _saving ? null : _save,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF42A5F5),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(AppNumber.radiusMedium)),
-          ),
-          child: _saving
-              ? const SizedBox(
-                  width: 18,
-                  height: 18,
-                  child: CircularProgressIndicator(
-                      strokeWidth: 2, color: Colors.white))
-              : Text("រក្សាទុក", style: AppTextStyle.bodyWhite),
-        ),
-      ],
-    );
-  }
 }

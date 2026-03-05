@@ -7,6 +7,7 @@ import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/repositories/activity_repo.dart';
 import 'package:tamdansers_app/repositories/homework_repo.dart';
 import 'package:tamdansers_app/screens/teacher/teacher_dashboard.dart';
+import 'package:tamdansers_app/state/app_notifiers.dart';
 import 'package:tamdansers_app/widget/primary_button.dart';
 
 class AddTask extends StatefulWidget {
@@ -17,7 +18,6 @@ class AddTask extends StatefulWidget {
 }
 
 class _AddTaskState extends State<AddTask> {
-  int _selectedTab = 0;
   String? _selectedSubject;
   bool _notifyStudents = true;
   bool _notifyParents = false;
@@ -128,6 +128,7 @@ class _AddTaskState extends State<AddTask> {
     }
     if (mounted) {
       setState(() => _saving = false);
+      notifyHomeworkChanged();
       Navigator.pop(context, true);
     }
   }
@@ -238,10 +239,6 @@ class _AddTaskState extends State<AddTask> {
                   ),
                   const SizedBox(height: 20),
 
-                  // Tab selector
-                  _buildTabSelector(),
-                  const SizedBox(height: 24),
-
                   // Subject dropdown
                   _buildLabel('មុខវិជ្ជា'),
                   const SizedBox(height: 8),
@@ -334,62 +331,6 @@ class _AddTaskState extends State<AddTask> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildTabSelector() {
-    return Container(
-      height: 44,
-      decoration: BoxDecoration(
-        color: const Color(0xFFF0F0F5),
-        borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
-      ),
-      padding: const EdgeInsets.all(4),
-      child: Row(
-        children: [
-          _buildTabLabel(0, 'កិច្ចការផ្ទះ'),
-          _buildTabLabel(1, 'ការប្រឡងខ្លីៗ'),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTabLabel(int index, String label) {
-    final isSelected = _selectedTab == index;
-    return Expanded(
-      child: GestureDetector(
-        onTap: () => setState(() => _selectedTab = index),
-        behavior: HitTestBehavior.opaque,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          decoration: BoxDecoration(
-            color: isSelected ? AppColors.white : Colors.transparent,
-            borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
-            boxShadow: isSelected
-                ? [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.09),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ]
-                : [],
-          ),
-          child: Center(
-            child: AnimatedDefaultTextStyle(
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.easeInOut,
-              style: isSelected
-                  ? AppTextStyle.body14.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.primaryText,
-                    )
-                  : AppTextStyle.caption14Secondary,
-              child: Text(label),
-            ),
-          ),
-        ),
       ),
     );
   }

@@ -1,6 +1,8 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import 'package:tamdansers_app/constants/app_animation.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
@@ -111,6 +113,37 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
 
   Future<void> _submitAttendance() async {
     if (_classId == null || _selectedDate.isEmpty || _students.isEmpty) return;
+
+    // Show loading dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => Dialog(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        child: Container(
+          padding: const EdgeInsets.all(28),
+          decoration: BoxDecoration(
+            color: AppColors.backgroundLight,
+            borderRadius: BorderRadius.circular(AppNumber.radiusLarge),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Lottie.asset(
+                AppAnimations.loading,
+                width: 100,
+                height: 100,
+              ),
+              const SizedBox(height: 12),
+              Text('កំពុងរក្សាទុក...', style: AppTextStyle.subtitle16),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    // Save records
     final repo = AttendanceRepo();
     for (final s in _students) {
       await repo.saveAttendance(
@@ -126,12 +159,73 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       title: 'វត្តមានត្រូវបានកត់ត្រា',
       subtitle: '$_className · $_selectedDate',
     );
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('វត្តមានត្រូវបានរក្សាទុក')),
-      );
-      _loadData();
-    }
+
+    if (!mounted) return;
+
+    // Close loading dialog
+    Navigator.of(context, rootNavigator: true).pop();
+
+    // Show success dialog
+    await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => Dialog(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        child: Container(
+          padding: const EdgeInsets.all(28),
+          decoration: BoxDecoration(
+            color: AppColors.backgroundLight,
+            borderRadius: BorderRadius.circular(AppNumber.radiusLarge),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Lottie.asset(
+                AppAnimations.successful,
+                width: 140,
+                height: 140,
+                repeat: false,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'រៀបរាល់!',
+                style: AppTextStyle.sectionTitle20
+                    .copyWith(color: AppColors.success),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'វត្តមានត្រូវបានរក្សាទុក។',
+                style: AppTextStyle.body14,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () => Navigator.of(ctx).pop(),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primaryMain,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(AppNumber.radiusMedium),
+                    ),
+                  ),
+                  child: Text(
+                    'ត្រលប់',
+                    style: AppTextStyle.buttonText18White,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    // Navigate back after dialog is dismissed
+    if (mounted) Navigator.of(context).pop();
   }
 
   void _recalcSummary() {
@@ -259,7 +353,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                     '${s["first_name"]} ${s["last_name"]}',
                                     s['student_id'].toString(),
                                     s['status'] as String,
-                                    false,
+                                    s['status'] == 'absent' ||
+                                        s['status'] == 'late',
                                     null,
                                     index,
                                   ),
@@ -699,6 +794,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                   onPressed: () {
                     setState(() {
                       _students[index]["status"] = "present";
+                      _students[index]["notify_parent"] = false;
                       _recalcSummary();
                     });
                   },
@@ -733,6 +829,9 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                   onPressed: () {
                     setState(() {
                       _students[index]["status"] = "absent";
+                      if (_students[index]["notify_parent"] == null) {
+                        _students[index]["notify_parent"] = true;
+                      }
                       _recalcSummary();
                     });
                   },
@@ -764,6 +863,9 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                   onPressed: () {
                     setState(() {
                       _students[index]["status"] = "late";
+                      if (_students[index]["notify_parent"] == null) {
+                        _students[index]["notify_parent"] = true;
+                      }
                       _recalcSummary();
                     });
                   },
@@ -801,15 +903,15 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                   SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      "ផ្ញើការជូនដំណឹងទៅឪពុកម្តាយ",
+                      "ជូនដំណឹងដល់មាតាបិតា",
                       style: AppTextStyle.caption13Secondary,
                     ),
                   ),
                   Switch(
-                    value: _students[index]["hasNotification"],
+                    value: _students[index]["notify_parent"] as bool? ?? true,
                     onChanged: (value) {
                       setState(() {
-                        _students[index]["hasNotification"] = value;
+                        _students[index]["notify_parent"] = value;
                       });
                     },
                     activeColor: AppColors.primaryMain,

@@ -18,7 +18,7 @@ class StudentDetailScreen extends StatelessWidget {
           icon: Icon(Icons.arrow_back_ios_new_rounded,
               color: AppColors.primaryText),
         ),
-        title: Text("ព័ត៌មានលម្អិត", style: AppTextStyle.screenTitle24),
+        title: Text("ព័ត៌មានលម្អិត", style: AppTextStyle.sectionTitle20),
         centerTitle: true,
         elevation: 0,
         backgroundColor: AppColors.transparent,

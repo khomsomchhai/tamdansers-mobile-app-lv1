@@ -226,6 +226,7 @@ class TeacherProfileScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.backgroundLight,
         title: Text("ចាកចេញ?", style: AppTextStyle.subtitle18),
         content: Text(
           "តើអ្នកពិតជាចង់ចាកចេញពីគណនីនេះមែនទេ?",
