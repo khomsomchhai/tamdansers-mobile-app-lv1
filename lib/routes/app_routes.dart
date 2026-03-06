@@ -64,4 +64,5 @@ class AppRoutes {
   static const String AttandanceScreen = "/parent_attendance_screen";
   static const String HomeworkQuizeScreen = "/parent_homework_quiz_screen";
   static const String NewsScreen = "/parent_news_screen";
+  
 }
