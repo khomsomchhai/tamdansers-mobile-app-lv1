@@ -9,7 +9,8 @@ import 'package:tamdansers_app/screens/teacher/teacher_dashboard.dart';
 import 'package:tamdansers_app/screens/teacher/teacher_profile_screen.dart';
 
 class TeacherMainScreen extends StatefulWidget {
-  const TeacherMainScreen({super.key});
+  final int userId;
+  const TeacherMainScreen({super.key, required this.userId});
 
   @override
   State<TeacherMainScreen> createState() => _TeacherMainScreenState();

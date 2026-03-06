@@ -110,6 +110,7 @@ class ParentProfileHeader extends StatelessWidget {
               final pref = await SharedPreferences.getInstance();
               await pref.setBool('isLogin', false);
               await pref.remove('role');
+              await pref.remove("userId");
               if (context.mounted) {
                 Navigator.pushNamedAndRemoveUntil(
                   context,

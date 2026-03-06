@@ -1,0 +1,114 @@
+[33mb23dc1e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32msomchhai[m[33m)[m merge
+[33m4c171c3[m[33m ([m[1;31morigin/somchhai[m[33m)[m add AppRouter
+[33mf1611c9[m add AppRouter
+[33m3a0a3f9[m add AppRouter
+[33m01cdedb[m merge main
+[33m90dbe56[m Merge pull request #22 from khomsomchhai/vatanak
+[33m45ab93a[m Merge branch 'main' into vatanak
+[33m029cc97[m add feature + database
+[33m6a389bc[m merge
+[33maa5151c[m pull main
+[33m2c55caa[m my branch
+[33m1eeb4c1[m Merge branch 'main' of https://github.com/khomsomchhai/tamdansers-mobile-app into vatanak
+[33ma4ab312[m add_student screen and add_task screen
+[33m7721a05[m add a lot
+[33mf62e817[m add a lot
+[33m17d51f3[m resolve conflict
+[33m6d499b6[m resolve confict
+[33m228d434[m Merge branch 'somchhai' of https://github.com/khomsomchhai/tamdansers-mobile-app
+[33me3c23d6[m add a lot(auth database-repo, student, parent screen,...)
+[33macc7441[m merge
+[33mb52be19[m do student
+[33m48f61f2[m fecth: parent
+[33m8df2f68[m p vong
+[33m254869a[m full student
+[33m921a02a[m Merge branch 'main' of https://github.com/khomsomchhai/tamdansers-mobile-app into vong
+[33mf3ec2f5[m map
+[33m21e9846[m hello
+[33md60249c[m modify
+[33mcc3d51b[m Save local changes before pulling
+[33mdbea515[m pull from main
+[33mcc3a7e2[m Merge pull request #19 from khomsomchhai/somchhai
+[33m8392fc5[m my part
+[33m55c0dae[m fix
+[33m8090210[m push hong
+[33m1cd6a0d[m student
+[33md387516[m student
+[33m172a1b1[m student
+[33m16794f8[m student
+[33m2a1b87f[m Merge branch 'somchhai'
+[33m2a01e44[m new fix: student
+[33mb96722a[m Update auth/parent screen
+[33mbee0da2[m resolve merge conflict
+[33m284808c[m update
+[33m92c2aca[m fix: student
+[33m177e94a[m erge branch 'somchhai' aborts# the commit.
+[33m8bac64f[m add teacher and parent screen
+[33m61a1f73[m student
+[33m8353e5c[m modify
+[33mc210d28[m stu
+[33mb8b9dd7[m Update login/sign up
+[33meae567c[m Merge pull request #17 from khomsomchhai/somchhai
+[33m09dcc07[m Update teacher UI
+[33mb3f39ff[m just commit
+[33m558afd5[m Merge pull request #16 from khomsomchhai/vatanak
+[33m596cd0f[m[33m ([m[1;31morigin/vatanak[m[33m)[m add system border radius, spacing, ...
+[33mbfce66f[m Merge pull request #15 from khomsomchhai/vatanak
+[33m9a23f51[m add system border radius, spacing, ...
+[33m9ad94fc[m Merge pull request #14 from khomsomchhai/vatanak
+[33m862881f[m Merge branch 'main' into vatanak - resolved conflicts
+[33mfe36c8b[m add attendance UI screenand Homework
+[33m733e01d[m Merge pull request #13 from khomsomchhai/henglay
+[33m40dd6b7[m[33m ([m[1;31morigin/henglay[m[33m)[m Merge pull request #12 from khomsomchhai/vong
+[33mb74a7bf[m[33m ([m[1;31morigin/vong[m[33m)[m bro lay jet laor
+[33m4d0a409[m design parent
+[33m3fca0a2[m Merge pull request #11 from khomsomchhai/somchhai
+[33m8ddaa1e[m update teacher ui
+[33m5f6ec63[m Merge pull request #10 from khomsomchhai/somchhai
+[33m185b172[m Merge branch 'main' into somchhai
+[33m8891633[m update teacher ui
+[33m9b20536[m merge from main
+[33me186b36[m Merge branch 'main' of https://github.com/khomsomchhai/tamdansers-mobile-app into vatanak
+[33macb6d00[m add new UI screen
+[33m9276472[m Merge pull request #9 from khomsomchhai/limhong
+[33m5ca0419[m[33m ([m[1;31morigin/limhong[m[33m)[m Merge branch 'main' into limhong
+[33m0dfd523[m modify routes
+[33m6bde6ff[m update teacher ui
+[33m48d4fba[m Merge branch 'main' of https://github.com/khomsomchhai/tamdansers-mobile-app into somchhai
+[33m6c0e693[m update and add more teacher UI
+[33m025af38[m Merge pull request #8 from khomsomchhai/vatanak
+[33mc674234[m UI of Teacher Dashboard, Manage class(all) and Manage class(one)
+[33m192bb99[m Merge branches 'vatanak' and 'main' of https://github.com/khomsomchhai/tamdansers-mobile-app into vatanak
+[33m94cb6d5[m UI of Teacher Dashboard, Manage class(all) and Manage class(one)
+[33mc5fbcf9[m Merge pull request #7 from khomsomchhai/limhong
+[33m1b810ae[m accept all
+[33m3731b23[m pull
+[33me6ace10[m update color (.withopacity)
+[33m060644c[m add UI screen of teacher: dashboard,manage_all_class, and one class
+[33mc949294[m resolve conflit error
+[33m207ad8f[m add folder
+[33m39be5aa[m design
+[33m8d421ba[m ok
+[33mbedeb0d[m Merge branch 'limhong' of https://github.com/khomsomchhai/tamdansers-mobile-app
+[33me654cf0[m update dsb
+[33m855b8de[m Merge branch 'main' of https://github.com/khomsomchhai/tamdansers-mobile-app into vatanak
+[33m010f4ed[m first
+[33m94a4ac3[m add teacher auth more
+[33mf5a10d6[m Merge pull request #5 from khomsomchhai/somchhai
+[33ma3d0fb9[m update more about spacing in teacher auth
+[33m3cc175a[m add teacher auth more
+[33m29184e9[m add teacher auth more
+[33mbb099de[m Merge pull request #4 from henglay/vong
+[33m3ec662d[m Merge branch 'henglay' into vong
+[33m8f101b0[m hello o lay
+[33m8c0e382[m hello bro vong
+[33mea1ca1d[m re design
+[33mada1e1a[m design parent_dashboard
+[33m57761ae[m Merge pull request #3 from khomsomchhai/limhong
+[33ma1d7142[m do studentsdashboard
+[33m88c1d1e[m Merge pull request #2 from khomsomchhai/somchhai
+[33m547bfbd[m Update UI and fix button styles, more folder
+[33mcd78558[m Update UI and fix button styles
+[33m45b6ac8[m Merge pull request #1 from khomsomchhai/somchhai
+[33m5ec3e10[m second commit
+[33ma5be58d[m first commit

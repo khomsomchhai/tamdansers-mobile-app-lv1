@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
+import 'package:tamdansers_app/screens/auth/change_password.dart';
 import 'package:tamdansers_app/screens/auth/login_screen.dart';
 import 'package:tamdansers_app/screens/auth/otp_screen.dart';
 import 'package:tamdansers_app/screens/auth/role_selection_screen.dart';
 import 'package:tamdansers_app/screens/auth/sign_up_screen.dart';
 import 'package:tamdansers_app/screens/auth/splash_screen.dart';
-import 'package:tamdansers_app/screens/parents/menu/Monthy_result_Ranking.dart';
 import 'package:tamdansers_app/screens/parents/parent_connect_student.dart';
 import 'package:tamdansers_app/screens/parents/parent_first_screen.dart';
-import 'package:tamdansers_app/screens/parents/parent_list_stu_class.dart';
 import 'package:tamdansers_app/screens/parents/parents_dashboard.dart';
-import 'package:tamdansers_app/screens/student/menu/attendance.dart';
+import 'package:tamdansers_app/screens/student/join_class_screen.dart';
+import 'package:tamdansers_app/screens/student/menu/deatil_teacher.dart';
+import 'package:tamdansers_app/screens/student/menu/deatilscreen.dart';
 import 'package:tamdansers_app/screens/student/menu/homepage.dart';
 import 'package:tamdansers_app/screens/student/menu/homework.dart';
 import 'package:tamdansers_app/screens/student/menu/info_personal.dart';
 import 'package:tamdansers_app/screens/student/menu/notification.dart';
 import 'package:tamdansers_app/screens/student/menu/profile.dart';
+import 'package:tamdansers_app/screens/student/menu/submmit_screen.dart';
 import 'package:tamdansers_app/screens/student/result.dart';
 import 'package:tamdansers_app/screens/student/scedeul.dart';
 import 'package:tamdansers_app/screens/student/student_dashboard.dart';
@@ -24,7 +26,7 @@ import 'package:tamdansers_app/screens/student/subjects.dart';
 import 'package:tamdansers_app/screens/teacher/add_student.dart';
 import 'package:tamdansers_app/screens/teacher/add_task.dart';
 import 'package:tamdansers_app/screens/teacher/attendance_screen.dart';
-import 'package:tamdansers_app/screens/teacher/homework_detail_screen.dart';
+import 'package:tamdansers_app/screens/teacher/grade_result.dart';
 import 'package:tamdansers_app/screens/teacher/homework_screen.dart';
 import 'package:tamdansers_app/screens/teacher/link_parent.dart';
 import 'package:tamdansers_app/screens/teacher/manage_all_class.dart';
@@ -32,115 +34,183 @@ import 'package:tamdansers_app/screens/teacher/manage_class.dart';
 import 'package:tamdansers_app/screens/teacher/manage_student_screen.dart';
 import 'package:tamdansers_app/screens/teacher/score_detail_screen.dart';
 import 'package:tamdansers_app/screens/teacher/student_detail_screen.dart';
-import 'package:tamdansers_app/screens/teacher/student_submission_screen.dart';
+import 'package:tamdansers_app/screens/teacher/teacher_dashboard.dart';
 import 'package:tamdansers_app/screens/teacher/teacher_main_screen.dart';
+import 'package:tamdansers_app/screens/teacher/teacher_notification_screen.dart';
+import 'package:tamdansers_app/screens/teacher/teacher_profile_screen.dart';
 
 class AppRouter {
   static Route generateRoute(RouteSettings settings) {
     switch (settings.name) {
+
       case AppRoutes.splashScreen:
-        return _fadeRouter(SplashScreen(), settings);
+      return _fadeRouter(
+        SplashScreen()
+      );
 
       //------------ Auth ----------------
       case AppRoutes.roleSelectionScreen:
-        return _fadeRouter(RoleSelectionScreen(), settings);
+      return _fadeRouter(
+        RoleSelectionScreen()
+      );
       case AppRoutes.loginScreen:
-        final role = settings.arguments as String?;
-        return _slideRoute(
-          LoginScreen(role: role ?? "student"),
-          settings,
-        );
+      final role = settings.arguments as String?;
+      return _slideRoute(
+        LoginScreen(role: role ?? "student"),
+      );
       case AppRoutes.signUpScreen:
-        final role = settings.arguments as String?;
-        return _slideRoute(SignUpScreen(role: role ?? "student"), settings);
+      final role = settings.arguments as String?;
+      return _slideRoute(
+        SignUpScreen(role: role ?? "student")
+      );
       case AppRoutes.otpScreen:
-        final role = settings.arguments as String?;
-        return _slideRoute(OtpScreen(role: role ?? "student"), settings);
-
+      final role = settings.arguments as String?;
+      return _slideRoute(
+        OtpScreen(role: role ?? "student")
+      );
+      case AppRoutes.changePassword:
+      return _slideRoute(
+        ChangePassword()
+      );
       //------------ Teacher ----------------
       case AppRoutes.teacherDashboard:
-        return _fadeRouter(const TeacherMainScreen(), settings);
-
+      return _fadeRouter(
+        TeacherDashboard()
+      );
       case AppRoutes.manageAllClass:
-        return _slideRoute(const ManageAllClass(), settings);
-
+      return _slideRoute(
+        ManageAllClass()
+      );
       case AppRoutes.manageClass:
-        return _slideRoute(const ManageClass(), settings);
-
-      case AppRoutes.manageStudentScreen:
-        final classId = settings.arguments as int? ?? 0;
-        return _slideRoute(ManageStudentScreen(classId: classId), settings);
-
-      case AppRoutes.studentDetailScreen:
-        return _slideRoute(const StudentDetailScreen(), settings);
-
+      return _slideRoute(
+        ManageClass()
+      );
       case AppRoutes.linkParentScreen:
-        return _slideRoute(const LinkParentScreen(), settings);
-
+      return _slideRoute(
+        LinkParentScreen()
+      );
+      case AppRoutes.studentDetailScreen:
+      return _slideRoute(
+        StudentDetailScreen()
+      );
       case AppRoutes.scoreDetailScreen:
-        return _slideRoute(const ScoreDetailScreen(), settings);
-
+      return _slideRoute(
+        ScoreDetailScreen()
+      );
+      case AppRoutes.manageStudentScreen:
+      final classId = settings.arguments as int?;
+      return _slideRoute(
+        ManageStudentScreen(classId: classId ?? 1)
+      );
       case AppRoutes.teacherAttendanceScreen:
-        final classId = settings.arguments as int?;
-        return _slideRoute(AttendanceScreen(classId: classId), settings);
-
+      return _slideRoute(
+        AttendanceScreen()
+      );
       case AppRoutes.teacherHomeworkScreen:
-        return _slideRoute(const HomeworkScreen(), settings);
-
-      case AppRoutes.homeworkDetailScreen:
-        return _slideRoute(const HomeworkDetailScreen(), settings);
-
+      return _slideRoute(
+        HomeworkScreen()
+      );
       case AppRoutes.addTaskScreen:
-        return _slideRoute(const AddTask(), settings);
-
+      return _slideRoute(
+        AddTask()
+      );
       case AppRoutes.addStudentScreen:
-        return _slideRoute(const AddStudent(), settings);
-
-      case AppRoutes.studentSubmissionScreen:
-        return _slideRoute(const StudentSubmissionScreen(), settings);
+      return _slideRoute(
+        AddStudent()
+      );
+      case AppRoutes.teacherProfile:
+      return _fadeRouter(
+        TeacherProfileScreen()
+      );
+      case AppRoutes.teacherMainScreen:
+      final userId = settings.arguments as int?;
+      return _fadeRouter(
+        TeacherMainScreen(userId: userId ?? 1)
+      );
+      case AppRoutes.teacherGradeResult:
+      return _slideRoute(
+        GradeResult()
+      );
+      case AppRoutes.teacherNotificationScreen:
+      return _slideRoute(
+        TeacherNotificationScreen()
+      );
+      
+      
 
       //------------ Student ----------------
       case AppRoutes.studentFirstScreen:
-        final userId = settings.arguments as int;
-        return _fadeRouter(StudentFirstScreen(userId: userId), settings);
+      final userId = settings.arguments as int;
+      return _fadeRouter(
+        StudentFirstScreen(userId: userId,)
+      );
+      case AppRoutes.joinClassSreen:
+      final userId = settings.arguments as int;
+      return _slideRoute(
+        JoinClassScreen(userId: userId,)
+      );
       case AppRoutes.studentDashboard:
-        return _fadeRouter(StudentDashboard(), settings);
-      case AppRoutes.homepage:
-        return _fadeRouter(Homepage(), settings);
-
-      case AppRoutes.scedeul:
-        return _fadeRouter(Scedeul(), settings);
-
-      case AppRoutes.profile:
-        return _fadeRouter(Profile(), settings);
-      case AppRoutes.attendance:
-        return _fadeRouter(Attendance(), settings);
+      return _slideRoute(
+        StudentDashboard()
+      );
+      case AppRoutes.submitted:
+      return _slideRoute(
+        SubmmitScreen()
+      );
       case AppRoutes.homework:
-        return _fadeRouter(Homework(), settings);
-
-      case AppRoutes.notifications:
-        return _fadeRouter(Notifications(), settings);
+      return _slideRoute(
+        Homework()
+      );
+      case AppRoutes.profile:
+      return _slideRoute(
+        Profile()
+      );
+      case AppRoutes.detail:
+      return _slideRoute(
+        Deatilscreen()
+      );
+      case AppRoutes.detailTeach:
+      return _slideRoute(
+        DeatilTeacher()
+      );
+      case AppRoutes.homepage:
+      return _slideRoute(
+        Homepage()
+      );
+      case AppRoutes.scedeul:
+      return _slideRoute(
+        Scedeul()
+      );
       case AppRoutes.result:
-        return _fadeRouter(Result(), settings);
+      return _slideRoute(
+        Result()
+      );
       case AppRoutes.info:
-        return _fadeRouter(InfoPersonal(), settings);
+      return _slideRoute(
+        InfoPersonal()
+      );
       case AppRoutes.subject:
-        return _fadeRouter(Subjects(), settings);
+      return _slideRoute(
+        Subjects()
+      );
+      case AppRoutes.notifications:
+      return _slideRoute(
+        Notifications()
+      );
+
       //------------ Parent -----------------
-      case AppRoutes.parentDashboardScreen:
-        return _fadeRouter(const ParentsDashboard(), settings);
-
       case AppRoutes.parentFirstScreen:
-        return _slideRoute(const ParentFirstScreen(), settings);
-
+      return _fadeRouter(
+        ParentFirstScreen()
+      );
       case AppRoutes.parentConnectStudent:
-        return _slideRoute(const ParentConnectStudent(), settings);
-
-      case AppRoutes.parentListStuClass:
-        return _slideRoute(const ParentListStuClass(), settings);
-
-      case AppRoutes.monthly:
-        return _slideRoute(const CustomScreen(), settings);
+      return _slideRoute(
+        ParentConnectStudent()
+      );
+      case AppRoutes.parentDashboardScreen:
+      return _slideRoute(
+        ParentsDashboard()
+      );
 
       default:
         return MaterialPageRoute(
@@ -151,13 +221,14 @@ class AppRouter {
     }
   }
 
+
   //slide from right
-  static PageRouteBuilder _slideRoute(Widget page, RouteSettings settings) {
+  static PageRouteBuilder _slideRoute(Widget page) {
     return PageRouteBuilder(
-      settings: settings,
       pageBuilder: (context, animation, secondaryAnimation) => page,
       transitionDuration: const Duration(milliseconds: 350),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
+
         final tween = Tween(
           begin: const Offset(1, 0),
           end: Offset.zero,
@@ -172,9 +243,8 @@ class AppRouter {
   }
 
   //fade
-  static PageRouteBuilder _fadeRouter(Widget page, RouteSettings settings) {
+  static PageRouteBuilder _fadeRouter(Widget page){
     return PageRouteBuilder(
-      settings: settings,
       transitionDuration: Duration(milliseconds: 400),
       pageBuilder: (context, animation, secondaryAnimation) => page,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {

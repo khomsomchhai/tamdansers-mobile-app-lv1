@@ -1,3 +1,5 @@
+
+
 class AppRoutes {
   //Auth
   static const String splashScreen = "/splash_screen";
@@ -5,6 +7,7 @@ class AppRoutes {
   static const String loginScreen = "/login_screen";
   static const String signUpScreen = "/sign_up_screen";
   static const String otpScreen = "/otp_screen";
+  static const String changePassword = "/change_password";
   //teacher
   static const String teacherMainScreen = "/teacher_main_screen";
 
@@ -22,6 +25,9 @@ class AppRoutes {
   static const String homeworkDetailScreen = "/homework_detail_screen";
   static const String addStudentScreen = "/add_student_screen";
   static const String studentSubmissionScreen = "/student_submission_screen";
+  static const String teacherProfile = "/teacher_profile_screen";
+  static const String teacherGradeResult = "/teacher_grade_result";
+  static const String teacherNotificationScreen = "/teacher_notification_screen";
   //student
   static const String studentFirstScreen = "/student_first_sreen";
   static const String joinClassSreen = "/join_class_screen";
@@ -40,12 +46,11 @@ class AppRoutes {
   static const String info = "/student_info_personal";
   static const String subject = "/subject";
   static const String notifications = "/notifications";
+
   //parent
   static const String parentDashboardScreen = "/parent_dashboard_screen";
 
   static String teacherDashboardScreen = "/teacher_dashboard_screen";
-
-  static const String changePassword = "/change_password";
 
   //parent
 
