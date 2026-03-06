@@ -1,5 +1,3 @@
-
-
 class AppRoutes {
   //Auth
   static const String splashScreen = "/splash_screen";
@@ -27,7 +25,8 @@ class AppRoutes {
   static const String studentSubmissionScreen = "/student_submission_screen";
   static const String teacherProfile = "/teacher_profile_screen";
   static const String teacherGradeResult = "/teacher_grade_result";
-  static const String teacherNotificationScreen = "/teacher_notification_screen";
+  static const String teacherNotificationScreen =
+      "/teacher_notification_screen";
   //student
   static const String studentFirstScreen = "/student_first_sreen";
   static const String joinClassSreen = "/join_class_screen";
@@ -61,4 +60,8 @@ class AppRoutes {
 
   static const String monthly = "/monthly_result_ranking";
   static const String commentScreen = "/comment_screen";
+  static const String ParentsDashboard = "/parent_dashboard_screen";
+  static const String AttandanceScreen = "/parent_attendance_screen";
+  static const String HomeworkQuizeScreen = "/parent_homework_quiz_screen";
+  static const String NewsScreen = "/parent_news_screen";
 }
