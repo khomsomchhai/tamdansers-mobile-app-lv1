@@ -31,13 +31,13 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
       "day": "ថ្ងៃចន្ទ, ១៦តុលា",
       "time": "Check-in: 07 : 30 AM",
       "status": "វត្តមាន",
-      "type": "present",
+      "type": "presents",
     },
     {
       "day": "ថ្ងៃសុក្រ, ១៣តុលា",
       "time": "Check-in: 07 : 35 AM",
       "status": "វត្តមាន",
-      "type": "present",
+      "type": "presents",
     },
     {
       "day": "ថ្ងៃព្រហស្បត្តិ៍, ១២តុលា",
@@ -49,7 +49,7 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
       "day": "ថ្ងៃពុធ, ១១តុលា",
       "time": "Check-in: 07 : 28 AM",
       "status": "វត្តមាន",
-      "type": "present",
+      "type": "presents",
     },
     {
       "day": "ថ្ងៃអង្គារ, ១០តុលា",
