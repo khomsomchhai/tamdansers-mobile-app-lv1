@@ -12,7 +12,14 @@ class Scedeul extends StatefulWidget {
 
 class _ScedeulState extends State<Scedeul> {
   int? selectedDay;
-
+  final List<String> days=['ចន្ទ', 'អង្គារ', 'ពុធ', 'ព្រហ', 'សុក្រ'];
+  final List<List<String>> teachers=[
+    ['សុខ សុភា', 'គ្រូប្រវត្តិវិទ្យា'],
+    ['ស្រី សុវណ្ណ', 'គ្រូគណិតវិទ្យា'],
+    ['លី សុវណ្ណ', 'គ្រូរូបវិទ្យា'],
+    ['ចាន់ សុវណ្ណ', 'គ្រូគីមីវិទ្យា'],
+    ['សុខ សុវណ្ណ', 'គ្រូភាសាអង់គ្លេស'],
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +57,7 @@ class _ScedeulState extends State<Scedeul> {
           children: [
             /// ===== DAYS =====
             SizedBox(
-              height: 100,
+              height: 110,
               child: GridView.builder(
                 itemCount: 5,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -75,7 +82,7 @@ class _ScedeulState extends State<Scedeul> {
                       child: Column(
                         children: [
                           Text(
-                            'ចន្ទ',
+                            days[index],
                             style: AppTextStyle.fontsize18.copyWith(
                               color: isSelected
                                   ? AppColors.white
@@ -173,11 +180,11 @@ class _ScedeulState extends State<Scedeul> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('ប្រវត្តិវិទ្យា',
+                      Text(teachers[0][0],
                           style: AppTextStyle.sectionTitle20),
                       const SizedBox(height: 5),
                       Text(
-                        'គ្រូ: សុខ សុភា',
+                        'គ្រូ: ${teachers[0][1]}',
                         style: AppTextStyle.body.copyWith(
                           color: AppColors.secondaryText,
                         ),
