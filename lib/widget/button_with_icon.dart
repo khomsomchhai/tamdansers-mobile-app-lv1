@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 
 class ButtonWithIcon extends StatelessWidget {
@@ -23,7 +24,10 @@ class ButtonWithIcon extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 10),
         backgroundColor: AppColors.white,
         foregroundColor: AppColors.primaryText,
-        shadowColor: AppColors.transparent
+        shadowColor: AppColors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppNumber.radiusMedium)
+        )
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,

@@ -47,7 +47,7 @@ class Validators {
     if(value!.isEmpty){
       return "សូមបញ្ចូលលេខកូដថ្នាក់";
     }
-    if(value!.length() < 4){
+    if(value.length < 4){
       return "លេខកូដថ្នាក់ត្រូវមានយ៉ាងហោចណាស់ 4 ខ្ទង់";
     }
     return null;
@@ -56,7 +56,7 @@ class Validators {
     if(value!.isEmpty){
       return "សូមបញ្ចូលលេខកូដភ្ជាប់";
     }
-    if(value!.length() < 4){
+    if(value.length < 4){
       return "លេខកូដភ្ជាប់ត្រូវមានយ៉ាងហោចណាស់ 4 ខ្ទង់";
     }
     return null;

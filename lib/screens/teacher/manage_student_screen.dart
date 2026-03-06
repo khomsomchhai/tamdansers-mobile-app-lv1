@@ -62,6 +62,7 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.backgroundLight,
         title: Text("លុបសិស្ស?", style: AppTextStyle.subtitle18),
         content: Text(
           "តើអ្នកពិតជាចង់លុបសិស្ស ${student["first_name"]} ${student["last_name"]} មែនទេ?",
@@ -96,7 +97,7 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
           icon: const Icon(Icons.arrow_back_ios_new_rounded,
               color: AppColors.primaryText),
         ),
-        title: Text("គ្រប់គ្រងសិស្ស", style: AppTextStyle.screenTitle24),
+        title: Text("គ្រប់គ្រងសិស្ស", style: AppTextStyle.sectionTitle20),
         centerTitle: true,
         elevation: 0,
         surfaceTintColor: AppColors.transparent,
