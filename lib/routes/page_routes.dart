@@ -5,6 +5,9 @@ import 'package:tamdansers_app/screens/auth/login_teacher_screen.dart';
 import 'package:tamdansers_app/screens/auth/role_selection_screen.dart';
 import 'package:tamdansers_app/screens/auth/sign_up_teacher_screen.dart';
 import 'package:tamdansers_app/screens/auth/splash_screen.dart';
+import 'package:tamdansers_app/screens/parents/menu/attandance_child.dart';
+import 'package:tamdansers_app/screens/parents/menu/homework_quize_child.dart';
+import 'package:tamdansers_app/screens/parents/menu/news.dart';
 import 'package:tamdansers_app/screens/parents/parent_login.dart';
 import 'package:tamdansers_app/screens/student/menu/attendance.dart';
 import 'package:tamdansers_app/screens/student/menu/homepage.dart';
@@ -32,7 +35,7 @@ class PageRoutes {
     AppRoutes.manageStudentScreen: (context) => ManageStudentScreen(),
     AppRoutes.studentDetailScreen: (context) => StudentDetailScreen(),
     AppRoutes.linkParentScreen: (context) => LinkParentScreen(),
-    
+
     //student
     // AppRoutes.studentDashboard: (context) => StudentDashboard(),
     AppRoutes.profile: (context) => Profile(),
@@ -40,10 +43,12 @@ class PageRoutes {
     AppRoutes.homework: (context) => Homework(),
     AppRoutes.homepage: (context) => Homepage(),
     // AppRoutes.scedeul: (context) => Scedeul(),
-    AppRoutes.result:(context) => Result(),
-
+    AppRoutes.result: (context) => Result(),
 
     //parent
-    AppRoutes.parentDashboardScreen:(contex)=> ParentLogin()
+    AppRoutes.parentDashboardScreen: (contex) => ParentLogin(),
+    AppRoutes.attandanceChild: (context) => AttandanceScreen(),
+    AppRoutes.homeworkQuizeScreen: (context) => HomeworkQuizeScreen(),
+    AppRoutes.newsScreen: (context) => NewsScreen(),
   };
 }

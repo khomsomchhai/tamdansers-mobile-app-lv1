@@ -11,20 +11,21 @@ class AppRoutes {
   static const String manageAllClass = "/manage_all_class";
   static const String manageStudentScreen = "/manage_student_screen";
   static const String studentDetailScreen = "/student_detail_screen";
-  static const String linkParentScreen="/link_parent_screen";
+  static const String linkParentScreen = "/link_parent_screen";
   //student
   static const String studentDashboard = "/student_dashboard";
   static const String scedeul = "/student_scedeul";
-  static const String profile="/student_profile";
-  static const String attendance="/student_attendance";
-  static const String homework="/student_homework";
-  static const String homepage="/student_homepage";
-  static const String result="/student_result";
+  static const String profile = "/student_profile";
+  static const String attendance = "/student_attendance";
+  static const String homework = "/student_homework";
+  static const String homepage = "/student_homepage";
+  static const String result = "/student_result";
 
   static String teacherDashboardScreen = "/teacher_dashboard_screen";
-  
-
 
   //parent
-  static String parentDashboardScreen ="/parentDashboardScreen";
+  static String parentDashboardScreen = "/parentDashboardScreen";
+  static const String attandanceChild = "/attandance_child_screen";
+  static const String homeworkQuizeScreen = "/homework_quize_screen";
+  static const String newsScreen = "/news_screen";
 }
