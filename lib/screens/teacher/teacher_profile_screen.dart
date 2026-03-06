@@ -245,8 +245,7 @@ class TeacherProfileScreen extends StatelessWidget {
               await pref.remove("role");
               await pref.remove("userId");
               if (context.mounted) {
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
+                Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
                   AppRoutes.roleSelectionScreen,
                   (route) => false,
                 );

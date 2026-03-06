@@ -151,7 +151,7 @@ class _OtpScreenState extends State<OtpScreen> {
                         SizedBox(height: 12),
                         Text(
                           "កំពុងដំណើរការ...",
-                          style: AppTextStyle.caption14Secondary,
+                          style: AppTextStyle.body,
                         ),
                       ],
                     ),

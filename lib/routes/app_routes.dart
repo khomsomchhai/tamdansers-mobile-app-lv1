@@ -27,6 +27,7 @@ class AppRoutes {
   static const String studentSubmissionScreen = "/student_submission_screen";
   static const String teacherProfile = "/teacher_profile_screen";
   static const String teacherGradeResult = "/teacher_grade_result";
+  static const String teacherNotificationScreen = "/teacher_notification_screen";
   //student
   static const String studentFirstScreen = "/student_first_sreen";
   static const String joinClassSreen = "/join_class_screen";
@@ -45,6 +46,7 @@ class AppRoutes {
   static const String info = "/student_info_personal";
   static const String subject = "/subject";
   static const String notifications = "/notifications";
+
   //parent
   static const String parentDashboardScreen = "/parent_dashboard_screen";
 

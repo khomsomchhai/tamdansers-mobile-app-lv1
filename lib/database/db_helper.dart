@@ -122,6 +122,22 @@ class DbHelper {
     ''');
   }
 
+  static Future<void> _createTblParentStudent(Database db) async {
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS "tbl_parent_student" (
+        "id"         INTEGER,
+        "parent_id"  INTEGER NOT NULL,
+        "student_id" INTEGER NOT NULL,
+        "status"     TEXT NOT NULL DEFAULT "pending",
+        "created_at" TEXT NOT NULL,
+        PRIMARY KEY("id" AUTOINCREMENT),
+        FOREIGN KEY("parent_id")  REFERENCES "tbl_user"("id") ON DELETE CASCADE,
+        FOREIGN KEY("student_id") REFERENCES "tbl_student_class"("id") ON DELETE CASCADE,
+        UNIQUE("parent_id", "student_id")
+      );
+    ''');
+  }
+
   // ─── Open / init ──────────────────────────────────────────────────────────
 
   Future<Database> _getDatabase() async {
@@ -129,7 +145,7 @@ class DbHelper {
     var path = join(dbPath, "tamdansers.db");
     db = await openDatabase(
       path,
-      version: 3,
+      version: 4,
       onCreate: (db, version) async {
         await _createTblUser(db);
         await _createTblClass(db);
@@ -138,6 +154,7 @@ class DbHelper {
         await _createTblAttendance(db);
         await _createTblActivityLog(db);
         await _createTblSubmission(db);
+        await _createTblParentStudent(db);
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         if (oldVersion < 2) {
@@ -149,6 +166,9 @@ class DbHelper {
         }
         if (oldVersion < 3) {
           await _createTblSubmission(db);
+        }
+        if (oldVersion < 4) {
+          await _createTblParentStudent(db);
         }
       },
     );

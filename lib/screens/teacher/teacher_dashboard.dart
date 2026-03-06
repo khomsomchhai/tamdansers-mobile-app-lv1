@@ -264,14 +264,20 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
           "បញ្ជូលពិន្ទុ",
           Color(0xFFE8F5E9),
           Color(0xFF4CAF50),
-          onTap: () {},
+          onTap: () {
+            Navigator.pushNamed(context, AppRoutes.teacherGradeResult)
+                .then((_) => _loadData());
+          },
         ),
         _buildQuickActionItem(
           Icons.campaign_outlined,
           "ផ្ញើរសេចក្តីជូនដំណឹង",
           Color(0xFFFFF3E0),
           Color(0xFFFF9800),
-          onTap: () {},
+          onTap: () {
+            Navigator.pushNamed(context, AppRoutes.teacherNotificationScreen)
+                .then((_) => _loadData());
+          },
         ),
       ],
     );
