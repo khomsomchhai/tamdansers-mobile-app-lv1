@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tamdansers_app/constants/app_animation.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
@@ -16,35 +14,59 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
 
-  void checkLogin() async{
-    var pref = await SharedPreferences.getInstance();
-    var role = pref.getString("role") ?? "";
-    var isLogin = pref.getBool("isLogin") ?? false;
-    if(isLogin){
-      if(role == "teacher"){
+  void checkLogin() async {
+  final pref = await SharedPreferences.getInstance();
+
+  final role = pref.getString("role");
+  final id = pref.getInt("userId");
+  final isLogin = pref.getBool("isLogin") ?? false;
+
+  if (!mounted) return;
+
+  if (isLogin && role != null && id != null) {
+
+    switch (role) {
+      case "teacher":
+        // use the main screen which contains the bottom navigation bar
         Navigator.pushReplacementNamed(
-          context, 
-          AppRoutes.teacherDashboard,
+          context,
+          AppRoutes.teacherMainScreen,
+          arguments: id,
         );
-      } else if(role == "student"){
+        break;
+
+      case "student":
         Navigator.pushReplacementNamed(
-          context, 
+          context,
           AppRoutes.studentFirstScreen,
+          arguments: id,
         );
-      } else if(role == "parent"){
+        break;
+
+      case "parent":
         Navigator.pushReplacementNamed(
-          context, 
+          context,
           AppRoutes.parentFirstScreen,
+          arguments: id,
         );
-      }
-    }else{
-      Navigator.pushNamedAndRemoveUntil(
-        context, 
-        AppRoutes.roleSelectionScreen, 
-        (route) => false,
-      );
+        break;
+
+      default:
+        _goToRoleSelection();
     }
+
+  } else {
+    _goToRoleSelection();
   }
+}
+
+void _goToRoleSelection() {
+  Navigator.pushNamedAndRemoveUntil(
+    context,
+    AppRoutes.roleSelectionScreen,
+    (route) => false,
+  );
+}
 
   @override
   void initState() {
@@ -58,31 +80,15 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primaryMain,
-      appBar: AppBar(
-        backgroundColor: AppColors.transparent,
-        elevation: 0,
-        surfaceTintColor: AppColors.transparent,
-        automaticallyImplyLeading: false,
-      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Spacer(),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.2,
             child: SvgPicture.asset(
               AppImages.appLogoWhite,
             ),
           ),
-          Spacer(),
-          SizedBox(
-            height: 150,
-            child: Lottie.asset(
-              AppAnimations.loadingCircle,
-              repeat: true
-            ),
-          ),
-          SizedBox(height: 60,)
         ],
       ),
     );

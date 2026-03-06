@@ -241,11 +241,11 @@ class TeacherProfileScreen extends StatelessWidget {
             onPressed: () async {
               Navigator.pop(ctx);
               final pref = await SharedPreferences.getInstance();
-              await pref.setBool('isLogin', false);
-              await pref.remove('role');
+              await pref.setBool("isLogin", false);
+              await pref.remove("role");
+              await pref.remove("userId");
               if (context.mounted) {
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
+                Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
                   AppRoutes.roleSelectionScreen,
                   (route) => false,
                 );

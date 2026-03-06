@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
@@ -78,7 +78,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
           ),
         ),
         title: Text(
-          "ទេព ធីតា",
+          "Tep Thida",
           style: AppTextStyle.fontsize18,
         ),
       ),
@@ -94,7 +94,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                   style: AppTextStyle.screenTitle24,
                   children: [
                     TextSpan(
-                      text: "ទេព ធីតា",
+                      text: 'Tep Thida',
                       style: AppTextStyle.screenTitle24Main,
                     ),
                   ],
@@ -264,14 +264,20 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
           "បញ្ជូលពិន្ទុ",
           Color(0xFFE8F5E9),
           Color(0xFF4CAF50),
-          onTap: () {},
+          onTap: () {
+            Navigator.pushNamed(context, AppRoutes.teacherGradeResult)
+                .then((_) => _loadData());
+          },
         ),
         _buildQuickActionItem(
           Icons.campaign_outlined,
           "ផ្ញើរសេចក្តីជូនដំណឹង",
           Color(0xFFFFF3E0),
           Color(0xFFFF9800),
-          onTap: () {},
+          onTap: () {
+            Navigator.pushNamed(context, AppRoutes.teacherNotificationScreen)
+                .then((_) => _loadData());
+          },
         ),
       ],
     );

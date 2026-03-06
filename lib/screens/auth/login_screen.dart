@@ -12,7 +12,7 @@ import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/widget/auth_field.dart';
 import 'package:tamdansers_app/widget/button_with_icon.dart';
 import 'package:tamdansers_app/widget/custom_snackbar.dart';
-import 'package:tamdansers_app/widget/primary_button.dart';
+import 'package:tamdansers_app/widget/primary_button_2.dart';
 
 class LoginScreen extends StatefulWidget {
   final String role;
@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   var pwdCtrl = TextEditingController();
   var formKey = GlobalKey<FormState>();
   bool isCheck = false;
-
+  bool isLoading = false;
   late String selectedRole;
   @override
   void initState() {
@@ -36,47 +36,69 @@ class _LoginScreenState extends State<LoginScreen> {
   }
   
   void login() async {
-    var user = await UserRepo().login(identifierCtrl.text, pwdCtrl.text);
-    if (user == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          behavior: SnackBarBehavior.floating,
-          margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-          content: CustomSnackbar(
-            title: "មិនត្រឹមត្រូវ!", 
-            message: "អ៊ីម៉ែល ឬ លេខទូរស័ព្ទ និងពាក្យសម្ងាត់មិនត្រឺមត្រូវ។ សូមព្យាយាមម្ដងទៀត", 
-            icon: Icons.close, 
-            color: AppColors.error
-          )
-        ),
+    try {
+      var user = await UserRepo().login(
+        identifierCtrl.text.trim(),
+        pwdCtrl.text.trim(),
       );
-      return;
-    }
-    var pref = await SharedPreferences.getInstance();
-    pref.setString("role", user["role"]);
-    pref.setBool("isLogin", true);
-    if (user["role"] == "teacher") {
-      Navigator.pushReplacementNamed(
-        context,
-        AppRoutes.teacherDashboard,
-        arguments: user["id"]
-      );
-    } else if (user["role"] == "student") {
-      Navigator.pushReplacementNamed(
-        context,
-        AppRoutes.studentFirstScreen,
-        arguments: user["id"]
-      );
-    } else if (user["role"] == "parent") {
-      Navigator.pushReplacementNamed(
-        context,
-        AppRoutes.parentFirstScreen,
-        arguments: user["id"]
-      );
-    }
 
+      if (user == null) {
+        _showError("អ៊ីម៉ែល ឬ លេខទូរស័ព្ទ និងពាក្យសម្ងាត់មិនត្រឹមត្រូវ។");
+        return;
+      }
+
+      if (user["role"] != selectedRole) {
+        _showError("គណនីនេះមិនមែនជា $selectedRole ទេ។ សូមជ្រើសរើសមុខងារឱ្យបានត្រឹមត្រូវ។");
+        return;
+      }
+      setState(() {
+        isLoading = true;
+      });
+      await Future.delayed(Duration(seconds: 2));
+      var pref = await SharedPreferences.getInstance();
+      await pref.setString("role", user["role"]);
+      await pref.setBool("isLogin", true);
+      await pref.setInt("userId", user["id"]);
+
+      if (!mounted) return;
+
+      if (selectedRole == "teacher") {
+        Navigator.pushReplacementNamed(
+          context,
+          AppRoutes.teacherMainScreen,
+          arguments: user["id"],
+        );
+      } else if (selectedRole == "student") {
+        Navigator.pushReplacementNamed(
+          context,
+          AppRoutes.studentFirstScreen,
+          arguments: user["id"],
+        );
+      } else if (selectedRole == "parent") {
+        Navigator.pushReplacementNamed(
+          context,
+          AppRoutes.parentFirstScreen,
+          arguments: user["id"],
+        );
+      }
+
+    } catch (e) {
+      _showError("មានបញ្ហាបច្ចេកទេស សូមព្យាយាមម្ដងទៀត។");
+    }
+  }
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        content: CustomSnackbar(
+          title: "មិនត្រឹមត្រូវ!",
+          message: message,
+          icon: Icons.close,
+          color: AppColors.error,
+        ),
+      ),
+    );
   }
  
   @override
@@ -218,12 +240,21 @@ class _LoginScreenState extends State<LoginScreen> {
           SizedBox(
             height: 8,
           ),
-          PrimaryButton(
-            label: "ចូលគណនី",
+          PrimaryButton2(
+            label: isLoading ? "" : "ចូលគណនី",
             backgroundColor: AppColors.primaryMain,
             foregroundColor: AppColors.white,
-            onPressed: () {
+            processIndicator: isLoading ? SizedBox(
+              width: 26,
+              height: 26,
+              child: CircularProgressIndicator(
+                color: AppColors.white,
+                strokeWidth: 2,
+              ),
+            ): null,
+            onPressed: () async{
               if (formKey.currentState!.validate()) {
+                
                 login();
               }
             },

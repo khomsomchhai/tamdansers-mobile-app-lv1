@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:tamdansers_app/database/db_helper.dart';
 
 class ClassRepo {
@@ -9,8 +10,10 @@ class ClassRepo {
     required String colorHex,
     String semester = "ឆមាសទី ១",
     String schoolYear = "2024-2025",
+    String? classCode,
   }) async {
     final db = await DbHelper().initDatabase();
+    classCode ??= await _generateClassCode();
     final id = await db.insert("tbl_class", {
       "name": name,
       "grade": grade,
@@ -19,6 +22,7 @@ class ClassRepo {
       "color_hex": colorHex,
       "semester": semester,
       "school_year": schoolYear,
+      "class_code": classCode,
       "created_at": DateTime.now().toIso8601String(),
     });
     return id;
@@ -51,6 +55,17 @@ class ClassRepo {
       "tbl_class",
       where: "id = ?",
       whereArgs: [id],
+    );
+    if (result.isNotEmpty) return result.first;
+    return null;
+  }
+
+  Future<Map<String, dynamic>?> getClassByCode(String code) async {
+    final db = await DbHelper().initDatabase();
+    final result = await db.query(
+      "tbl_class",
+      where: "class_code = ?",
+      whereArgs: [code],
     );
     if (result.isNotEmpty) return result.first;
     return null;
@@ -93,5 +108,27 @@ class ClassRepo {
       [teacherId],
     );
     return result.first["count"] as int;
+  }
+
+  Future<String> _generateClassCode() async {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    final random = Random();
+    String code;
+    do {
+      code = String.fromCharCodes(
+        Iterable.generate(6, (_) => chars.codeUnitAt(random.nextInt(chars.length))),
+      );
+    } while (await _isCodeExists(code));
+    return code;
+  }
+
+  Future<bool> _isCodeExists(String code) async {
+    final db = await DbHelper().initDatabase();
+    final result = await db.query(
+      "tbl_class",
+      where: "class_code = ?",
+      whereArgs: [code],
+    );
+    return result.isNotEmpty;
   }
 }

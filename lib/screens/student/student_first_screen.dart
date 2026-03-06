@@ -16,7 +16,7 @@ class StudentFirstScreen extends StatefulWidget {
 }
 class _StudentFirstScreenState extends State<StudentFirstScreen> {
 
-  bool hasJoinedClass = false;
+  bool hasJoinedClass = true;
   Map<String, dynamic>? user;
 
   @override
@@ -67,7 +67,7 @@ class _StudentFirstScreenState extends State<StudentFirstScreen> {
               Expanded(
                 child: hasJoinedClass
                     ? StudentHasJoinedClass(userId: widget.userId)
-                    : StudentEmptyClass(),
+                    : StudentEmptyClass(userId: widget.userId),
               ),
             ],
           ),
@@ -78,11 +78,15 @@ class _StudentFirstScreenState extends State<StudentFirstScreen> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
         ),
-        onPressed: () {
-          Navigator.pushNamed(
-            context, 
-            AppRoutes.joinClassSreen
+        onPressed: () async {
+          final result = await Navigator.pushNamed(
+            context,
+            AppRoutes.joinClassSreen,
+            arguments: widget.userId
           );
+          if (result == true) {
+            _loadUser(); // Refresh user data
+          }
         },
         child: Icon(
           Icons.add,

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
@@ -163,7 +164,11 @@ class _ProfileState extends State<Profile> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                           ),
-                          onPressed: () {
+                          onPressed: ()async {
+                            final pref = await SharedPreferences.getInstance();
+                            await pref.setBool("isLogin", false);
+                            await pref.remove("role");
+                            await pref.remove("userId");
                             Navigator.popAndPushNamed(context, AppRoutes.roleSelectionScreen);
                           },
                           child: Text('ចាកចេញ',style: AppTextStyle.hintText.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
