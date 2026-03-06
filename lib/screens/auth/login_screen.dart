@@ -1,40 +1,100 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_images.dart';
+import 'package:tamdansers_app/constants/app_number.dart';
+import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/constants/validators.dart';
+import 'package:tamdansers_app/repositories/user_repo.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
+import 'package:tamdansers_app/widget/auth_field.dart';
+import 'package:tamdansers_app/widget/button_with_icon.dart';
+import 'package:tamdansers_app/widget/custom_snackbar.dart';
+import 'package:tamdansers_app/widget/primary_button.dart';
 
-import '../../constants/app_colors.dart';
-import '../../constants/text_style.dart';
-import '../../constants/validators.dart';
-import '../../widget/auth_field.dart';
-import '../../widget/button_with_icon.dart';
-import '../../widget/primary_button.dart';
-
-class SignInStudent extends StatefulWidget {
-  const SignInStudent({super.key});
+class LoginScreen extends StatefulWidget {
+  final String role;
+  const LoginScreen({super.key, required this.role});
 
   @override
-  State<SignInStudent> createState() => _SignInStudentState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _SignInStudentState extends State<SignInStudent> {
-  var emailCtrl = TextEditingController();
+class _LoginScreenState extends State<LoginScreen> {
+  var identifierCtrl = TextEditingController();
   var pwdCtrl = TextEditingController();
   var formKey = GlobalKey<FormState>();
   bool isCheck = false;
+
+  late String selectedRole;
+  @override
+  void initState() {
+    super.initState();
+    selectedRole = widget.role;
+  }
+  
+  void login() async {
+    var user = await UserRepo().login(identifierCtrl.text, pwdCtrl.text);
+    if (user == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+          content: CustomSnackbar(
+            title: "មិនត្រឹមត្រូវ!", 
+            message: "អ៊ីម៉ែល ឬ លេខទូរស័ព្ទ និងពាក្យសម្ងាត់មិនត្រឺមត្រូវ។ សូមព្យាយាមម្ដងទៀត", 
+            icon: Icons.close, 
+            color: AppColors.error
+          )
+        ),
+      );
+      return;
+    }
+    var pref = await SharedPreferences.getInstance();
+    pref.setString("role", user["role"]);
+    pref.setBool("isLogin", true);
+    if (user["role"] == "teacher") {
+      Navigator.pushReplacementNamed(
+        context,
+        AppRoutes.teacherDashboard,
+        arguments: user["id"]
+      );
+    } else if (user["role"] == "student") {
+      Navigator.pushReplacementNamed(
+        context,
+        AppRoutes.studentFirstScreen,
+        arguments: user["id"]
+      );
+    } else if (user["role"] == "parent") {
+      Navigator.pushReplacementNamed(
+        context,
+        AppRoutes.parentFirstScreen,
+        arguments: user["id"]
+      );
+    }
+
+  }
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        leading: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: Icon(
-              Icons.arrow_back_ios_new_rounded,
-              color: AppColors.primaryText,
-            )),
+        automaticallyImplyLeading: false,
+        leading: Navigator.canPop(context)
+            ? IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  color: AppColors.primaryText,
+                  size: AppNumber.iconMedium,
+                ),
+              )
+            : null,
       ),
       body: CustomScrollView(
         slivers: [
@@ -57,6 +117,7 @@ class _SignInStudentState extends State<SignInStudent> {
           ),
         ],
       ),
+
       // body: SingleChildScrollView(
       //   child: Padding(
       //     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -74,6 +135,7 @@ class _SignInStudentState extends State<SignInStudent> {
       // ),
     );
   }
+
   Widget _buildHeader(Size size) {
     return Column(
       children: [
@@ -101,9 +163,9 @@ class _SignInStudentState extends State<SignInStudent> {
       child: Column(
         children: [
           AuthField(
-            validator: Validators.email,
-            textController: emailCtrl,
-            hintText: "បញ្ចូលអ៊ីម៉ែលរបស់អ្នក",
+            validator: Validators.emailOrPhone,
+            textController: identifierCtrl,
+            hintText: "បញ្ចូលអ៊ីម៉ែល ឬ លេខទូរស័ព្ទរបស់អ្នក",
             icon: Icon(
               Icons.email_outlined,
               size: 20,
@@ -161,10 +223,7 @@ class _SignInStudentState extends State<SignInStudent> {
             foregroundColor: AppColors.white,
             onPressed: () {
               if (formKey.currentState!.validate()) {
-                Navigator.pushReplacementNamed(
-                  context,
-                  AppRoutes.studentDashboard,
-                );
+                login();
               }
             },
           ),
@@ -188,7 +247,8 @@ class _SignInStudentState extends State<SignInStudent> {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, AppRoutes.signupStudent);
+                Navigator.pushNamed(context, AppRoutes.signUpScreen,
+                    arguments: selectedRole);
               },
               child: Text(
                 "ចុះឈ្មោះ",

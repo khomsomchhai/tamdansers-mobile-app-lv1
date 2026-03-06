@@ -56,10 +56,9 @@ class PageRoutes {
     // Parent routes
     AppRoutes.parentFirstScreen: (context) => ParentFirstScreen(),
     AppRoutes.parentConnectStudent: (context) => ParentConnectStudent(),
-    AppRoutes.parentDashboardScreen: (context) => ParentLogin(),
     AppRoutes.monthly: (context) => CustomScreen(),
     AppRoutes.commentScreen: (context) => CommentSignature(),
-    AppRoutes.nothication:(context)=> Nothication(),
+    AppRoutes.parent_nothi:(context)=> Nothication(),
     AppRoutes.information:(context)=> Information()
   };
 }

@@ -41,13 +41,19 @@ class ClassCard extends StatelessWidget {
                   topRight: Radius.circular(16),
                 ),
               ),
-              child: Stack(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Positioned(
-                    right: 10,
-                    bottom: -10,
-                    child: Icon(Icons.laptop_chromebook,
-                        color: Colors.white.withValues(alpha: 0.2), size: 100),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: Transform.translate(
+                        offset: Offset(10, 10),
+                        child: Icon(Icons.laptop_chromebook,
+                            color: Colors.white.withValues(alpha: 0.2),
+                            size: 100),
+                      ),
+                    ),
                   ),
                   Padding(
                     padding: EdgeInsets.all(16),

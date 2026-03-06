@@ -12,6 +12,7 @@ class AppImages {
   static const String joinClass = "assets/images/join_class.svg";
   static const String notFound = "assets/images/not_found.svg";
   static const String connection = "assets/images/connection.svg";
+  static const String otpVeriy = "assets/images/otp_verify.svg";
   //icon
   static const String emailIcon = "assets/icons/email.svg";
   static const String googleIcon = "assets/icons/google_icon.svg";

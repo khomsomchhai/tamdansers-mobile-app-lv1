@@ -15,7 +15,11 @@ class _CommentSignatureState extends State<CommentSignature> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("ការបញ្ជាក់ទទួល",style: AppTextStyle.screenTitle24Main.copyWith(color: AppColors.primaryText),),
+        title: Text(
+          "ការបញ្ជាក់ទទួល",
+          style: AppTextStyle.screenTitle24Main
+              .copyWith(color: AppColors.primaryText),
+        ),
         centerTitle: true,
         backgroundColor: AppColors.white,
       ),
@@ -37,6 +41,7 @@ class _CommentSignatureState extends State<CommentSignature> {
       ),
     );
   }
+
   Widget _studentCard() {
     return Container(
       decoration: BoxDecoration(
@@ -79,6 +84,7 @@ class _CommentSignatureState extends State<CommentSignature> {
       ),
     );
   }
+
   Widget _commentCard() {
     return Container(
       padding: const EdgeInsets.all(20.0),
@@ -103,19 +109,20 @@ class _CommentSignatureState extends State<CommentSignature> {
               borderRadius: BorderRadius.circular(20),
             ),
             child: TextField(
-              maxLines: 6, 
+              maxLines: 6,
               decoration: InputDecoration(
-                hintText: 'សរសេរការឆ្លើយតប ឬសំណួរ',
-                hintStyle: AppTextStyle.subtitle16.copyWith(color: Colors.grey),
-                contentPadding: EdgeInsets.all(15),
-                border: InputBorder.none
-              ),
+                  hintText: 'សរសេរការឆ្លើយតប ឬសំណួរ',
+                  hintStyle:
+                      AppTextStyle.subtitle16.copyWith(color: Colors.grey),
+                  contentPadding: EdgeInsets.all(15),
+                  border: InputBorder.none),
             ),
           ),
         ],
       ),
     );
   }
+
   Widget _signatureCard() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,6 +174,7 @@ class _CommentSignatureState extends State<CommentSignature> {
       ],
     );
   }
+
   Widget _submitButton() {
     return ElevatedButton(
       onPressed: () {

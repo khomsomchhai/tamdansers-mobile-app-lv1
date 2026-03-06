@@ -9,17 +9,19 @@ class Attendance extends StatefulWidget {
   @override
   State<Attendance> createState() => _AttendanceState();
 }
-bool attendance=true;
+
+bool attendance = true;
+
 class _AttendanceState extends State<Attendance> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'វត្តមាន',
           style: AppTextStyle.screenTitle24,
         ),
-        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -61,19 +63,22 @@ class _AttendanceState extends State<Attendance> {
                           padding:
                               EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                           decoration: BoxDecoration(
-                              color: attendance? AppColors.successBG : AppColors.errorBG,
+                              color: attendance
+                                  ? AppColors.successBG
+                                  : AppColors.errorBG,
                               borderRadius: BorderRadius.circular(20)),
                           child: Text(
                             attendance ? 'វត្តមាន' : 'អវត្តមាន',
                             style: AppTextStyle.subtitle16.copyWith(
-                                color: attendance? AppColors.success : AppColors.error),
+                                color: attendance
+                                    ? AppColors.success
+                                    : AppColors.error),
                             textAlign: TextAlign.center,
                           ),
                         ),
                       );
                     },
                   )
-                
                 ],
               )
             ],

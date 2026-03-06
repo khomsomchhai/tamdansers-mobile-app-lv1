@@ -9,35 +9,35 @@ class SearchField extends StatelessWidget {
   final String hintText;
   final Widget icon;
   final TextEditingController controller;
+  final ValueChanged<String>? onChanged;
   const SearchField({
     super.key,
     required this.hintText,
     required this.icon,
-    required this.controller
+    required this.controller,
+    this.onChanged,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      onChanged: onChanged,
       textAlignVertical: TextAlignVertical.center,
       style: AppTextStyle.body,
       decoration: InputDecoration(
-        filled: true,
-        fillColor: AppColors.primaryMain.withValues(alpha: 0.1),
-        border: InputBorder.none,
-        hintText: hintText,
-        hintStyle: AppTextStyle.hintText,
-        prefixIcon: icon,
-        enabledBorder: UnderlineInputBorder(
-          borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
-          borderSide: BorderSide.none
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
-          borderSide: BorderSide.none
-        )
-      ),
+          filled: true,
+          fillColor: AppColors.primaryMain.withValues(alpha: 0.1),
+          border: InputBorder.none,
+          hintText: hintText,
+          hintStyle: AppTextStyle.hintText,
+          prefixIcon: icon,
+          enabledBorder: UnderlineInputBorder(
+              borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
+              borderSide: BorderSide.none),
+          focusedBorder: UnderlineInputBorder(
+              borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
+              borderSide: BorderSide.none)),
     );
   }
 }
