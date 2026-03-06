@@ -9,9 +9,9 @@ import 'package:tamdansers_app/screens/auth/splash_screen.dart';
 import 'package:tamdansers_app/screens/parents/menu/attandance_child.dart';
 import 'package:tamdansers_app/screens/parents/menu/homework_quize_child.dart';
 import 'package:tamdansers_app/screens/parents/menu/news.dart';
+import 'package:tamdansers_app/screens/parents/menu/parents_dashboard.dart';
 import 'package:tamdansers_app/screens/parents/parent_connect_student.dart';
 import 'package:tamdansers_app/screens/parents/parent_first_screen.dart';
-import 'package:tamdansers_app/screens/parents/parents_dashboard.dart';
 import 'package:tamdansers_app/screens/student/join_class_screen.dart';
 import 'package:tamdansers_app/screens/student/menu/deatil_teacher.dart';
 import 'package:tamdansers_app/screens/student/menu/deatilscreen.dart';
@@ -139,7 +139,7 @@ class AppRouter {
         return _fadeRouter(ParentFirstScreen());
       case AppRoutes.parentConnectStudent:
         return _slideRoute(ParentConnectStudent());
-      case AppRoutes.parentDashboardScreen:
+      case AppRoutes.ParentsDashboard:
         return _slideRoute(ParentsDashboard());
       case AppRoutes.AttandanceScreen:
         return _slideRoute(AttandanceScreen());
