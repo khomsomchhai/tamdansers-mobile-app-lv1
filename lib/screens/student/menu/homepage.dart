@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/screens/student/menu/data_list_homepage.dart';
@@ -16,20 +15,7 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   bool isExpend = false;
   final totalClass = 10;
-  @override
-void initState() {
-  super.initState();
-  loadName();
-}
 
-String fullName = "";
-
-void loadName() async {
-  var pref = await SharedPreferences.getInstance();
-  setState(() {
-    fullName = pref.getString("fullName") ?? "";
-  });
-}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +43,6 @@ void loadName() async {
   }
 
   AppBar _buil_appbar() {
-  
     return AppBar(
       leading: Container(
           margin: EdgeInsets.only(left: 16),
@@ -73,11 +58,9 @@ void loadName() async {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            fullName,
+            'Run Limhong',
             style: AppTextStyle.sectionTitle20,
           ),
-          Text('ID: 123456789',
-              style: AppTextStyle.body.copyWith(color: AppColors.secondaryText))
         ],
       ),
       actions: [
@@ -223,7 +206,6 @@ class _Classes extends StatelessWidget {
         Row(
           children: [
             Text('ថ្នាក់បន្ទាប់', style: AppTextStyle.fontsize18),
-            
           ],
         ),
         SizedBox(height: 12),
@@ -305,7 +287,9 @@ class _GridInfo extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 12),
-                  Text(item.title, style: AppTextStyle.body.copyWith(fontWeight: FontWeight.bold))
+                  Text(item.title,
+                      style: AppTextStyle.body
+                          .copyWith(fontWeight: FontWeight.bold))
                 ],
               ),
             ),

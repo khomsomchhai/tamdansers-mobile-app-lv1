@@ -11,7 +11,7 @@ class Scedeul extends StatefulWidget {
 }
 
 class _ScedeulState extends State<Scedeul> {
-  int? selectedDay;
+  int selectedDay=0;
   final List<String> days=['ចន្ទ', 'អង្គារ', 'ពុធ', 'ព្រហ', 'សុក្រ'];
   final List<List<String>> teachers=[
     ['សុខ សុភា', 'គ្រូប្រវត្តិវិទ្យា'],

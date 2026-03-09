@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/repositories/profile_repo.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 
 class Profile extends StatefulWidget {
@@ -75,7 +76,6 @@ class _ProfileState extends State<Profile> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text('គណនីអាខោន', style: AppTextStyle.screenTitle24),
-        
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -129,13 +129,14 @@ class _ProfileState extends State<Profile> {
                     barrierDismissible: false,
                     builder: (context) => AlertDialog(
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
+                        borderRadius:
+                            BorderRadius.circular(AppNumber.radiusMedium),
                       ),
                       title: Text(
                         'បញ្ជាក់ការចាកចេញ',
                         style: AppTextStyle.sectionTitle20,
                       ),
-                      content:  Text(
+                      content: Text(
                         'តើអ្នកប្រាកដថាចង់ចាកចេញមែនទេ?',
                         style: AppTextStyle.body,
                       ),
@@ -144,7 +145,7 @@ class _ProfileState extends State<Profile> {
                       actions: [
                         TextButton(
                           onPressed: () {
-                            Navigator.pop(context); 
+                            Navigator.pop(context);
                           },
                           style: TextButton.styleFrom(
                             side: BorderSide(color: AppColors.secondaryText),
@@ -154,7 +155,8 @@ class _ProfileState extends State<Profile> {
                           ),
                           child: Text(
                             'បោះបង់',
-                            style: AppTextStyle.hintText.copyWith(color: Colors.black),
+                            style: AppTextStyle.hintText
+                                .copyWith(color: Colors.black),
                           ),
                         ),
                         ElevatedButton(
@@ -164,14 +166,18 @@ class _ProfileState extends State<Profile> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                           ),
-                          onPressed: ()async {
+                          onPressed: () async {
                             final pref = await SharedPreferences.getInstance();
                             await pref.setBool("isLogin", false);
                             await pref.remove("role");
                             await pref.remove("userId");
-                            Navigator.popAndPushNamed(context, AppRoutes.roleSelectionScreen);
+                            Navigator.popAndPushNamed(
+                                context, AppRoutes.roleSelectionScreen);
                           },
-                          child: Text('ចាកចេញ',style: AppTextStyle.hintText.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
+                          child: Text('ចាកចេញ',
+                              style: AppTextStyle.hintText.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold)),
                         ),
                       ],
                     ),
@@ -195,16 +201,37 @@ class ImageProfile extends StatefulWidget {
 
 class _ImageProfileState extends State<ImageProfile> {
   String imagePath = '';
+  final ProfileRepo _profileRepo = ProfileRepo();
 
-  // ✅ Pick Image
+  @override
+  void initState() {
+    super.initState();
+    _loadImage();
+  }
+
+  Future<void> _loadImage() async {
+    final savedImage = await _profileRepo.getImage();
+
+    if (savedImage != null &&
+        savedImage.isNotEmpty &&
+        File(savedImage).existsSync()) {
+      setState(() {
+        imagePath = savedImage;
+      });
+    }
+  }
+
   Future<void> dataChooseImg(ImageSource source) async {
     final picker = ImagePicker();
+
     final pickedImg = await picker.pickImage(
       source: source,
       imageQuality: 70,
     );
 
     if (pickedImg != null) {
+      await _profileRepo.saveImage(pickedImg.path);
+
       setState(() {
         imagePath = pickedImg.path;
       });
@@ -274,7 +301,7 @@ class _ImageProfileState extends State<ImageProfile> {
               shape: const CircleBorder(),
               child: InkWell(
                 customBorder: const CircleBorder(),
-                onTap: showImageOptions, // 👈 call inside class
+                onTap: showImageOptions,
                 child: const SizedBox(
                   width: 40,
                   height: 40,
@@ -289,8 +316,10 @@ class _ImageProfileState extends State<ImageProfile> {
           ],
         ),
         const SizedBox(height: 10),
-        Text('Run Limhong', style: AppTextStyle.screenTitle24),
-        Text('ID: 12345678', style: AppTextStyle.body),
+        Text(
+          'Run Limhong',
+          style: AppTextStyle.screenTitle24,
+        ),
       ],
     );
   }
