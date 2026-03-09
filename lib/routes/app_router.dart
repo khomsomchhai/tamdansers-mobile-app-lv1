@@ -42,6 +42,8 @@ import 'package:tamdansers_app/screens/teacher/teacher_main_screen.dart';
 import 'package:tamdansers_app/screens/teacher/teacher_notification_screen.dart';
 import 'package:tamdansers_app/screens/teacher/teacher_profile_screen.dart';
 
+import '../screens/parents/menu/setting.dart' show parent_setting;
+
 class AppRouter {
   static Route generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -147,7 +149,8 @@ class AppRouter {
         return _slideRoute(HomeworkQuizeScreen());
       case AppRoutes.NewsScreen:
         return _slideRoute(NewsScreen());
-
+      case AppRoutes.parent_setting:
+        return _slideRoute(parent_setting());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
