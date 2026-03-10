@@ -64,6 +64,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           SnackBar(
             backgroundColor: AppColors.transparent,
             elevation: 0,
+            behavior: SnackBarBehavior.floating,
             margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
             content: CustomSnackbar(
               title: "មិនអាចចុះឈ្មោះបាន!", 

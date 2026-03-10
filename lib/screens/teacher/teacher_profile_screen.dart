@@ -1,18 +1,52 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/repositories/user_repo.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 
-class TeacherProfileScreen extends StatelessWidget {
-  const TeacherProfileScreen({super.key});
+class TeacherProfileScreen extends StatefulWidget {
+  final int teacherId;
+  const TeacherProfileScreen({super.key, required this.teacherId});
+
+  @override
+  State<TeacherProfileScreen> createState() => _TeacherProfileScreenState();
+}
+
+class _TeacherProfileScreenState extends State<TeacherProfileScreen> {
+  Map<String, dynamic>? _teacherData;
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTeacherData();
+  }
+
+  Future<void> _loadTeacherData() async {
+    final data = await UserRepo().getUserById(widget.teacherId);
+    if (mounted) {
+      setState(() {
+        _teacherData = data;
+        _loading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (_loading) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    final teacherName = _teacherData != null 
+        ? "${_teacherData!['first_name']} ${_teacherData!['last_name']}"
+        : "Teacher";
+
     return Scaffold(
       backgroundColor: AppColors.backgroundLight,
       appBar: AppBar(
@@ -27,7 +61,7 @@ class TeacherProfileScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildProfileHeader(),
+            _buildProfileHeader(teacherName),
             const SizedBox(height: 24),
             _buildInfoSection(),
             const SizedBox(height: 24),
@@ -41,7 +75,7 @@ class TeacherProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileHeader() {
+  Widget _buildProfileHeader(String teacherName) {
     return Center(
       child: Column(
         children: [
@@ -75,7 +109,7 @@ class TeacherProfileScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          Text("ទេព ធីតា",
+          Text(teacherName,
               style: AppTextStyle.sectionTitle20
                   .copyWith(fontWeight: FontWeight.bold)),
           const SizedBox(height: 4),
