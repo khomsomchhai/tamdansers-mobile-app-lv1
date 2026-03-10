@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart' show SharedPreferences;
+
 import '../../../constants/app_colors.dart' show AppColors;
 import '../../../constants/app_images.dart' show AppImages;
 import '../../../constants/app_number.dart' show AppNumber;
+import '../../../constants/class_child.dart' show ChildCard;
 import '../../../constants/text_style.dart' show AppTextStyle;
 import '../../../routes/app_routes.dart' show AppRoutes;
 
-class parent_setting extends StatefulWidget {
-  const parent_setting({super.key});
+class ParentSetting extends StatefulWidget {
+  const ParentSetting({super.key});
 
   @override
-  State<parent_setting> createState() => _MyWidgetState();
+  State<ParentSetting> createState() => _ParentSettingState();
 }
 
-class _MyWidgetState extends State<parent_setting> {
+class _ParentSettingState extends State<ParentSetting> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,6 +33,8 @@ class _MyWidgetState extends State<parent_setting> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildProfileHeader(),
+            const SizedBox(height: 24),
+            _buildChildrenRow(),
             const SizedBox(height: 24),
             _buildInfoSection(),
             const SizedBox(height: 24),
@@ -72,16 +76,76 @@ class _MyWidgetState extends State<parent_setting> {
                     shape: BoxShape.circle,
                     border: Border.all(color: Colors.white, width: 2),
                   ),
-                  child: const Icon(Icons.edit, size: 14, color: Colors.white),
+                  child: const Icon(
+                    Icons.edit,
+                    size: 14,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ],
           ),
           const SizedBox(height: 12),
-          Text("Heng Lay",
-              style: AppTextStyle.sectionTitle20
-                  .copyWith(fontWeight: FontWeight.bold)),
+          Text(
+            "Heng Lay",
+            style: AppTextStyle.sectionTitle20.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildChildrenRow() {
+    return SizedBox(
+      height: 205,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          const ChildCard(
+            name: "Leo Jenkins",
+            grade: "Grade 5",
+            attendance: 98,
+            progressColor: Color(0xFF1E88E5),
+            imageUrl:
+                "https://cdn-icons-png.flaticon.com/512/4140/4140048.png",
+          ),
+          const SizedBox(width: 16),
+          const ChildCard(
+            name: "Mia Jenkins",
+            grade: "Grade 2",
+            attendance: 92,
+            progressColor: Color(0xFF22C55E),
+            imageUrl:
+                "https://cdn-icons-png.flaticon.com/512/6997/6997662.png",
+          ),
+          const SizedBox(width: 16),
+          addChildCard(),
+        ],
+      ),
+    );
+  }
+
+  Widget addChildCard() {
+    return Container(
+      width: 110,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(
+          color: const Color(0xFFD9D9D9),
+        ),
+      ),
+      child: const Center(
+        child: Text(
+          "Add",
+          style: TextStyle(
+            fontSize: 16,
+            color: Color(0xFF9CA3AF),
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ),
     );
   }
@@ -112,7 +176,9 @@ class _MyWidgetState extends State<parent_setting> {
       children: [
         Icon(icon, color: AppColors.secondaryText, size: 20),
         const SizedBox(width: 12),
-        Expanded(child: Text(value, style: AppTextStyle.body14)),
+        Expanded(
+          child: Text(value, style: AppTextStyle.body14),
+        ),
       ],
     );
   }
@@ -148,15 +214,16 @@ class _MyWidgetState extends State<parent_setting> {
                 icon: Icons.help_outline_rounded,
                 title: "Help & Support",
                 onTap: () {},
-                showDivider: false,
+                showDivider: true,
               ),
               _settingsTile(
-                icon: Icons.link, 
-                title: "Link To Student", 
+                icon: Icons.link,
+                title: "Link To Student",
                 onTap: () {
                   showPartnerDialog(context);
-                }, 
-                showDivider: false)
+                },
+                showDivider: false,
+              ),
             ],
           ),
         ),
@@ -184,14 +251,22 @@ class _MyWidgetState extends State<parent_setting> {
                 Expanded(
                   child: Text(title, style: AppTextStyle.body14),
                 ),
-                const Icon(Icons.chevron_right,
-                    color: AppColors.secondaryText, size: 20),
+                const Icon(
+                  Icons.chevron_right,
+                  color: AppColors.secondaryText,
+                  size: 20,
+                ),
               ],
             ),
           ),
         ),
         if (showDivider)
-          const Divider(height: 1, thickness: 0.5, indent: 52, endIndent: 0),
+          const Divider(
+            height: 1,
+            thickness: 0.5,
+            indent: 52,
+            endIndent: 0,
+          ),
       ],
     );
   }
@@ -201,8 +276,11 @@ class _MyWidgetState extends State<parent_setting> {
       width: double.infinity,
       child: OutlinedButton.icon(
         onPressed: () => _confirmLogout(context),
-        icon:
-            const Icon(Icons.logout_rounded, color: AppColors.error, size: 20),
+        icon: const Icon(
+          Icons.logout_rounded,
+          color: AppColors.error,
+          size: 20,
+        ),
         label: Text(
           "Logout",
           style: AppTextStyle.subtitle16.copyWith(color: AppColors.error),
@@ -210,7 +288,7 @@ class _MyWidgetState extends State<parent_setting> {
         style: OutlinedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 14),
           side: const BorderSide(color: AppColors.error, width: 1.2),
-          backgroundColor: AppColors.error.withValues(alpha: 0.05),
+          backgroundColor: AppColors.error.withOpacity(0.05),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppNumber.radiusLarge),
           ),
@@ -241,6 +319,7 @@ class _MyWidgetState extends State<parent_setting> {
               await pref.setBool("isLogin", false);
               await pref.remove("role");
               await pref.remove("userId");
+
               if (context.mounted) {
                 Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
                   AppRoutes.roleSelectionScreen,
@@ -257,109 +336,114 @@ class _MyWidgetState extends State<parent_setting> {
       ),
     );
   }
+
   void showPartnerDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (context) {
-      return Dialog(
-        backgroundColor: AppColors.backgroundLight,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                "តំណរភ្ជាប់សិស្ស",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                    children: [
-                      Container(
-                        width: 60,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: Colors.green.shade100,
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Icon(Icons.person, size: 35),
-                      ),
-                      SizedBox(height: 5),
-                      Text("អ្នក"),
-                    ],
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: AppColors.backgroundLight,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  "តំណរភ្ជាប់សិស្ស",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
-                  SizedBox(width: 10),
-                  Icon(Icons.link, color: Colors.blue),
-                  SizedBox(width: 10),
-                  Column(
-                    children: [
-                      Container(
-                        width: 60,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: Colors.green.shade100,
-                          borderRadius: BorderRadius.circular(30),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            color: Colors.green.shade100,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: const Icon(Icons.person, size: 35),
                         ),
-                        child: Center(
-                          child: Text(
-                            "S for\nParent",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 10),
+                        const SizedBox(height: 5),
+                        const Text("អ្នក"),
+                      ],
+                    ),
+                    const SizedBox(width: 10),
+                    const Icon(Icons.link, color: Colors.blue),
+                    const SizedBox(width: 10),
+                    Column(
+                      children: [
+                        Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            color: Colors.green.shade100,
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              "S for\nParent",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 10),
+                            ),
                           ),
                         ),
+                        const SizedBox(height: 5),
+                        const Text("ដៃគូ"),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 25),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.error,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      SizedBox(height: 5),
-                      Text("ដៃគូ"),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 25),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.error,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      "ចាកចេញ",
+                      style: AppTextStyle.body18White,
                     ),
                   ),
-                  child: Text("ចាកចេញ",style: AppTextStyle.body18White,),
                 ),
-              ),
-              SizedBox(height: 10),
-              SizedBox(
-                width: double.infinity,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: AppColors.link,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: double.infinity,
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: AppColors.link,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      "បោះបង់",
+                      style: AppTextStyle.body18White,
                     ),
                   ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text("បោះបង់",style: AppTextStyle.body18White,),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      );
-    },
-  );
+        );
+      },
+    );
+  }
 }
-}
-
-  

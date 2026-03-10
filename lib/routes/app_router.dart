@@ -10,6 +10,7 @@ import 'package:tamdansers_app/screens/parents/menu/attandance_child.dart';
 import 'package:tamdansers_app/screens/parents/menu/homework_quize_child.dart';
 import 'package:tamdansers_app/screens/parents/menu/news.dart';
 import 'package:tamdansers_app/screens/parents/menu/parents_dashboard.dart';
+import 'package:tamdansers_app/screens/parents/menu/setting.dart';
 import 'package:tamdansers_app/screens/parents/parent_connect_student.dart';
 import 'package:tamdansers_app/screens/parents/parent_first_screen.dart';
 import 'package:tamdansers_app/screens/student/join_class_screen.dart';
@@ -42,7 +43,6 @@ import 'package:tamdansers_app/screens/teacher/teacher_main_screen.dart';
 import 'package:tamdansers_app/screens/teacher/teacher_notification_screen.dart';
 import 'package:tamdansers_app/screens/teacher/teacher_profile_screen.dart';
 
-import '../screens/parents/menu/setting.dart' show parent_setting;
 
 class AppRouter {
   static Route generateRoute(RouteSettings settings) {
@@ -150,7 +150,7 @@ class AppRouter {
       case AppRoutes.NewsScreen:
         return _slideRoute(NewsScreen());
       case AppRoutes.parent_setting:
-        return _slideRoute(parent_setting());
+        return _slideRoute(ParentSetting());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
