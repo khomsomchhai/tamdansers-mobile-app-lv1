@@ -1,12 +1,12 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/repositories/activity_repo.dart';
 import 'package:tamdansers_app/repositories/homework_repo.dart';
-import 'package:tamdansers_app/screens/teacher/teacher_dashboard.dart';
 import 'package:tamdansers_app/state/app_notifiers.dart';
 import 'package:tamdansers_app/widget/primary_button.dart';
 
@@ -100,7 +100,7 @@ class _AddTaskState extends State<AddTask> {
         status: status,
       );
       await ActivityRepo().logActivity(
-        teacherId: kTeacherId,
+        teacherId: (await SharedPreferences.getInstance()).getInt('userId') ?? 1,
         activityType: 'homework',
         title: 'កិច្ចការត្រូវបានកែប្រែ',
         subtitle: title,
@@ -110,7 +110,7 @@ class _AddTaskState extends State<AddTask> {
         title: title,
         subject: _selectedSubject ?? '',
         classId: _classId ?? 0,
-        teacherId: kTeacherId,
+        teacherId: (await SharedPreferences.getInstance()).getInt('userId') ?? 1,
         instructions: _instructionController.text.trim().isEmpty
             ? null
             : _instructionController.text.trim(),
@@ -118,7 +118,7 @@ class _AddTaskState extends State<AddTask> {
         status: status,
       );
       await ActivityRepo().logActivity(
-        teacherId: kTeacherId,
+        teacherId: (await SharedPreferences.getInstance()).getInt('userId') ?? 1,
         activityType: 'homework',
         title: status == 'active'
             ? 'កិច្ចការថ្មីត្រូវបានបង្កើត'

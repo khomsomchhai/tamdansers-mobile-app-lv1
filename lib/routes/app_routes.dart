@@ -8,6 +8,8 @@ class AppRoutes {
   static const String signUpScreen = "/sign_up_screen";
   static const String otpScreen = "/otp_screen";
   static const String changePassword = "/change_password";
+  static const String resetPassword = "/reset_password";
+  static const String forgetPassword1 = "forget_password1";
   //teacher
   static const String teacherMainScreen = "/teacher_main_screen";
 

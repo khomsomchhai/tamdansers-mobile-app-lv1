@@ -7,8 +7,9 @@ import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/constants/validators.dart';
 import 'package:tamdansers_app/repositories/class_repo.dart';
 import 'package:tamdansers_app/repositories/user_repo.dart';
+import 'package:tamdansers_app/screens/widget/custom_snackbar.dart';
+import 'package:tamdansers_app/screens/widget/primary_button_2.dart';
 import 'package:tamdansers_app/widget/auth_field.dart';
-import 'package:tamdansers_app/widget/primary_button.dart';
 
 class JoinClassScreen extends StatefulWidget {
   final int userId;
@@ -21,7 +22,21 @@ class JoinClassScreen extends StatefulWidget {
 class _JoinClassScreenState extends State<JoinClassScreen> {
   var classCodeCtrl = TextEditingController();
   var formKey = GlobalKey<FormState>();
-
+  bool isLoading = false;
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        content: CustomSnackbar(
+          title: "មិនត្រឹមត្រូវ!",
+          message: message,
+          icon: Icons.close,
+          color: AppColors.error,
+        ),
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,10 +76,18 @@ class _JoinClassScreenState extends State<JoinClassScreen> {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(20),
-        child: PrimaryButton(
-            label: "ចូល",
+        child: PrimaryButton2(
+            label: isLoading ? "" : "ចូល",
             backgroundColor: AppColors.primaryMain,
             foregroundColor: AppColors.white,
+            processIndicator: isLoading ? SizedBox(
+              width: 26,
+              height: 26,
+              child: CircularProgressIndicator(
+                color: AppColors.white,
+                strokeWidth: 2,
+              ),
+            ):null,
             onPressed: () async {
               try {
                 if (formKey.currentState!.validate()) {
@@ -73,23 +96,30 @@ class _JoinClassScreenState extends State<JoinClassScreen> {
                   if (classData != null) {
                     final success = await UserRepo().joinClass(widget.userId, classData['id']);
                     if (success) {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      await Future.delayed(Duration(seconds: 2));
+                      setState(() {
+                        isLoading = false;
+                      });
                       Navigator.pop(context, true); // Go back to first screen with success
                     } else {
                       // Show error
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Failed to join class')),
+                      _showError(
+                        "មិនអាចចូលថ្នាក់បាន"
                       );
                     }
                   } else {
                     // Invalid code
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Invalid class code')),
+                    _showError(
+                      "លេខកូដថ្នាក់មិនត្រឹមត្រូវ"
                     );
                   }
                 }
               } catch (e) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Error: $e')),
+                _showError(
+                  "កំហុស: $e"
                 );
               }
             }),

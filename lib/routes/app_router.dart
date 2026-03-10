@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/screens/auth/change_password.dart';
+import 'package:tamdansers_app/screens/auth/forget_password1.dart';
 import 'package:tamdansers_app/screens/auth/login_screen.dart';
 import 'package:tamdansers_app/screens/auth/otp_screen.dart';
+import 'package:tamdansers_app/screens/auth/reset_password_screen.dart';
 import 'package:tamdansers_app/screens/auth/role_selection_screen.dart';
 import 'package:tamdansers_app/screens/auth/sign_up_screen.dart';
 import 'package:tamdansers_app/screens/auth/splash_screen.dart';
@@ -64,22 +66,43 @@ class AppRouter {
         SignUpScreen(role: role ?? "student")
       );
       case AppRoutes.otpScreen:
-      final role = settings.arguments as String?;
+      String role = "student";
+      int? userId;
+      if (settings.arguments is Map) {
+        final args = settings.arguments as Map;
+        role = args['role'] ?? "student";
+        userId = args['userId'];
+      } else if (settings.arguments is String) {
+        role = settings.arguments as String;
+      }
       return _slideRoute(
-        OtpScreen(role: role ?? "student")
+        OtpScreen(role: role, userId: userId)
       );
       case AppRoutes.changePassword:
       return _slideRoute(
         ChangePassword()
       );
+      case AppRoutes.resetPassword:
+      final userId = settings.arguments as int?;
+      return _slideRoute(
+        ResetPasswordScreen(userId: userId ?? 1)
+      );
+      case AppRoutes.forgetPassword1:
+      return _slideRoute(
+        ForgetPassword1()
+      );
       //------------ Teacher ----------------
       case AppRoutes.teacherDashboard:
+      final teacherId = settings.arguments as int?;
       return _fadeRouter(
-        TeacherDashboard()
+        TeacherDashboard(
+          teacherId: teacherId ?? 1
+        )
       );
       case AppRoutes.manageAllClass:
+      final teacherId = settings.arguments as int?;
       return _slideRoute(
-        ManageAllClass()
+        ManageAllClass(teacherId: teacherId ?? 1)
       );
       case AppRoutes.manageClass:
       return _slideRoute(
@@ -115,12 +138,16 @@ class AppRouter {
         AddTask()
       );
       case AppRoutes.addStudentScreen:
+      final teacherId = settings.arguments as int?;
       return _slideRoute(
-        AddStudent()
+        AddStudent(teacherId: teacherId ?? 1)
       );
       case AppRoutes.teacherProfile:
+      final teacherId = settings.arguments as int?;
       return _fadeRouter(
-        TeacherProfileScreen()
+        TeacherProfileScreen(
+          teacherId: teacherId ?? 1
+        )
       );
       case AppRoutes.teacherMainScreen:
       final userId = settings.arguments as int?;

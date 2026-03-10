@@ -99,19 +99,22 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
                     builder: (_) {
                       if (i == 0) {
                         return TeacherDashboard(
-                            refreshTrigger: _dashboardRefresh);
+                            refreshTrigger: _dashboardRefresh,
+                            teacherId: widget.userId);
                       } else if (i == 1) {
                         return ManageAllClass(
                           showBackButton: false,
                           dashboardRefresh: _dashboardRefresh,
+                          teacherId: widget.userId,
                         );
                       } else if (i == 2) {
                         return HomeworkScreen(
                           showBackButton: false,
                           refreshTrigger: _homeworkRefresh,
+                          teacherId: widget.userId,
                         );
                       } else {
-                        return const TeacherProfileScreen();
+                        return TeacherProfileScreen(teacherId: widget.userId);
                       }
                     },
                     settings: settings,

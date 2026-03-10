@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/screens/widget/custom_snackbar.dart';
 
 class TeacherNotificationScreen extends StatefulWidget {
   const TeacherNotificationScreen({super.key});
@@ -21,7 +22,34 @@ class _TeacherNotificationScreenState extends State<TeacherNotificationScreen> {
     _messageController.dispose();
     super.dispose();
   }
-
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        content: CustomSnackbar(
+          title: "កំហុស!",
+          message: message,
+          icon: Icons.close,
+          color: AppColors.error,
+        ),
+      ),
+    );
+  }
+  void _showSuccess(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        content: CustomSnackbar(
+          title: "ជោកជ័យ!",
+          message: message,
+          icon: Icons.close,
+          color: AppColors.success,
+        ),
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,11 +60,11 @@ class _TeacherNotificationScreenState extends State<TeacherNotificationScreen> {
         elevation: 0,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppNumber.screenPadding),
+        padding: const EdgeInsets.all(AppNumber.sectionPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('ជ្រើសរើសអ្នកទទួល', style: AppTextStyle.body),
+            Text('ជ្រើសរើសអ្នកទទួល', style: AppTextStyle.subtitle18),
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -48,18 +76,18 @@ class _TeacherNotificationScreenState extends State<TeacherNotificationScreen> {
                 value: _selectedRecipient,
                 isExpanded: true,
                 underline: const SizedBox(),
-                items: const [
+                items: [
                   DropdownMenuItem(
                     value: 'all_students',
-                    child: Text('សិស្សទាំងអស់'),
+                    child: Text('សិស្សទាំងអស់',style: AppTextStyle.body,),
                   ),
                   DropdownMenuItem(
                     value: 'specific_class',
-                    child: Text('ថ្នាក់ជាក់លាក់'),
+                    child: Text('ថ្នាក់ទាំងអស់', style: AppTextStyle.body,),
                   ),
                   DropdownMenuItem(
                     value: 'parents',
-                    child: Text('ឪពុកម្តាយ'),
+                    child: Text('ឪពុកម្តាយ', style: AppTextStyle.body),
                   ),
                 ],
                 onChanged: (value) {
@@ -70,12 +98,13 @@ class _TeacherNotificationScreenState extends State<TeacherNotificationScreen> {
               ),
             ),
             const SizedBox(height: 24),
-            Text('ចំណងជើង', style: AppTextStyle.body),
+            Text('ចំណងជើង', style: AppTextStyle.subtitle18),
             const SizedBox(height: 12),
             TextField(
               controller: _titleController,
               decoration: InputDecoration(
                 hintText: 'បញ្ចូលចំណងជើងសេចក្តីជូនដំណឹង',
+                hintStyle: AppTextStyle.hintText,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(AppNumber.radiusLarge),
                 ),
@@ -84,13 +113,15 @@ class _TeacherNotificationScreenState extends State<TeacherNotificationScreen> {
               ),
             ),
             const SizedBox(height: 24),
-            Text('សារសេចក្តីជូនដំណឹង', style: AppTextStyle.body),
+            Text('សារសេចក្តីជូនដំណឹង', style: AppTextStyle.subtitle18),
             const SizedBox(height: 12),
             TextField(
               controller: _messageController,
               maxLines: 5,
+              
               decoration: InputDecoration(
                 hintText: 'បញ្ចូលសារសេចក្តីជូនដំណឹង',
+                hintStyle: AppTextStyle.hintText,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(AppNumber.radiusLarge),
                 ),
@@ -111,8 +142,8 @@ class _TeacherNotificationScreenState extends State<TeacherNotificationScreen> {
                   ),
                 ),
                 child: Text(
-                  'ផ្ញើរសេចក្តីជូនដំណឹង',
-                  style: AppTextStyle.bodyWhite,
+                  'ផ្ញើសេចក្តីជូនដំណឹង',
+                  style: AppTextStyle.buttonText16White,
                 ),
               ),
             ),
@@ -127,22 +158,12 @@ class _TeacherNotificationScreenState extends State<TeacherNotificationScreen> {
     final message = _messageController.text.trim();
 
     if (title.isEmpty || message.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('សូមបំពេញចំណងជើង និងសារសេចក្តីជូនដំណឹង'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      _showError("សូមបំពេញចំណងជើង និងសារសេចក្តីជូនដំណឹង");
       return;
     }
 
     // TODO: Implement actual notification sending logic
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('សេចក្តីជូនដំណឹងត្រូវបានផ្ញើរដោយជោគជ័យ'),
-        backgroundColor: Colors.green,
-      ),
-    );
+    _showSuccess("សេចក្តីជូនដំណឹងត្រូវបានផ្ញើរដោយជោគជ័យ");
 
     // Clear fields
     _titleController.clear();
