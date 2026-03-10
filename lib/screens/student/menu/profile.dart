@@ -210,16 +210,18 @@ class _ImageProfileState extends State<ImageProfile> {
   }
 
   Future<void> _loadImage() async {
-    final savedImage = await _profileRepo.getImage();
+  final savedImage = await _profileRepo.getImage();
 
-    if (savedImage != null &&
-        savedImage.isNotEmpty &&
-        File(savedImage).existsSync()) {
+  if (savedImage != null && savedImage.isNotEmpty) {
+    final file = File(savedImage);
+
+    if (await file.exists()) {
       setState(() {
         imagePath = savedImage;
       });
     }
   }
+}
 
   Future<void> dataChooseImg(ImageSource source) async {
     final picker = ImagePicker();
