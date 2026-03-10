@@ -34,6 +34,8 @@ class _ParentSettingState extends State<ParentSetting> {
           children: [
             _buildProfileHeader(),
             const SizedBox(height: 24),
+            _rowIconText("កូនៗរបស់អ្នក"),
+            const SizedBox(height: 15),
             _buildChildrenRow(),
             const SizedBox(height: 24),
             _buildInfoSection(),
@@ -92,11 +94,24 @@ class _ParentSettingState extends State<ParentSetting> {
               fontWeight: FontWeight.bold,
             ),
           ),
+          SizedBox(height: 6),
+          Container(
+            padding: const EdgeInsets.symmetric(
+                horizontal: AppNumber.sectionPadding,
+                vertical: AppNumber.spacingSmall),
+            decoration: BoxDecoration(
+              color: AppColors.primaryMain.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(AppNumber.radiusRounded),
+            ),
+            child: Text("Parent / July", style: AppTextStyle.caption14Secondary.copyWith(color: AppColors.link)),
+          ),
         ],
       ),
     );
   }
-
+  Widget _rowIconText(String text) {
+    return Text(text, style: AppTextStyle.fontsize18.copyWith(fontWeight: FontWeight.w600));
+  }
   Widget _buildChildrenRow() {
     return SizedBox(
       height: 205,
@@ -128,28 +143,32 @@ class _ParentSettingState extends State<ParentSetting> {
   }
 
   Widget addChildCard() {
-    return Container(
-      width: 110,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(
-          color: const Color(0xFFD9D9D9),
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, AppRoutes.parentConnectStudent);
+      },
+      child: Container(
+        width: 110,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(
+            color: const Color(0xFFD9D9D9),
+          ),
         ),
-      ),
-      child: const Center(
-        child: Text(
-          "Add",
-          style: TextStyle(
-            fontSize: 16,
-            color: Color(0xFF9CA3AF),
-            fontWeight: FontWeight.w600,
+        child: const Center(
+          child: Text(
+            "Add",
+            style: TextStyle(
+              fontSize: 16,
+              color: Color(0xFF9CA3AF),
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
       ),
     );
   }
-
   Widget _buildInfoSection() {
     return Container(
       width: double.infinity,
@@ -164,8 +183,6 @@ class _ParentSettingState extends State<ParentSetting> {
           _infoRow(Icons.email_outlined, "Henglay@school.edu.kh"),
           const Divider(height: 24, thickness: 0.5),
           _infoRow(Icons.phone_outlined, "+855 12 345 678"),
-          const Divider(height: 24, thickness: 0.5),
-          _infoRow(Icons.location_on_outlined, "ភ្នំពេញ, កម្ពុជា"),
         ],
       ),
     );
@@ -215,14 +232,6 @@ class _ParentSettingState extends State<ParentSetting> {
                 title: "Help & Support",
                 onTap: () {},
                 showDivider: true,
-              ),
-              _settingsTile(
-                icon: Icons.link,
-                title: "Link To Student",
-                onTap: () {
-                  showPartnerDialog(context);
-                },
-                showDivider: false,
               ),
             ],
           ),
@@ -337,113 +346,113 @@ class _ParentSettingState extends State<ParentSetting> {
     );
   }
 
-  void showPartnerDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Dialog(
-          backgroundColor: AppColors.backgroundLight,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  "តំណរភ្ជាប់សិស្ស",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Column(
-                      children: [
-                        Container(
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            color: Colors.green.shade100,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: const Icon(Icons.person, size: 35),
-                        ),
-                        const SizedBox(height: 5),
-                        const Text("អ្នក"),
-                      ],
-                    ),
-                    const SizedBox(width: 10),
-                    const Icon(Icons.link, color: Colors.blue),
-                    const SizedBox(width: 10),
-                    Column(
-                      children: [
-                        Container(
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            color: Colors.green.shade100,
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              "S for\nParent",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 10),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        const Text("ដៃគូ"),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 25),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.error,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: Text(
-                      "ចាកចេញ",
-                      style: AppTextStyle.body18White,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                SizedBox(
-                  width: double.infinity,
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      backgroundColor: AppColors.link,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      "បោះបង់",
-                      style: AppTextStyle.body18White,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
+  // void showPartnerDialog(BuildContext context) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return Dialog(
+  //         backgroundColor: AppColors.backgroundLight,
+  //         shape: RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.circular(20),
+  //         ),
+  //         child: Padding(
+  //           padding: const EdgeInsets.all(20),
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               const Text(
+  //                 "តំណរភ្ជាប់សិស្ស",
+  //                 style: TextStyle(
+  //                   fontSize: 18,
+  //                   fontWeight: FontWeight.bold,
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 20),
+  //               Row(
+  //                 mainAxisAlignment: MainAxisAlignment.center,
+  //                 children: [
+  //                   Column(
+  //                     children: [
+  //                       Container(
+  //                         width: 60,
+  //                         height: 60,
+  //                         decoration: BoxDecoration(
+  //                           color: Colors.green.shade100,
+  //                           borderRadius: BorderRadius.circular(15),
+  //                         ),
+  //                         child: const Icon(Icons.person, size: 35),
+  //                       ),
+  //                       const SizedBox(height: 5),
+  //                       const Text("អ្នក"),
+  //                     ],
+  //                   ),
+  //                   const SizedBox(width: 10),
+  //                   const Icon(Icons.link, color: Colors.blue),
+  //                   const SizedBox(width: 10),
+  //                   Column(
+  //                     children: [
+  //                       Container(
+  //                         width: 60,
+  //                         height: 60,
+  //                         decoration: BoxDecoration(
+  //                           color: Colors.green.shade100,
+  //                           borderRadius: BorderRadius.circular(30),
+  //                         ),
+  //                         child: const Center(
+  //                           child: Text(
+  //                             "S for\nParent",
+  //                             textAlign: TextAlign.center,
+  //                             style: TextStyle(fontSize: 10),
+  //                           ),
+  //                         ),
+  //                       ),
+  //                       const SizedBox(height: 5),
+  //                       const Text("ដៃគូ"),
+  //                     ],
+  //                   ),
+  //                 ],
+  //               ),
+  //               const SizedBox(height: 25),
+  //               SizedBox(
+  //                 width: double.infinity,
+  //                 child: ElevatedButton(
+  //                   onPressed: () {},
+  //                   style: ElevatedButton.styleFrom(
+  //                     backgroundColor: AppColors.error,
+  //                     shape: RoundedRectangleBorder(
+  //                       borderRadius: BorderRadius.circular(12),
+  //                     ),
+  //                   ),
+  //                   child: Text(
+  //                     "ចាកចេញ",
+  //                     style: AppTextStyle.body18White,
+  //                   ),
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 10),
+  //               SizedBox(
+  //                 width: double.infinity,
+  //                 child: TextButton(
+  //                   style: TextButton.styleFrom(
+  //                     backgroundColor: AppColors.link,
+  //                     shape: RoundedRectangleBorder(
+  //                       borderRadius: BorderRadius.circular(12),
+  //                     ),
+  //                   ),
+  //                   onPressed: () {
+  //                     Navigator.pop(context);
+  //                   },
+  //                   child: Text(
+  //                     "បោះបង់",
+  //                     style: AppTextStyle.body18White,
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 }
