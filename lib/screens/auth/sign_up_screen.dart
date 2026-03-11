@@ -31,14 +31,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
   var cfPwdCtrl = TextEditingController();
   String gender = "male";
   var formKey = GlobalKey<FormState>();
-  
+
   late String selectedRole;
   @override
   void initState() {
     super.initState();
     selectedRole = widget.role;
   }
-  
+
   Future<void> _register() async {
     String identifier = identifierCtrl.text.trim();
     bool isEmail = identifier.contains("@");
@@ -83,18 +83,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
           email: email,
           password: pwdCtrl.text,
           role: selectedRole,
+        );
 
-        );
-        
-        Navigator.pushNamed(
-          context, 
-          AppRoutes.otpScreen,
-          arguments: selectedRole
-        );
-        
+        Navigator.pushNamed(context, AppRoutes.otpScreen,
+            arguments: selectedRole);
       }
     }
   }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -348,9 +344,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       },
       child: Container(
         decoration: BoxDecoration(
-            color: AppColors.white, 
-            borderRadius: BorderRadius.circular(AppNumber.radiusMedium)
-          ),
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(AppNumber.radiusMedium)),
         padding: EdgeInsets.only(left: 15, top: 4, bottom: 4),
         child: Row(
           children: [

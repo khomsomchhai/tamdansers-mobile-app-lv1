@@ -137,6 +137,14 @@ class DbHelper {
       );
     ''');
   }
+  static Future<void> _createTblProfile(Database db) async {
+  await db.execute('''
+    CREATE TABLE IF NOT EXISTS profile(
+      id INTEGER PRIMARY KEY,
+      image TEXT
+    )
+  ''');
+}
 
   // ─── Open / init ──────────────────────────────────────────────────────────
 
@@ -155,6 +163,8 @@ class DbHelper {
         await _createTblActivityLog(db);
         await _createTblSubmission(db);
         await _createTblParentStudent(db);
+
+        await _createTblProfile(db);
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         if (oldVersion < 2) {
@@ -163,6 +173,8 @@ class DbHelper {
           await _createTblHomework(db);
           await _createTblAttendance(db);
           await _createTblActivityLog(db);
+
+          await _createTblProfile(db);
         }
         if (oldVersion < 3) {
           await _createTblSubmission(db);
