@@ -3,13 +3,21 @@ import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 
-class ParentsDashboard extends StatelessWidget {
+class ParentsDashboard extends StatefulWidget {
+  
   const ParentsDashboard({super.key});
+
+  @override
+  State<ParentsDashboard> createState() => _ParentsDashboardState();
+}
+
+class _ParentsDashboardState extends State<ParentsDashboard> 
+  with SingleTickerProviderStateMixin{
   double _fs(double base, BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     return base * (width / 390).clamp(0.78, 1.15);
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
