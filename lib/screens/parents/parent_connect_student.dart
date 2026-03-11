@@ -8,6 +8,7 @@ import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/constants/validators.dart';
 import 'package:tamdansers_app/repositories/parent_student_repo.dart';
 import 'package:tamdansers_app/repositories/user_repo.dart';
+import 'package:tamdansers_app/screens/widget/custom_snackbar.dart';
 import 'package:tamdansers_app/screens/widget/primary_button_2.dart';
 import 'package:tamdansers_app/widget/auth_field.dart';
 import 'package:tamdansers_app/widget/custom_dialog.dart';
@@ -99,11 +100,14 @@ class _ParentConnectStudentState extends State<ParentConnectStudent> {
   void _showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
-          message,
-          style: AppTextStyle.body15White,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        content: CustomSnackbar(
+          title: "មិនត្រឹមត្រូវ!",
+          message: message,
+          icon: Icons.close,
+          color: AppColors.error,
         ),
-        backgroundColor: AppColors.error,
       ),
     );
   }

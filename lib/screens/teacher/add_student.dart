@@ -1,16 +1,17 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/repositories/activity_repo.dart';
 import 'package:tamdansers_app/repositories/student_class_repo.dart';
-import 'package:tamdansers_app/screens/teacher/teacher_dashboard.dart';
 import 'package:tamdansers_app/widget/primary_button.dart';
 
 class AddStudent extends StatefulWidget {
-  const AddStudent({super.key});
+  final int teacherId;
+  const AddStudent({super.key, required this.teacherId});
 
   @override
   State<AddStudent> createState() => _AddStudentState();
@@ -91,7 +92,7 @@ class _AddStudentState extends State<AddStudent> {
             : _emailController.text.trim(),
       );
       await ActivityRepo().logActivity(
-        teacherId: kTeacherId,
+        teacherId: (await SharedPreferences.getInstance()).getInt('userId') ?? 1,
         activityType: 'class',
         title: 'សិស្សថ្មីត្រូវបានបញ្ចូល',
         subtitle: '$firstName $lastName',

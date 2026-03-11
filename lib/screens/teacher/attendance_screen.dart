@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tamdansers_app/constants/app_animation.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
@@ -9,7 +10,6 @@ import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/repositories/activity_repo.dart';
 import 'package:tamdansers_app/repositories/attendance_repo.dart';
 import 'package:tamdansers_app/repositories/class_repo.dart';
-import 'package:tamdansers_app/screens/teacher/teacher_dashboard.dart';
 
 class AttendanceScreen extends StatefulWidget {
   final int? classId;
@@ -51,7 +51,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   }
 
   Future<void> _loadAllClasses() async {
-    final classes = await ClassRepo().getClassesByTeacher(kTeacherId);
+    final classes = await ClassRepo().getClassesByTeacher((await SharedPreferences.getInstance()).getInt('userId') ?? 1);
     if (mounted) {
       setState(() {
         _allClasses = classes;
@@ -154,7 +154,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       );
     }
     await ActivityRepo().logActivity(
-      teacherId: kTeacherId,
+      teacherId: (await SharedPreferences.getInstance()).getInt('userId') ?? 1,
       activityType: 'attendance',
       title: 'វត្តមានត្រូវបានកត់ត្រា',
       subtitle: '$_className · $_selectedDate',

@@ -62,14 +62,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
       if (existingUser != null) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              backgroundColor: AppColors.transparent,
-              elevation: 0,
-              margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              content: CustomSnackbar(
-                  title: "មិនអាចចុះឈ្មោះបាន!",
-                  message: "គណនីនេះមានរួចហើយ សូមប្រើអ៊ីម៉ែល ឬ លេខទូរស័ព្ទផ្សេង",
-                  icon: Icons.close,
-                  color: AppColors.error)),
+            backgroundColor: AppColors.transparent,
+            elevation: 0,
+            behavior: SnackBarBehavior.floating,
+            margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+            content: CustomSnackbar(
+              title: "មិនអាចចុះឈ្មោះបាន!", 
+              message: "គណនីនេះមានរួចហើយ សូមប្រើអ៊ីម៉ែល ឬ លេខទូរស័ព្ទផ្សេង", 
+              icon: Icons.close, 
+              color: AppColors.error
+            )
+          ),
         );
       } else {
         await UserRepo().createUser(

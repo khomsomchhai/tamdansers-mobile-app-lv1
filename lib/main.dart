@@ -21,7 +21,7 @@ class MainApp extends StatelessWidget {
             elevation: 0,
             surfaceTintColor: AppColors.transparent,
           )),
-      initialRoute: AppRoutes.splashScreen,
+      initialRoute: AppRoutes.studentDashboard,
       onGenerateRoute: AppRouter.generateRoute,
     );
   }

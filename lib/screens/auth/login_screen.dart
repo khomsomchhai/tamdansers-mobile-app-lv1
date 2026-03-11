@@ -91,6 +91,8 @@ class _LoginScreenState extends State<LoginScreen> {
       SnackBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
         content: CustomSnackbar(
           title: "មិនត្រឹមត្រូវ!",
           message: message,
@@ -228,7 +230,13 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               Spacer(),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(
+                    context, 
+                    AppRoutes.forgetPassword1,
+                    arguments: selectedRole
+                  );
+                },
                 child: Text(
                   "ភ្លេចពាក្យសម្ងាត់?",
                   style: GoogleFonts.kantumruyPro(

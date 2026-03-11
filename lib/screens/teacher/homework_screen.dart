@@ -1,23 +1,25 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/repositories/homework_repo.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
-import 'package:tamdansers_app/screens/teacher/teacher_dashboard.dart';
 import 'package:tamdansers_app/state/app_notifiers.dart';
 
 class HomeworkScreen extends StatefulWidget {
   final int? classId;
   final bool showBackButton;
   final ValueNotifier<int>? refreshTrigger;
+  final int? teacherId;
   const HomeworkScreen({
     super.key,
     this.classId,
     this.showBackButton = true,
     this.refreshTrigger,
+    this.teacherId,
   });
 
   @override
@@ -48,13 +50,20 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
     super.dispose();
   }
 
+  Future<int> _getTeacherId() async {
+    if (widget.teacherId != null) return widget.teacherId!;
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('userId') ?? 1;
+  }
+
   Future<void> _loadHomework() async {
     if (mounted) setState(() => _loading = true);
     List<Map<String, dynamic>> all;
     if (widget.classId != null) {
       all = await HomeworkRepo().getHomeworkByClass(widget.classId!);
     } else {
-      all = await HomeworkRepo().getAllHomeworkByTeacher(kTeacherId);
+      final teacherId = await _getTeacherId();
+      all = await HomeworkRepo().getAllHomeworkByTeacher(teacherId);
     }
     if (mounted) {
       setState(() {

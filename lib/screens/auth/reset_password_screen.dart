@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/constants/validators.dart';
@@ -10,16 +11,15 @@ import 'package:tamdansers_app/widget/auth_field.dart';
 import 'package:tamdansers_app/widget/custom_snackbar.dart';
 import 'package:tamdansers_app/widget/primary_button.dart';
 
-class ChangePassword extends StatefulWidget {
-  const ChangePassword({super.key});
+class ResetPasswordScreen extends StatefulWidget {
+  final int userId;
+  const ResetPasswordScreen({super.key, required this.userId});
 
   @override
-  State<ChangePassword> createState() => _ChangePasswordState();
+  State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
 }
 
-class _ChangePasswordState extends State<ChangePassword> {
-
-  late TextEditingController oldPasswordCtrl;
+class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   late TextEditingController newPasswordCtrl;
   late TextEditingController confirmPasswordCtrl;
   late GlobalKey<FormState> formKey;
@@ -28,7 +28,6 @@ class _ChangePasswordState extends State<ChangePassword> {
   @override
   void initState() {
     super.initState();
-    oldPasswordCtrl = TextEditingController();
     newPasswordCtrl = TextEditingController();
     confirmPasswordCtrl = TextEditingController();
     formKey = GlobalKey<FormState>();
@@ -36,13 +35,12 @@ class _ChangePasswordState extends State<ChangePassword> {
 
   @override
   void dispose() {
-    oldPasswordCtrl.dispose();
     newPasswordCtrl.dispose();
     confirmPasswordCtrl.dispose();
     super.dispose();
   }
 
-  void _changePassword() async {
+  void _resetPassword() async {
     if (!formKey.currentState!.validate()) {
       return;
     }
@@ -52,30 +50,8 @@ class _ChangePasswordState extends State<ChangePassword> {
     });
 
     try {
-      final pref = await SharedPreferences.getInstance();
-      final userId = pref.getInt('userId');
-
-      if (userId == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            behavior: SnackBarBehavior.floating,
-            margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-            content: CustomSnackbar(
-              title: "កំហុស!",
-              message: "មិនបានរកឃើញលម្អិតគណនី សូមចូលប្រើប្រាស់ម្ដងទៀត",
-              icon: Icons.close,
-              color: AppColors.error,
-            ),
-          ),
-        );
-        return;
-      }
-
-      final success = await UserRepo().changePassword(
-        userId,
-        oldPasswordCtrl.text,
+      final success = await UserRepo().resetPassword(
+        widget.userId,
         newPasswordCtrl.text,
       );
 
@@ -89,13 +65,18 @@ class _ChangePasswordState extends State<ChangePassword> {
               margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
               content: CustomSnackbar(
                 title: "ជោគជ័យ!",
-                message: "ពាក្យសម្ងាត់ត្រូវបានផ្លាស់ប្តូរដោយជោគជ័យ",
+                message: "ពាក្យសម្ងាត់ត្រូវបានកំណត់ឡើងវិញដោយជោគជ័យ។ សូមចូលប្រើប្រាស់។",
                 icon: Icons.check_circle,
                 color: AppColors.success,
               ),
             ),
           );
-          Navigator.pop(context);
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            AppRoutes.loginScreen,
+            (route) => false,
+            arguments: UserRepo().getRoleById(widget.userId),
+          );
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -105,8 +86,8 @@ class _ChangePasswordState extends State<ChangePassword> {
             behavior: SnackBarBehavior.floating,
             margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
             content: CustomSnackbar(
-              title: "មិនត្រឹមត្រូវ!",
-              message: "ពាក្យសម្ងាត់ចាស់មិនត្រឹមត្រូវ។ សូមព្យាយាមម្ដងទៀត",
+              title: "កំហុស!",
+              message: "មានកំហុសកើតឡើង សូមព្យាយាមម្ដងទៀត",
               icon: Icons.close,
               color: AppColors.error,
             ),
@@ -149,11 +130,6 @@ class _ChangePasswordState extends State<ChangePassword> {
             size: AppNumber.iconMedium,
           ),
         ),
-        title: Text(
-          "ប្ដូរពាក្យសម្ងាត់",
-          style: AppTextStyle.sectionTitle20,
-        ),
-        centerTitle: true,
         elevation: 0,
         surfaceTintColor: AppColors.transparent,
       ),
@@ -161,23 +137,25 @@ class _ChangePasswordState extends State<ChangePassword> {
         child: Padding(
           padding: EdgeInsets.symmetric(
             horizontal: 20,
-            vertical: 20,
           ),
           child: Form(
             key: formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AuthField(
-                  hintText: "ពាក្យសម្ងាត់បច្ចុប្បន្ន",
-                  icon: Icon(
-                    Icons.lock_outline_rounded,
-                    size: 20,
-                    color: AppColors.secondaryText,
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.2,
+                  child: SvgPicture.asset(
+                    AppImages.appLogoblue,
+                    fit: BoxFit.contain,
                   ),
-                  isPwd: true,
-                  textController: oldPasswordCtrl,
-                  validator: Validators.password
+                ),
+                SizedBox(height: 30),
+                Center(
+                  child: Text(
+                    "បង្កើតពាក្យសម្ងាត់ថ្មី",
+                    style: AppTextStyle.sectionTitle20,
+                  ),
                 ),
                 SizedBox(height: 20),
                 AuthField(
@@ -205,30 +183,12 @@ class _ChangePasswordState extends State<ChangePassword> {
                     return Validators.cnfPassword(value, newPasswordCtrl.text);
                   },
                 ),
-                SizedBox(height: 12,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(
-                          context,
-                          AppRoutes.forgetPassword1
-                        );
-                      },
-                      child: Text(
-                        "ភ្លេចពាក្យសម្ងាត់",
-                        style: AppTextStyle.bodyPrimary,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height:20),
+                SizedBox(height: 20),
                 PrimaryButton(
-                  label: isLoading ? "កំពុងដំណើរការ..." : "បន្ទាប់",
+                  label: isLoading ? "កំពុងដំណើរការ..." : "កំណត់ពាក្យសម្ងាត់",
                   backgroundColor: AppColors.primaryMain,
                   foregroundColor: AppColors.white,
-                  onPressed: isLoading ? () {} : _changePassword,
+                  onPressed: isLoading ? () {} : _resetPassword,
                 ),
               ],
             ),
