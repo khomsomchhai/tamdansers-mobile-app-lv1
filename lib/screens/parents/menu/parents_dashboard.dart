@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 
@@ -25,8 +26,8 @@ class ParentsDashboard extends StatelessWidget {
                   width: double.infinity,
                   padding: EdgeInsets.only(
                     top: MediaQuery.of(context).padding.top + 12,
-                    left: 16,
-                    right: 16,
+                    left: 20,
+                    right: 20,
                     bottom: 70,
                   ),
                   decoration: const BoxDecoration(
@@ -58,7 +59,7 @@ class ParentsDashboard extends StatelessWidget {
                             ),
                             child: ClipOval(
                               child: Image.asset(
-                                'assets/images/profile_placeholder.png',
+                                AppImages.userProfile,
                                 fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) =>
                                     Icon(Icons.person,
@@ -193,14 +194,8 @@ class ParentsDashboard extends StatelessWidget {
                       color: AppColors.primaryBg,
                     ),
                     child: ClipOval(
-                      child: Image.asset(
-                        'assets/images/profile_placeholder.png',
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => Icon(
-                            Icons.person,
-                            size: 36,
-                            color: AppColors.primaryMain),
-                      ),
+                      child:
+                          Image.asset(AppImages.userProfile, fit: BoxFit.cover),
                     ),
                   ),
                   Positioned(

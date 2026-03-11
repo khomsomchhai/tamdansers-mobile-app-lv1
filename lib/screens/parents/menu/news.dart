@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 
@@ -120,22 +121,13 @@ class _NewsScreenState extends State<NewsScreen> {
             border: Border.all(color: AppColors.primaryMain, width: 2),
           ),
           child: ClipOval(
-            child: Image.asset(
-              'assets/images/user_profile.png',
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Icon(
-                Icons.person,
-                color: AppColors.primaryMain,
-                size: 22,
-              ),
-            ),
+            child: Image.asset(AppImages.userProfile, fit: BoxFit.cover),
           ),
         ),
       ],
     );
   }
 
-  // ==================== SEARCH BAR ====================
   Widget _buildSearchBar() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 0),

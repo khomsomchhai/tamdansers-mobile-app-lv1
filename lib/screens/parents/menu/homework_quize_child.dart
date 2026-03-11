@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 
@@ -63,15 +64,7 @@ class _HomeworkQuizeScreenState extends State<HomeworkQuizeScreen> {
             border: Border.all(color: AppColors.primaryMain, width: 2),
           ),
           child: ClipOval(
-            child: Image.asset(
-              'assets/images/user_profile.png',
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Icon(
-                Icons.person,
-                color: AppColors.primaryMain,
-                size: 28,
-              ),
-            ),
+              child: Image.asset(AppImages.userProfile, fit: BoxFit.cover),
           ),
         ),
         const SizedBox(width: 12),
@@ -109,8 +102,6 @@ class _HomeworkQuizeScreenState extends State<HomeworkQuizeScreen> {
       ],
     );
   }
-
-  // ==================== TAB SELECTOR ====================
   Widget _buildTabSelector() {
     return Container(
       padding: const EdgeInsets.all(4),
@@ -152,7 +143,7 @@ class _HomeworkQuizeScreenState extends State<HomeworkQuizeScreen> {
     );
   }
 
-  // ==================== STATS ROW ====================
+
   Widget _buildStatsRow() {
     return Row(
       children: [
