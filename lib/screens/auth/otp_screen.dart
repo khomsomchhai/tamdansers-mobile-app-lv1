@@ -14,7 +14,8 @@ import 'package:tamdansers_app/widget/custom_dialog.dart';
 
 class OtpScreen extends StatefulWidget {
   final String role;
-  const OtpScreen({super.key, required this.role});
+  final int? userId;
+  const OtpScreen({super.key, required this.role, this.userId});
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
@@ -51,6 +52,13 @@ class _OtpScreenState extends State<OtpScreen> {
     selectedRole = widget.role;
     startTimer();
   }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -166,14 +174,22 @@ class _OtpScreenState extends State<OtpScreen> {
                   builder: (context) => CustomDialog(
                     title: "ជោគជ័យ",
                     description: "លេខកូដរបស់អ្នកត្រូវបានផ្ទៀងផ្ទាត់ដោយជោគជ័យ។",
-                    label: "ចូលគណនី",
+                    label: widget.userId != null ? "កំណត់ពាក្យសម្ងាត់ថ្មី" : "ចូលគណនី",
                     onPressed: (){
-                      Navigator.pushNamedAndRemoveUntil(
-                        context, 
-                        AppRoutes.loginScreen, 
-                        (route) => false,
-                        arguments: selectedRole
-                      );
+                      if (widget.userId != null) {
+                        Navigator.pushNamed(
+                          context, 
+                          AppRoutes.resetPassword,
+                          arguments: widget.userId
+                        );
+                      } else {
+                        Navigator.pushNamedAndRemoveUntil(
+                          context, 
+                          AppRoutes.loginScreen, 
+                          (route) => false,
+                          arguments: selectedRole
+                        );
+                      }
                     },
                   )
                 );

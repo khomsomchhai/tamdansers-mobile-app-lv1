@@ -1,21 +1,23 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/repositories/class_repo.dart';
 import 'package:tamdansers_app/repositories/student_class_repo.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
-import 'package:tamdansers_app/screens/teacher/teacher_dashboard.dart';
 import 'package:tamdansers_app/widget/class_card.dart';
 import 'package:tamdansers_app/widget/create_class_dialog.dart';
 
 class ManageAllClass extends StatefulWidget {
   final bool showBackButton;
   final ValueNotifier<int>? dashboardRefresh;
+  final int? teacherId;
   const ManageAllClass({
     super.key,
     this.showBackButton = true,
     this.dashboardRefresh,
+    this.teacherId,
   });
 
   @override
@@ -52,8 +54,15 @@ class _ManageAllClassState extends State<ManageAllClass> {
     super.dispose();
   }
 
+  Future<int> _getTeacherId() async {
+    if (widget.teacherId != null) return widget.teacherId!;
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('userId') ?? 1;
+  }
+
   Future<void> _loadClasses() async {
-    final classes = await ClassRepo().getClassesByTeacher(kTeacherId);
+    final teacherId = await _getTeacherId();
+    final classes = await ClassRepo().getClassesByTeacher(teacherId);
     if (mounted) {
       setState(() {
         _classes = classes;
