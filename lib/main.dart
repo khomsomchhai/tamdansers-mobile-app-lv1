@@ -9,7 +9,6 @@ void main() {
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -21,7 +20,11 @@ class MainApp extends StatelessWidget {
             elevation: 0,
             surfaceTintColor: AppColors.transparent,
           )),
+<<<<<<< HEAD
       initialRoute: AppRoutes.ParentsDashboard,
+=======
+      initialRoute: AppRoutes.roleSelectionScreen,
+>>>>>>> 49aad77233a74a74050a7167d916392eebb526ac
       onGenerateRoute: AppRouter.generateRoute,
     );
   }
