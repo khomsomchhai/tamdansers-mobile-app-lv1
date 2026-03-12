@@ -131,9 +131,7 @@ class AppRouter {
           teacherId: teacherId ?? 1
         )
       );
-        return _slideRoute(AddStudent());
-      case AppRoutes.teacherProfile:
-        return _fadeRouter(TeacherProfileScreen());
+      
       case AppRoutes.teacherMainScreen:
         final userId = settings.arguments as int?;
         return _fadeRouter(TeacherMainScreen(userId: userId ?? 1));
