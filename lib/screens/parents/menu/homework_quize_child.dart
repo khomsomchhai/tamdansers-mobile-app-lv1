@@ -4,10 +4,8 @@ import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
-
 class HomeworkQuizeScreen extends StatefulWidget {
   const HomeworkQuizeScreen({super.key});
-
   @override
   State<HomeworkQuizeScreen> createState() => _HomeworkQuizeScreenState();
 }
@@ -244,8 +242,6 @@ class _HomeworkQuizeScreenState extends State<HomeworkQuizeScreen> {
       ],
     );
   }
-
-  // ==================== TODAY SECTION ====================
   Widget _buildTodaySection() {
     return Column(
       children: [
@@ -292,7 +288,7 @@ class _HomeworkQuizeScreenState extends State<HomeworkQuizeScreen> {
     );
   }
 
-  // ==================== RECENT SECTION ====================
+
   Widget _buildRecentSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

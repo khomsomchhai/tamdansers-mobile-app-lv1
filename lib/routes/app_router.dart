@@ -10,10 +10,7 @@ import 'package:tamdansers_app/screens/parents/menu/attandance_child.dart';
 import 'package:tamdansers_app/screens/parents/menu/homework_quize_child.dart';
 import 'package:tamdansers_app/screens/parents/menu/news.dart';
 import 'package:tamdansers_app/screens/parents/menu/parents_dashboard.dart';
-<<<<<<< HEAD
-=======
 import 'package:tamdansers_app/screens/parents/menu/setting.dart';
->>>>>>> 49aad77233a74a74050a7167d916392eebb526ac
 import 'package:tamdansers_app/screens/parents/parent_connect_student.dart';
 import 'package:tamdansers_app/screens/parents/parent_first_screen.dart';
 import 'package:tamdansers_app/screens/student/join_class_screen.dart';
