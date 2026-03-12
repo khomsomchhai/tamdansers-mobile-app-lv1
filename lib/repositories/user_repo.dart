@@ -81,6 +81,20 @@ class UserRepo {
     }
     return null;
   }
+  Future<String?> getRoleById(int id) async {
+    final db = await DbHelper().initDatabase();
+    final result = await db.query(
+      'tbl_user',
+      columns: ['role'],
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+
+    if (result.isNotEmpty) {
+      return result.first['role'] as String?;
+    }
+    return null;
+  }
   getUserByPhone(String phone) async {
     final db = await DbHelper().initDatabase();
     final result = await db.query(
@@ -112,6 +126,17 @@ class UserRepo {
       whereArgs: [userId],
     );
     
+    return updated > 0;
+  }
+
+  Future<bool> resetPassword(int userId, String newPassword) async {
+    final db = await DbHelper().initDatabase();
+    final updated = await db.update(
+      'tbl_user',
+      {'password': newPassword},
+      where: 'id = ?',
+      whereArgs: [userId],
+    );
     return updated > 0;
   }
 

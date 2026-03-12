@@ -6,15 +6,14 @@ import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/repositories/activity_repo.dart';
 import 'package:tamdansers_app/repositories/class_repo.dart';
 import 'package:tamdansers_app/repositories/student_class_repo.dart';
+import 'package:tamdansers_app/repositories/user_repo.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/widget/create_class_dialog.dart';
 
-// Temporary teacher ID — replace with session value once auth is complete
-const int kTeacherId = 1;
-
 class TeacherDashboard extends StatefulWidget {
   final ValueNotifier<int>? refreshTrigger;
-  const TeacherDashboard({super.key, this.refreshTrigger});
+  final int teacherId;
+  const TeacherDashboard({super.key, this.refreshTrigger, required this.teacherId});
 
   @override
   State<TeacherDashboard> createState() => _TeacherDashboardState();
@@ -25,6 +24,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
   int _studentCount = 0;
   List<Map<String, dynamic>> _activities = [];
   bool _loading = true;
+  String _teacherName = "Teacher";
 
   @override
   void initState() {
@@ -40,13 +40,17 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
   }
 
   Future<void> _loadData() async {
-    final classCount = await ClassRepo().getClassCountByTeacher(kTeacherId);
+    final teacherData = await UserRepo().getUserById(widget.teacherId);
+    final classCount = await ClassRepo().getClassCountByTeacher(widget.teacherId);
     final studentCount =
-        await StudentClassRepo().getTotalStudentsByTeacher(kTeacherId);
+        await StudentClassRepo().getTotalStudentsByTeacher(widget.teacherId);
     final activities =
-        await ActivityRepo().getRecentActivities(kTeacherId, limit: 5);
+        await ActivityRepo().getRecentActivities(widget.teacherId, limit: 5);
     if (mounted) {
       setState(() {
+        _teacherName = teacherData != null 
+            ? "${teacherData['first_name']} ${teacherData['last_name']}" 
+            : "Teacher";
         _classCount = classCount;
         _studentCount = studentCount;
         _activities = activities;
@@ -78,7 +82,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
           ),
         ),
         title: Text(
-          "Tep Thida",
+          _teacherName,
           style: AppTextStyle.fontsize18,
         ),
       ),
@@ -94,7 +98,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                   style: AppTextStyle.screenTitle24,
                   children: [
                     TextSpan(
-                      text: 'Tep Thida',
+                      text: _teacherName,
                       style: AppTextStyle.screenTitle24Main,
                     ),
                   ],

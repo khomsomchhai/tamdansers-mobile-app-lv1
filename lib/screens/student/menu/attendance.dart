@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
-import 'package:tamdansers_app/widget/attendance_db.dart';
+import 'package:tamdansers_app/screens/student/menu/data_attendance.dart';
+import 'package:tamdansers_app/screens/widget/attendance_db.dart';
 
 class Attendance extends StatefulWidget {
   const Attendance({super.key});
@@ -9,8 +10,7 @@ class Attendance extends StatefulWidget {
   @override
   State<Attendance> createState() => _AttendanceState();
 }
-
-bool attendance = true;
+final summary= attendanceSummary;
 
 class _AttendanceState extends State<Attendance> {
   @override
@@ -29,7 +29,7 @@ class _AttendanceState extends State<Attendance> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CardAttendance(),
+              CardAttendance(totalDays: summary.totalDays, presentDays: summary.presentDays, absentDays: summary.absentDays,attendanceRate: summary.attendanceRate,monthLabel: 'មករា',),
               SizedBox(height: 20),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,8 +39,11 @@ class _AttendanceState extends State<Attendance> {
                   ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount: 10,
+                    itemCount: AttendanceEntryModel.attendanceHistory.length,
+                    
                     itemBuilder: (context, index) {
+                      final entry = AttendanceEntryModel.attendanceHistory[index];
+                      final isPresent = entry.isPresent;
                       return ListTile(
                         contentPadding: EdgeInsets.zero,
                         leading: Container(
@@ -55,22 +58,22 @@ class _AttendanceState extends State<Attendance> {
                             size: 30,
                           ),
                         ),
-                        title: Text('17 មករា 2026',
+                        title: Text(entry.date,
                             style: AppTextStyle.sectionTitle20),
-                        subtitle: Text('គណិតវិទ្យា', style: AppTextStyle.body),
+                        subtitle: Text(entry.time, style: AppTextStyle.body),
                         trailing: Container(
                           width: 100,
                           padding:
                               EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                           decoration: BoxDecoration(
-                              color: attendance
+                              color: isPresent
                                   ? AppColors.successBG
                                   : AppColors.errorBG,
                               borderRadius: BorderRadius.circular(20)),
                           child: Text(
-                            attendance ? 'វត្តមាន' : 'អវត្តមាន',
+                            isPresent ? 'វត្តមាន' : 'អវត្តមាន',
                             style: AppTextStyle.subtitle16.copyWith(
-                                color: attendance
+                                color: isPresent
                                     ? AppColors.success
                                     : AppColors.error),
                             textAlign: TextAlign.center,

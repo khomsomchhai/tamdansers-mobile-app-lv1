@@ -1,12 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/repositories/activity_repo.dart';
 import 'package:tamdansers_app/repositories/class_repo.dart';
-import 'package:tamdansers_app/screens/teacher/teacher_dashboard.dart';
 
 class CreateClassDialog extends StatefulWidget {
   final List<String> grades;
@@ -62,13 +62,13 @@ class _CreateClassDialogState extends State<CreateClassDialog> {
         name: _nameCtrl.text.trim(),
         grade: _grade!,
         section: _sectionCtrl.text.trim().toUpperCase(),
-        teacherId: kTeacherId,
+        teacherId: (await SharedPreferences.getInstance()).getInt('userId') ?? 1,
         colorHex: _color,
         semester: _semester,
         schoolYear: _schoolYearCtrl.text.trim(),
       );
       await ActivityRepo().logActivity(
-        teacherId: kTeacherId,
+        teacherId: (await SharedPreferences.getInstance()).getInt('userId') ?? 1,
         activityType: "class",
         title: "ថ្នាក់ត្រូវបានបង្កើត",
         subtitle:

@@ -18,7 +18,11 @@ class MainApp extends StatelessWidget {
             elevation: 0,
             surfaceTintColor: AppColors.transparent,
           )),
+<<<<<<< HEAD
       initialRoute: AppRoutes.ParentsDashboard,
+=======
+      initialRoute: AppRoutes.studentDashboard,
+>>>>>>> 3e959042f9aee65583177021d4d1d2ff4258da7c
       onGenerateRoute: AppRouter.generateRoute,
     );
   }
