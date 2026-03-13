@@ -91,9 +91,11 @@ class _ParentConnectStudentState extends State<ParentConnectStudent> {
     } catch (e) {
       _showError("មានបញ្ហាបច្ចេកទេស សូមព្យាយាមម្ដងទៀត។");
     } finally {
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -110,6 +112,12 @@ class _ParentConnectStudentState extends State<ParentConnectStudent> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    invCodeCtrl.dispose();
+    super.dispose();
   }
 
   @override

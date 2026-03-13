@@ -9,6 +9,7 @@ import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/repositories/profile_repo.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
+import 'package:tamdansers_app/screens/student/menu/connection_requests.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
