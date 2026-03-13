@@ -67,21 +67,15 @@ class _CommentSignatureState extends State<CommentSignature> {
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children:  [
                 Text(
                   "ប៊ិន​ សុវណ្ណវង្ស",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: AppTextStyle.subtitle16,
                 ),
                 SizedBox(height: 4),
                 Text(
-                  "ID: STU-2023-89. ថ្នាក់ទី ១២ ក",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 14,
-                  ),
+                  "ID: STU-2023-89. ថ្នាក់ទី ១២ ក",  
+                  style: AppTextStyle.subtitle16.copyWith(color: AppColors.grey)
                 ),
               ],
             ),
@@ -133,29 +127,18 @@ class _CommentSignatureState extends State<CommentSignature> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Header Text
-        const Text(
+         Text(
           'ស៊ីញ៉េអាណាព្យាបាល',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
+          style: AppTextStyle.sectionTitle20
         ),
         const SizedBox(height: 8),
-
-        // Sub-header Text
-        const Text(
+         Text(
           'សូមចុះឈ្មោះក្នុងប្រអប់ខាងក្រោម ដើម្បីទទួលស្គាល់បង្កាន់ដៃ។',
-          style: TextStyle(
-            fontSize: 14,
-            color: Colors.grey,
-          ),
+          style: AppTextStyle.subtitle16.copyWith(color: AppColors.grey)
         ),
         const SizedBox(height: 20),
-
-        // Dotted Signature Box
         DottedBorder(
-          color: Colors.grey.shade400,
+          color: AppColors.secondaryText,
           strokeWidth: 1,
           dashPattern: const [8, 4],
           borderType: BorderType.RRect,
@@ -164,30 +147,23 @@ class _CommentSignatureState extends State<CommentSignature> {
             height: 200,
             width: double.infinity,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.uploadFile,
               borderRadius: BorderRadius.circular(25),
             ),
             child: Stack(
               children: [
-                // Placeholder Text
-                const Center(
+                 Center(
                   child: Text(
                     'Sign Here',
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 32,
-                      fontWeight: FontWeight.w400,
-                    ),
+                    style: AppTextStyle.screenTitle24
                   ),
                 ),
-
-                // Delete/Clear Icon
                 Positioned(
                   top: 15,
                   right: 15,
                   child: Icon(
                     Icons.delete_outline,
-                    color: Colors.grey.shade700,
+                    color: AppColors.secondaryText,
                     size: 30,
                   ),
                 ),
@@ -202,7 +178,6 @@ class _CommentSignatureState extends State<CommentSignature> {
   Widget _submitButton() {
     return ElevatedButton(
       onPressed: () {
-        // Handle submit action
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primaryMain,
