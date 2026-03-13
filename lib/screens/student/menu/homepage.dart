@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/screens/student/menu/attendance.dart';
 import 'package:tamdansers_app/screens/student/menu/data_list_homepage.dart';
-import 'package:tamdansers_app/widget/attendance_db.dart';
+import 'package:tamdansers_app/screens/widget/attendance_db.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -15,6 +16,7 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   bool isExpend = false;
   final totalClass = 10;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +29,7 @@ class _HomepageState extends State<Homepage> {
             children: [
               _TitleHeader(),
               SizedBox(height: 20),
-              CardAttendance(),
+              CardAttendance(monthLabel: 'មករា',totalDays: summary.totalDays, presentDays: summary.presentDays, absentDays: summary.absentDays,attendanceRate: summary.attendanceRate,),
               SizedBox(height: 20),
               _GridInfo(),
               SizedBox(height: 20),
@@ -60,8 +62,6 @@ class _HomepageState extends State<Homepage> {
             'Run Limhong',
             style: AppTextStyle.sectionTitle20,
           ),
-          Text('ID: 123456789',
-              style: AppTextStyle.body.copyWith(color: AppColors.secondaryText))
         ],
       ),
       actions: [
@@ -207,7 +207,6 @@ class _Classes extends StatelessWidget {
         Row(
           children: [
             Text('ថ្នាក់បន្ទាប់', style: AppTextStyle.fontsize18),
-            
           ],
         ),
         SizedBox(height: 12),
@@ -289,7 +288,9 @@ class _GridInfo extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 12),
-                  Text(item.title, style: AppTextStyle.body.copyWith(fontWeight: FontWeight.bold))
+                  Text(item.title,
+                      style: AppTextStyle.body
+                          .copyWith(fontWeight: FontWeight.bold))
                 ],
               ),
             ),
