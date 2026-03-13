@@ -8,6 +8,7 @@ import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
+import 'package:tamdansers_app/screens/student/menu/connection_requests.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -115,6 +116,19 @@ class _ProfileState extends State<Profile> {
                 title: 'ការជូនដំណឹង',
                 onTap: () {
                   Navigator.pushNamed(context, '/notifications');
+                },
+              ),
+              const SizedBox(height: 20),
+              ProfileMenu(
+                icon: Icons.family_restroom,
+                iconBgColor: AppColors.primaryBg,
+                iconColor: AppColors.primaryMain,
+                title: 'សំណើភ្ជាប់ពីឪពុកម្តាយ',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ConnectionRequests()),
+                  );
                 },
               ),
               const SizedBox(height: 20),

@@ -56,6 +56,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       );
 
       if (success) {
+        String? role = await UserRepo().getRoleById(widget.userId);
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -71,12 +72,15 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               ),
             ),
           );
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            AppRoutes.loginScreen,
-            (route) => false,
-            arguments: UserRepo().getRoleById(widget.userId),
-          );
+          await Future.delayed(const Duration(seconds: 2)); // Wait for snackbar to show
+          if (mounted) {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              AppRoutes.loginScreen,
+              (route) => false,
+              arguments: role,
+            );
+          }
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
