@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -355,7 +357,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                     s['status'] as String,
                                     s['status'] == 'absent' ||
                                         s['status'] == 'late',
-                                    null,
+                                    s['photo_path'] as String?,
                                     index,
                                   ),
                                 );
@@ -735,14 +737,15 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             children: [
               CircleAvatar(
                 radius: 28,
-                backgroundImage:
-                    imagePath != null ? AssetImage(imagePath) : null,
+                backgroundImage: imagePath != null && File(imagePath).existsSync()
+                    ? FileImage(File(imagePath))
+                    : null,
                 backgroundColor: status == "present"
                     ? Color(0xFFE8F5E9)
                     : status == "absent"
                         ? Color(0xFFFFEBEE)
                         : Color(0xFFFFF3E0),
-                child: imagePath == null
+                child: imagePath == null || !File(imagePath).existsSync()
                     ? Text(
                         name.isNotEmpty
                             ? name.substring(0, 1).toUpperCase()

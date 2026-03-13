@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
@@ -309,11 +311,22 @@ class _HomeworkDetailScreenState extends State<HomeworkDetailScreen> {
                                     radius: 24,
                                     backgroundColor:
                                         AppColors.primaryMain.withOpacity(0.15),
-                                    child: Icon(
-                                      Icons.person_outline,
-                                      color: AppColors.primaryMain,
-                                      size: 26,
-                                    ),
+                                    backgroundImage: () {
+                                      final p = s['photo_path'] as String?;
+                                      if (p != null && File(p).existsSync()) {
+                                        return FileImage(File(p)) as ImageProvider;
+                                      }
+                                      return null;
+                                    }(),
+                                    child: () {
+                                      final p = s['photo_path'] as String?;
+                                      if (p != null && File(p).existsSync()) return null;
+                                      return Icon(
+                                        Icons.person_outline,
+                                        color: AppColors.primaryMain,
+                                        size: 26,
+                                      );
+                                    }(),
                                   ),
                                   const SizedBox(width: 12),
                                   Expanded(

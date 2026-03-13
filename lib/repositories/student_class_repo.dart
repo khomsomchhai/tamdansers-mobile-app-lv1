@@ -27,10 +27,10 @@ class StudentClassRepo {
 
   Future<List<Map<String, dynamic>>> getStudentsByClass(int classId) async {
     final db = await DbHelper().initDatabase();
-    // Manually added students
+    // Manually added students (exclude rows linked to a real user account)
     final manual = await db.query(
       "tbl_student_class",
-      where: "class_id = ?",
+      where: "class_id = ? AND linked_user_id IS NULL",
       whereArgs: [classId],
       orderBy: "first_name ASC",
     );
@@ -134,9 +134,9 @@ class StudentClassRepo {
 
   Future<int> getStudentCountByClass(int classId) async {
     final db = await DbHelper().initDatabase();
-    // Count manually-added students
+    // Count manually-added students (exclude linked placeholders)
     final manual = await db.rawQuery(
-      "SELECT COUNT(*) as count FROM tbl_student_class WHERE class_id = ?",
+      "SELECT COUNT(*) as count FROM tbl_student_class WHERE class_id = ? AND linked_user_id IS NULL",
       [classId],
     );
     // Count self-registered students who joined via class code
@@ -161,7 +161,7 @@ class StudentClassRepo {
   Future<int> getMaleCountByClass(int classId) async {
     final db = await DbHelper().initDatabase();
     final manual = await db.rawQuery(
-      "SELECT COUNT(*) as count FROM tbl_student_class WHERE class_id = ? AND (gender = 'ប្រុស' OR gender = 'male')",
+      "SELECT COUNT(*) as count FROM tbl_student_class WHERE class_id = ? AND linked_user_id IS NULL AND (gender = 'ប្រុស' OR gender = 'male')",
       [classId],
     );
     final selfJoined = await db.rawQuery(
@@ -174,7 +174,7 @@ class StudentClassRepo {
   Future<int> getFemaleCountByClass(int classId) async {
     final db = await DbHelper().initDatabase();
     final manual = await db.rawQuery(
-      "SELECT COUNT(*) as count FROM tbl_student_class WHERE class_id = ? AND (gender = 'ស្រី' OR gender = 'female')",
+      "SELECT COUNT(*) as count FROM tbl_student_class WHERE class_id = ? AND linked_user_id IS NULL AND (gender = 'ស្រី' OR gender = 'female')",
       [classId],
     );
     final selfJoined = await db.rawQuery(

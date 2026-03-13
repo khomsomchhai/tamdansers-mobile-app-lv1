@@ -49,7 +49,12 @@ class _AddStudentState extends State<AddStudent> {
       _emailController.text = args['email'] as String? ?? '';
       _phoneController.text = args['phone'] as String? ?? '';
       _photoPath = args['photo_path'] as String?;
-      _selectedGender = args['gender'] as String?;
+      final rawGender = args['gender'] as String?;
+      _selectedGender = rawGender == 'male'
+          ? 'ប្រុស'
+          : rawGender == 'female'
+              ? 'ស្រី'
+              : rawGender;
       _classId = args['class_id'] as int?;
     } else {
       _classId = args as int?;

@@ -42,16 +42,17 @@ class DbHelper {
   static Future<void> _createTblStudentClass(Database db) async {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS "tbl_student_class" (
-        "id"         INTEGER,
-        "first_name" TEXT NOT NULL,
-        "last_name"  TEXT NOT NULL,
-        "gender"     TEXT NOT NULL DEFAULT "ប្រុស",
-        "dob"        TEXT,
-        "email"      TEXT,
-        "phone"      TEXT,
-        "photo_path" TEXT,
-        "class_id"   INTEGER NOT NULL,
-        "created_at" TEXT NOT NULL,
+        "id"             INTEGER,
+        "first_name"     TEXT NOT NULL,
+        "last_name"      TEXT NOT NULL,
+        "gender"         TEXT NOT NULL DEFAULT "ប្រុស",
+        "dob"            TEXT,
+        "email"          TEXT,
+        "phone"          TEXT,
+        "photo_path"     TEXT,
+        "class_id"       INTEGER NOT NULL,
+        "linked_user_id" INTEGER,
+        "created_at"     TEXT NOT NULL,
         PRIMARY KEY("id" AUTOINCREMENT),
         FOREIGN KEY("class_id") REFERENCES "tbl_class"("id") ON DELETE CASCADE
       );
@@ -168,12 +169,13 @@ class DbHelper {
       );
     ''');
   }
+
   Future<Database> _getDatabase() async {
     var dbPath = await getDatabasesPath();
     var path = join(dbPath, "tamdansers.db");
     db = await openDatabase(
       path,
-      version: 8,
+      version: 10,
       onCreate: (db, version) async {
         await _createTblUser(db);
         await _createTblClass(db);
@@ -205,8 +207,8 @@ class DbHelper {
               'ALTER TABLE tbl_homework ADD COLUMN attachment_path TEXT');
         }
         if (oldVersion < 6) {
-          await db.execute(
-              'ALTER TABLE tbl_student_class ADD COLUMN phone TEXT');
+          await db
+              .execute('ALTER TABLE tbl_student_class ADD COLUMN phone TEXT');
           await db.execute(
               'ALTER TABLE tbl_student_class ADD COLUMN photo_path TEXT');
         }
@@ -217,8 +219,7 @@ class DbHelper {
           await _createTblUserClass(db);
           // Migrate existing class_id values from tbl_user into tbl_user_class
           final users = await db.query('tbl_user',
-              columns: ['id', 'class_id'],
-              where: 'class_id IS NOT NULL');
+              columns: ['id', 'class_id'], where: 'class_id IS NOT NULL');
           for (final u in users) {
             await db.insert(
               'tbl_user_class',
@@ -226,6 +227,48 @@ class DbHelper {
                 'user_id': u['id'],
                 'class_id': u['class_id'],
                 'joined_at': DateTime.now().toIso8601String(),
+              },
+              conflictAlgorithm: ConflictAlgorithm.ignore,
+            );
+          }
+        }
+        if (oldVersion < 9) {
+          await db.execute(
+              'ALTER TABLE tbl_student_class ADD COLUMN linked_user_id INTEGER');
+        }
+        if (oldVersion < 10) {
+          // Create tbl_student_class entries for existing self-joined students
+          // who don't already have a linked row
+          final userClasses = await db.rawQuery(
+            '''
+            SELECT uc.user_id, uc.class_id, uc.joined_at,
+                   u.first_name, u.last_name, u.gender, u.phone, u.email
+            FROM tbl_user_class uc
+            INNER JOIN tbl_user u ON uc.user_id = u.id
+            WHERE NOT EXISTS (
+              SELECT 1 FROM tbl_student_class sc
+              WHERE sc.class_id = uc.class_id AND sc.linked_user_id = uc.user_id
+            )
+            ''',
+          );
+          for (final row in userClasses) {
+            final rawGender = row['gender'] as String? ?? 'ប្រុស';
+            final gender = rawGender == 'male'
+                ? 'ប្រុស'
+                : rawGender == 'female'
+                    ? 'ស្រី'
+                    : rawGender;
+            await db.insert(
+              'tbl_student_class',
+              {
+                'first_name': row['first_name'],
+                'last_name': row['last_name'],
+                'gender': gender,
+                'phone': row['phone'],
+                'email': row['email'],
+                'class_id': row['class_id'],
+                'linked_user_id': row['user_id'],
+                'created_at': row['joined_at'],
               },
               conflictAlgorithm: ConflictAlgorithm.ignore,
             );

@@ -155,7 +155,83 @@ class UserRepo {
     // Also keep tbl_user.class_id updated to the latest joined class
     await db.update('tbl_user', {'class_id': classId},
         where: 'id = ?', whereArgs: [userId]);
+    // Link any pre-added placeholder in tbl_student_class
+    await _linkPlaceholder(db, userId, classId);
     return result != 0;
+  }
+
+  Future<void> _linkPlaceholder(Database db, int userId, int classId) async {
+    final users =
+        await db.query('tbl_user', where: 'id = ?', whereArgs: [userId]);
+    if (users.isEmpty) return;
+    final user = users.first;
+
+    List<Map<String, dynamic>> match = [];
+
+    // 1. Match by email
+    final email = user['email'] as String?;
+    if (email != null && email.isNotEmpty) {
+      match = await db.query(
+        'tbl_student_class',
+        where: 'class_id = ? AND email = ? AND linked_user_id IS NULL',
+        whereArgs: [classId, email],
+      );
+    }
+
+    // 2. Match by phone
+    if (match.isEmpty) {
+      final phone = user['phone'] as String?;
+      if (phone != null && phone.isNotEmpty) {
+        match = await db.query(
+          'tbl_student_class',
+          where: 'class_id = ? AND phone = ? AND linked_user_id IS NULL',
+          whereArgs: [classId, phone],
+        );
+      }
+    }
+
+    // 3. Match by full name (case-insensitive)
+    if (match.isEmpty) {
+      match = await db.rawQuery(
+        'SELECT * FROM tbl_student_class WHERE class_id = ? AND LOWER(first_name) = LOWER(?) AND LOWER(last_name) = LOWER(?) AND linked_user_id IS NULL',
+        [classId, user['first_name'], user['last_name']],
+      );
+    }
+
+    if (match.isNotEmpty) {
+      // Link the existing placeholder
+      await db.update(
+        'tbl_student_class',
+        {'linked_user_id': userId},
+        where: 'id = ?',
+        whereArgs: [match.first['id']],
+      );
+    } else {
+      // No placeholder — create one so this student appears in attendance/homework
+      final existing = await db.query(
+        'tbl_student_class',
+        where: 'class_id = ? AND linked_user_id = ?',
+        whereArgs: [classId, userId],
+      );
+      if (existing.isEmpty) {
+        final rawGender = user['gender'] as String? ?? 'ប្រុស';
+        final gender = rawGender == 'male'
+            ? 'ប្រុស'
+            : rawGender == 'female'
+                ? 'ស្រី'
+                : rawGender;
+        await db.insert('tbl_student_class', {
+          'first_name': user['first_name'],
+          'last_name': user['last_name'],
+          'gender': gender,
+          'phone': user['phone'],
+          'email': user['email'],
+          'class_id': classId,
+          'linked_user_id': userId,
+          'created_at': DateTime.now().toIso8601String(),
+        });
+      }
+    }
   }
 
   Future<List<int>> getJoinedClassIds(int userId) async {
