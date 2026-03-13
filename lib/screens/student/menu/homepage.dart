@@ -1,7 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/repositories/profile_repo.dart';
 import 'package:tamdansers_app/screens/student/menu/attendance.dart';
 import 'package:tamdansers_app/screens/student/menu/data_list_homepage.dart';
 import 'package:tamdansers_app/screens/widget/attendance_db.dart';
@@ -16,6 +18,26 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   bool isExpend = false;
   final totalClass = 10;
+  var _profileImagePath = '';
+  final ProfileRepo _profileRepo = ProfileRepo();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadImage(); // ✅ Load image when homepage starts
+  }
+
+  Future<void> _loadImage() async {
+    final savedImage = await _profileRepo.getImage();
+    if (savedImage != null && savedImage.isNotEmpty) {
+      final file = File(savedImage);
+      if (await file.exists()) {
+        setState(() {
+          _profileImagePath=savedImage;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +49,16 @@ class _HomepageState extends State<Homepage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              
               _TitleHeader(),
               SizedBox(height: 20),
-              CardAttendance(monthLabel: 'មករា',totalDays: summary.totalDays, presentDays: summary.presentDays, absentDays: summary.absentDays,attendanceRate: summary.attendanceRate,),
+              CardAttendance(
+                monthLabel: 'មករា',
+                totalDays: summary.totalDays,
+                presentDays: summary.presentDays,
+                absentDays: summary.absentDays,
+                attendanceRate: summary.attendanceRate,
+              ),
               SizedBox(height: 20),
               _GridInfo(),
               SizedBox(height: 20),
@@ -54,7 +83,14 @@ class _HomepageState extends State<Homepage> {
                 width: 2.0,
               )),
           child: CircleAvatar(
-              child: SvgPicture.asset("assets/images/app_logo_blue.svg"))),
+            backgroundImage: _profileImagePath.isNotEmpty
+                ? FileImage(File(_profileImagePath))
+                : null,
+            child: _profileImagePath.isEmpty
+                ? const Icon(Icons.person, size: 40)
+                : null,
+                
+          )),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -75,6 +111,7 @@ class _HomepageState extends State<Homepage> {
       ],
     );
   }
+
 }
 
 class _TitleHeader extends StatefulWidget {

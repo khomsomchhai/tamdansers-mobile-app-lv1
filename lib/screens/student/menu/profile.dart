@@ -12,6 +12,7 @@ import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/screens/student/menu/connection_requests.dart';
 
 class Profile extends StatefulWidget {
+
   const Profile({super.key});
 
   @override
@@ -103,7 +104,8 @@ class _ProfileState extends State<Profile> {
 }
 
 class ImageProfile extends StatefulWidget {
-  const ImageProfile({super.key});
+  final Function(String)? onImageChanged;
+  const ImageProfile({super.key, this.onImageChanged});
 
   @override
   State<ImageProfile> createState() => _ImageProfileState();
@@ -153,6 +155,7 @@ class _ImageProfileState extends State<ImageProfile> {
       setState(() {
         imagePath = pickedImg.path;
       });
+      widget.onImageChanged!(pickedImg.path);
     }
   }
 
@@ -246,6 +249,7 @@ class _ImageProfileState extends State<ImageProfile> {
     );
   }
 }
+
 Widget _buildInfoSection() {
     return Container(
       width: double.infinity,
