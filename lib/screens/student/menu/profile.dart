@@ -111,6 +111,7 @@ class ImageProfile extends StatefulWidget {
 
 class _ImageProfileState extends State<ImageProfile> {
   String imagePath = '';
+  bool _isLoading = true; // សម្រាប់បង្ហាញ loading នៅពេលចាប់ផ្តើម
   final ProfileRepo _profileRepo = ProfileRepo();
 
   @override
@@ -119,20 +120,25 @@ class _ImageProfileState extends State<ImageProfile> {
     _loadImage();
   }
 
+  // ផ្ទុករូបភាពពី database
   Future<void> _loadImage() async {
-  final savedImage = await _profileRepo.getImage();
+    final savedImage = await _profileRepo.getImage();
 
-  if (savedImage != null && savedImage.isNotEmpty) {
-    final file = File(savedImage);
-
-    if (await file.exists()) {
-      setState(() {
-        imagePath = savedImage;
-      });
+    if (savedImage != null && savedImage.isNotEmpty) {
+      final file = File(savedImage);
+      if (await file.exists()) {
+        setState(() {
+          imagePath = savedImage;
+        });
+      }
     }
-  }
-}
 
+    setState(() {
+      _isLoading = false; // បញ្ចប់ loading
+    }); 
+  }
+
+  // ជ្រើសរើសរូបភាពពី Gallery ឬ Camera
   Future<void> dataChooseImg(ImageSource source) async {
     final picker = ImagePicker();
 
@@ -150,6 +156,7 @@ class _ImageProfileState extends State<ImageProfile> {
     }
   }
 
+  // បង្ហាញ Bottom Sheet ជ្រើសរើស Camera ឬ Gallery
   void showImageOptions() {
     showModalBottomSheet(
       context: context,
@@ -163,7 +170,7 @@ class _ImageProfileState extends State<ImageProfile> {
             children: [
               ListTile(
                 leading: const Icon(Icons.camera_alt, color: Colors.blue),
-                title: const Text("Take Photo"),
+                title: Text("ថតរូប",style: AppTextStyle.body,),
                 onTap: () {
                   Navigator.pop(context);
                   dataChooseImg(ImageSource.camera);
@@ -171,7 +178,7 @@ class _ImageProfileState extends State<ImageProfile> {
               ),
               ListTile(
                 leading: const Icon(Icons.photo, color: Colors.green),
-                title: const Text("Choose from Gallery"),
+                title: Text("ជ្រើសរើសពីថតរូប",style: AppTextStyle.body),
                 onTap: () {
                   Navigator.pop(context);
                   dataChooseImg(ImageSource.gallery);
@@ -204,9 +211,12 @@ class _ImageProfileState extends State<ImageProfile> {
                       )
                     : null,
               ),
-              child: imagePath.isEmpty
-                  ? const Icon(Icons.person, size: 60, color: Colors.grey)
-                  : null,
+              // បង្ហាញ loading, រូបអ្នកប្រើ, ឬ icon លំនាំដើម
+              child: _isLoading
+                  ? const CircularProgressIndicator() // កំពុងផ្ទុក
+                  : imagePath.isEmpty
+                      ? const Icon(Icons.person, size: 60, color: Colors.grey)
+                      : null,
             ),
             Material(
               color: AppColors.primary300,
@@ -236,7 +246,6 @@ class _ImageProfileState extends State<ImageProfile> {
     );
   }
 }
-
 Widget _buildInfoSection() {
     return Container(
       width: double.infinity,
