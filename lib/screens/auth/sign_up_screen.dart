@@ -29,16 +29,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
   var identifierCtrl = TextEditingController();
   var pwdCtrl = TextEditingController();
   var cfPwdCtrl = TextEditingController();
-  String gender = "male";
+  String gender = "ប្រុស";
   var formKey = GlobalKey<FormState>();
-  
+
   late String selectedRole;
   @override
   void initState() {
     super.initState();
     selectedRole = widget.role;
   }
-  
+
   Future<void> _register() async {
     String identifier = identifierCtrl.text.trim();
     bool isEmail = identifier.contains("@");
@@ -62,17 +62,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
       if (existingUser != null) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            backgroundColor: AppColors.transparent,
-            elevation: 0,
-            behavior: SnackBarBehavior.floating,
-            margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-            content: CustomSnackbar(
-              title: "មិនអាចចុះឈ្មោះបាន!", 
-              message: "គណនីនេះមានរួចហើយ សូមប្រើអ៊ីម៉ែល ឬ លេខទូរស័ព្ទផ្សេង", 
-              icon: Icons.close, 
-              color: AppColors.error
-            )
-          ),
+              backgroundColor: AppColors.transparent,
+              elevation: 0,
+              behavior: SnackBarBehavior.floating,
+              margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+              content: CustomSnackbar(
+                  title: "មិនអាចចុះឈ្មោះបាន!",
+                  message: "គណនីនេះមានរួចហើយ សូមប្រើអ៊ីម៉ែល ឬ លេខទូរស័ព្ទផ្សេង",
+                  icon: Icons.close,
+                  color: AppColors.error)),
         );
       } else {
         await UserRepo().createUser(
@@ -83,18 +81,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
           email: email,
           password: pwdCtrl.text,
           role: selectedRole,
+        );
 
-        );
-        
-        Navigator.pushNamed(
-          context, 
-          AppRoutes.otpScreen,
-          arguments: selectedRole
-        );
-        
+        Navigator.pushNamed(context, AppRoutes.otpScreen,
+            arguments: selectedRole);
       }
     }
   }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -188,13 +182,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
           Row(
             children: [
               Expanded(
-                child: _buildRadio(label: "ប្រុស", value: "male"),
+                child: _buildRadio(label: "ប្រុស", value: "ប្រុស"),
               ),
               SizedBox(
                 width: 10,
               ),
               Expanded(
-                child: _buildRadio(label: "ស្រី", value: "female"),
+                child: _buildRadio(label: "ស្រី", value: "ស្រី"),
               ),
             ],
           ),
@@ -348,9 +342,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       },
       child: Container(
         decoration: BoxDecoration(
-            color: AppColors.white, 
-            borderRadius: BorderRadius.circular(AppNumber.radiusMedium)
-          ),
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(AppNumber.radiusMedium)),
         padding: EdgeInsets.only(left: 15, top: 4, bottom: 4),
         child: Row(
           children: [

@@ -3,9 +3,6 @@ import 'package:sqflite/sqflite.dart';
 
 class DbHelper {
   Database? db;
-
-  // ─── Table creation helpers ───────────────────────────────────────────────
-
   static Future<void> _createTblUser(Database db) async {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS "tbl_user" (
@@ -51,6 +48,8 @@ class DbHelper {
         "gender"     TEXT NOT NULL DEFAULT "ប្រុស",
         "dob"        TEXT,
         "email"      TEXT,
+        "phone"      TEXT,
+        "photo_path" TEXT,
         "class_id"   INTEGER NOT NULL,
         "created_at" TEXT NOT NULL,
         PRIMARY KEY("id" AUTOINCREMENT),
@@ -62,15 +61,16 @@ class DbHelper {
   static Future<void> _createTblHomework(Database db) async {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS "tbl_homework" (
-        "id"           INTEGER,
-        "title"        TEXT NOT NULL,
-        "subject"      TEXT NOT NULL,
-        "instructions" TEXT,
-        "class_id"     INTEGER NOT NULL,
-        "teacher_id"   INTEGER NOT NULL,
-        "deadline"     TEXT,
-        "status"       TEXT NOT NULL DEFAULT "active",
-        "created_at"   TEXT NOT NULL,
+        "id"              INTEGER,
+        "title"           TEXT NOT NULL,
+        "subject"         TEXT NOT NULL,
+        "instructions"    TEXT,
+        "class_id"        INTEGER NOT NULL,
+        "teacher_id"      INTEGER NOT NULL,
+        "deadline"        TEXT,
+        "status"          TEXT NOT NULL DEFAULT "active",
+        "attachment_path" TEXT,
+        "created_at"      TEXT NOT NULL,
         PRIMARY KEY("id" AUTOINCREMENT),
         FOREIGN KEY("class_id") REFERENCES "tbl_class"("id") ON DELETE CASCADE
       );
@@ -122,6 +122,22 @@ class DbHelper {
     ''');
   }
 
+  static Future<void> _createTblScore(Database db) async {
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS "tbl_score" (
+        "id"         INTEGER,
+        "student_id" INTEGER NOT NULL,
+        "class_id"   INTEGER NOT NULL,
+        "subject"    TEXT NOT NULL,
+        "score"      REAL NOT NULL,
+        "created_at" TEXT NOT NULL,
+        PRIMARY KEY("id" AUTOINCREMENT),
+        FOREIGN KEY("student_id") REFERENCES "tbl_student_class"("id") ON DELETE CASCADE,
+        FOREIGN KEY("class_id")   REFERENCES "tbl_class"("id") ON DELETE CASCADE
+      );
+    ''');
+  }
+
   static Future<void> _createTblParentStudent(Database db) async {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS "tbl_parent_student" (
@@ -138,14 +154,26 @@ class DbHelper {
     ''');
   }
 
-  // ─── Open / init ──────────────────────────────────────────────────────────
-
+  static Future<void> _createTblUserClass(Database db) async {
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS "tbl_user_class" (
+        "id"         INTEGER,
+        "user_id"    INTEGER NOT NULL,
+        "class_id"   INTEGER NOT NULL,
+        "joined_at"  TEXT NOT NULL,
+        PRIMARY KEY("id" AUTOINCREMENT),
+        FOREIGN KEY("user_id")  REFERENCES "tbl_user"("id") ON DELETE CASCADE,
+        FOREIGN KEY("class_id") REFERENCES "tbl_class"("id") ON DELETE CASCADE,
+        UNIQUE("user_id", "class_id")
+      );
+    ''');
+  }
   Future<Database> _getDatabase() async {
     var dbPath = await getDatabasesPath();
     var path = join(dbPath, "tamdansers.db");
     db = await openDatabase(
       path,
-      version: 4,
+      version: 8,
       onCreate: (db, version) async {
         await _createTblUser(db);
         await _createTblClass(db);
@@ -155,6 +183,8 @@ class DbHelper {
         await _createTblActivityLog(db);
         await _createTblSubmission(db);
         await _createTblParentStudent(db);
+        await _createTblScore(db);
+        await _createTblUserClass(db);
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         if (oldVersion < 2) {
@@ -169,6 +199,37 @@ class DbHelper {
         }
         if (oldVersion < 4) {
           await _createTblParentStudent(db);
+        }
+        if (oldVersion < 5) {
+          await db.execute(
+              'ALTER TABLE tbl_homework ADD COLUMN attachment_path TEXT');
+        }
+        if (oldVersion < 6) {
+          await db.execute(
+              'ALTER TABLE tbl_student_class ADD COLUMN phone TEXT');
+          await db.execute(
+              'ALTER TABLE tbl_student_class ADD COLUMN photo_path TEXT');
+        }
+        if (oldVersion < 7) {
+          await _createTblScore(db);
+        }
+        if (oldVersion < 8) {
+          await _createTblUserClass(db);
+          // Migrate existing class_id values from tbl_user into tbl_user_class
+          final users = await db.query('tbl_user',
+              columns: ['id', 'class_id'],
+              where: 'class_id IS NOT NULL');
+          for (final u in users) {
+            await db.insert(
+              'tbl_user_class',
+              {
+                'user_id': u['id'],
+                'class_id': u['class_id'],
+                'joined_at': DateTime.now().toIso8601String(),
+              },
+              conflictAlgorithm: ConflictAlgorithm.ignore,
+            );
+          }
         }
       },
     );

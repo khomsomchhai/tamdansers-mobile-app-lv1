@@ -61,72 +61,71 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, _) {
-        if (didPop) return;
-        final nav = _navKeys[_index].currentState;
-        if (nav != null && nav.canPop()) nav.pop();
-      },
-      child: Scaffold(
-        backgroundColor: AppColors.backgroundLight,
-        bottomNavigationBar: _TeacherBottomNav(
-          currentIndex: _index,
-          onTap: (i) {
-            if (i == _index) {
-              // Same tab tapped — pop to root if on a sub-screen
-              _navKeys[i].currentState?.popUntil((r) => r.isFirst);
-              return;
-            }
-            if (i == 0) {
-              _dashboardRefresh.value++;
-            }
-            if (i == 2) {
-              _homeworkRefresh.value++;
-            }
-            setState(() => _index = i);
-          },
-          tabs: _tabs,
-        ),
-        body: IndexedStack(
-          index: _index,
-          children: List.generate(
-            _tabs.length,
-            (i) => Navigator(
-              key: _navKeys[i],
-              onGenerateRoute: (settings) {
-                if (settings.name == Navigator.defaultRouteName) {
-                  return MaterialPageRoute(
-                    builder: (_) {
-                      if (i == 0) {
-                        return TeacherDashboard(
-                            refreshTrigger: _dashboardRefresh,
-                            teacherId: widget.userId);
-                      } else if (i == 1) {
-                        return ManageAllClass(
-                          showBackButton: false,
-                          dashboardRefresh: _dashboardRefresh,
-                          teacherId: widget.userId,
-                        );
-                      } else if (i == 2) {
-                        return HomeworkScreen(
-                          showBackButton: false,
-                          refreshTrigger: _homeworkRefresh,
-                          teacherId: widget.userId,
-                        );
-                      } else {
-                        return TeacherProfileScreen(teacherId: widget.userId);
-                      }
-                    },
-                    settings: settings,
-                  );
-                }
-                return AppRouter.generateRoute(settings);
-              },
+        canPop: false,
+        onPopInvokedWithResult: (didPop, _) {
+          if (didPop) return;
+          final nav = _navKeys[_index].currentState;
+          if (nav != null && nav.canPop()) nav.pop();
+        },
+        child: Scaffold(
+          backgroundColor: AppColors.backgroundLight,
+          bottomNavigationBar: _TeacherBottomNav(
+            currentIndex: _index,
+            onTap: (i) {
+              if (i == _index) {
+                // Same tab tapped — pop to root if on a sub-screen
+                _navKeys[i].currentState?.popUntil((r) => r.isFirst);
+                return;
+              }
+              if (i == 0) {
+                _dashboardRefresh.value++;
+              }
+              if (i == 2) {
+                _homeworkRefresh.value++;
+              }
+              setState(() => _index = i);
+            },
+            tabs: _tabs,
+          ),
+          body: IndexedStack(
+            index: _index,
+            children: List.generate(
+              _tabs.length,
+              (i) => Navigator(
+                key: _navKeys[i],
+                onGenerateRoute: (settings) {
+                  if (settings.name == Navigator.defaultRouteName) {
+                    return MaterialPageRoute(
+                      builder: (_) {
+                        if (i == 0) {
+                          return TeacherDashboard(
+                              refreshTrigger: _dashboardRefresh,
+                              teacherId: widget.userId);
+                        } else if (i == 1) {
+                          return ManageAllClass(
+                            showBackButton: false,
+                            dashboardRefresh: _dashboardRefresh,
+                            teacherId: widget.userId,
+                          );
+                        } else if (i == 2) {
+                          return HomeworkScreen(
+                            showBackButton: false,
+                            refreshTrigger: _homeworkRefresh,
+                            teacherId: widget.userId,
+                          );
+                        } else {
+                          return TeacherProfileScreen(teacherId: widget.userId);
+                        }
+                      },
+                      settings: settings,
+                    );
+                  }
+                  return AppRouter.generateRoute(settings);
+                },
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
 

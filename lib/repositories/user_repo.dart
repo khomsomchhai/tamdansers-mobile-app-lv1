@@ -1,3 +1,4 @@
+import 'package:sqflite/sqflite.dart';
 import 'package:tamdansers_app/database/db_helper.dart';
 
 class UserRepo {
@@ -142,12 +143,30 @@ class UserRepo {
 
   Future<bool> joinClass(int userId, int classId) async {
     final db = await DbHelper().initDatabase();
-    final updated = await db.update(
-      'tbl_user',
-      {'class_id': classId},
-      where: 'id = ?',
-      whereArgs: [userId],
+    final result = await db.insert(
+      'tbl_user_class',
+      {
+        'user_id': userId,
+        'class_id': classId,
+        'joined_at': DateTime.now().toIso8601String(),
+      },
+      conflictAlgorithm: ConflictAlgorithm.ignore,
     );
-    return updated > 0;
+    // Also keep tbl_user.class_id updated to the latest joined class
+    await db.update('tbl_user', {'class_id': classId},
+        where: 'id = ?', whereArgs: [userId]);
+    return result != 0;
+  }
+
+  Future<List<int>> getJoinedClassIds(int userId) async {
+    final db = await DbHelper().initDatabase();
+    final rows = await db.query(
+      'tbl_user_class',
+      columns: ['class_id'],
+      where: 'user_id = ?',
+      whereArgs: [userId],
+      orderBy: 'joined_at ASC',
+    );
+    return rows.map((r) => r['class_id'] as int).toList();
   }
 }

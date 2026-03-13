@@ -1,5 +1,8 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
@@ -25,6 +28,8 @@ class _AddTaskState extends State<AddTask> {
   TimeOfDay? _dueTime;
   int? _classId;
   bool _saving = false;
+  String? _attachmentPath;
+  String? _attachmentName;
 
   // Edit mode
   Map<String, dynamic>? _editingHw;
@@ -45,6 +50,11 @@ class _AddTaskState extends State<AddTask> {
       _instructionController.text = args['instructions'] as String? ?? '';
       final subj = args['subject'] as String?;
       if (subj != null && _subjects.contains(subj)) _selectedSubject = subj;
+      final attach = args['attachment_path'] as String?;
+      if (attach != null && attach.isNotEmpty) {
+        _attachmentPath = attach;
+        _attachmentName = attach.split('/').last;
+      }
       final deadline = args['deadline'] as String?;
       if (deadline != null && deadline.isNotEmpty) {
         final parts = deadline.split(' ');
@@ -98,9 +108,11 @@ class _AddTaskState extends State<AddTask> {
             : _instructionController.text.trim(),
         deadline: deadlineStr,
         status: status,
+        attachmentPath: _attachmentPath,
       );
       await ActivityRepo().logActivity(
-        teacherId: (await SharedPreferences.getInstance()).getInt('userId') ?? 1,
+        teacherId:
+            (await SharedPreferences.getInstance()).getInt('userId') ?? 1,
         activityType: 'homework',
         title: 'កិច្ចការត្រូវបានកែប្រែ',
         subtitle: title,
@@ -110,15 +122,18 @@ class _AddTaskState extends State<AddTask> {
         title: title,
         subject: _selectedSubject ?? '',
         classId: _classId ?? 0,
-        teacherId: (await SharedPreferences.getInstance()).getInt('userId') ?? 1,
+        teacherId:
+            (await SharedPreferences.getInstance()).getInt('userId') ?? 1,
         instructions: _instructionController.text.trim().isEmpty
             ? null
             : _instructionController.text.trim(),
         deadline: deadlineStr,
         status: status,
+        attachmentPath: _attachmentPath,
       );
       await ActivityRepo().logActivity(
-        teacherId: (await SharedPreferences.getInstance()).getInt('userId') ?? 1,
+        teacherId:
+            (await SharedPreferences.getInstance()).getInt('userId') ?? 1,
         activityType: 'homework',
         title: status == 'active'
             ? 'កិច្ចការថ្មីត្រូវបានបង្កើត'
@@ -161,6 +176,20 @@ class _AddTaskState extends State<AddTask> {
     setState(() {
       _dueDate = date;
       _dueTime = time;
+    });
+  }
+
+  Future<void> _pickFile() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf', 'doc', 'docx'],
+    );
+    if (result == null || result.files.isEmpty) return;
+    final file = result.files.first;
+    if (!mounted) return;
+    setState(() {
+      _attachmentPath = file.path;
+      _attachmentName = file.name;
     });
   }
 
@@ -433,28 +462,98 @@ class _AddTaskState extends State<AddTask> {
   }
 
   Widget _buildFileAttachment() {
-    return CustomPaint(
-      painter: _DashedBorderPainter(),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 22),
-        child: Column(
+    if (_attachmentName != null) {
+      final ext = _attachmentName!.split('.').last.toLowerCase();
+      final isPdf = ext == 'pdf';
+      return Container(
+        decoration: BoxDecoration(
+          color: const Color(0xFFF0F7FF),
+          borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
+          border:
+              Border.all(color: AppColors.primaryMain.withValues(alpha: 0.3)),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Row(
           children: [
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF0F0F5),
-                borderRadius: BorderRadius.circular(AppNumber.radiusPill),
-              ),
-              child: const Icon(Icons.attach_file_rounded,
-                  color: AppColors.secondaryText, size: 22),
+            Icon(
+              isPdf
+                  ? Icons.picture_as_pdf_rounded
+                  : Icons.insert_drive_file_rounded,
+              color: isPdf ? Colors.red : AppColors.primaryMain,
+              size: 26,
             ),
-            const SizedBox(height: 10),
-            Text(
-              'ភ្ជាប់ឯកសារសិក្សា (PDF, Doc)',
-              style: AppTextStyle.caption14Secondary,
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _attachmentName!,
+                    style: AppTextStyle.body14
+                        .copyWith(fontWeight: FontWeight.w600),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  if (_attachmentPath != null)
+                    Text(
+                      '${(File(_attachmentPath!).lengthSync() / 1024).toStringAsFixed(1)} KB',
+                      style: AppTextStyle.caption14Secondary,
+                    ),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GestureDetector(
+                  onTap: _pickFile,
+                  child: const Icon(Icons.swap_horiz_rounded,
+                      color: AppColors.primaryMain, size: 22),
+                ),
+                const SizedBox(width: 8),
+                GestureDetector(
+                  onTap: () =>
+                      setState(() => _attachmentPath = _attachmentName = null),
+                  child: const Icon(Icons.close,
+                      color: AppColors.secondaryText, size: 22),
+                ),
+              ],
             ),
           ],
+        ),
+      );
+    }
+    return GestureDetector(
+      onTap: _pickFile,
+      child: CustomPaint(
+        painter: _DashedBorderPainter(),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(vertical: 22),
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF0F0F5),
+                  borderRadius: BorderRadius.circular(AppNumber.radiusPill),
+                ),
+                child: const Icon(Icons.attach_file_rounded,
+                    color: AppColors.secondaryText, size: 22),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                'ភ្ជាប់ឯកសារសិក្សា (PDF, Doc)',
+                style: AppTextStyle.caption14Secondary,
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'ចុចដើម្បីជ្រើសរើសឯកសារ',
+                style: AppTextStyle.caption14Secondary
+                    .copyWith(color: AppColors.primaryMain),
+              ),
+            ],
+          ),
         ),
       ),
     );

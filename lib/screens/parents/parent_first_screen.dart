@@ -75,7 +75,10 @@ class _ParentFirstScreenState extends State<ParentFirstScreen> {
             name: _currentUser?["first_name"] ?? "Parent",
             gender: _currentUser?["gender"] ?? "male",
           ),
-          Expanded(child: _students.isNotEmpty ? ParentHasData(students: _students) : ParentEmptyData())
+          Expanded(
+              child: _students.isNotEmpty
+                  ? ParentHasData(students: _students)
+                  : ParentEmptyData())
         ],
       ),
       floatingActionButton: FloatingActionButton(

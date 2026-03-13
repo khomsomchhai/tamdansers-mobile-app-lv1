@@ -43,7 +43,7 @@ class _TeacherProfileScreenState extends State<TeacherProfileScreen> {
       );
     }
 
-    final teacherName = _teacherData != null 
+    final teacherName = _teacherData != null
         ? "${_teacherData!['first_name']} ${_teacherData!['last_name']}"
         : "Teacher";
 
@@ -112,8 +112,6 @@ class _TeacherProfileScreenState extends State<TeacherProfileScreen> {
           Text(teacherName,
               style: AppTextStyle.sectionTitle20
                   .copyWith(fontWeight: FontWeight.bold)),
-          const SizedBox(height: 4),
-          Text("អ្នកគ្រូ • គណិតវិទ្យា", style: AppTextStyle.bodySecondary),
           const SizedBox(height: 10),
           Container(
             padding: const EdgeInsets.symmetric(
@@ -123,7 +121,13 @@ class _TeacherProfileScreenState extends State<TeacherProfileScreen> {
               color: AppColors.primaryMain.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(AppNumber.radiusRounded),
             ),
-            child: Text("សាលា អប្សរា", style: AppTextStyle.bodyPrimary),
+            child: Text(
+              (_teacherData?['role'] as String? ?? 'teacher').toUpperCase() ==
+                      'TEACHER'
+                  ? 'គ្រូបង្រៀន'
+                  : (_teacherData?['role'] as String? ?? ''),
+              style: AppTextStyle.bodyPrimary,
+            ),
           ),
         ],
       ),
@@ -141,11 +145,16 @@ class _TeacherProfileScreenState extends State<TeacherProfileScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _infoRow(Icons.email_outlined, "ទេព.ធីតា@school.edu.kh"),
+          _infoRow(
+              Icons.email_outlined,
+              (_teacherData?['email'] as String?)?.isNotEmpty == true
+                  ? _teacherData!['email'] as String
+                  : 'មិនទាន់បញ្ចូលអ៊ីមែល'),
           const Divider(height: 24, thickness: 0.5),
-          _infoRow(Icons.phone_outlined, "+855 12 345 678"),
+          _infoRow(
+              Icons.phone_outlined, _teacherData?['phone'] as String? ?? '—'),
           const Divider(height: 24, thickness: 0.5),
-          _infoRow(Icons.location_on_outlined, "ភ្នំពេញ, កម្ពុជា"),
+          _infoRow(Icons.location_on_outlined, 'ភ្នំពេញ, កម្ពុជា'),
         ],
       ),
     );
@@ -279,7 +288,8 @@ class _TeacherProfileScreenState extends State<TeacherProfileScreen> {
               await pref.remove("role");
               await pref.remove("userId");
               if (context.mounted) {
-                Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+                Navigator.of(context, rootNavigator: true)
+                    .pushNamedAndRemoveUntil(
                   AppRoutes.roleSelectionScreen,
                   (route) => false,
                 );

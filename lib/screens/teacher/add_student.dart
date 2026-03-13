@@ -1,6 +1,9 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
@@ -22,10 +25,12 @@ class _AddStudentState extends State<AddStudent> {
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
 
   String? _selectedGender;
   int? _classId;
   bool _saving = false;
+  String? _photoPath;
   Map<String, dynamic>? _editingStudent;
   bool _initialized = false;
   bool get _isEditing => _editingStudent != null;
@@ -42,6 +47,8 @@ class _AddStudentState extends State<AddStudent> {
       _lastNameController.text = args['last_name'] as String? ?? '';
       _dobController.text = args['dob'] as String? ?? '';
       _emailController.text = args['email'] as String? ?? '';
+      _phoneController.text = args['phone'] as String? ?? '';
+      _photoPath = args['photo_path'] as String?;
       _selectedGender = args['gender'] as String?;
       _classId = args['class_id'] as int?;
     } else {
@@ -77,6 +84,10 @@ class _AddStudentState extends State<AddStudent> {
         email: _emailController.text.trim().isEmpty
             ? null
             : _emailController.text.trim(),
+        phone: _phoneController.text.trim().isEmpty
+            ? null
+            : _phoneController.text.trim(),
+        photoPath: _photoPath,
       );
     } else {
       await StudentClassRepo().addStudent(
@@ -90,9 +101,14 @@ class _AddStudentState extends State<AddStudent> {
         email: _emailController.text.trim().isEmpty
             ? null
             : _emailController.text.trim(),
+        phone: _phoneController.text.trim().isEmpty
+            ? null
+            : _phoneController.text.trim(),
+        photoPath: _photoPath,
       );
       await ActivityRepo().logActivity(
-        teacherId: (await SharedPreferences.getInstance()).getInt('userId') ?? 1,
+        teacherId:
+            (await SharedPreferences.getInstance()).getInt('userId') ?? 1,
         activityType: 'class',
         title: 'សិស្សថ្មីត្រូវបានបញ្ចូល',
         subtitle: '$firstName $lastName',
@@ -100,7 +116,7 @@ class _AddStudentState extends State<AddStudent> {
     }
     if (mounted) {
       setState(() => _saving = false);
-      Navigator.pop(context);
+      Navigator.pop(context, true);
     }
   }
 
@@ -110,7 +126,19 @@ class _AddStudentState extends State<AddStudent> {
     _lastNameController.dispose();
     _dobController.dispose();
     _emailController.dispose();
+    _phoneController.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final picked = await picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 85,
+    );
+    if (picked != null && mounted) {
+      setState(() => _photoPath = picked.path);
+    }
   }
 
   @override
@@ -132,15 +160,6 @@ class _AddStudentState extends State<AddStudent> {
           style: AppTextStyle.subtitle18,
         ),
         centerTitle: true,
-        actions: [
-          TextButton(
-            onPressed: _saving ? null : _save,
-            child: Text(
-              'រក្សាទុក',
-              style: AppTextStyle.bodyPrimary,
-            ),
-          ),
-        ],
       ),
       body: Column(
         children: [
@@ -158,44 +177,56 @@ class _AddStudentState extends State<AddStudent> {
                       child: Column(
                         children: [
                           // Profile Image
-                          SizedBox(
-                            width: 120,
-                            height: 120,
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Container(
-                                width: 120,
-                                height: 120,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppColors.grey.withValues(alpha: 0.3),
-                                ),
-                                child: Align(
-                                  alignment: Alignment.bottomRight,
-                                  child: Container(
-                                    padding: EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.primaryMain,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Icon(
-                                      Icons.camera_alt,
-                                      color: AppColors.backgroundLight,
-                                      size: 24,
+                          GestureDetector(
+                            onTap: _pickImage,
+                            child: SizedBox(
+                              width: 120,
+                              height: 120,
+                              child: Stack(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 60,
+                                    backgroundColor:
+                                        AppColors.grey.withValues(alpha: 0.3),
+                                    backgroundImage: _photoPath != null
+                                        ? FileImage(File(_photoPath!))
+                                        : null,
+                                    child: _photoPath == null
+                                        ? Icon(Icons.person,
+                                            size: 52,
+                                            color: AppColors.secondaryText)
+                                        : null,
+                                  ),
+                                  Positioned(
+                                    right: 0,
+                                    bottom: 0,
+                                    child: Container(
+                                      padding: EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.primaryMain,
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                            color: Colors.white, width: 2),
+                                      ),
+                                      child: Icon(
+                                        Icons.camera_alt,
+                                        color: AppColors.backgroundLight,
+                                        size: 18,
+                                      ),
                                     ),
                                   ),
-                                ),
+                                ],
                               ),
                             ),
                           ),
                           SizedBox(height: 16),
                           Text(
-                            'ផ្ទុតរូបថតសិស្ស',
+                            'រូបថតសិស្ស',
                             style: AppTextStyle.subtitle18,
                           ),
                           SizedBox(height: 4),
                           Text(
-                            'ចុចដើម្បីផ្ទុករូបថតរបស់សិស្ស',
+                            'ចុចដើម្បីភ្ជាប់រូបថតរបស់សិស្ស',
                             style: AppTextStyle.bodySecondary,
                           ),
                           // Photo Buttons
@@ -421,6 +452,35 @@ class _AddStudentState extends State<AddStudent> {
                               Text(
                                 'ការចូលប្រើប្រាស់',
                                 style: AppTextStyle.subtitle16,
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 16),
+                          // Phone
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('លេខទំនាក់ទំនង', style: AppTextStyle.body),
+                              SizedBox(height: 8),
+                              TextField(
+                                controller: _phoneController,
+                                keyboardType: TextInputType.phone,
+                                decoration: InputDecoration(
+                                  hintText: '0XX XXX XXX',
+                                  hintStyle: AppTextStyle.hintText,
+                                  filled: true,
+                                  fillColor: AppColors.white,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        AppNumber.radiusSmall),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 12),
+                                  prefixIcon:
+                                      Icon(Icons.phone_outlined, size: 20),
+                                ),
+                                style: AppTextStyle.body,
                               ),
                             ],
                           ),

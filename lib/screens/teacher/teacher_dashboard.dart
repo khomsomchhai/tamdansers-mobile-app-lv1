@@ -13,7 +13,8 @@ import 'package:tamdansers_app/widget/create_class_dialog.dart';
 class TeacherDashboard extends StatefulWidget {
   final ValueNotifier<int>? refreshTrigger;
   final int teacherId;
-  const TeacherDashboard({super.key, this.refreshTrigger, required this.teacherId});
+  const TeacherDashboard(
+      {super.key, this.refreshTrigger, required this.teacherId});
 
   @override
   State<TeacherDashboard> createState() => _TeacherDashboardState();
@@ -25,6 +26,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
   List<Map<String, dynamic>> _activities = [];
   bool _loading = true;
   String _teacherName = "Teacher";
+  String _teacherGender = "";
 
   @override
   void initState() {
@@ -41,16 +43,18 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
 
   Future<void> _loadData() async {
     final teacherData = await UserRepo().getUserById(widget.teacherId);
-    final classCount = await ClassRepo().getClassCountByTeacher(widget.teacherId);
+    final classCount =
+        await ClassRepo().getClassCountByTeacher(widget.teacherId);
     final studentCount =
         await StudentClassRepo().getTotalStudentsByTeacher(widget.teacherId);
     final activities =
         await ActivityRepo().getRecentActivities(widget.teacherId, limit: 5);
     if (mounted) {
       setState(() {
-        _teacherName = teacherData != null 
-            ? "${teacherData['first_name']} ${teacherData['last_name']}" 
+        _teacherName = teacherData != null
+            ? "${teacherData['first_name']} ${teacherData['last_name']}"
             : "Teacher";
+        _teacherGender = teacherData?['gender'] as String? ?? "";
         _classCount = classCount;
         _studentCount = studentCount;
         _activities = activities;
@@ -94,7 +98,10 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
             children: [
               RichText(
                 text: TextSpan(
-                  text: "សួស្តី អ្នកគ្រូ ",
+                  text: _teacherGender.toLowerCase() == 'male' ||
+                          _teacherGender == 'ប្រុស'
+                      ? "សួស្តី លោកគ្រូ "
+                      : "សួស្តី អ្នកគ្រូ ",
                   style: AppTextStyle.screenTitle24,
                   children: [
                     TextSpan(
@@ -131,13 +138,16 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
   ];
 
   Future<void> _showCreateClassDialog() async {
-    await showDialog<bool>(
+    final created = await showDialog<bool>(
       context: context,
       barrierDismissible: false,
       barrierColor: Colors.black.withValues(alpha: 0.45),
       builder: (_) => CreateClassDialog(grades: _grades),
     );
-    if (mounted) _loadData();
+    if (mounted) {
+      _loadData();
+      if (created == true) widget.refreshTrigger?.value++;
+    }
   }
 
   Widget _buildStatsCards() {

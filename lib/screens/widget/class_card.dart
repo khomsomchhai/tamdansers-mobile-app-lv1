@@ -8,6 +8,7 @@ class ClassCard extends StatelessWidget {
   final String title;
   final String students;
   final Color color;
+  final String teacherName;
   final VoidCallback? onTap;
 
   const ClassCard({
@@ -16,6 +17,7 @@ class ClassCard extends StatelessWidget {
     required this.title,
     required this.students,
     required this.color,
+    required this.teacherName,
     this.onTap,
   });
 
@@ -85,7 +87,7 @@ class ClassCard extends StatelessWidget {
                         ),
                         SizedBox(width: 8),
                         Flexible(
-                          child: Text("អ្នកគ្រូ ទេព ធីតា",
+                          child: Text(teacherName,
                               style: AppTextStyle.body,
                               overflow: TextOverflow.ellipsis),
                         ),

@@ -55,26 +55,39 @@ class _CreateClassDialogState extends State<CreateClassDialog> {
   Future<void> _save() async {
     if (_nameCtrl.text.trim().isEmpty ||
         _grade == null ||
-        _sectionCtrl.text.trim().isEmpty) return;
+        _sectionCtrl.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("សូមបំពេញព័ត៌មានទាំងអស់")),
+      );
+      return;
+    }
     setState(() => _saving = true);
     try {
+      final prefs = await SharedPreferences.getInstance();
+      final teacherId = prefs.getInt('userId') ?? 1;
       await ClassRepo().createClass(
         name: _nameCtrl.text.trim(),
         grade: _grade!,
         section: _sectionCtrl.text.trim().toUpperCase(),
-        teacherId: (await SharedPreferences.getInstance()).getInt('userId') ?? 1,
+        teacherId: teacherId,
         colorHex: _color,
         semester: _semester,
         schoolYear: _schoolYearCtrl.text.trim(),
       );
       await ActivityRepo().logActivity(
-        teacherId: (await SharedPreferences.getInstance()).getInt('userId') ?? 1,
+        teacherId: teacherId,
         activityType: "class",
         title: "ថ្នាក់ត្រូវបានបង្កើត",
         subtitle:
             "${_nameCtrl.text.trim()} — $_grade ${_sectionCtrl.text.trim().toUpperCase()}",
       );
       if (mounted) Navigator.pop(context, true);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("មិនអាចបង្កើតថ្នាក់បាន: $e")),
+        );
+      }
     } finally {
       if (mounted) setState(() => _saving = false);
     }
