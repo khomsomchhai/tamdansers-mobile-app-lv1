@@ -9,7 +9,8 @@ import 'package:tamdansers_app/screens/student/menu/homework.dart';
 import 'package:tamdansers_app/screens/student/menu/profile.dart';
 
 class StudentDashboard extends StatefulWidget {
-  const StudentDashboard({super.key});
+  final int userId;
+  const StudentDashboard({super.key, required this.userId});
 
   @override
   State<StudentDashboard> createState() => _StudentDashboardState();
@@ -43,8 +44,8 @@ class _StudentDashboardState extends State<StudentDashboard>
 
       body: IndexedStack(
         index: _motionTabBarController.index,
-        children: const [
-          Homepage(),
+        children: [
+          Homepage(userId: widget.userId),
           Homework(),
           Attendance(),
           Profile(),

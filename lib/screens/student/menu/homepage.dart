@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/repositories/class_repo.dart';
+import 'package:tamdansers_app/repositories/homework_repo.dart';
+import 'package:tamdansers_app/repositories/user_repo.dart';
 import 'package:tamdansers_app/screens/student/menu/data_list_homepage.dart';
+import 'package:tamdansers_app/screens/student/widget/student_profile_header.dart';
 import 'package:tamdansers_app/widget/attendance_db.dart';
 
 class Homepage extends StatefulWidget {
-  const Homepage({super.key});
+  final int userId;
+  const Homepage({super.key, required this.userId});
 
   @override
   State<Homepage> createState() => _HomepageState();
@@ -15,70 +19,71 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   bool isExpend = false;
   final totalClass = 10;
+  Map<String, dynamic>? user;
+  Map<String, dynamic>? classData;
+  List<Map<String, dynamic>> homeworkData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    final fetchedUser = await UserRepo().getUserById(widget.userId);
+    if (fetchedUser != null && fetchedUser['class_id'] != null) {
+      final fetchedClass = await ClassRepo().getClassById(fetchedUser['class_id']);
+      final fetchedHomework = await HomeworkRepo().getHomeworkByClass(fetchedUser['class_id']);
+      setState(() {
+        user = fetchedUser;
+        classData = fetchedClass;
+        homeworkData = fetchedHomework;
+      });
+    } else {
+      setState(() {
+        user = fetchedUser;
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
+    if (user == null) {
+      return Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
     return Scaffold(
-      appBar: _buil_appbar(),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _TitleHeader(),
-              SizedBox(height: 20),
-              CardAttendance(),
-              SizedBox(height: 20),
-              _GridInfo(),
-              SizedBox(height: 20),
-              _Classes(),
-              SizedBox(height: 20),
-              _Homework()
-            ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                StudentProfileHeader(user: user!),
+                SizedBox(height: 20),
+                _TitleHeader(user: user, classData: classData),
+                SizedBox(height: 20),
+                CardAttendance(),
+                SizedBox(height: 20),
+                _GridInfo(),
+                SizedBox(height: 20),
+                _Classes(classData: classData),
+                SizedBox(height: 20),
+                _Homework(homeworkData: homeworkData)
+              ],
+            ),
           ),
         ),
       ),
     );
   }
-
-  AppBar _buil_appbar() {
-    return AppBar(
-      leading: Container(
-          margin: EdgeInsets.only(left: 16),
-          decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: AppColors.primaryMain,
-                width: 2.0,
-              )),
-          child: CircleAvatar(
-              child: SvgPicture.asset("assets/images/app_logo_blue.svg"))),
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Run Limhong',
-            style: AppTextStyle.sectionTitle20,
-          ),
-          Text('ID: 123456789',
-              style: AppTextStyle.body.copyWith(color: AppColors.secondaryText))
-        ],
-      ),
-      actions: [
-        IconButton(
-          onPressed: () {},
-          icon: Icon(
-            Icons.notifications,
-            color: AppColors.primaryText,
-          ),
-        )
-      ],
-    );
-  }
 }
 
 class _TitleHeader extends StatefulWidget {
-  const _TitleHeader();
+  final Map<String, dynamic>? user;
+  final Map<String, dynamic>? classData;
+  const _TitleHeader({this.user, this.classData});
 
   @override
   State<_TitleHeader> createState() => _TitleHeaderState();
@@ -121,6 +126,15 @@ class _TitleHeaderState extends State<_TitleHeader> {
 
   @override
   Widget build(BuildContext context) {
+    final firstName = widget.user?['first_name'] ?? '';
+    final lastName = widget.user?['last_name'] ?? '';
+    final fullName = ('$firstName $lastName').trim();
+    final greeting = fullName.isNotEmpty ? 'សួស្តី $firstName! ' : 'សួស្តី! ';
+
+    final className = widget.classData != null
+        ? '${widget.classData!['grade']} ${widget.classData!['section']}'
+        : 'ថ្នាក់មិនបានកំណត់';
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -129,10 +143,10 @@ class _TitleHeaderState extends State<_TitleHeader> {
           style: AppTextStyle.body,
         ),
         SizedBox(height: 8),
-        Text('សួស្តី Limhong! ', style: AppTextStyle.screenTitle24),
+        Text(greeting, style: AppTextStyle.title28),
         SizedBox(height: 10),
         Text(
-          'ថ្នាក់ទី 8A',
+          className,
           style: AppTextStyle.sectionTitle20
               .copyWith(color: AppColors.secondaryText),
         ),
@@ -142,7 +156,8 @@ class _TitleHeaderState extends State<_TitleHeader> {
 }
 
 class _Homework extends StatefulWidget {
-  const _Homework();
+  final List<Map<String, dynamic>> homeworkData;
+  const _Homework({required this.homeworkData});
 
   @override
   State<_Homework> createState() => _HomeworkState();
@@ -151,6 +166,37 @@ class _Homework extends StatefulWidget {
 class _HomeworkState extends State<_Homework> {
   @override
   Widget build(BuildContext context) {
+    if (widget.homeworkData.isEmpty) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'កិច្ចការផ្ទះ',
+            style: AppTextStyle.fontsize18,
+          ),
+          SizedBox(height: 10),
+          Container(
+            height: 80,
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppColors.white, width: 0.5),
+            ),
+            child: Center(
+              child: Text(
+                'មិនមានកិច្ចការផ្ទះ',
+                style: AppTextStyle.body,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
+    final homework = widget.homeworkData.first;
+    final subject = homework['subject'] ?? 'មិនបានកំណត់';
+    final deadline = homework['deadline'] ?? 'មិនបានកំណត់';
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -177,11 +223,11 @@ class _HomeworkState extends State<_Homework> {
                   child: Icon(Icons.calculate_outlined,
                       size: 40, color: AppColors.primary400),
                 ),
-                title: Text('គណិតវិទ្យា',
+                title: Text(subject,
                     style: AppTextStyle.body
                         .copyWith(fontWeight: FontWeight.bold)),
                 subtitle: Text(
-                  '11-1-2026',
+                  deadline,
                   style: AppTextStyle.body,
                 ),
                 trailing: Icon(
@@ -198,16 +244,19 @@ class _HomeworkState extends State<_Homework> {
 }
 
 class _Classes extends StatelessWidget {
-  const _Classes();
+  final Map<String, dynamic>? classData;
+  const _Classes({this.classData});
 
   @override
   Widget build(BuildContext context) {
+    final teacherName = classData?['teacher_name'] ?? 'មិនបានកំណត់';
+    final subject = 'គណិតវិទ្យា'; 
+
     return Column(
       children: [
         Row(
           children: [
             Text('ថ្នាក់បន្ទាប់', style: AppTextStyle.fontsize18),
-            
           ],
         ),
         SizedBox(height: 12),
@@ -234,11 +283,11 @@ class _Classes extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('គណិតវិទ្យា',
+                    Text(subject,
                         style: AppTextStyle.body
                             .copyWith(fontWeight: FontWeight.bold)),
                     Text(
-                      'គ្រូបង្រៀន​: លោក សុខា',
+                      'គ្រូបង្រៀន​: $teacherName',
                       style: AppTextStyle.hint15,
                     ),
                   ],
@@ -257,45 +306,43 @@ class _GridInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: GridView.builder(
-        shrinkWrap: true,
-        itemCount: items.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: 12,
-        ),
-        itemBuilder: (context, index) {
-          final item = items[index];
-          return GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, item.route);
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(14),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: item.bgColor),
-                    child: Image.asset(
-                      item.img,
-                      color: item.imgColor,
-                    ),
-                  ),
-                  SizedBox(height: 12),
-                  Text(item.title, style: AppTextStyle.body.copyWith(fontWeight: FontWeight.bold))
-                ],
-              ),
-            ),
-          );
-        },
+    return GridView.builder(
+      shrinkWrap: true,
+      itemCount: items.length,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        crossAxisSpacing: 12,
       ),
+      itemBuilder: (context, index) {
+        final item = items[index];
+        return GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, item.route);
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle, color: item.bgColor),
+                  child: Image.asset(
+                    item.img,
+                    color: item.imgColor,
+                  ),
+                ),
+                SizedBox(height: 12),
+                Text(item.title, style: AppTextStyle.body.copyWith(fontWeight: FontWeight.bold))
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

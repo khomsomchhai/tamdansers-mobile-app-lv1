@@ -51,7 +51,8 @@ class _StudentHasJoinedClassState extends State<StudentHasJoinedClass> {
                 onTap: () {
                   Navigator.pushNamed(
                     context, 
-                    AppRoutes.studentDashboard
+                    AppRoutes.studentDashboard,
+                    arguments: widget.userId
                   );
                 },
               ),
