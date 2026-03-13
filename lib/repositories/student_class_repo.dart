@@ -105,6 +105,20 @@ class StudentClassRepo {
     return result.first["count"] as int;
   }
 
+  Future<List<Map<String, dynamic>>> getEnrolledClassesByEmail(String email) async {
+    final db = await DbHelper().initDatabase();
+    return await db.rawQuery(
+      '''
+      SELECT c.* FROM tbl_class c
+      INNER JOIN tbl_student_class sc ON sc.class_id = c.id
+      WHERE sc.email = ?
+      GROUP BY c.id
+      ORDER BY c.grade ASC, c.section ASC
+      ''',
+      [email],
+    );
+  }
+
   Future<int> getMaleCountByClass(int classId) async {
     final db = await DbHelper().initDatabase();
     final result = await db.rawQuery(

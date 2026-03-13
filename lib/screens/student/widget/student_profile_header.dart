@@ -5,7 +5,6 @@ import 'package:tamdansers_app/constants/app_icon.dart';
 import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
-import 'package:tamdansers_app/routes/app_routes.dart';
 
 class StudentProfileHeader extends StatelessWidget {
   final Map<String, dynamic>? user;
@@ -15,23 +14,15 @@ class StudentProfileHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(
-              context, 
-              AppRoutes.profile
-            );
-          },
-          child: CircleAvatar(
-            radius: AppNumber.avatarSmall,
-            backgroundColor: AppColors.white,
-            backgroundImage: AssetImage(
-              (() {
-                final g = (user?['gender'] ?? '').toString().toLowerCase();
-                if (g.contains('f') || g.contains('female')) return AppIcon.femaleAvatar;
-                return AppIcon.maleAvatar;
-              })(),
-            ),
+        CircleAvatar(
+          radius: AppNumber.avatarSmall,
+          backgroundColor: AppColors.white,
+          backgroundImage: AssetImage(
+            (() {
+              final g = (user?['gender'] ?? '').toString().toLowerCase();
+              if (g.contains('f') || g.contains('female')) return AppIcon.femaleAvatar;
+              return AppIcon.maleAvatar;
+            })(),
           ),
         ),
         SizedBox(width: 10,),

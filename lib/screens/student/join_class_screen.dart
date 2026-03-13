@@ -6,6 +6,7 @@ import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/constants/validators.dart';
 import 'package:tamdansers_app/repositories/class_repo.dart';
+import 'package:tamdansers_app/repositories/student_class_repo.dart';
 import 'package:tamdansers_app/repositories/user_repo.dart';
 import 'package:tamdansers_app/screens/widget/custom_snackbar.dart';
 import 'package:tamdansers_app/screens/widget/primary_button_2.dart';
@@ -91,27 +92,33 @@ class _JoinClassScreenState extends State<JoinClassScreen> {
             onPressed: () async {
               try {
                 if (formKey.currentState!.validate()) {
-                  // Join class
                   final classData = await ClassRepo().getClassByCode(classCodeCtrl.text.trim());
                   if (classData != null) {
                     final success = await UserRepo().joinClass(widget.userId, classData['id']);
                     if (success) {
-                      setState(() {
-                        isLoading = true;
-                      });
-                      await Future.delayed(Duration(seconds: 2));
-                      setState(() {
-                        isLoading = false;
-                      });
-                      Navigator.pop(context, true); // Go back to first screen with success
+                      final user = await UserRepo().getUserById(widget.userId);
+                      if (user != null) {
+                        await StudentClassRepo().addStudent(
+                          firstName: user['first_name'],
+                          lastName: user['last_name'],
+                          gender: user['gender'],
+                          email: user['email'],
+                          classId: classData['id'],
+                        );
+                      }
+                      if (mounted) {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        await Future.delayed(Duration(seconds: 2));
+                        Navigator.pop(context, true);
+                      }
                     } else {
-                      // Show error
                       _showError(
                         "មិនអាចចូលថ្នាក់បាន"
                       );
                     }
                   } else {
-                    // Invalid code
                     _showError(
                       "លេខកូដថ្នាក់មិនត្រឹមត្រូវ"
                     );

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_images.dart';
+import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 
@@ -52,9 +55,14 @@ class _HomeworkState extends State<Homework> {
       
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text('កិច្ចការផ្ទះ',style: AppTextStyle.screenTitle24,),
+        title: Text('កិច្ចការផ្ទះ',style: AppTextStyle.sectionTitle20,),
+        centerTitle: true,
         actions: [
-          Icon(Icons.notifications_sharp,color: AppColors.primaryText,)
+          SvgPicture.asset(
+            AppImages.notification,
+            height: AppNumber.iconSmall,
+          ),
+          SizedBox(width: 20,)
         ],
         
       ),
@@ -76,9 +84,9 @@ class _HomeworkState extends State<Homework> {
 
 Widget tabWidget() {
   return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 18),
+    padding: const EdgeInsets.symmetric(horizontal: 12),
     child: Container(
-      height: 52, // fixed height for better control
+      height: 52,
       padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
         color: const Color(0xFFEFF2F6),
@@ -87,15 +95,14 @@ Widget tabWidget() {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          // Animated sliding indicator (white pill)
           AnimatedPositioned(
             duration: const Duration(milliseconds: 320),
-            curve: Curves.easeInOutCubicEmphasized, // modern smooth curve
+            curve: Curves.easeInOutCubicEmphasized, 
             left: selectedIndex == 0 ? 5 : null,
             right: selectedIndex == 1 ? 5 : null,
             top: 5,
             bottom: 5,
-            width: (MediaQuery.sizeOf(context).width - 36 - 10) / 2, // dynamic half width
+            width: (MediaQuery.sizeOf(context).width - 36 - 10) / 2, 
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -111,7 +118,6 @@ Widget tabWidget() {
             ),
           ),
 
-          // Invisible layer for taps + text
           Row(
             children: [
               Expanded(
@@ -141,7 +147,7 @@ Widget _buildTabButton({
   required VoidCallback onTap,
 }) {
   return GestureDetector(
-    behavior: HitTestBehavior.opaque, // better tap area
+    behavior: HitTestBehavior.opaque,
     onTap: onTap,
     child: Center(
       child: AnimatedDefaultTextStyle(
@@ -169,7 +175,7 @@ Widget _buildTabButton({
     padding: const EdgeInsets.all(14),
     decoration: BoxDecoration(
       color: Colors.white,
-      borderRadius: BorderRadius.circular(18),
+      borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
       boxShadow: [
         BoxShadow(
           color: Colors.black.withOpacity(0.04),
@@ -237,8 +243,7 @@ Widget _buildTabButton({
               ),
               child: Text(
                 _statusText(status),
-                style: TextStyle(
-                  fontSize: 12,
+                style: AppTextStyle.caption12Secondary.copyWith(
                   fontWeight: FontWeight.bold,
                   color: _statusColor(status),
                 ),
@@ -255,7 +260,7 @@ Widget _buildTabButton({
             const SizedBox(width: 6),
             Text(
               isClosed ? "ឈប់ទទួល $date" : "បានផ្ញើរ $date",
-              style: TextStyle(
+              style: AppTextStyle.hintText.copyWith(
                 color: isClosed ? AppColors.error : AppColors.secondaryText,
                 fontWeight:
                     isClosed ? FontWeight.bold : FontWeight.normal,
@@ -411,12 +416,12 @@ Widget taskListWidget() {
   );
 }
 Widget oldTaskListWidget() {
-  return taskListWidget(); // reuse your existing
+  return taskListWidget(); 
 }
 
 Widget newTaskListWidget() {
   return ListView(
-    padding: const EdgeInsets.all(18),
+    padding: const EdgeInsets.all(20),
     children: [
       GestureDetector(
         onTap: () {

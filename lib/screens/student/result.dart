@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_icon.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/screens/student/data_result.dart';
+import 'package:tamdansers_app/screens/student/data_schedule.dart';
 
 class Result extends StatefulWidget {
   const Result({super.key});
@@ -13,48 +15,63 @@ class Result extends StatefulWidget {
 class _ResultState extends State<Result> {
   int selectIndex = 0;
 
-  late List<MontResult> monthResults;
-  @override
-  void initState() {
-    super.initState();
+  late List<MonthResult> monthResults;
 
-    monthResults = List.generate(12, (monthIndex) {
-      return MontResult(
-        totalScore: 380 + (monthIndex * 5),
-        maxScore: 500,
-        rank: monthIndex + 1,
-        average: 50 + monthIndex.toDouble(),
-        subjects: List.generate(7, (subjectIndex) {
-          List<String> subjectNames = [
-            'ភូមិវិទ្យា',
-            'គណិតវិទ្យា',
-            'រូបវិទ្យា',
-            'គីមីវិទ្យា',
-            'ជីវវិទ្យា',
-            'ប្រវត្តិវិទ្យា',
-            'ភាសាខ្មែរ',
-          ];
+@override
+void initState() {
+  super.initState();
 
-          List<String> teacherNames = [
-            'រុន លីមហុង',
-            'ស៊ុន ដារ៉ា',
-            'ចាន់ សុភា',
-            'លី សុវណ្ណ',
-            'មឿន ស្រីនាង',
-            'ថា វិសាល',
-            'គង់ សុភ័ក្រ្ត',
-          ];
+  monthResults = List.generate(12, (monthIndex) {
+    final subjects = [
+      SubjectResult(
+        subject: SubjectModel.geography,
+        teacher: Teachers.rith,
+        score: 70 + monthIndex.toDouble(),
+      ),
+      SubjectResult(
+        subject: SubjectModel.math,
+        teacher: Teachers.sokha,
+        score: 80 + monthIndex.toDouble(),
+      ),
+      SubjectResult(
+        subject: SubjectModel.physics,
+        teacher: Teachers.virak,
+        score: 75 + monthIndex.toDouble(),
+      ),
+      SubjectResult(
+        subject: SubjectModel.chemistry,
+        teacher: Teachers.lina,
+        score: 85 + monthIndex.toDouble(),
+      ),
+      SubjectResult(
+        subject: SubjectModel.biology,
+        teacher: Teachers.chanda,
+        score: 78 + monthIndex.toDouble(),
+      ),
+      SubjectResult(
+        subject: SubjectModel.history,
+        teacher: Teachers.sophal,
+        score: 82 + monthIndex.toDouble(),
+      ),
+      SubjectResult(
+        subject: SubjectModel.khmer,
+        teacher: Teachers.chan,
+        score: 88 + monthIndex.toDouble(),
+      ),
+    ];
 
-          return SubjectResult(
-            subjectName: subjectNames[subjectIndex],
-            teacherName: teacherNames[subjectIndex],
-            score: 40 + subjectIndex * 3 + monthIndex.toDouble(),
-          );
-        }),
-      );
-    });
-  }
+    final total =
+        subjects.map((e) => e.score).reduce((a, b) => a + b);
 
+    return MonthResult(
+      totalScore: total,
+      maxScore: 700,
+      rank: monthIndex + 1,
+      average: total / subjects.length,
+      subjects: subjects,
+    );
+  });
+}
   @override
   Widget build(BuildContext context) {
     final data = monthResults[selectIndex];
@@ -65,7 +82,7 @@ class _ResultState extends State<Result> {
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(20.0),
             child: Column(
               children: [
                 _list_month(),
@@ -108,24 +125,24 @@ class _ResultState extends State<Result> {
           Row(
             children: [
               Container(
-                padding: EdgeInsets.all(2),
+                padding: EdgeInsets.all(5),
                 height: 50,
                 width: 50,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: AppColors.primaryBg,
+                  color: subject.subject.bgIconColor,
+                  borderRadius: BorderRadius.circular(12)
                 ),
-                child: Image.asset(
-                  'assets/images/user_profile.png',
-                  fit: BoxFit.cover,
-                ),
+                child: Icon(
+                  subject.subject.icon,
+                  color: subject.subject.iconColor,
+                )
               ),
               SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(subject.subjectName, style: AppTextStyle.fontsize18),
-                  Text('លោកគ្រូ​​ : ${subject.teacherName}', style: AppTextStyle.body),
+                  Text(subject.subject.name, style: AppTextStyle.fontsize18),
+                  Text('លោកគ្រូ​​ : ${subject.teacher.name}', style: AppTextStyle.body),
                 ],
               )
             ],
@@ -189,7 +206,7 @@ class _ResultState extends State<Result> {
             width: 100,
             decoration: BoxDecoration(shape: BoxShape.circle),
             clipBehavior: Clip.antiAlias,
-            child: Image.asset('assets/images/user_profile.png',
+            child: Image.asset(AppIcon.maleAvatar,
                 fit: BoxFit.cover),
           ),
           SizedBox(height: 20),
@@ -207,7 +224,7 @@ class _ResultState extends State<Result> {
                     Text('${data.totalScore} of ${data.maxScore}',
                         textAlign: TextAlign.center,
                         style:
-                            AppTextStyle.body.copyWith(color: AppColors.white)),
+                            AppTextStyle.body.copyWith(color: AppColors.white,fontWeight: FontWeight.w600)),
                   ],
                 ),
               ),
@@ -243,7 +260,7 @@ class _ResultState extends State<Result> {
                         style: AppTextStyle.subtitle16
                             .copyWith(color: AppColors.white)),
                     SizedBox(height: 20),
-                    Text('${data.average}',
+                    Text(' ${data.calculatedAverage.toStringAsFixed(2)} ',
                         style: AppTextStyle.fontsize18
                             .copyWith(color: AppColors.white)),
                   ],

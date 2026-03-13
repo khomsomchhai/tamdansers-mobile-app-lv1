@@ -161,7 +161,8 @@ class AppRouter {
       case AppRoutes.homework:
         return _slideRoute(Homework());
       case AppRoutes.profile:
-        return _slideRoute(Profile());
+      final userId = settings.arguments as int?;
+        return _slideRoute(Profile(userId: userId ?? 1));
       case AppRoutes.detail:
         return _slideRoute(Deatilscreen());
       case AppRoutes.detailTeach:

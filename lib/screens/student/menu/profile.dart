@@ -5,13 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_icon.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/repositories/profile_repo.dart';
+import 'package:tamdansers_app/repositories/user_repo.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
-import 'package:tamdansers_app/screens/student/menu/connection_requests.dart';
 
 class Profile extends StatefulWidget {
-  const Profile({super.key});
+  final int userId;
+  const Profile({super.key, required this.userId});
 
   @override
   State<Profile> createState() => _ProfileState();
@@ -19,8 +22,20 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   String imagePath = '';
+  Map<String, dynamic>? user;
+  final UserRepo _userRepo = UserRepo();
+  @override
+  void initState() {
+    super.initState();
+    _loadUser();
+  }
 
-  // ✅ Pick Image (Safe)
+  Future<void> _loadUser() async {
+    final fetchedUser = await _userRepo.getUserById(widget.userId);
+    setState(() {
+      user = fetchedUser;
+    });
+  }
   Future<void> dataChooseImg(ImageSource source) async {
     final picker = ImagePicker();
     final pickedImg = await picker.pickImage(
@@ -34,8 +49,6 @@ class _ProfileState extends State<Profile> {
       });
     }
   }
-
-  // ✅ BottomSheet 2 Option
   void showImageOptions() {
     showModalBottomSheet(
       context: context,
@@ -75,126 +88,24 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text('គណនីអាខោន', style: AppTextStyle.screenTitle24),
-        
+        title: Text('ប្រវតិ្តរូប', style: AppTextStyle.sectionTitle20),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              const SizedBox(height: 20),
-              ImageProfile(),
-              const SizedBox(height: 60),
-              ProfileMenu(
-                icon: Icons.person,
-                iconBgColor: AppColors.primaryBg,
-                iconColor: AppColors.primaryMain,
-                title: 'ព័ត៍មានផ្ទាល់ខ្លួន',
-                onTap: () {
-                  Navigator.pushNamed(context, '/student_info_personal');
-                },
-              ),
-              const SizedBox(height: 20),
-              ProfileMenu(
-                icon: Icons.lock,
-                iconBgColor: AppColors.lightPink,
-                iconColor: AppColors.pepure,
-                title: 'ប្ដូរពាក្យសម្ងាត់',
-                onTap: () {
-                  Navigator.pushNamed(
-                    context, 
-                    AppRoutes.changePassword
-                  );
-                },
-              ),
-              const SizedBox(height: 20),
-              ProfileMenu(
-                icon: Icons.notifications,
-                iconColor: AppColors.orange,
-                iconBgColor: const Color.fromARGB(37, 252, 170, 88),
-                title: 'ការជូនដំណឹង',
-                onTap: () {
-                  Navigator.pushNamed(context, '/notifications');
-                },
-              ),
-              const SizedBox(height: 20),
-              ProfileMenu(
-                icon: Icons.family_restroom,
-                iconBgColor: AppColors.primaryBg,
-                iconColor: AppColors.primaryMain,
-                title: 'សំណើភ្ជាប់ពីឪពុកម្តាយ',
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const ConnectionRequests()),
-                  );
-                },
-              ),
-              const SizedBox(height: 20),
-              ProfileMenu(
-                icon: Icons.logout,
-                iconColor: AppColors.error,
-                title: 'ចាកចេញ',
-                showChevron: false,
-                titleColor: AppColors.error,
-                center: true,
-                BgColor: AppColors.errorBG,
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (context) => AlertDialog(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
-                      ),
-                      title: Text(
-                        'បញ្ជាក់ការចាកចេញ',
-                        style: AppTextStyle.sectionTitle20,
-                      ),
-                      content:  Text(
-                        'តើអ្នកប្រាកដថាចង់ចាកចេញមែនទេ?',
-                        style: AppTextStyle.body,
-                      ),
-                      actionsPadding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context); 
-                          },
-                          style: TextButton.styleFrom(
-                            side: BorderSide(color: AppColors.secondaryText),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          child: Text(
-                            'បោះបង់',
-                            style: AppTextStyle.hintText.copyWith(color: Colors.black),
-                          ),
-                        ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.error,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          onPressed: ()async {
-                            final pref = await SharedPreferences.getInstance();
-                            await pref.setBool("isLogin", false);
-                            await pref.remove("role");
-                            await pref.remove("userId");
-                            Navigator.popAndPushNamed(context, AppRoutes.roleSelectionScreen);
-                          },
-                          child: Text('ចាកចេញ',style: AppTextStyle.hintText.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
+            const SizedBox(height: 20),
+            ImageProfile(userId: widget.userId),
+            const SizedBox(height: 60),
+            _buildInfoSection(user),
+            const SizedBox(height: 24),
+            _buildSettingsSection(context),
+            const SizedBox(height: 16),
+            _buildLogoutButton(context),
+            const SizedBox(height: 24),
+              
             ],
           ),
         ),
@@ -204,7 +115,8 @@ class _ProfileState extends State<Profile> {
 }
 
 class ImageProfile extends StatefulWidget {
-  const ImageProfile({super.key});
+  final int userId;
+  const ImageProfile({super.key, required this.userId});
 
   @override
   State<ImageProfile> createState() => _ImageProfileState();
@@ -212,16 +124,48 @@ class ImageProfile extends StatefulWidget {
 
 class _ImageProfileState extends State<ImageProfile> {
   String imagePath = '';
+  Map<String, dynamic>? user;
+  final ProfileRepo _profileRepo = ProfileRepo();
 
-  // ✅ Pick Image
+  @override
+  void initState() {
+    super.initState();
+    _loadImage();
+    _loadUser();
+  }
+
+  Future<void> _loadImage() async {
+    final savedImage = await _profileRepo.getImage();
+
+    if (savedImage != null && savedImage.isNotEmpty) {
+      final file = File(savedImage);
+
+      if (await file.exists()) {
+        setState(() {
+          imagePath = savedImage;
+        });
+      }
+    }
+  }
+
+  Future<void> _loadUser() async {
+    final fetchedUser = await UserRepo().getUserById(widget.userId);
+    setState(() {
+      user = fetchedUser;
+    });
+  }
+
   Future<void> dataChooseImg(ImageSource source) async {
     final picker = ImagePicker();
+
     final pickedImg = await picker.pickImage(
       source: source,
       imageQuality: 70,
     );
 
     if (pickedImg != null) {
+      await _profileRepo.saveImage(pickedImg.path);
+
       setState(() {
         imagePath = pickedImg.path;
       });
@@ -280,10 +224,12 @@ class _ImageProfileState extends State<ImageProfile> {
                         image: FileImage(File(imagePath)),
                         fit: BoxFit.cover,
                       )
-                    : null,
+                    : null
               ),
               child: imagePath.isEmpty
-                  ? const Icon(Icons.person, size: 60, color: Colors.grey)
+                  ? Image.asset(
+                    AppIcon.maleAvatar
+                  )
                   : null,
             ),
             Material(
@@ -291,7 +237,7 @@ class _ImageProfileState extends State<ImageProfile> {
               shape: const CircleBorder(),
               child: InkWell(
                 customBorder: const CircleBorder(),
-                onTap: showImageOptions, // 👈 call inside class
+                onTap: showImageOptions,
                 child: const SizedBox(
                   width: 40,
                   height: 40,
@@ -306,69 +252,186 @@ class _ImageProfileState extends State<ImageProfile> {
           ],
         ),
         const SizedBox(height: 10),
-        Text('Run Limhong', style: AppTextStyle.screenTitle24),
-        Text('ID: 12345678', style: AppTextStyle.body),
+        Text(
+          (() {
+            final first = user?['last_name'] ?? '';
+            final last = user?['first_name'] ?? '';
+            final full = ('$first $last').trim();
+            return full.isNotEmpty ? full : 'រុន​ លីមហុង';
+          })(),
+          style: AppTextStyle.screenTitle24,
+        ),
       ],
     );
   }
 }
 
-class ProfileMenu extends StatelessWidget {
-  final IconData icon;
-  final Color? iconBgColor;
-  final Color iconColor;
-  final String title;
-  final VoidCallback onTap;
-  final bool showChevron;
-  final bool center;
-  final Color? titleColor;
-  final Color? BgColor;
-  const ProfileMenu(
-      {super.key,
-      required this.icon,
-      this.iconBgColor,
-      required this.iconColor,
-      required this.title,
-      required this.onTap,
-      this.showChevron = true,
-      this.center = false,
-      this.titleColor,
-      this.BgColor});
+Widget _buildInfoSection(Map<String, dynamic>? user) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(AppNumber.cardPadding),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(AppNumber.radiusLarge),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _infoRow(Icons.email_outlined,user?['email'] ?? "មិនមានទិន្នន័យ"),
+          const Divider(height: 24, thickness: 0.5),
+          _infoRow(Icons.phone_outlined,user?['phone']??"មិនមានទិន្នន័យ"),
+          const Divider(height: 24, thickness: 0.5),
+          _infoRow(Icons.location_on_outlined, "ភ្នំពេញ, កម្ពុជា"),
+        ],
+      ),
+    );
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: BgColor ?? AppColors.white,
-          borderRadius: BorderRadius.circular(10),
+  Widget _infoRow(IconData icon, String value) {
+    return Row(
+      children: [
+        Icon(icon, color: AppColors.secondaryText, size: 20),
+        const SizedBox(width: 12),
+        Expanded(child: Text(value, style: AppTextStyle.body14)),
+      ],
+    );
+  }
+
+  Widget _buildSettingsSection(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 4, bottom: 10),
+          child: Text("ការកំណត់", style: AppTextStyle.sectionTitle20),
         ),
-        child: Row(
-          mainAxisAlignment:
-              center ? MainAxisAlignment.center : MainAxisAlignment.start,
-          children: [
-            Container(
-              width: 50,
-              height: 50,
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: iconBgColor,
-                shape: BoxShape.circle,
+        Container(
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(AppNumber.radiusLarge),
+          ),
+          child: Column(
+            children: [
+              _settingsTile(
+                icon: Icons.lock_outline_rounded,
+                title: "ផ្លាស់ប្តូរពាក្យសម្ងាត់",
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.changePassword);
+                },
+                showDivider: true,
               ),
-              child: Icon(icon, color: iconColor),
+              _settingsTile(
+                icon: Icons.settings_outlined,
+                title: "ការកំណត់កម្មវិធី",
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.notifications);
+                },
+                showDivider: true,
+              ),
+              _settingsTile(
+                icon: Icons.help_outline_rounded,
+                title: "ជំនួយ & សេវាកម្ម",
+                onTap: () {},
+                showDivider: false,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _settingsTile({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+    required bool showDivider,
+  }) {
+    return Column(
+      children: [
+        InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(AppNumber.radiusLarge),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Row(
+              children: [
+                Icon(icon, color: AppColors.secondaryText, size: 22),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Text(title, style: AppTextStyle.body14),
+                ),
+                const Icon(Icons.chevron_right,
+                    color: AppColors.secondaryText, size: 20),
+              ],
             ),
-            SizedBox(width: 16),
-            Text(title,
-                style: AppTextStyle.fontsize18
-                    .copyWith(color: titleColor ?? Colors.black)),
-            if (!center) const Spacer(),
-            if (!center && showChevron)
-              Icon(Icons.chevron_right, color: AppColors.secondaryText),
-          ],
+          ),
+        ),
+        if (showDivider)
+          const Divider(height: 1, thickness: 0.5, indent: 52, endIndent: 0),
+      ],
+    );
+  }
+
+  Widget _buildLogoutButton(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: OutlinedButton.icon(
+        onPressed: () => _confirmLogout(context),
+        icon:
+            const Icon(Icons.logout_rounded, color: AppColors.error, size: 20),
+        label: Text(
+          "ចាកចេញ",
+          style: AppTextStyle.subtitle16.copyWith(color: AppColors.error),
+        ),
+        style: OutlinedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          side: const BorderSide(color: AppColors.error, width: 1.2),
+          backgroundColor: AppColors.error.withValues(alpha: 0.05),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppNumber.radiusLarge),
+          ),
         ),
       ),
     );
   }
-}
+
+  void _confirmLogout(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.backgroundLight,
+        title: Text("ចាកចេញ?", style: AppTextStyle.subtitle18),
+        content: Text(
+          "តើអ្នកពិតជាចង់ចាកចេញពីគណនីនេះមែនទេ?",
+          style: AppTextStyle.body14,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text("បោះបង់", style: AppTextStyle.bodyPrimary),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(ctx);
+              final pref = await SharedPreferences.getInstance();
+              await pref.setBool("isLogin", false);
+              await pref.remove("role");
+              await pref.remove("userId");
+              if (context.mounted) {
+                Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+                  AppRoutes.roleSelectionScreen,
+                  (route) => false,
+                );
+              }
+            },
+            child: Text(
+              "ចាកចេញ",
+              style: AppTextStyle.subtitle16.copyWith(color: AppColors.error),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+

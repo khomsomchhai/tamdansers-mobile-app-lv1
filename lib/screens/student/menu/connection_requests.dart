@@ -49,9 +49,7 @@ class _ConnectionRequestsState extends State<ConnectionRequests> {
       } else {
         await parentStudentRepo.rejectConnection(connectionId);
       }
-      // Reload requests
       _loadPendingRequests();
-      // Show success message
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

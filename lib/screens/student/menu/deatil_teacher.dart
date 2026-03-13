@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 
@@ -12,8 +13,6 @@ class DeatilTeacher extends StatefulWidget {
 
 class _DeatilTeacherState extends State<DeatilTeacher> {
   bool _showAllLessons = false;
-
-  // Example lessons (replace with API later)
   final List<Map<String, dynamic>> allLessons = [
     {
       "title": "មេរៀន ១៖ ចំនួនគត់",
@@ -39,7 +38,6 @@ class _DeatilTeacherState extends State<DeatilTeacher> {
 
   @override
   Widget build(BuildContext context) {
-    // Support both old String and new Map arguments
     final Object? rawArgs = ModalRoute.of(context)?.settings.arguments;
     String titleAppBar = "មុខវិជ្ជា";
 
@@ -56,24 +54,19 @@ class _DeatilTeacherState extends State<DeatilTeacher> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(titleAppBar, style: AppTextStyle.screenTitle24),
+        title: Text(titleAppBar, style: AppTextStyle.sectionTitle20),
         centerTitle: true,
-        actions: const [Icon(Icons.menu)],
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               taskCard(),
-
               Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text("មេរៀន", style: AppTextStyle.sectionTitle20),
-                  ),
+                  Text("មេរៀន", style: AppTextStyle.subtitle18),
                   const Spacer(),
                   if (canShowMore)
                     Padding(
@@ -96,7 +89,7 @@ class _DeatilTeacherState extends State<DeatilTeacher> {
                 ],
               ),
 
-              // Lessons list
+
               Column(
                 children: lessonsToShow.map((l) {
                   return Padding(
@@ -112,19 +105,15 @@ class _DeatilTeacherState extends State<DeatilTeacher> {
 
               const SizedBox(height: 8),
 
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text("កិច្ចការផ្ទះ", style: AppTextStyle.sectionTitle20),
-              ),
+              Text("កិច្ចការផ្ទះ", style: AppTextStyle.subtitle18),
+              const SizedBox(height: 8),
               subMitted(
                 title: "លំហាត់មេរៀនទី២",
                 subtitle: "ផុតកំណត់ថ្ងៃស្អែក",
               ),
-
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text("ឯកសារយោង", style: AppTextStyle.sectionTitle20),
-              ),
+              const SizedBox(height: 8),
+              Text("ឯកសារយោង", style: AppTextStyle.subtitle18),
+              const SizedBox(height: 8),
               reFerence(),
             ],
           ),
@@ -138,7 +127,7 @@ class _DeatilTeacherState extends State<DeatilTeacher> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.06),
@@ -166,10 +155,10 @@ class _DeatilTeacherState extends State<DeatilTeacher> {
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(color: const Color(0xFFE6EAF2)),
                 ),
-                child: const Center(
+                child:Center(
                   child: Text(
                     "上",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    style: AppTextStyle.body,
                   ),
                 ),
               ),
@@ -202,10 +191,9 @@ class _DeatilTeacherState extends State<DeatilTeacher> {
                         SizedBox(height: 6),
                         Text(
                           "85%",
-                          style: TextStyle(
-                            fontSize: 20,
+                          style: AppTextStyle.sectionTitle20.copyWith(
                             fontWeight: FontWeight.w800,
-                            color: Color(0xFF2F6BFF),
+                            color: const Color(0xFF2F6BFF),
                           ),
                         ),
                       ],
@@ -223,10 +211,9 @@ class _DeatilTeacherState extends State<DeatilTeacher> {
                         SizedBox(height: 6),
                         Text(
                           "98%",
-                          style: TextStyle(
-                            fontSize: 20,
+                          style: AppTextStyle.sectionTitle20.copyWith(
                             fontWeight: FontWeight.w800,
-                            color: Color(0xFF17B26A),
+                            color: const Color(0xFF17B26A),
                           ),
                         ),
                       ],
@@ -250,7 +237,7 @@ class _DeatilTeacherState extends State<DeatilTeacher> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.06),
@@ -283,19 +270,17 @@ class _DeatilTeacherState extends State<DeatilTeacher> {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: AppTextStyle.body.copyWith(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF0B1220),
+                    color: const Color(0xFF0B1220),
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   subtitle,
-                  style: TextStyle(
-                    fontSize: 13,
+                  style: AppTextStyle.caption13Secondary.copyWith(
                     fontWeight: FontWeight.w500,
-                    color: Colors.black.withOpacity(0.45),
                   ),
                 ),
               ],
@@ -333,7 +318,7 @@ class _DeatilTeacherState extends State<DeatilTeacher> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.06),
@@ -365,19 +350,17 @@ class _DeatilTeacherState extends State<DeatilTeacher> {
                   children: [
                     Text(
                       title,
-                      style: const TextStyle(
+                      style: AppTextStyle.body.copyWith(
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
-                        color: Color(0xFF0B1220),
+                        color: const Color(0xFF0B1220),
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       subtitle,
-                      style: TextStyle(
-                        fontSize: 13,
+                      style: AppTextStyle.caption13Secondary.copyWith(
                         fontWeight: FontWeight.w500,
-                        color: Colors.black.withOpacity(0.45),
                       ),
                     ),
                   ],
@@ -414,7 +397,7 @@ class _DeatilTeacherState extends State<DeatilTeacher> {
             height: 150,
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(22),
+              borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.06),
@@ -425,16 +408,16 @@ class _DeatilTeacherState extends State<DeatilTeacher> {
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 CircleAvatar(
                   radius: 28,
                   backgroundColor: Color.fromARGB(55, 244, 67, 54),
                   child: Icon(Icons.picture_as_pdf, color: Colors.red),
                 ),
                 SizedBox(height: 8),
-                Text("ស្លាយមេរៀន.pdf"),
+                Text("ស្លាយមេរៀន.pdf", style: AppTextStyle.caption14Secondary),
                 SizedBox(height: 8),
-                Text("2.8 MB"),
+                Text("2.8 MB", style: AppTextStyle.caption12Secondary),
               ],
             ),
           ),
@@ -445,7 +428,7 @@ class _DeatilTeacherState extends State<DeatilTeacher> {
             height: 150,
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(22),
+              borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.06),
@@ -463,9 +446,9 @@ class _DeatilTeacherState extends State<DeatilTeacher> {
                   child: Icon(Icons.video_call, color: AppColors.link),
                 ),
                 const SizedBox(height: 8),
-                const Text("ស្លាយមេរៀន.pptx"),
+                Text("ស្លាយមេរៀន.pdf", style: AppTextStyle.caption14Secondary),
                 const SizedBox(height: 8),
-                const Text("1.8 MB"),
+                Text("2.8 MB", style: AppTextStyle.caption12Secondary),
               ],
             ),
           ),
