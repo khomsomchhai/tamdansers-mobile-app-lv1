@@ -134,6 +134,7 @@ class _ImageProfileState extends State<ImageProfile> {
     _loadUser();
   }
 
+  // ផ្ទុករូបភាពពី database
   Future<void> _loadImage() async {
     final savedImage = await _profileRepo.getImage();
 
@@ -146,6 +147,10 @@ class _ImageProfileState extends State<ImageProfile> {
         });
       }
     }
+
+    setState(() {
+      _isLoading = false; // បញ្ចប់ loading
+    }); 
   }
 
   Future<void> _loadUser() async {
@@ -155,6 +160,7 @@ class _ImageProfileState extends State<ImageProfile> {
     });
   }
 
+  // ជ្រើសរើសរូបភាពពី Gallery ឬ Camera
   Future<void> dataChooseImg(ImageSource source) async {
     final picker = ImagePicker();
 
@@ -169,9 +175,11 @@ class _ImageProfileState extends State<ImageProfile> {
       setState(() {
         imagePath = pickedImg.path;
       });
+      widget.onImageChanged!(pickedImg.path);
     }
   }
 
+  // បង្ហាញ Bottom Sheet ជ្រើសរើស Camera ឬ Gallery
   void showImageOptions() {
     showModalBottomSheet(
       context: context,
@@ -185,7 +193,7 @@ class _ImageProfileState extends State<ImageProfile> {
             children: [
               ListTile(
                 leading: const Icon(Icons.camera_alt, color: Colors.blue),
-                title: const Text("Take Photo"),
+                title: Text("ថតរូប",style: AppTextStyle.body,),
                 onTap: () {
                   Navigator.pop(context);
                   dataChooseImg(ImageSource.camera);
@@ -193,7 +201,7 @@ class _ImageProfileState extends State<ImageProfile> {
               ),
               ListTile(
                 leading: const Icon(Icons.photo, color: Colors.green),
-                title: const Text("Choose from Gallery"),
+                title: Text("ជ្រើសរើសពីថតរូប",style: AppTextStyle.body),
                 onTap: () {
                   Navigator.pop(context);
                   dataChooseImg(ImageSource.gallery);
