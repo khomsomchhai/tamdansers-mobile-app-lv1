@@ -1,19 +1,8 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-
-// ═══════════════════════════════════════════════════════════
-//  ATTENDANCE STATUS ENUM
-// ═══════════════════════════════════════════════════════════
-
 enum AttendanceStatus { present, absent }
-
-// ═══════════════════════════════════════════════════════════
-//  ATTENDANCE ENTRY MODEL
-// ═══════════════════════════════════════════════════════════
-
 class AttendanceEntryModel {
   final String date;
   final String subject;
-  final String time; // ✅ បន្ថែម time field
+  final String time;
   final AttendanceStatus status;
 
   const AttendanceEntryModel({
@@ -25,7 +14,6 @@ class AttendanceEntryModel {
 
   bool get isPresent => status == AttendanceStatus.present;
 
-  // ✅ static const list នៅក្នុង class — ដូច្នេះ AttendanceEntryModel.attendanceHistory នឹងបង្ហាញ
   static const List<AttendanceEntryModel> attendanceHistory = [
     AttendanceEntryModel(
       date: '17 មករា 2026',
@@ -90,10 +78,6 @@ class AttendanceEntryModel {
   ];
 }
 
-// ═══════════════════════════════════════════════════════════
-//  ATTENDANCE SUMMARY MODEL
-// ═══════════════════════════════════════════════════════════
-
 class AttendanceSummaryModel {
   final int totalDays;
   final int presentDays;
@@ -108,11 +92,6 @@ class AttendanceSummaryModel {
   double get attendanceRate =>
       totalDays == 0 ? 0 : (presentDays / totalDays) * 100;
 }
-
-// ═══════════════════════════════════════════════════════════
-//  ATTENDANCE SUMMARY COMPUTED
-// ═══════════════════════════════════════════════════════════
-
 AttendanceSummaryModel get attendanceSummary {
   final history = AttendanceEntryModel.attendanceHistory;
   final total = history.length;

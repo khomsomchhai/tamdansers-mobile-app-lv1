@@ -9,7 +9,8 @@ import 'package:tamdansers_app/screens/student/menu/homework.dart';
 import 'package:tamdansers_app/screens/student/menu/profile.dart';
 
 class StudentDashboard extends StatefulWidget {
-  const StudentDashboard({super.key});
+  final int userId;
+  const StudentDashboard({super.key, required this.userId});
 
   @override
   State<StudentDashboard> createState() => _StudentDashboardState();
@@ -50,12 +51,14 @@ class _StudentDashboardState extends State<StudentDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, _) {
-        if (didPop) return;
+    return WillPopScope(
+      onWillPop: () async {
         final nav = _navKeys[_index].currentState;
-        if (nav != null && nav.canPop()) nav.pop();
+        if (nav != null && nav.canPop()) {
+          nav.pop();
+          return false;
+        }
+        return true;
       },
       child: Scaffold(
         backgroundColor: AppColors.backgroundLight,
@@ -81,13 +84,13 @@ class _StudentDashboardState extends State<StudentDashboard> {
                   return MaterialPageRoute(
                     builder: (_) {
                       if (i == 0) {
-                        return const Homepage();
+                        return Homepage(userId: widget.userId);
                       } else if (i == 1) {
                         return const Homework();
                       } else if (i == 2) {
                         return const Attendance();
                       } else {
-                        return const Profile();
+                        return Profile(userId: widget.userId);
                       }
                     },
                     settings: settings,
@@ -103,10 +106,6 @@ class _StudentDashboardState extends State<StudentDashboard> {
   }
 }
 
-////////////////////////////////////////////////////////////
-/// DATA MODEL
-////////////////////////////////////////////////////////////
-
 class _NavItem {
   final IconData icon;
   final IconData activeIcon;
@@ -118,10 +117,6 @@ class _NavItem {
     required this.label,
   });
 }
-
-////////////////////////////////////////////////////////////
-/// CUSTOM BOTTOM NAV
-////////////////////////////////////////////////////////////
 
 class _StudentBottomNav extends StatelessWidget {
   final int currentIndex;
@@ -173,10 +168,6 @@ class _StudentBottomNav extends StatelessWidget {
     );
   }
 }
-
-////////////////////////////////////////////////////////////
-/// SINGLE TAB ITEM
-////////////////////////////////////////////////////////////
 
 class _NavTabItem extends StatelessWidget {
   final _NavItem item;
@@ -231,6 +222,7 @@ class _NavTabItem extends StatelessWidget {
               child: Text(
                 item.label,
                 maxLines: 1,
+                style: AppTextStyle.caption12Primary,
               ),
             ),
           ],

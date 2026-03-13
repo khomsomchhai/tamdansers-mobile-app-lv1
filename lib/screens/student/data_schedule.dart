@@ -2,11 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
-
-// ═══════════════════════════════════════════════════════════
-//  ENUMS
-// ═══════════════════════════════════════════════════════════
-
 enum Session { morning, evening }
 
 enum SubjectType {
@@ -19,10 +14,6 @@ enum SubjectType {
   history,
   english,
 }
-
-// ═══════════════════════════════════════════════════════════
-//  SUBJECT MODEL  (with icon + bgIconColor)
-// ═══════════════════════════════════════════════════════════
 
 class SubjectModel {
   final SubjectType type;
@@ -39,12 +30,11 @@ class SubjectModel {
     required this.bgIconColor,
   });
 
-  // ── Predefined subjects ──────────────────────────────────
   static const math = SubjectModel(
     type: SubjectType.math,
     name: 'គណិតវិទ្យា',
     icon: Icons.calculate_rounded,
-    iconColor: AppColors.primary300,       // indigo
+    iconColor: AppColors.primary300,  
     bgIconColor: AppColors.primaryBg,
   );
 
@@ -52,7 +42,7 @@ class SubjectModel {
     type: SubjectType.khmer,
     name: 'ភាសាខ្មែរ',
     icon: Icons.menu_book_rounded,
-    iconColor: AppColors.orange,       // orange
+    iconColor: AppColors.orange,    
     bgIconColor: AppColors.teacomment,
   );
 
@@ -60,7 +50,7 @@ class SubjectModel {
     type: SubjectType.geography,
     name: 'ភូមិវិទ្យា',
     icon: Icons.public_rounded,
-    iconColor: AppColors.success,       // green
+    iconColor: AppColors.success,      
     bgIconColor: AppColors.successBG,
   );
 
@@ -68,7 +58,7 @@ class SubjectModel {
     type: SubjectType.biology,
     name: 'ជីវវិទ្យា',
     icon: Icons.biotech_rounded,
-    iconColor: AppColors.pepure,       // purple
+    iconColor: AppColors.pepure,     
     bgIconColor: AppColors.purple,
   );
 
@@ -76,7 +66,7 @@ class SubjectModel {
     type: SubjectType.physics,
     name: 'រូបវិទ្យា',
     icon: Icons.bolt_rounded,
-    iconColor: AppColors.error,       // blue
+    iconColor: AppColors.error,    
     bgIconColor: AppColors.errorBG,
   );
 
@@ -84,7 +74,7 @@ class SubjectModel {
     type: SubjectType.chemistry,
     name: 'គីមីវិទ្យា',
     icon: Icons.science_rounded,
-    iconColor: AppColors.grey,       // rose
+    iconColor: AppColors.grey,      
     bgIconColor: AppColors.lightgrey,
   );
 
@@ -92,7 +82,7 @@ class SubjectModel {
     type: SubjectType.history,
     name: 'ប្រវត្តិវិទ្យា',
     icon: Icons.account_balance_rounded,
-    iconColor: Color(0xFFCA8A04),       // amber
+    iconColor: Color(0xFFCA8A04),      
     bgIconColor: AppColors.teacomment,
   );
 
@@ -100,14 +90,10 @@ class SubjectModel {
     type: SubjectType.english,
     name: 'ភាសាអង់គ្លេស',
     icon: Icons.language_rounded,
-    iconColor: Color(0xFF0D9488),       // teal
+    iconColor: Color(0xFF0D9488),     
     bgIconColor: AppColors.successBG,
   );
 }
-
-// ═══════════════════════════════════════════════════════════
-//  TEACHER MODEL
-// ═══════════════════════════════════════════════════════════
 
 class TeacherModel {
   final String name;
@@ -116,23 +102,17 @@ class TeacherModel {
   const TeacherModel({required this.name, this.avatarUrl});
 }
 
-// ═══════════════════════════════════════════════════════════
-//  TIME SLOT MODEL
-// ═══════════════════════════════════════════════════════════
-
 class TimeSlotModel {
   final String start;
   final String end;
 
   const TimeSlotModel({required this.start, required this.end});
 
-  // Morning slots
   static const m1 = TimeSlotModel(start: '7:00 AM',  end: '8:00 AM');
   static const m2 = TimeSlotModel(start: '8:10 AM',  end: '9:00 AM');
   static const m3 = TimeSlotModel(start: '9:10 AM',  end: '10:00 AM');
   static const m4 = TimeSlotModel(start: '10:10 AM', end: '11:00 AM');
 
-  // Evening slots
   static const e1 = TimeSlotModel(start: '1:00 PM', end: '1:50 PM');
   static const e2 = TimeSlotModel(start: '2:00 PM', end: '2:50 PM');
   static const e3 = TimeSlotModel(start: '3:00 PM', end: '3:50 PM');
@@ -141,11 +121,6 @@ class TimeSlotModel {
   String get display      => '$start - $end';
   String get shortDisplay => start;
 }
-
-// ═══════════════════════════════════════════════════════════
-//  SCHEDULE ENTRY MODEL
-// ═══════════════════════════════════════════════════════════
-
 class ScheduleEntryModel {
   final SubjectModel subject;
   final TeacherModel teacher;
@@ -159,10 +134,6 @@ class ScheduleEntryModel {
     required this.session,
   });
 }
-
-// ═══════════════════════════════════════════════════════════
-//  DAY SCHEDULE MODEL
-// ═══════════════════════════════════════════════════════════
 
 class DayScheduleModel {
   final String dayName;
@@ -180,10 +151,6 @@ class DayScheduleModel {
   List<ScheduleEntryModel> get allEntries => [...morning, ...evening];
 }
 
-// ═══════════════════════════════════════════════════════════
-//  WEEKLY SCHEDULE MODEL
-// ═══════════════════════════════════════════════════════════
-
 class WeeklyScheduleModel {
   final List<DayScheduleModel> days;
 
@@ -195,10 +162,6 @@ class WeeklyScheduleModel {
 
   int get totalDays => days.length;
 }
-
-// ═══════════════════════════════════════════════════════════
-//  TEACHERS
-// ═══════════════════════════════════════════════════════════
 
 class Teachers {
   static const sokha  = TeacherModel(name: 'លោក សុខា');
@@ -212,14 +175,9 @@ class Teachers {
   static const pich   = TeacherModel(name: 'លោក ពេជ្រ');
 }
 
-// ═══════════════════════════════════════════════════════════
-//  WEEKLY SCHEDULE DATA
-// ═══════════════════════════════════════════════════════════
 
 final WeeklyScheduleModel weeklySchedule = WeeklyScheduleModel(
   days: [
-
-    // ── Monday ──────────────────────────────────────────────
     DayScheduleModel(
       dayName: 'ចន្ទ', date: 9,
       morning: [
@@ -235,8 +193,6 @@ final WeeklyScheduleModel weeklySchedule = WeeklyScheduleModel(
         ScheduleEntryModel(subject: SubjectModel.english,   teacher: Teachers.bopha,  timeSlot: TimeSlotModel.e4, session: Session.evening),
       ],
     ),
-
-    // ── Tuesday ─────────────────────────────────────────────
     DayScheduleModel(
       dayName: 'អង្គារ', date: 10,
       morning: [
@@ -253,7 +209,6 @@ final WeeklyScheduleModel weeklySchedule = WeeklyScheduleModel(
       ],
     ),
 
-    // ── Wednesday ───────────────────────────────────────────
     DayScheduleModel(
       dayName: 'ពុធ', date: 11,
       morning: [
@@ -270,7 +225,6 @@ final WeeklyScheduleModel weeklySchedule = WeeklyScheduleModel(
       ],
     ),
 
-    // ── Thursday ────────────────────────────────────────────
     DayScheduleModel(
       dayName: 'ព្រហ', date: 12,
       morning: [
@@ -287,7 +241,6 @@ final WeeklyScheduleModel weeklySchedule = WeeklyScheduleModel(
       ],
     ),
 
-    // ── Friday ──────────────────────────────────────────────
     DayScheduleModel(
       dayName: 'សុក្រ', date: 13,
       morning: [

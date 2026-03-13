@@ -129,7 +129,9 @@ class AppRouter {
           teacherId: teacherId ?? 1
         )
       );
-      
+      //   return _slideRoute(AddStudent());
+      // case AppRoutes.teacherProfile:
+      //   return _fadeRouter(TeacherProfileScreen());
       case AppRoutes.teacherMainScreen:
         final userId = settings.arguments as int?;
         return _fadeRouter(TeacherMainScreen(userId: userId ?? 1));
@@ -150,19 +152,24 @@ class AppRouter {
           userId: userId,
         ));
       case AppRoutes.studentDashboard:
-        return _slideRoute(StudentDashboard());
+      final userId = settings.arguments as int?;
+      return _slideRoute(
+        StudentDashboard(userId: userId ?? 1)
+      );
       case AppRoutes.submitted:
         return _slideRoute(SubmmitScreen());
       case AppRoutes.homework:
         return _slideRoute(Homework());
       case AppRoutes.profile:
-        return _slideRoute(Profile());
+      final userId = settings.arguments as int?;
+        return _slideRoute(Profile(userId: userId ?? 1));
       case AppRoutes.detail:
         return _slideRoute(Deatilscreen());
       case AppRoutes.detailTeach:
         return _slideRoute(DeatilTeacher());
       case AppRoutes.homepage:
-        return _slideRoute(Homepage());
+        final userId = settings.arguments as int?;
+        return _slideRoute(Homepage(userId: userId ?? 1));
       case AppRoutes.scedeul:
         return _slideRoute(Scedeul());
       case AppRoutes.result:

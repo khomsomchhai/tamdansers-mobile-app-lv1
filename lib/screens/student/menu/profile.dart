@@ -5,15 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_icon.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/repositories/profile_repo.dart';
+import 'package:tamdansers_app/repositories/user_repo.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
-import 'package:tamdansers_app/screens/student/menu/connection_requests.dart';
 
 class Profile extends StatefulWidget {
-
-  const Profile({super.key});
+  final int userId;
+  const Profile({super.key, required this.userId});
 
   @override
   State<Profile> createState() => _ProfileState();
@@ -21,8 +22,20 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   String imagePath = '';
+  Map<String, dynamic>? user;
+  final UserRepo _userRepo = UserRepo();
+  @override
+  void initState() {
+    super.initState();
+    _loadUser();
+  }
 
-  // ✅ Pick Image (Safe)
+  Future<void> _loadUser() async {
+    final fetchedUser = await _userRepo.getUserById(widget.userId);
+    setState(() {
+      user = fetchedUser;
+    });
+  }
   Future<void> dataChooseImg(ImageSource source) async {
     final picker = ImagePicker();
     final pickedImg = await picker.pickImage(
@@ -36,8 +49,6 @@ class _ProfileState extends State<Profile> {
       });
     }
   }
-
-  // ✅ BottomSheet 2 Option
   void showImageOptions() {
     showModalBottomSheet(
       context: context,
@@ -77,24 +88,24 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text('គណនីអាខោន', style: AppTextStyle.screenTitle24),
+        title: Text('ប្រវតិ្តរូប', style: AppTextStyle.sectionTitle20),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              const SizedBox(height: 20),
-              ImageProfile(),
-              const SizedBox(height: 60),
-               _buildInfoSection(),
+            const SizedBox(height: 20),
+            ImageProfile(userId: widget.userId),
+            const SizedBox(height: 60),
+            _buildInfoSection(user),
             const SizedBox(height: 24),
             _buildSettingsSection(context),
             const SizedBox(height: 16),
             _buildLogoutButton(context),
             const SizedBox(height: 24),
               
-             
             ],
           ),
         ),
@@ -104,8 +115,8 @@ class _ProfileState extends State<Profile> {
 }
 
 class ImageProfile extends StatefulWidget {
-  final Function(String)? onImageChanged;
-  const ImageProfile({super.key, this.onImageChanged});
+  final int userId;
+  const ImageProfile({super.key, required this.userId});
 
   @override
   State<ImageProfile> createState() => _ImageProfileState();
@@ -113,13 +124,14 @@ class ImageProfile extends StatefulWidget {
 
 class _ImageProfileState extends State<ImageProfile> {
   String imagePath = '';
-  bool _isLoading = true; // សម្រាប់បង្ហាញ loading នៅពេលចាប់ផ្តើម
+  Map<String, dynamic>? user;
   final ProfileRepo _profileRepo = ProfileRepo();
 
   @override
   void initState() {
     super.initState();
     _loadImage();
+    _loadUser();
   }
 
   // ផ្ទុករូបភាពពី database
@@ -128,6 +140,7 @@ class _ImageProfileState extends State<ImageProfile> {
 
     if (savedImage != null && savedImage.isNotEmpty) {
       final file = File(savedImage);
+
       if (await file.exists()) {
         setState(() {
           imagePath = savedImage;
@@ -138,6 +151,13 @@ class _ImageProfileState extends State<ImageProfile> {
     setState(() {
       _isLoading = false; // បញ្ចប់ loading
     }); 
+  }
+
+  Future<void> _loadUser() async {
+    final fetchedUser = await UserRepo().getUserById(widget.userId);
+    setState(() {
+      user = fetchedUser;
+    });
   }
 
   // ជ្រើសរើសរូបភាពពី Gallery ឬ Camera
@@ -212,14 +232,13 @@ class _ImageProfileState extends State<ImageProfile> {
                         image: FileImage(File(imagePath)),
                         fit: BoxFit.cover,
                       )
-                    : null,
+                    : null
               ),
-              // បង្ហាញ loading, រូបអ្នកប្រើ, ឬ icon លំនាំដើម
-              child: _isLoading
-                  ? const CircularProgressIndicator() // កំពុងផ្ទុក
-                  : imagePath.isEmpty
-                      ? const Icon(Icons.person, size: 60, color: Colors.grey)
-                      : null,
+              child: imagePath.isEmpty
+                  ? Image.asset(
+                    AppIcon.maleAvatar
+                  )
+                  : null,
             ),
             Material(
               color: AppColors.primary300,
@@ -242,14 +261,20 @@ class _ImageProfileState extends State<ImageProfile> {
         ),
         const SizedBox(height: 10),
         Text(
-          'Run Limhong',
+          (() {
+            final first = user?['last_name'] ?? '';
+            final last = user?['first_name'] ?? '';
+            final full = ('$first $last').trim();
+            return full.isNotEmpty ? full : 'រុន​ លីមហុង';
+          })(),
           style: AppTextStyle.screenTitle24,
         ),
       ],
     );
   }
 }
-Widget _buildInfoSection() {
+
+Widget _buildInfoSection(Map<String, dynamic>? user) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(AppNumber.cardPadding),
@@ -260,9 +285,9 @@ Widget _buildInfoSection() {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _infoRow(Icons.email_outlined, "limhong@gmail.com"),
+          _infoRow(Icons.email_outlined,user?['email'] ?? "មិនមានទិន្នន័យ"),
           const Divider(height: 24, thickness: 0.5),
-          _infoRow(Icons.phone_outlined, "+855 12 345 678"),
+          _infoRow(Icons.phone_outlined,user?['phone']??"មិនមានទិន្នន័យ"),
           const Divider(height: 24, thickness: 0.5),
           _infoRow(Icons.location_on_outlined, "ភ្នំពេញ, កម្ពុជា"),
         ],
@@ -286,7 +311,7 @@ Widget _buildInfoSection() {
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 4, bottom: 10),
-          child: Text("Settings", style: AppTextStyle.sectionTitle20),
+          child: Text("ការកំណត់", style: AppTextStyle.sectionTitle20),
         ),
         Container(
           decoration: BoxDecoration(
@@ -297,7 +322,7 @@ Widget _buildInfoSection() {
             children: [
               _settingsTile(
                 icon: Icons.lock_outline_rounded,
-                title: "Change Password",
+                title: "ផ្លាស់ប្តូរពាក្យសម្ងាត់",
                 onTap: () {
                   Navigator.pushNamed(context, AppRoutes.changePassword);
                 },
@@ -305,7 +330,7 @@ Widget _buildInfoSection() {
               ),
               _settingsTile(
                 icon: Icons.settings_outlined,
-                title: "App Settings",
+                title: "ការកំណត់កម្មវិធី",
                 onTap: () {
                   Navigator.pushNamed(context, AppRoutes.notifications);
                 },
@@ -313,7 +338,7 @@ Widget _buildInfoSection() {
               ),
               _settingsTile(
                 icon: Icons.help_outline_rounded,
-                title: "Help & Support",
+                title: "ជំនួយ & សេវាកម្ម",
                 onTap: () {},
                 showDivider: false,
               ),
@@ -364,7 +389,7 @@ Widget _buildInfoSection() {
         icon:
             const Icon(Icons.logout_rounded, color: AppColors.error, size: 20),
         label: Text(
-          "Logout",
+          "ចាកចេញ",
           style: AppTextStyle.subtitle16.copyWith(color: AppColors.error),
         ),
         style: OutlinedButton.styleFrom(

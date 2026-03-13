@@ -20,12 +20,13 @@ class _AttendanceState extends State<Attendance> {
         automaticallyImplyLeading: false,
         title: Text(
           'វត្តមាន',
-          style: AppTextStyle.screenTitle24,
+          style: AppTextStyle.sectionTitle20,
         ),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

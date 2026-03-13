@@ -28,8 +28,8 @@ class StudentProfileHeader extends StatelessWidget {
         SizedBox(width: 10,),
         Text(
           (() {
-            final first = user?['first_name'] ?? '';
-            final last = user?['last_name'] ?? '';
+            final first = user?['last_name'] ?? '';
+            final last = user?['first_name'] ?? '';
             final full = ('$first $last').trim();
             return full.isNotEmpty ? full : 'រុន​ លីមហុង';
           })(),

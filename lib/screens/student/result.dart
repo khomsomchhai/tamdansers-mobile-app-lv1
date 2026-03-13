@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_icon.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/screens/student/data_result.dart';
 import 'package:tamdansers_app/screens/student/data_schedule.dart';
@@ -81,7 +82,7 @@ void initState() {
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(20.0),
             child: Column(
               children: [
                 _list_month(),
@@ -205,7 +206,7 @@ void initState() {
             width: 100,
             decoration: BoxDecoration(shape: BoxShape.circle),
             clipBehavior: Clip.antiAlias,
-            child: Image.asset('assets/images/user_profile.png',
+            child: Image.asset(AppIcon.maleAvatar,
                 fit: BoxFit.cover),
           ),
           SizedBox(height: 20),

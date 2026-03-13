@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
+import 'package:tamdansers_app/repositories/student_class_repo.dart';
 import 'package:tamdansers_app/repositories/user_repo.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/screens/student/widget/student_empty_class.dart';
@@ -18,6 +19,7 @@ class _StudentFirstScreenState extends State<StudentFirstScreen> {
 
   bool hasJoinedClass = true;
   Map<String, dynamic>? user;
+  List<Map<String, dynamic>> classes = [];
 
   @override
   void initState() {
@@ -27,32 +29,19 @@ class _StudentFirstScreenState extends State<StudentFirstScreen> {
 
   Future<void> _loadUser() async {
     final fetched = await UserRepo().getUserById(widget.userId);
-    final joined = _determineHasJoined(fetched);
-    setState((){
-      user = fetched;
-      hasJoinedClass = joined;
-    });
-  }
-
-  bool _determineHasJoined(Map<String, dynamic>? u) {
-    if (u == null) return false;
-    final keys = [
-      'class_id',
-      'class',
-      'classCode',
-      'class_code',
-      'joined_class',
-      'has_joined',
-    ];
-    for (var k in keys) {
-      if (u.containsKey(k)) {
-        final v = u[k];
-        if (v is int && v != 0) return true;
-        if (v is String && v.isNotEmpty) return true;
-        if (v is bool && v) return true;
+    List<Map<String, dynamic>> enrolledClasses = [];
+    if (fetched != null) {
+      final email = (fetched['email'] ?? '') as String;
+      if (email.isNotEmpty) {
+        enrolledClasses = await StudentClassRepo().getEnrolledClassesByEmail(email);
       }
     }
-    return false;
+    final joined = enrolledClasses.isNotEmpty;
+    setState(() {
+      user = fetched;
+      classes = enrolledClasses;
+      hasJoinedClass = joined;
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -62,11 +51,18 @@ class _StudentFirstScreenState extends State<StudentFirstScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           child: Column(
             children: [
-              StudentProfileHeader(user: user),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    AppRoutes.profile
+                  );
+                },
+                child: StudentProfileHeader(user: user)),
               SizedBox(height: 20,),
               Expanded(
                 child: hasJoinedClass
-                    ? StudentHasJoinedClass(userId: widget.userId)
+                    ? StudentHasJoinedClass(userId: widget.userId, classes: classes)
                     : StudentEmptyClass(userId: widget.userId),
               ),
             ],
@@ -85,7 +81,7 @@ class _StudentFirstScreenState extends State<StudentFirstScreen> {
             arguments: widget.userId
           );
           if (result == true) {
-            _loadUser(); // Refresh user data
+            _loadUser();
           }
         },
         child: Icon(
