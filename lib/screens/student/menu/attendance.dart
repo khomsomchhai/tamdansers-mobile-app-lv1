@@ -35,7 +35,7 @@ class _AttendanceState extends State<Attendance> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('ប្រវត្តិវត្តមាន', style: AppTextStyle.sectionTitle20),
+                  Text('ប្រវត្តិវត្តមាន', style: AppTextStyle.subtitle18),
                   SizedBox(height: 10),
                   ListView.builder(
                     shrinkWrap: true,
@@ -60,7 +60,7 @@ class _AttendanceState extends State<Attendance> {
                           ),
                         ),
                         title: Text(entry.date,
-                            style: AppTextStyle.sectionTitle20),
+                            style: AppTextStyle.subtitle16),
                         subtitle: Text(entry.time, style: AppTextStyle.body),
                         trailing: Container(
                           width: 100,

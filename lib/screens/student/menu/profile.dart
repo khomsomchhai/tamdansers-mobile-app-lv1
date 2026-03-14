@@ -11,6 +11,7 @@ import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/repositories/profile_repo.dart';
 import 'package:tamdansers_app/repositories/user_repo.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
+import 'package:tamdansers_app/state/profile_image_state.dart';
 
 class Profile extends StatefulWidget {
   final int userId;
@@ -133,10 +134,8 @@ class _ImageProfileState extends State<ImageProfile> {
     _loadImage();
     _loadUser();
   }
-
-  // ផ្ទុករូបភាពពី database
   Future<void> _loadImage() async {
-    final savedImage = await _profileRepo.getImage();
+    final savedImage = await _profileRepo.getImage(widget.userId);
 
     if (savedImage != null && savedImage.isNotEmpty) {
       final file = File(savedImage);
@@ -145,12 +144,9 @@ class _ImageProfileState extends State<ImageProfile> {
         setState(() {
           imagePath = savedImage;
         });
+        ProfileImageState.updateImage(widget.userId, savedImage);
       }
-    }
-
-    setState(() {
-      _isLoading = false; // បញ្ចប់ loading
-    }); 
+    } 
   }
 
   Future<void> _loadUser() async {
@@ -160,7 +156,6 @@ class _ImageProfileState extends State<ImageProfile> {
     });
   }
 
-  // ជ្រើសរើសរូបភាពពី Gallery ឬ Camera
   Future<void> dataChooseImg(ImageSource source) async {
     final picker = ImagePicker();
 
@@ -170,16 +165,14 @@ class _ImageProfileState extends State<ImageProfile> {
     );
 
     if (pickedImg != null) {
-      await _profileRepo.saveImage(pickedImg.path);
+      await _profileRepo.saveImage(pickedImg.path, widget.userId);
 
       setState(() {
         imagePath = pickedImg.path;
       });
-      widget.onImageChanged!(pickedImg.path);
     }
   }
 
-  // បង្ហាញ Bottom Sheet ជ្រើសរើស Camera ឬ Gallery
   void showImageOptions() {
     showModalBottomSheet(
       context: context,
