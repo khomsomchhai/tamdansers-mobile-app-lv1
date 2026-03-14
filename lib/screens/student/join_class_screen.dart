@@ -6,6 +6,7 @@ import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/constants/validators.dart';
 import 'package:tamdansers_app/repositories/class_repo.dart';
+import 'package:tamdansers_app/repositories/student_class_repo.dart';
 import 'package:tamdansers_app/repositories/user_repo.dart';
 import 'package:tamdansers_app/screens/widget/custom_snackbar.dart';
 import 'package:tamdansers_app/screens/widget/primary_button_2.dart';

@@ -21,6 +21,11 @@ class ForgetPassword1 extends StatefulWidget {
 class _ForgetPassword1State extends State<ForgetPassword1> {
   var identifierCtrl = TextEditingController();
   var formKey = GlobalKey<FormState>();
+  @override
+  void dispose() {
+    identifierCtrl.dispose();
+    super.dispose();
+  }
   bool isLoading = false;
   @override
   Widget build(BuildContext context) {
@@ -86,27 +91,80 @@ class _ForgetPassword1State extends State<ForgetPassword1> {
                           strokeWidth: 2,
                         ),
                       ): null,
-                      onPressed: () async{
-                        String identifier = identifierCtrl.text.trim();
-                        bool isEmail = identifier.contains("@");
-        
-                        String? email;
-                        String? phone;
-        
-                        if (isEmail) {
-                          email = identifier;
-                        } else {
-                          phone = identifier;
-                        }
-                        if (formKey.currentState!.validate()) {
+                      onPressed: () async {
+                        if (!formKey.currentState!.validate()) return;
+
+                        setState(() {
+                          isLoading = true;
+                        });
+
+                        try {
+                          String identifier = identifierCtrl.text.trim();
+                          bool isEmail = identifier.contains("@");
+                          
+                          String? email;
+                          String? phone;
+                          
+                          if (isEmail) {
+                            email = identifier;
+                          } else {
+                            phone = identifier;
+                          }
+
                           Map<String, dynamic>? existingUser;
-                          if (email != null) {
-                            existingUser = await UserRepo().getUserByEmail(email);
+                          try {
+                            if (email != null) {
+                              existingUser = await UserRepo().getUserByEmail(email);
+                              print('User found by email: $existingUser');
+                            }
+                            if (existingUser == null && phone != null) {
+                              existingUser = await UserRepo().getUserByPhone(phone);
+                              print('User found by phone: $existingUser');
+                            }
+                          } catch (dbError) {
+                            print('Database error: $dbError');
+                            rethrow;
                           }
-                          if (existingUser == null && phone != null) {
-                            existingUser = await UserRepo().getUserByPhone(phone);
-                          }
+                          
                           if (existingUser == null) {
+                            if (mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor: AppColors.transparent,
+                                  elevation: 0,
+                                  behavior: SnackBarBehavior.floating,
+                                  margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                                  content: CustomSnackbar(
+                                    title: "កហុស!", 
+                                    message: "គណនីនេះមិនអាចរកឃើញ", 
+                                    icon: Icons.close, 
+                                    color: AppColors.error
+                                  )
+                                ),
+                              );
+                            }
+                          } else {
+                            try {
+                              String? role = await UserRepo().getRoleById(existingUser['id']);
+                              print('Role: $role');
+                              if (mounted) {
+                                Navigator.pushNamed(
+                                  context, 
+                                  AppRoutes.otpScreen,
+                                  arguments: {
+                                    'role': role,
+                                    'userId': existingUser['id']
+                                  }
+                                );
+                              }
+                            } catch (navError) {
+                              print('Navigation error: $navError');
+                              rethrow;
+                            }
+                          }
+                        } catch (e) {
+                          print('General error: $e');
+                          if (mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 backgroundColor: AppColors.transparent,
@@ -115,21 +173,18 @@ class _ForgetPassword1State extends State<ForgetPassword1> {
                                 margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                                 content: CustomSnackbar(
                                   title: "កហុស!", 
-                                  message: "គណនីនេះមិនអាចរកឃើញ", 
+                                  message: "មានបញ្ហាបច្ចេកទេស", 
                                   icon: Icons.close, 
                                   color: AppColors.error
                                 )
                               ),
                             );
-                          } else {
-                            Navigator.pushNamed(
-                              context, 
-                              AppRoutes.otpScreen,
-                              arguments: {
-                                'role': UserRepo().getRoleById(existingUser['id']),
-                                'userId': existingUser['id']
-                              }
-                            );
+                          }
+                        } finally {
+                          if (mounted) {
+                            setState(() {
+                              isLoading = false;
+                            });
                           }
                         }
                       },

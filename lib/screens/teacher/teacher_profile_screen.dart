@@ -43,8 +43,8 @@ class _TeacherProfileScreenState extends State<TeacherProfileScreen> {
       );
     }
 
-    final teacherName = _teacherData != null
-        ? "${_teacherData!['first_name']} ${_teacherData!['last_name']}"
+    final teacherName = _teacherData != null 
+        ? "${_teacherData!['last_name']} ${_teacherData!['first_name']}"
         : "Teacher";
 
     return Scaffold(

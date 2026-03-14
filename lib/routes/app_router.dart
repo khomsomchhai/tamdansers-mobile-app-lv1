@@ -203,11 +203,7 @@ class AppRouter {
         );
       case AppRoutes.teacherProfile:
         final teacherId = settings.arguments as int?;
-        return PageTransition.build(
-          page: TeacherProfileScreen(teacherId: teacherId ?? 1),
-          settings: settings,
-          transition: PageTransitionType.fadeThrough,
-        );
+        return _fadeRouter(TeacherProfileScreen(teacherId: teacherId ?? 1));
       case AppRoutes.teacherMainScreen:
         final userId = settings.arguments as int?;
         return PageTransition.build(
@@ -244,11 +240,8 @@ class AppRouter {
           transition: PageTransitionType.iosPush,
         );
       case AppRoutes.studentDashboard:
-        return PageTransition.build(
-          page: StudentDashboard(),
-          settings: settings,
-          transition: PageTransitionType.fadeThrough,
-        );
+        final userId = settings.arguments as int?;
+        return _slideRoute(StudentDashboard(userId: userId ?? 1));
       case AppRoutes.submitted:
         return PageTransition.build(
           page: SubmmitScreen(),
@@ -262,11 +255,8 @@ class AppRouter {
           transition: PageTransitionType.iosPush,
         );
       case AppRoutes.profile:
-        return PageTransition.build(
-          page: Profile(),
-          settings: settings,
-          transition: PageTransitionType.iosPush,
-        );
+        final userId = settings.arguments as int?;
+        return _slideRoute(Profile(userId: userId ?? 1));
       case AppRoutes.detail:
         return PageTransition.build(
           page: Deatilscreen(),
@@ -280,11 +270,8 @@ class AppRouter {
           transition: PageTransitionType.iosPush,
         );
       case AppRoutes.homepage:
-        return PageTransition.build(
-          page: Homepage(),
-          settings: settings,
-          transition: PageTransitionType.fadeThrough,
-        );
+        final userId = settings.arguments as int?;
+        return _slideRoute(Homepage(userId: userId ?? 1));
       case AppRoutes.scedeul:
         return PageTransition.build(
           page: Scedeul(),
@@ -362,5 +349,37 @@ class AppRouter {
           ),
         );
     }
+  }
+
+  // slide from right
+  static PageRouteBuilder _slideRoute(Widget page) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => page,
+      transitionDuration: const Duration(milliseconds: 350),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        final tween = Tween(
+          begin: const Offset(1, 0),
+          end: Offset.zero,
+        ).chain(CurveTween(curve: Curves.easeInOut));
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
+  }
+
+  // fade
+  static PageRouteBuilder _fadeRouter(Widget page) {
+    return PageRouteBuilder(
+      transitionDuration: const Duration(milliseconds: 400),
+      pageBuilder: (context, animation, secondaryAnimation) => page,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(
+          opacity: animation,
+          child: child,
+        );
+      },
+    );
   }
 }

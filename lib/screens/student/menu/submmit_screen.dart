@@ -17,7 +17,6 @@ class _SubmmitScreenState extends State<SubmmitScreen> {
   final noteController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
 
-  // ✅ store real picked images
   final List<XFile> _pickedImages = [];
 
   @override
@@ -26,13 +25,12 @@ class _SubmmitScreenState extends State<SubmmitScreen> {
     super.dispose();
   }
 
-  // ✅ convert picked images to your files format
   List<Map<String, String>> get files => _pickedImages.map((x) {
         final bytes = File(x.path).lengthSync();
         return {
           "name": x.name,
           "size": _formatBytes(bytes),
-          "path": x.path, // ✅ for preview
+          "path": x.path, 
         };
       }).toList();
 
@@ -41,7 +39,7 @@ class _SubmmitScreenState extends State<SubmmitScreen> {
     if (images.isEmpty) return;
 
     setState(() {
-      _pickedImages.addAll(images); // png1, png2...
+      _pickedImages.addAll(images);
     });
   }
 
@@ -57,16 +55,20 @@ class _SubmmitScreenState extends State<SubmmitScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("បញ្ចូនកិច្ចការ")),
+      appBar: AppBar(
+        title:Text("បញ្ចូនកិច្ចការ",
+        style: AppTextStyle.sectionTitle20,),
+        centerTitle: true,
+      ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               dashBoard(),
               const SizedBox(height: 15),
-              Text("មតិ ឬចំណាំ", style: AppTextStyle.sectionTitle20),
+              Text("មតិ ឬចំណាំ", style: AppTextStyle.subtitle18),
               const SizedBox(height: 15),
               noteCard(
                 controller: noteController,
@@ -74,8 +76,6 @@ class _SubmmitScreenState extends State<SubmmitScreen> {
                 borderColor: AppColors.backgroundLight,
               ),
               const SizedBox(height: 15),
-
-              // ✅ use real files from picker
               uploadHomeworkWidget(
                 files: files,
                 onUploadTap: _onUploadTap,
@@ -86,14 +86,13 @@ class _SubmmitScreenState extends State<SubmmitScreen> {
                   required String sizeText,
                   required VoidCallback onRemove,
                 }) {
-                  // ✅ find the file path for preview
                   final item = files.firstWhere((e) => e["name"] == fileName);
                   final path = item["path"] ?? "";
 
                   return fileItemWidget(
                     fileName: fileName,
                     sizeText: sizeText,
-                    imagePath: path, // ✅ add preview
+                    imagePath: path, 
                     onRemove: onRemove,
                   );
                 },
@@ -113,7 +112,6 @@ class _SubmmitScreenState extends State<SubmmitScreen> {
     return "${mb.toStringAsFixed(1)} MB";
   }
 
-  // ---------------- your widgets below (small edits) ----------------
 
   Widget dashBoard() {
     return Container(
@@ -166,9 +164,9 @@ class _SubmmitScreenState extends State<SubmmitScreen> {
   }) {
     return TextFormField(
       controller: controller,
-      style: TextStyle(color: textColor),
+      style: AppTextStyle.body.copyWith(color: textColor),
       decoration: InputDecoration(
-        hintStyle: TextStyle(color: hintColor),
+        hintStyle: AppTextStyle.hintText.copyWith(color: hintColor),
         filled: true,
         fillColor: backgroundColor,
         hintText: hintText,
@@ -183,8 +181,6 @@ class _SubmmitScreenState extends State<SubmmitScreen> {
       ),
     );
   }
-
-  // ✅ edited: add imagePath and show thumbnail
   Widget fileItemWidget({
     required String fileName,
     required String sizeText,
@@ -227,18 +223,12 @@ class _SubmmitScreenState extends State<SubmmitScreen> {
                   fileName,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: AppTextStyle.body14.copyWith(fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   sizeText,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.black54,
-                  ),
+                  style: AppTextStyle.caption12Secondary.copyWith(color: Colors.black54),
                 ),
               ],
             ),
@@ -266,9 +256,9 @@ class _SubmmitScreenState extends State<SubmmitScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           "បញ្ចូលរូបភាពការងារ",
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          style: AppTextStyle.subtitle18,
         ),
         const SizedBox(height: 10),
         GestureDetector(
@@ -288,11 +278,11 @@ class _SubmmitScreenState extends State<SubmmitScreen> {
                 color: const Color(0xFFEAF1FF),
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: const Column(
+              child: Column(
                 children: [
                   Text(
                     "Upload រូបភាព",
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                    style: AppTextStyle.body.copyWith(fontSize: 15, fontWeight: FontWeight.w600),
                   ),
                   SizedBox(height: 12),
                   Icon(
@@ -308,7 +298,7 @@ class _SubmmitScreenState extends State<SubmmitScreen> {
         const SizedBox(height: 18),
         Text(
           "បញ្ជីឯកសារដែលបានជ្រើសរើស (${files.length})",
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+          style: AppTextStyle.body,
         ),
         const SizedBox(height: 10),
         ...List.generate(files.length, (index) {
@@ -335,13 +325,9 @@ class _SubmmitScreenState extends State<SubmmitScreen> {
               elevation: 0,
             ),
             icon: const Icon(Icons.send, color: Colors.white),
-            label: const Text(
+            label: Text(
               "បញ្ជូន",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+              style: AppTextStyle.buttonText16White,
             ),
           ),
         ),

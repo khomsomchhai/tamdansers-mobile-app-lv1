@@ -83,10 +83,12 @@ void _goToRoleSelection() {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.2,
-            child: SvgPicture.asset(
-              AppImages.appLogoWhite,
+          Center(
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height * 0.2,
+              child: SvgPicture.asset(
+                AppImages.appLogoWhite,
+              ),
             ),
           ),
         ],

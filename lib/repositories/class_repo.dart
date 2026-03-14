@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:tamdansers_app/database/db_helper.dart';
 
 class ClassRepo {
@@ -46,6 +47,14 @@ class ClassRepo {
       where: "teacher_id = ? AND grade = ?",
       whereArgs: [teacherId, grade],
       orderBy: "created_at DESC",
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> getAllClasses() async {
+    final db = await DbHelper().initDatabase();
+    return await db.query(
+      "tbl_class",
+      orderBy: "grade ASC, section ASC",
     );
   }
 

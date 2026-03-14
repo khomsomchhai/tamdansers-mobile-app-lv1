@@ -154,6 +154,14 @@ class DbHelper {
       );
     ''');
   }
+  static Future<void> _createTblProfile(Database db) async {
+  await db.execute('''
+    CREATE TABLE IF NOT EXISTS profile(
+      id INTEGER PRIMARY KEY,
+      image TEXT
+    )
+  ''');
+}
 
   static Future<void> _createTblUserClass(Database db) async {
     await db.execute('''
@@ -187,6 +195,7 @@ class DbHelper {
         await _createTblParentStudent(db);
         await _createTblScore(db);
         await _createTblUserClass(db);
+        await _createTblProfile(db);
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         if (oldVersion < 2) {
@@ -195,6 +204,8 @@ class DbHelper {
           await _createTblHomework(db);
           await _createTblAttendance(db);
           await _createTblActivityLog(db);
+
+          await _createTblProfile(db);
         }
         if (oldVersion < 3) {
           await _createTblSubmission(db);
@@ -283,7 +294,12 @@ class DbHelper {
     if (db != null) {
       return db!;
     } else {
-      return await _getDatabase();
+      Database database = await _getDatabase();
+      var result = await database.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='profile'");
+      if (result.isEmpty) {
+        await _createTblProfile(database);
+      }
+      return database;
     }
   }
 }
