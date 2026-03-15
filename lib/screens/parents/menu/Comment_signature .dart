@@ -15,6 +15,7 @@ class _CommentSignatureState extends State<CommentSignature> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           "ការបញ្ជាក់ទទួល",
           style: AppTextStyle.screenTitle24Main
@@ -67,16 +68,15 @@ class _CommentSignatureState extends State<CommentSignature> {
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children:  [
+              children: [
                 Text(
                   "ប៊ិន​ សុវណ្ណវង្ស",
                   style: AppTextStyle.subtitle16,
                 ),
                 SizedBox(height: 4),
-                Text(
-                  "ID: STU-2023-89. ថ្នាក់ទី ១២ ក",  
-                  style: AppTextStyle.subtitle16.copyWith(color: AppColors.grey)
-                ),
+                Text("ID: STU-2023-89. ថ្នាក់ទី ១២ ក",
+                    style: AppTextStyle.subtitle16
+                        .copyWith(color: AppColors.grey)),
               ],
             ),
           )
@@ -127,15 +127,10 @@ class _CommentSignatureState extends State<CommentSignature> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-         Text(
-          'ស៊ីញ៉េអាណាព្យាបាល',
-          style: AppTextStyle.sectionTitle20
-        ),
+        Text('ស៊ីញ៉េអាណាព្យាបាល', style: AppTextStyle.sectionTitle20),
         const SizedBox(height: 8),
-         Text(
-          'សូមចុះឈ្មោះក្នុងប្រអប់ខាងក្រោម ដើម្បីទទួលស្គាល់បង្កាន់ដៃ។',
-          style: AppTextStyle.subtitle16.copyWith(color: AppColors.grey)
-        ),
+        Text('សូមចុះឈ្មោះក្នុងប្រអប់ខាងក្រោម ដើម្បីទទួលស្គាល់បង្កាន់ដៃ។',
+            style: AppTextStyle.subtitle16.copyWith(color: AppColors.grey)),
         const SizedBox(height: 20),
         DottedBorder(
           color: AppColors.secondaryText,
@@ -152,11 +147,8 @@ class _CommentSignatureState extends State<CommentSignature> {
             ),
             child: Stack(
               children: [
-                 Center(
-                  child: Text(
-                    'Sign Here',
-                    style: AppTextStyle.screenTitle24
-                  ),
+                Center(
+                  child: Text('Sign Here', style: AppTextStyle.screenTitle24),
                 ),
                 Positioned(
                   top: 15,
@@ -177,8 +169,7 @@ class _CommentSignatureState extends State<CommentSignature> {
 
   Widget _submitButton() {
     return ElevatedButton(
-      onPressed: () {
-      },
+      onPressed: () {},
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primaryMain,
         padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 15),

@@ -8,9 +8,12 @@ import 'package:tamdansers_app/screens/auth/reset_password_screen.dart';
 import 'package:tamdansers_app/screens/auth/role_selection_screen.dart';
 import 'package:tamdansers_app/screens/auth/sign_up_screen.dart';
 import 'package:tamdansers_app/screens/auth/splash_screen.dart';
+import 'package:tamdansers_app/screens/parents/menu/Comment_signature .dart';
+import 'package:tamdansers_app/screens/parents/menu/Monthy_result_Ranking.dart';
 import 'package:tamdansers_app/screens/parents/menu/attandance_child.dart';
 import 'package:tamdansers_app/screens/parents/menu/homework_quize_child.dart';
 import 'package:tamdansers_app/screens/parents/menu/news.dart';
+import 'package:tamdansers_app/screens/parents/menu/nothication.dart';
 import 'package:tamdansers_app/screens/parents/menu/parents_dashboard.dart';
 import 'package:tamdansers_app/screens/parents/menu/setting.dart';
 import 'package:tamdansers_app/screens/parents/parent_connect_student.dart';
@@ -45,7 +48,6 @@ import 'package:tamdansers_app/screens/teacher/teacher_main_screen.dart';
 import 'package:tamdansers_app/screens/teacher/teacher_notification_screen.dart';
 import 'package:tamdansers_app/screens/teacher/teacher_profile_screen.dart';
 
-
 class AppRouter {
   static Route generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -64,44 +66,30 @@ class AppRouter {
         final role = settings.arguments as String?;
         return _slideRoute(SignUpScreen(role: role ?? "student"));
       case AppRoutes.otpScreen:
-      String role = "student";
-      int? userId;
-      if (settings.arguments is Map) {
-        final args = settings.arguments as Map;
-        role = args['role'] ?? "student";
-        userId = args['userId'];
-      } else if (settings.arguments is String) {
-        role = settings.arguments as String;
-      }
-      return _slideRoute(
-        OtpScreen(role: role, userId: userId)
-      );
+        String role = "student";
+        int? userId;
+        if (settings.arguments is Map) {
+          final args = settings.arguments as Map;
+          role = args['role'] ?? "student";
+          userId = args['userId'];
+        } else if (settings.arguments is String) {
+          role = settings.arguments as String;
+        }
+        return _slideRoute(OtpScreen(role: role, userId: userId));
       case AppRoutes.changePassword:
-      return _slideRoute(
-        ChangePassword()
-      );
+        return _slideRoute(ChangePassword());
       case AppRoutes.resetPassword:
-      final userId = settings.arguments as int?;
-      return _slideRoute(
-        ResetPasswordScreen(userId: userId ?? 1)
-      );
+        final userId = settings.arguments as int?;
+        return _slideRoute(ResetPasswordScreen(userId: userId ?? 1));
       case AppRoutes.forgetPassword1:
-      return _slideRoute(
-        ForgetPassword1()
-      );
+        return _slideRoute(ForgetPassword1());
       //------------ Teacher ----------------
       case AppRoutes.teacherDashboard:
-      final teacherId = settings.arguments as int?;
-      return _fadeRouter(
-        TeacherDashboard(
-          teacherId: teacherId ?? 1
-        )
-      );
+        final teacherId = settings.arguments as int?;
+        return _fadeRouter(TeacherDashboard(teacherId: teacherId ?? 1));
       case AppRoutes.manageAllClass:
-      final teacherId = settings.arguments as int?;
-      return _slideRoute(
-        ManageAllClass(teacherId: teacherId ?? 1)
-      );
+        final teacherId = settings.arguments as int?;
+        return _slideRoute(ManageAllClass(teacherId: teacherId ?? 1));
       case AppRoutes.manageClass:
         return _slideRoute(ManageClass());
       case AppRoutes.linkParentScreen:
@@ -120,18 +108,12 @@ class AppRouter {
       case AppRoutes.addTaskScreen:
         return _slideRoute(AddTask());
       case AppRoutes.addStudentScreen:
-      final teacherId = settings.arguments as int?;
-      return _slideRoute(
-        AddStudent(teacherId: teacherId ?? 1)
-      );
+        final teacherId = settings.arguments as int?;
+        return _slideRoute(AddStudent(teacherId: teacherId ?? 1));
       case AppRoutes.teacherProfile:
-      final teacherId = settings.arguments as int?;
-      return _fadeRouter(
-        TeacherProfileScreen(
-          teacherId: teacherId ?? 1
-        )
-      );
-      
+        final teacherId = settings.arguments as int?;
+        return _fadeRouter(TeacherProfileScreen(teacherId: teacherId ?? 1));
+
       case AppRoutes.teacherMainScreen:
         final userId = settings.arguments as int?;
         return _fadeRouter(TeacherMainScreen(userId: userId ?? 1));
@@ -189,8 +171,14 @@ class AppRouter {
         return _slideRoute(HomeworkQuizeScreen());
       case AppRoutes.NewsScreen:
         return _slideRoute(NewsScreen());
+      case AppRoutes.parent_nothi:
+        return _slideRoute(Nothication());
+      case AppRoutes.commentScreen:
+        return _slideRoute(CommentSignature());
       case AppRoutes.parent_setting:
         return _slideRoute(ParentSetting());
+      case AppRoutes.CustomScreen:
+        return _slideRoute(CustomScreen());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

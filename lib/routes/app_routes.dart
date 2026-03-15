@@ -62,4 +62,5 @@ class AppRoutes {
   static const String HomeworkQuizeScreen = "/parent_homework_quiz_screen";
   static const String NewsScreen = "/parent_news_screen";
   static const String parent_setting = "/parent_settings";
+  static const String CustomScreen = "/custom_screen";
 }

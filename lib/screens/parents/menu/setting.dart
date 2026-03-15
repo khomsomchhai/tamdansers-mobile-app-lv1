@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart' show SharedPreferences;
+import 'package:shared_preferences/shared_preferences.dart'
+    show SharedPreferences;
 
 import '../../../constants/app_colors.dart' show AppColors;
 import '../../../constants/app_images.dart' show AppImages;
@@ -18,33 +19,36 @@ class ParentSetting extends StatefulWidget {
 class _ParentSettingState extends State<ParentSetting> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
-      appBar: AppBar(
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
         backgroundColor: AppColors.backgroundLight,
-        elevation: 0,
-        title: Text("ប្រវត្តិរូប", style: AppTextStyle.sectionTitle20),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppNumber.screenPadding),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildProfileHeader(),
-            const SizedBox(height: 24),
-            _rowIconText("កូនៗរបស់អ្នក"),
-            const SizedBox(height: 15),
-            _buildChildrenRow(),
-            const SizedBox(height: 24),
-            _buildInfoSection(),
-            const SizedBox(height: 24),
-            _buildSettingsSection(context),
-            const SizedBox(height: 16),
-            _buildLogoutButton(context),
-            const SizedBox(height: 24),
-          ],
+        appBar: AppBar(
+          backgroundColor: AppColors.backgroundLight,
+          elevation: 0,
+          title: Text("ប្រវត្តិរូប", style: AppTextStyle.sectionTitle20),
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+        ),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(AppNumber.screenPadding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildProfileHeader(),
+              const SizedBox(height: 24),
+              _rowIconText("កូនៗរបស់អ្នក"),
+              const SizedBox(height: 15),
+              _buildChildrenRow(),
+              const SizedBox(height: 24),
+              _buildInfoSection(),
+              const SizedBox(height: 24),
+              _buildSettingsSection(context),
+              const SizedBox(height: 16),
+              _buildLogoutButton(context),
+              const SizedBox(height: 24),
+            ],
+          ),
         ),
       ),
     );
@@ -103,15 +107,20 @@ class _ParentSettingState extends State<ParentSetting> {
               color: AppColors.primaryMain.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(AppNumber.radiusRounded),
             ),
-            child: Text("Parent / July", style: AppTextStyle.caption14Secondary.copyWith(color: AppColors.link)),
+            child: Text("Parent / July",
+                style: AppTextStyle.caption14Secondary
+                    .copyWith(color: AppColors.link)),
           ),
         ],
       ),
     );
   }
+
   Widget _rowIconText(String text) {
-    return Text(text, style: AppTextStyle.fontsize18.copyWith(fontWeight: FontWeight.w600));
+    return Text(text,
+        style: AppTextStyle.fontsize18.copyWith(fontWeight: FontWeight.w600));
   }
+
   Widget _buildChildrenRow() {
     return SizedBox(
       height: 205,
@@ -123,8 +132,7 @@ class _ParentSettingState extends State<ParentSetting> {
             grade: "Grade 5",
             attendance: 98,
             progressColor: Color(0xFF1E88E5),
-            imageUrl:
-                "https://cdn-icons-png.flaticon.com/512/4140/4140048.png",
+            imageUrl: "https://cdn-icons-png.flaticon.com/512/4140/4140048.png",
           ),
           const SizedBox(width: 16),
           const ChildCard(
@@ -132,8 +140,7 @@ class _ParentSettingState extends State<ParentSetting> {
             grade: "Grade 2",
             attendance: 92,
             progressColor: Color(0xFF22C55E),
-            imageUrl:
-                "https://cdn-icons-png.flaticon.com/512/6997/6997662.png",
+            imageUrl: "https://cdn-icons-png.flaticon.com/512/6997/6997662.png",
           ),
           const SizedBox(width: 16),
           addChildCard(),
@@ -169,6 +176,7 @@ class _ParentSettingState extends State<ParentSetting> {
       ),
     );
   }
+
   Widget _buildInfoSection() {
     return Container(
       width: double.infinity,
@@ -330,7 +338,8 @@ class _ParentSettingState extends State<ParentSetting> {
               await pref.remove("userId");
 
               if (context.mounted) {
-                Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+                Navigator.of(context, rootNavigator: true)
+                    .pushNamedAndRemoveUntil(
                   AppRoutes.roleSelectionScreen,
                   (route) => false,
                 );
