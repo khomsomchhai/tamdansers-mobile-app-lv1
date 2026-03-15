@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
-import 'package:tamdansers_app/repositories/student_class_repo.dart';
 import 'package:tamdansers_app/repositories/user_repo.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/screens/student/widget/student_empty_class.dart';
@@ -15,11 +14,12 @@ class StudentFirstScreen extends StatefulWidget {
   @override
   State<StudentFirstScreen> createState() => _StudentFirstScreenState();
 }
-class _StudentFirstScreenState extends State<StudentFirstScreen> {
 
-  bool hasJoinedClass = true;
+class _StudentFirstScreenState extends State<StudentFirstScreen> {
   Map<String, dynamic>? user;
-  List<Map<String, dynamic>> classes = [];
+  List<int> joinedClassIds = [];
+
+  bool get hasJoinedClass => joinedClassIds.isNotEmpty;
 
   @override
   void initState() {
@@ -29,67 +29,56 @@ class _StudentFirstScreenState extends State<StudentFirstScreen> {
 
   Future<void> _loadUser() async {
     final fetched = await UserRepo().getUserById(widget.userId);
-    List<Map<String, dynamic>> enrolledClasses = [];
-    if (fetched != null) {
-      final email = (fetched['email'] ?? '') as String;
-      if (email.isNotEmpty) {
-        enrolledClasses = await StudentClassRepo().getEnrolledClassesByEmail(email);
-      }
-    }
-    final joined = enrolledClasses.isNotEmpty;
+    final classIds = await UserRepo().getJoinedClassIds(widget.userId);
     setState(() {
       user = fetched;
-      classes = enrolledClasses;
-      hasJoinedClass = joined;
+      joinedClassIds = classIds;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          child: Column(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    AppRoutes.profile
-                  );
-                },
-                child: StudentProfileHeader(user: user)),
-              SizedBox(height: 20,),
-              Expanded(
-                child: hasJoinedClass
-                    ? StudentHasJoinedClass(userId: widget.userId, classes: classes)
-                    : StudentEmptyClass(userId: widget.userId),
-              ),
-            ],
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: Column(
+              children: [
+                StudentProfileHeader(user: user),
+                SizedBox(
+                  height: 20,
+                ),
+                Expanded(
+                  child: hasJoinedClass
+                      ? StudentHasJoinedClass(
+                          userId: widget.userId,
+                          classIds: joinedClassIds,
+                        )
+                      : StudentEmptyClass(
+                          userId: widget.userId, onJoined: _loadUser),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.primaryMain,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
-        ),
-        onPressed: () async {
-          final result = await Navigator.pushNamed(
-            context,
-            AppRoutes.joinClassSreen,
-            arguments: widget.userId
-          );
-          if (result == true) {
-            _loadUser();
-          }
-        },
-        child: Icon(
-          Icons.add,
-          color: AppColors.white,
-          size: AppNumber.iconLarge,
-        ),
-      )
-    );
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: AppColors.primaryMain,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
+          ),
+          onPressed: () async {
+            final result = await Navigator.pushNamed(
+                context, AppRoutes.joinClassSreen,
+                arguments: widget.userId);
+            if (result == true) {
+              _loadUser();
+            }
+          },
+          child: Icon(
+            Icons.add,
+            color: AppColors.white,
+            size: AppNumber.iconLarge,
+          ),
+        ));
   }
 }

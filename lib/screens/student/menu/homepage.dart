@@ -5,6 +5,7 @@ import 'package:tamdansers_app/repositories/class_repo.dart';
 import 'package:tamdansers_app/repositories/homework_repo.dart';
 import 'package:tamdansers_app/repositories/student_class_repo.dart';
 import 'package:tamdansers_app/repositories/user_repo.dart';
+import 'package:tamdansers_app/screens/student/menu/data_attendance.dart';
 import 'package:tamdansers_app/screens/student/menu/data_list_homepage.dart';
 import 'package:tamdansers_app/screens/student/widget/student_profile_header.dart';
 import 'package:tamdansers_app/widget/attendance_db.dart';
@@ -38,11 +39,15 @@ class _HomepageState extends State<Homepage> {
     if (fetchedUser != null) {
       final email = (fetchedUser['email'] ?? '') as String;
       if (email.isNotEmpty) {
-        enrolledClasses = await StudentClassRepo().getEnrolledClassesByEmail(email);
+        enrolledClasses =
+            await StudentClassRepo().getEnrolledClassesByEmail(email);
       }
     }
-    if (enrolledClasses.isEmpty && fetchedUser != null && fetchedUser['class_id'] != null) {
-      final fetchedClass = await ClassRepo().getClassById(fetchedUser['class_id']);
+    if (enrolledClasses.isEmpty &&
+        fetchedUser != null &&
+        fetchedUser['class_id'] != null) {
+      final fetchedClass =
+          await ClassRepo().getClassById(fetchedUser['class_id']);
       if (fetchedClass != null) {
         enrolledClasses = [fetchedClass];
       }
@@ -52,7 +57,8 @@ class _HomepageState extends State<Homepage> {
     List<Map<String, dynamic>> fetchedHomework = [];
     if (enrolledClasses.isNotEmpty) {
       fetchedClass = enrolledClasses.first;
-      fetchedHomework = await HomeworkRepo().getHomeworkByClass(fetchedClass['id']);
+      fetchedHomework =
+          await HomeworkRepo().getHomeworkByClass(fetchedClass['id']);
     }
 
     setState(() {
@@ -61,6 +67,24 @@ class _HomepageState extends State<Homepage> {
       homeworkData = fetchedHomework;
       availableClasses = enrolledClasses;
     });
+  }
+
+  String _currentKhmerMonth() {
+    const months = [
+      'មករា',
+      'កុម្ភៈ',
+      'មីនា',
+      'មេសា',
+      'ឧសភា',
+      'មិថុនា',
+      'កក្កដា',
+      'សីហា',
+      'កញ្ញា',
+      'តុលា',
+      'វិច្ឆិកា',
+      'ធ្នូ',
+    ];
+    return months[DateTime.now().month - 1];
   }
 
   Future<void> _selectClass(Map<String, dynamic> newClass) async {
@@ -73,6 +97,7 @@ class _HomepageState extends State<Homepage> {
       homeworkData = fetchedHomework;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     if (user == null) {
@@ -84,7 +109,8 @@ class _HomepageState extends State<Homepage> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -97,7 +123,13 @@ class _HomepageState extends State<Homepage> {
                   onClassSelected: _selectClass,
                 ),
                 SizedBox(height: 20),
-                CardAttendance(),
+                CardAttendance(
+                  totalDays: attendanceSummary.totalDays,
+                  presentDays: attendanceSummary.presentDays,
+                  absentDays: attendanceSummary.absentDays,
+                  attendanceRate: attendanceSummary.attendanceRate,
+                  monthLabel: _currentKhmerMonth(),
+                ),
                 SizedBox(height: 20),
                 _GridInfo(),
                 SizedBox(height: 20),
@@ -201,10 +233,13 @@ class _TitleHeaderState extends State<_TitleHeader> {
                     itemBuilder: (context, index) {
                       final cls = widget.classes![index];
                       final label = '${cls['grade']} ${cls['section']}';
-                      final isSelected = widget.classData != null && cls['id'] == widget.classData!['id'];
+                      final isSelected = widget.classData != null &&
+                          cls['id'] == widget.classData!['id'];
                       return ListTile(
                         title: Text(label, style: AppTextStyle.body),
-                        trailing: isSelected ? Icon(Icons.check, color: AppColors.primaryMain) : null,
+                        trailing: isSelected
+                            ? Icon(Icons.check, color: AppColors.primaryMain)
+                            : null,
                         onTap: () {
                           Navigator.pop(context);
                           widget.onClassSelected?.call(cls);
@@ -337,7 +372,7 @@ class _Classes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final teacherName = classData?['teacher_name'] ?? 'មិនបានកំណត់';
-    final subject = 'គណិតវិទ្យា'; 
+    final subject = 'គណិតវិទ្យា';
 
     return Column(
       children: [
@@ -424,7 +459,9 @@ class _GridInfo extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 12),
-                Text(item.title, style: AppTextStyle.body.copyWith(fontWeight: FontWeight.bold))
+                Text(item.title,
+                    style:
+                        AppTextStyle.body.copyWith(fontWeight: FontWeight.bold))
               ],
             ),
           ),

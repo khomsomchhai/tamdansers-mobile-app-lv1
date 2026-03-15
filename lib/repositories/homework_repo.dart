@@ -10,6 +10,7 @@ class HomeworkRepo {
     String? instructions,
     String? deadline,
     String status = "active",
+    String? attachmentPath,
   }) async {
     final db = await DbHelper().initDatabase();
     return await db.insert("tbl_homework", {
@@ -20,6 +21,7 @@ class HomeworkRepo {
       "teacher_id": teacherId,
       "deadline": deadline,
       "status": status,
+      "attachment_path": attachmentPath,
       "created_at": DateTime.now().toIso8601String(),
     });
   }
@@ -111,6 +113,7 @@ class HomeworkRepo {
     String? instructions,
     String? deadline,
     required String status,
+    String? attachmentPath,
   }) async {
     final db = await DbHelper().initDatabase();
     return await db.update(
@@ -121,6 +124,7 @@ class HomeworkRepo {
         "instructions": instructions,
         "deadline": deadline,
         "status": status,
+        "attachment_path": attachmentPath,
       },
       where: "id = ?",
       whereArgs: [id],
@@ -165,7 +169,7 @@ class HomeworkRepo {
     final db = await DbHelper().initDatabase();
     return await db.rawQuery(
       '''
-      SELECT sc.id, sc.first_name, sc.last_name, sc.gender,
+      SELECT sc.id, sc.first_name, sc.last_name, sc.gender, sc.photo_path,
              CASE WHEN sub.id IS NOT NULL THEN 1 ELSE 0 END AS submitted,
              sub.submitted_at
       FROM tbl_student_class sc

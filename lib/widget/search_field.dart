@@ -10,12 +10,14 @@ class SearchField extends StatelessWidget {
   final Widget icon;
   final TextEditingController controller;
   final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onSubmitted;
   const SearchField({
     super.key,
     required this.hintText,
     required this.icon,
     required this.controller,
     this.onChanged,
+    this.onSubmitted,
   });
 
   @override
@@ -23,6 +25,7 @@ class SearchField extends StatelessWidget {
     return TextField(
       controller: controller,
       onChanged: onChanged,
+      onSubmitted: onSubmitted,
       textAlignVertical: TextAlignVertical.center,
       style: AppTextStyle.body,
       decoration: InputDecoration(

@@ -125,7 +125,8 @@ class ClassRepo {
     String code;
     do {
       code = String.fromCharCodes(
-        Iterable.generate(6, (_) => chars.codeUnitAt(random.nextInt(chars.length))),
+        Iterable.generate(
+            6, (_) => chars.codeUnitAt(random.nextInt(chars.length))),
       );
     } while (await _isCodeExists(code));
     return code;
