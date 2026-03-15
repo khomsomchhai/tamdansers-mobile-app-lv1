@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_images.dart';
+import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/repositories/user_repo.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/screens/parents/menu/Comment_signature .dart';
 import 'package:tamdansers_app/screens/parents/menu/news.dart';
 import 'package:tamdansers_app/screens/parents/menu/setting.dart';
+import 'package:tamdansers_app/screens/parents/widget/parent_profile_header.dart';
 
 class ParentsDashboard extends StatefulWidget {
   const ParentsDashboard({super.key});
@@ -17,6 +21,26 @@ class ParentsDashboard extends StatefulWidget {
 class _ParentsDashboardState extends State<ParentsDashboard>
     with SingleTickerProviderStateMixin {
   int _currentIndex = 0;
+  Map<String, dynamic>? _currentParent;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadParentUser();
+  }
+
+  Future<void> _loadParentUser() async {
+    try {
+      final pref = await SharedPreferences.getInstance();
+      final userId = pref.getInt("userId");
+      if (userId != null) {
+        _currentParent = await UserRepo().getUserById(userId);
+        setState(() {});
+      }
+    } catch (e) {
+      debugPrint("Error loading parent user: $e");
+    }
+  }
 
   double _fs(double base, BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -56,74 +80,9 @@ class _ParentsDashboardState extends State<ParentsDashboard>
           Stack(
             clipBehavior: Clip.none,
             children: [
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).padding.top + 12,
-                  left: 20,
-                  right: 20,
-                  bottom: 70,
-                ),
-                decoration: const BoxDecoration(
-                  color: AppColors.primary300,
-                  borderRadius:
-                      BorderRadius.vertical(bottom: Radius.circular(24)),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            "ថ្ងៃចន្ទ ទី5 ខែមករា ឆ្នាំ2026",
-                            style: AppTextStyle.body18White
-                                .copyWith(fontSize: _fs(12, context)),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(
-                                context, AppRoutes.parent_nothi);
-                          },
-                          child: _circleIcon(Icons.notifications_none, context),
-                        ),
-                        const SizedBox(width: 10),
-                        Container(
-                          width: 38,
-                          height: 38,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border:
-                                Border.all(color: AppColors.white, width: 2),
-                          ),
-                          child: ClipOval(
-                            child: Image.asset(
-                              AppImages.userProfile,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  Icon(Icons.person,
-                                      color: AppColors.white, size: 22),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      "អរុណសួស្តី",
-                      style: AppTextStyle.title28White.copyWith(
-                          fontSize: _fs(22, context),
-                          fontWeight: FontWeight.w600),
-                    ),
-                    Text(
-                      "លោក ឡាយ",
-                      style: AppTextStyle.title28White.copyWith(
-                          fontSize: _fs(22, context),
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
+              ParentProfileHeader(
+                name: _currentParent?["first_name"] ?? "Parent",
+                gender: _currentParent?["gender"] ?? "male",
               ),
               Positioned(
                 left: 24,
@@ -487,34 +446,139 @@ class _ParentsDashboardState extends State<ParentsDashboard>
     );
   }
 
-  Widget _circleIcon(IconData icon, BuildContext context) {
-    return Container(
-      width: 36,
-      height: 36,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: AppColors.white.withOpacity(0.2),
+  Widget _bottomNav(BuildContext context) {
+    const tabs = [
+      _NavItem(
+        icon: Icons.home_outlined,
+        activeIcon: Icons.home_rounded,
+        label: 'ផ្ទះ',
       ),
-      child: Icon(icon, color: AppColors.white, size: 20),
+      _NavItem(
+        icon: Icons.mail_outline,
+        activeIcon: Icons.mail_rounded,
+        label: 'សារ',
+      ),
+      _NavItem(
+        icon: Icons.newspaper_outlined,
+        activeIcon: Icons.newspaper,
+        label: 'ពត៌មាន',
+      ),
+      _NavItem(
+        icon: Icons.person_outline,
+        activeIcon: Icons.person,
+        label: 'ប្រវត្តិ',
+      ),
+    ];
+
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(AppNumber.radiusRounded),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primaryMain.withValues(alpha: 0.12),
+            blurRadius: 20,
+            offset: const Offset(0, -4),
+          ),
+        ],
+      ),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppNumber.screenPadding,
+            vertical: 10,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: List.generate(
+              tabs.length,
+              (i) => _NavTabItem(
+                item: tabs[i],
+                isActive: _currentIndex == i,
+                onTap: () => setState(() => _currentIndex = i),
+                fs: _fs,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
+}
 
-  Widget _bottomNav(BuildContext context) {
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      currentIndex: _currentIndex,
-      onTap: (index) => setState(() => _currentIndex = index),
-      selectedItemColor: AppColors.primaryMain,
-      unselectedItemColor: AppColors.secondaryText,
-      selectedFontSize: _fs(12, context),
-      unselectedFontSize: _fs(12, context),
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: "ផ្ទះ"),
-        BottomNavigationBarItem(icon: Icon(Icons.mail), label: "សារ"),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.newspaper_outlined), label: "ពត៌មាន"),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: "ប្រវត្តិ"),
-      ],
+class _NavItem {
+  final IconData icon;
+  final IconData activeIcon;
+  final String label;
+
+  const _NavItem({
+    required this.icon,
+    required this.activeIcon,
+    required this.label,
+  });
+}
+
+class _NavTabItem extends StatelessWidget {
+  final _NavItem item;
+  final bool isActive;
+  final VoidCallback onTap;
+  final double Function(double, BuildContext) fs;
+
+  const _NavTabItem({
+    required this.item,
+    required this.isActive,
+    required this.onTap,
+    required this.fs,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: SizedBox(
+        width: 72,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.easeInOut,
+              width: isActive ? 52 : 40,
+              height: 36,
+              decoration: BoxDecoration(
+                color: isActive
+                    ? AppColors.primaryMain.withValues(alpha: 0.12)
+                    : AppColors.transparent,
+                borderRadius: BorderRadius.circular(AppNumber.radiusPill),
+              ),
+              child: Icon(
+                isActive ? item.activeIcon : item.icon,
+                size: 24,
+                color:
+                    isActive ? AppColors.primaryMain : AppColors.secondaryText,
+              ),
+            ),
+            const SizedBox(height: 4),
+            AnimatedDefaultTextStyle(
+              duration: const Duration(milliseconds: 200),
+              style: isActive
+                  ? AppTextStyle.caption12Secondary.copyWith(
+                      color: AppColors.primaryMain,
+                      fontWeight: FontWeight.w700,
+                      fontSize: fs(12, context),
+                    )
+                  : AppTextStyle.caption12Secondary.copyWith(
+                      fontSize: fs(12, context),
+                    ),
+              child: Text(item.label, maxLines: 1),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

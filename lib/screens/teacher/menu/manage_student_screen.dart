@@ -5,12 +5,13 @@ import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
-import 'package:tamdansers_app/constants/app_images.dart';
+import 'package:tamdansers_app/constants/app_icon.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/database/db_helper.dart';
 import 'package:tamdansers_app/repositories/student_class_repo.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
+import 'package:tamdansers_app/widget/custom_snackbar.dart';
 import 'package:tamdansers_app/widget/search_field.dart';
 
 class ManageStudentScreen extends StatefulWidget {
@@ -88,9 +89,14 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
     if (isDuplicate) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('សិស្សនេះមានក្នុងថ្នាក់នេះរួចហើយ'),
-            backgroundColor: AppColors.error,
+          SnackBar(
+            content: CustomSnackbar(
+              title: 'Error',
+              message: 'សិស្សនេះមានក្នុងថ្នាក់នេះរួចហើយ',
+              icon: Icons.error,
+              color: Colors.red,
+            ),
+            behavior: SnackBarBehavior.floating,
           ),
         );
       }
@@ -440,8 +446,8 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
                 ? null
                 : Image.asset(
                     gender == 'ស្រី'
-                        ? AppImages.userProfile
-                        : AppImages.studentMale2,
+                        ? AppIcon.femaleAvatar
+                        : AppIcon.maleAvatar,
                     width: 36,
                     fit: BoxFit.cover,
                   ),
@@ -529,8 +535,8 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
                 ? null
                 : Image.asset(
                     gender == "ស្រី"
-                        ? AppImages.userProfile
-                        : AppImages.studentMale2,
+                        ? AppIcon.femaleAvatar
+                        : AppIcon.maleAvatar,
                     width: 40,
                     fit: BoxFit.cover,
                   ),

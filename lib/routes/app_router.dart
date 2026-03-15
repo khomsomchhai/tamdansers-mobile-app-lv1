@@ -142,8 +142,9 @@ class AppRouter {
           transition: PageTransitionType.iosPush,
         );
       case AppRoutes.linkParentScreen:
+        final student = settings.arguments as Map<String, dynamic>?;
         return PageTransition.build(
-          page: LinkParentScreen(),
+          page: LinkParentScreen(student: student),
           settings: settings,
           transition: PageTransitionType.iosPush,
         );

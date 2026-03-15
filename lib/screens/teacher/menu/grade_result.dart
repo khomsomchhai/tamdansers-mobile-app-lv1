@@ -8,6 +8,7 @@ import 'package:tamdansers_app/repositories/activity_repo.dart';
 import 'package:tamdansers_app/repositories/class_repo.dart';
 import 'package:tamdansers_app/repositories/score_repo.dart';
 import 'package:tamdansers_app/repositories/student_class_repo.dart';
+import 'package:tamdansers_app/widget/custom_snackbar.dart';
 
 class GradeResult extends StatefulWidget {
   const GradeResult({super.key});
@@ -136,8 +137,13 @@ class _GradeResultState extends State<GradeResult> {
       setState(() => _saving = false);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('រក្សាទុកពិន្ទុបានជោគជ័យ ($saved នាក់)'),
-          backgroundColor: AppColors.success,
+          content: CustomSnackbar(
+            title: 'Success',
+            message: 'រក្សាទុកពិន្ទុបានជោគជ័យ ($saved នាក់)',
+            icon: Icons.check_circle,
+            color: Colors.green,
+          ),
+          behavior: SnackBarBehavior.floating,
         ),
       );
       // Reload to reflect saved state

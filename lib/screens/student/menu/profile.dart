@@ -255,8 +255,8 @@ class _ImageProfileState extends State<ImageProfile> {
         const SizedBox(height: 10),
         Text(
           (() {
-            final first = user?['last_name'] ?? '';
-            final last = user?['first_name'] ?? '';
+            final first = user?['first_name'] ?? '';
+            final last = user?['last_name'] ?? '';
             final full = ('$first $last').trim();
             return full.isNotEmpty ? full : 'រុន​ លីមហុង';
           })(),

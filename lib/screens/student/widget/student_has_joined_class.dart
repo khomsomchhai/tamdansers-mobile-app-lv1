@@ -7,8 +7,9 @@ import 'package:tamdansers_app/widget/class_card.dart';
 class StudentHasJoinedClass extends StatefulWidget {
   final int userId;
   final List<int> classIds;
+  final VoidCallback? onClassTap;
   const StudentHasJoinedClass(
-      {super.key, required this.userId, required this.classIds});
+      {super.key, required this.userId, required this.classIds, this.onClassTap});
 
   @override
   State<StudentHasJoinedClass> createState() => _StudentHasJoinedClassState();
@@ -84,7 +85,7 @@ class _StudentHasJoinedClassState extends State<StudentHasJoinedClass> {
             color: Color(int.parse(
                 (cls['color_hex'] as String).replaceFirst('#', '0xFF'))),
             classCode: cls['class_code'] as String? ?? '',
-            onTap: () {
+            onTap: widget.onClassTap ?? () {
               Navigator.pushNamed(context, AppRoutes.studentDashboard);
             },
             teacherName: '',

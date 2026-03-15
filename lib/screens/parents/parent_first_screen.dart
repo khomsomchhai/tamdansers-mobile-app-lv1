@@ -48,11 +48,9 @@ class _ParentFirstScreenState extends State<ParentFirstScreen> with WidgetsBindi
       final userId = pref.getInt("userId");
 
       if (userId != null) {
-        // Fetch current user data
         final userRepo = UserRepo();
         _currentUser = await userRepo.getUserById(userId);
 
-        // Fetch connected students
         final parentStudentRepo = ParentStudentRepo();
         _students = await parentStudentRepo.getStudentsByParent(userId);
       }
@@ -82,53 +80,56 @@ class _ParentFirstScreenState extends State<ParentFirstScreen> with WidgetsBindi
       );
     }
 
-    return Scaffold(
-      body: Column(
-        children: [
-          ParentProfileHeader(
-            name: _currentUser?["first_name"] ?? "Parent",
-            gender: _currentUser?["gender"] ?? "male",
-          ),
-          Expanded(
-              child: _students.isNotEmpty
-                  ? ParentHasData(students: _students)
-                  : ParentEmptyData())
-        ],
-      ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            onPressed: () async {
-              await Navigator.pushNamed(context, AppRoutes.parentPendingRequests);
-              _loadData();
-            },
-            heroTag: "pending",
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(AppNumber.radiusMedium)),
-            backgroundColor: AppColors.white,
-            child: Icon(
-              Icons.pending,
-              color: AppColors.primaryMain,
-              size: AppNumber.iconMedium,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        body: Column(
+          children: [
+            ParentProfileHeader(
+              name: _currentUser?["first_name"] ?? "Parent",
+              gender: _currentUser?["gender"] ?? "male",
             ),
-          ),
-          SizedBox(height: 16),
-          FloatingActionButton(
-            onPressed: () {
-              Navigator.pushNamed(context, AppRoutes.parentConnectStudent);
-            },
-            heroTag: "add",
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(AppNumber.radiusMedium)),
-            backgroundColor: AppColors.primaryMain,
-            child: Icon(
-              Icons.add,
-              color: AppColors.white,
-              size: AppNumber.iconLarge,
+            Expanded(
+                child: _students.isNotEmpty
+                    ? ParentHasData(students: _students)
+                    : ParentEmptyData())
+          ],
+        ),
+        floatingActionButton: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton(
+              onPressed: () async {
+                await Navigator.pushNamed(context, AppRoutes.parentPendingRequests);
+                _loadData();
+              },
+              heroTag: "pending",
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppNumber.radiusMedium)),
+              backgroundColor: AppColors.white,
+              child: Icon(
+                Icons.pending,
+                color: AppColors.primaryMain,
+                size: AppNumber.iconMedium,
+              ),
             ),
-          ),
-        ],
+            SizedBox(height: 16),
+            FloatingActionButton(
+              onPressed: () {
+                Navigator.pushNamed(context, AppRoutes.parentConnectStudent);
+              },
+              heroTag: "add",
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppNumber.radiusMedium)),
+              backgroundColor: AppColors.primaryMain,
+              child: Icon(
+                Icons.add,
+                color: AppColors.white,
+                size: AppNumber.iconLarge,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

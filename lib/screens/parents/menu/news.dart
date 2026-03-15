@@ -138,7 +138,7 @@ class _NewsScreenState extends State<NewsScreen> {
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                  horizontal: AppNumber.screenPadding),
+                  horizontal: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -167,33 +167,10 @@ class _NewsScreenState extends State<NewsScreen> {
   // ==================== HEADER ====================
   Widget _buildHeader() {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text("ព័ត៌មាន", style: AppTextStyle.screenTitle24),
-        const Spacer(),
-        Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: AppColors.white,
-            border: Border.all(color: AppColors.lightgrey),
-          ),
-          child: const Icon(Icons.notifications_none,
-              size: 22, color: AppColors.primaryText),
-        ),
-        const SizedBox(width: 10),
-        Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: AppColors.primaryBg,
-            border: Border.all(color: AppColors.primaryMain, width: 2),
-          ),
-          child: ClipOval(
-            child: Image.asset(AppImages.userProfile, fit: BoxFit.cover),
-          ),
-        ),
+        Text("ព័ត៌មាន", style: AppTextStyle.sectionTitle20),
+        
       ],
     );
   }

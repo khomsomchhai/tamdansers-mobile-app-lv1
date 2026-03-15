@@ -11,6 +11,7 @@ import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/repositories/activity_repo.dart';
 import 'package:tamdansers_app/repositories/homework_repo.dart';
 import 'package:tamdansers_app/state/app_notifiers.dart';
+import 'package:tamdansers_app/widget/custom_snackbar.dart';
 import 'package:tamdansers_app/widget/primary_button.dart';
 
 class AddTask extends StatefulWidget {
@@ -84,8 +85,17 @@ class _AddTaskState extends State<AddTask> {
   Future<void> _saveHomework(String status) async {
     final title = _titleController.text.trim();
     if (title.isEmpty) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('សូមបំពេញចម្ណងជើរ')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: CustomSnackbar(
+            title: 'Error',
+            message: 'សូមបំពេញចម្ណងជើរ',
+            icon: Icons.error,
+            color: Colors.red,
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
       return;
     }
     setState(() => _saving = true);
