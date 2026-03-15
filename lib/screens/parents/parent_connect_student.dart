@@ -68,10 +68,11 @@ class _ParentConnectStudentState extends State<ParentConnectStudent> {
       }
 
       // Create connection request
-      await parentStudentRepo.connectParentToStudent(
+      final result = await parentStudentRepo.connectParentToStudent(
         parentId: parentId,
         studentId: studentUser["id"],
       );
+      debugPrint('connectParentToStudent: parentId=$parentId, studentId=${studentUser["id"]}, insert result=$result');
 
       if (mounted) {
         showDialog(
@@ -83,7 +84,7 @@ class _ParentConnectStudentState extends State<ParentConnectStudent> {
                 "សូមរង់ចាំការទទួលសំណើរពីសិស្ស។ អ្នកនឹងទទួលបានការជូនដំណឹងនៅពេលដែលសំណើរបស់អ្នកត្រូវបានទទួល ឬ បដិសេធ។",
             onPressed: () {
               Navigator.pop(context);
-              Navigator.pop(context); // Go back to parent screen
+              Navigator.pop(context);
             },
           ),
         );

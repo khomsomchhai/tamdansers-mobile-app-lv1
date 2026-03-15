@@ -14,7 +14,10 @@ import 'package:tamdansers_app/screens/parents/menu/news.dart';
 import 'package:tamdansers_app/screens/parents/menu/parents_dashboard.dart';
 import 'package:tamdansers_app/screens/parents/parent_connect_student.dart';
 import 'package:tamdansers_app/screens/parents/parent_first_screen.dart';
+import 'package:tamdansers_app/screens/parents/parent_list_stu_class.dart';
+import 'package:tamdansers_app/screens/parents/parent_pending_requests.dart';
 import 'package:tamdansers_app/screens/student/join_class_screen.dart';
+import 'package:tamdansers_app/screens/student/menu/connection_requests.dart';
 import 'package:tamdansers_app/screens/student/menu/deatil_teacher.dart';
 import 'package:tamdansers_app/screens/student/menu/deatilscreen.dart';
 import 'package:tamdansers_app/screens/student/menu/homepage.dart';
@@ -151,6 +154,8 @@ class AppRouter {
         return _slideRoute(JoinClassScreen(
           userId: userId,
         ));
+      case AppRoutes.connectRequest:
+        return _slideRoute(ConnectionRequests());
       case AppRoutes.studentDashboard:
       final userId = settings.arguments as int?;
       return _slideRoute(
@@ -186,6 +191,11 @@ class AppRouter {
         return _fadeRouter(ParentFirstScreen());
       case AppRoutes.parentConnectStudent:
         return _slideRoute(ParentConnectStudent());
+      case AppRoutes.parentPendingRequests:
+        return _slideRoute(ParentPendingRequests());
+      case AppRoutes.parentListStuClass:
+        final student = settings.arguments as Map<String, dynamic>?;
+        return _slideRoute(ParentListStuClass(student: student));
       case AppRoutes.ParentsDashboard:
         return _slideRoute(ParentsDashboard());
       case AppRoutes.AttandanceScreen:

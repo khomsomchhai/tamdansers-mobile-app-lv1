@@ -5,7 +5,9 @@ import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/screens/parents/widget/parent_profile_header.dart';
 
 class ParentListStuClass extends StatefulWidget {
-  const ParentListStuClass({super.key});
+  final Map<String, dynamic>? student;
+
+  const ParentListStuClass({super.key, this.student});
 
   @override
   State<ParentListStuClass> createState() => _ParentListStuClassState();
@@ -18,8 +20,8 @@ class _ParentListStuClassState extends State<ParentListStuClass> {
       body: Column(
         children: [
           ParentProfileHeader(
-            name: "Piseth",
-            gender: "male",
+            name: widget.student?["first_name"] ?? "Student",
+            gender: widget.student?["gender"] ?? "male",
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),

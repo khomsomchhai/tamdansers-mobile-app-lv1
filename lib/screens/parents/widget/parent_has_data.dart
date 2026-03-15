@@ -27,7 +27,7 @@ class _ParentHasDataState extends State<ParentHasData> {
               Icon(
                 Icons.account_circle_rounded,
                 size: AppNumber.iconLarge,
-                color: AppColors.primaryMain,
+                color: AppColors.secondaryText,
               ),
               SizedBox(width: 10,),
               Text(
@@ -106,11 +106,6 @@ class _ParentHasDataState extends State<ParentHasData> {
                   student["email"] ?? "",
                   style: AppTextStyle.caption14Secondary
                 ),
-                SizedBox(height: 4,),
-                Text(
-                  "ថ្នាក់: ${student["class_name"]}",
-                  style: AppTextStyle.caption14Secondary
-                )
               ],
             ),
           ),

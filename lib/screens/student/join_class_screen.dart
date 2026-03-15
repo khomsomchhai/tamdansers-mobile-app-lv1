@@ -98,11 +98,16 @@ class _JoinClassScreenState extends State<JoinClassScreen> {
                     if (success) {
                       final user = await UserRepo().getUserById(widget.userId);
                       if (user != null) {
+                        final email = user['email'];
+                        if (email == null || (email is String && email.trim().isEmpty)) {
+                          _showError("Email is missing. Please update your profile with a valid email before joining a class.");
+                          return;
+                        }
                         await StudentClassRepo().addStudent(
                           firstName: user['first_name'],
                           lastName: user['last_name'],
                           gender: user['gender'],
-                          email: user['email'],
+                          email: email,
                           classId: classData['id'],
                         );
                       }

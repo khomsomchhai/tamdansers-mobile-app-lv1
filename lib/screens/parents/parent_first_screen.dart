@@ -17,7 +17,7 @@ class ParentFirstScreen extends StatefulWidget {
   State<ParentFirstScreen> createState() => _ParentFirstScreenState();
 }
 
-class _ParentFirstScreenState extends State<ParentFirstScreen> {
+class _ParentFirstScreenState extends State<ParentFirstScreen> with WidgetsBindingObserver {
   Map<String, dynamic>? _currentUser;
   List<Map<String, dynamic>> _students = [];
   bool _isLoading = true;
@@ -25,7 +25,21 @@ class _ParentFirstScreenState extends State<ParentFirstScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _loadData();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _loadData();
+    }
   }
 
   Future<void> _loadData() async {
@@ -43,7 +57,7 @@ class _ParentFirstScreenState extends State<ParentFirstScreen> {
         _students = await parentStudentRepo.getStudentsByParent(userId);
       }
     } catch (e) {
-      print("Error loading data: $e");
+      debugPrint("Error loading data: $e");
     } finally {
       setState(() {
         _isLoading = false;
@@ -69,27 +83,52 @@ class _ParentFirstScreenState extends State<ParentFirstScreen> {
     }
 
     return Scaffold(
-      body: Column(
-        children: [
-          ParentProfileHeader(
-            name: _currentUser?["first_name"] ?? "Parent",
-            gender: _currentUser?["gender"] ?? "male",
-          ),
-          Expanded(child: _students.isNotEmpty ? ParentHasData(students: _students) : ParentEmptyData())
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, AppRoutes.parentConnectStudent);
-        },
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppNumber.radiusMedium)),
-        backgroundColor: AppColors.primaryMain,
-        child: Icon(
-          Icons.add,
-          color: AppColors.white,
-          size: AppNumber.iconLarge,
+      body: RefreshIndicator(
+        onRefresh: _loadData,
+        child: Column(
+          children: [
+            ParentProfileHeader(
+              name: _currentUser?["first_name"] ?? "Parent",
+              gender: _currentUser?["gender"] ?? "male",
+            ),
+            Expanded(child: _students.isNotEmpty ? ParentHasData(students: _students) : ParentEmptyData())
+          ],
         ),
+      ),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: () async {
+              await Navigator.pushNamed(context, AppRoutes.parentPendingRequests);
+              _loadData();
+            },
+            heroTag: "pending",
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppNumber.radiusMedium)),
+            backgroundColor: AppColors.white,
+            child: Icon(
+              Icons.pending,
+              color: AppColors.primaryMain,
+              size: AppNumber.iconMedium,
+            ),
+          ),
+          SizedBox(height: 16),
+          FloatingActionButton(
+            onPressed: () {
+              Navigator.pushNamed(context, AppRoutes.parentConnectStudent);
+            },
+            heroTag: "add",
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppNumber.radiusMedium)),
+            backgroundColor: AppColors.primaryMain,
+            child: Icon(
+              Icons.add,
+              color: AppColors.white,
+              size: AppNumber.iconLarge,
+            ),
+          ),
+        ],
       ),
     );
   }
