@@ -22,6 +22,7 @@ class AttendanceRepo {
     final db = await DbHelper().initDatabase();
     return await db.rawQuery(
       '''SELECT s.id as student_id, s.first_name, s.last_name, s.gender,
+                s.photo_path,
                 COALESCE(a.status, 'present') as status
          FROM tbl_student_class s
          LEFT JOIN tbl_attendance a

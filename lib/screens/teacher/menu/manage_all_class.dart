@@ -46,10 +46,12 @@ class _ManageAllClassState extends State<ManageAllClass> {
   void initState() {
     super.initState();
     _loadClasses();
+    widget.dashboardRefresh?.addListener(_loadClasses);
   }
 
   @override
   void dispose() {
+    widget.dashboardRefresh?.removeListener(_loadClasses);
     _searchCtrl.dispose();
     super.dispose();
   }
@@ -146,6 +148,7 @@ class _ManageAllClassState extends State<ManageAllClass> {
                                   students: "$count នាក់",
                                   color:
                                       _hexToColor(cls["color_hex"] as String),
+                                  classCode: cls["class_code"] as String? ?? '',
                                   onTap: () {
                                     Navigator.pushNamed(
                                       context,
@@ -153,6 +156,7 @@ class _ManageAllClassState extends State<ManageAllClass> {
                                       arguments: cls["id"] as int,
                                     ).then((_) => _loadClasses());
                                   },
+                                  teacherName: '',
                                 );
                               },
                             ),

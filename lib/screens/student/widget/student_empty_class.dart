@@ -8,9 +8,11 @@ import 'package:tamdansers_app/routes/app_routes.dart';
 
 class StudentEmptyClass extends StatelessWidget {
   final int userId;
+  final VoidCallback? onJoined;
   const StudentEmptyClass({
     super.key,
     required this.userId,
+    this.onJoined,
   });
 
   @override
@@ -39,12 +41,15 @@ class StudentEmptyClass extends StatelessWidget {
           height: 40,
           width: 160,
           child: ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(
-                context,
-                AppRoutes.joinClassSreen,
-                arguments: userId,
-              );
+              onPressed: () async {
+                final result = await Navigator.pushNamed(
+                  context,
+                  AppRoutes.joinClassSreen,
+                  arguments: userId,
+                );
+                if (result == true) {
+                  onJoined?.call();
+                }
               },
               style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primaryMain,
