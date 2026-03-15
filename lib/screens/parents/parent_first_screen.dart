@@ -83,18 +83,6 @@ class _ParentFirstScreenState extends State<ParentFirstScreen> with WidgetsBindi
     }
 
     return Scaffold(
-<<<<<<< HEAD
-      body: RefreshIndicator(
-        onRefresh: _loadData,
-        child: Column(
-          children: [
-            ParentProfileHeader(
-              name: _currentUser?["first_name"] ?? "Parent",
-              gender: _currentUser?["gender"] ?? "male",
-            ),
-            Expanded(child: _students.isNotEmpty ? ParentHasData(students: _students) : ParentEmptyData())
-          ],
-=======
       body: Column(
         children: [
           ParentProfileHeader(
@@ -106,20 +94,6 @@ class _ParentFirstScreenState extends State<ParentFirstScreen> with WidgetsBindi
                   ? ParentHasData(students: _students)
                   : ParentEmptyData())
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, AppRoutes.parentConnectStudent);
-        },
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppNumber.radiusMedium)),
-        backgroundColor: AppColors.primaryMain,
-        child: Icon(
-          Icons.add,
-          color: AppColors.white,
-          size: AppNumber.iconLarge,
->>>>>>> 7e97516d40583925bed57b3a3669a97205ae582c
-        ),
       ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,

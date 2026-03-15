@@ -5,7 +5,7 @@ import 'package:tamdansers_app/constants/app_icon.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/repositories/parent_student_repo.dart';
-import 'package:tamdansers_app/screens/widget/custom_snackbar.dart';
+import 'package:tamdansers_app/widget/custom_snackbar.dart';
 
 class ConnectionRequests extends StatefulWidget {
   const ConnectionRequests({super.key});

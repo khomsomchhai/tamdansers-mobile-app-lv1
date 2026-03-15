@@ -95,23 +95,6 @@ class AppRouter {
         } else if (settings.arguments is String) {
           role = settings.arguments as String;
         }
-<<<<<<< HEAD
-        return _slideRoute(OtpScreen(role: role, userId: userId));
-      case AppRoutes.changePassword:
-        return _slideRoute(ChangePassword());
-      case AppRoutes.resetPassword:
-        final userId = settings.arguments as int?;
-        return _slideRoute(ResetPasswordScreen(userId: userId ?? 1));
-      case AppRoutes.forgetPassword1:
-        return _slideRoute(ForgetPassword1());
-      //------------ Teacher ----------------
-      case AppRoutes.teacherDashboard:
-        final teacherId = settings.arguments as int?;
-        return _fadeRouter(TeacherDashboard(teacherId: teacherId ?? 1));
-      case AppRoutes.manageAllClass:
-        final teacherId = settings.arguments as int?;
-        return _slideRoute(ManageAllClass(teacherId: teacherId ?? 1));
-=======
         return PageTransition.build(
           page: OtpScreen(role: role, userId: userId),
           settings: settings,
@@ -152,7 +135,6 @@ class AppRouter {
           settings: settings,
           transition: PageTransitionType.iosPush,
         );
->>>>>>> 7e97516d40583925bed57b3a3669a97205ae582c
       case AppRoutes.manageClass:
         return PageTransition.build(
           page: ManageClass(),
@@ -219,10 +201,6 @@ class AppRouter {
           transition: PageTransitionType.iosPush,
         );
       case AppRoutes.addStudentScreen:
-<<<<<<< HEAD
-        final teacherId = settings.arguments as int?;
-        return _slideRoute(AddStudent(teacherId: teacherId ?? 1));
-=======
         final addArgs = settings.arguments;
         final teacherId = addArgs is int ? addArgs : 1;
         return PageTransition.build(
@@ -230,7 +208,6 @@ class AppRouter {
           settings: settings,
           transition: PageTransitionType.slideUpFade,
         );
->>>>>>> 7e97516d40583925bed57b3a3669a97205ae582c
       case AppRoutes.teacherProfile:
         final teacherId = settings.arguments as int?;
         return _fadeRouter(TeacherProfileScreen(teacherId: teacherId ?? 1));
@@ -262,21 +239,15 @@ class AppRouter {
           settings: settings,
           transition: PageTransitionType.fadeThrough,
         );
-      case AppRoutes.joinClassSreen:
-        final userId = settings.arguments as int;
-<<<<<<< HEAD
-        return _slideRoute(JoinClassScreen(
-          userId: userId,
-        ));
       case AppRoutes.connectRequest:
         return _slideRoute(ConnectionRequests());
-=======
+      case AppRoutes.joinClassSreen:
+        final userId = settings.arguments as int;
         return PageTransition.build(
           page: JoinClassScreen(userId: userId),
           settings: settings,
           transition: PageTransitionType.iosPush,
         );
->>>>>>> 7e97516d40583925bed57b3a3669a97205ae582c
       case AppRoutes.studentDashboard:
         final userId = settings.arguments as int?;
         return _slideRoute(StudentDashboard(userId: userId ?? 1));
@@ -348,21 +319,17 @@ class AppRouter {
           settings: settings,
           transition: PageTransitionType.fadeThrough,
         );
-      case AppRoutes.parentConnectStudent:
-<<<<<<< HEAD
-        return _slideRoute(ParentConnectStudent());
       case AppRoutes.parentPendingRequests:
         return _slideRoute(ParentPendingRequests());
       case AppRoutes.parentListStuClass:
         final student = settings.arguments as Map<String, dynamic>?;
         return _slideRoute(ParentListStuClass(student: student));
-=======
+      case AppRoutes.parentConnectStudent:
         return PageTransition.build(
           page: ParentConnectStudent(),
           settings: settings,
           transition: PageTransitionType.iosPush,
         );
->>>>>>> 7e97516d40583925bed57b3a3669a97205ae582c
       case AppRoutes.ParentsDashboard:
         return PageTransition.build(
           page: ParentsDashboard(),
@@ -381,9 +348,6 @@ class AppRouter {
           settings: settings,
           transition: PageTransitionType.iosPush,
         );
-      case AppRoutes.NewsScreen:
-<<<<<<< HEAD
-        return _slideRoute(NewsScreen());
       case AppRoutes.parent_nothi:
         return _slideRoute(Nothication());
       case AppRoutes.commentScreen:
@@ -392,14 +356,13 @@ class AppRouter {
         return _slideRoute(ParentSetting());
       case AppRoutes.CustomScreen:
         return _slideRoute(CustomScreen());
-=======
+      case AppRoutes.NewsScreen:
         return PageTransition.build(
           page: NewsScreen(),
           settings: settings,
           transition: PageTransitionType.iosPush,
         );
 
->>>>>>> 7e97516d40583925bed57b3a3669a97205ae582c
       default:
         return MaterialPageRoute(
           settings: settings,

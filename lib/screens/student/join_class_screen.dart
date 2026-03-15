@@ -81,37 +81,6 @@ class _JoinClassScreenState extends State<JoinClassScreen> {
             label: isLoading ? "" : "ចូល",
             backgroundColor: AppColors.primaryMain,
             foregroundColor: AppColors.white,
-<<<<<<< HEAD
-            processIndicator: isLoading ? SizedBox(
-              width: 26,
-              height: 26,
-              child: CircularProgressIndicator(
-                color: AppColors.white,
-                strokeWidth: 2,
-              ),
-            ):null,
-            onPressed: () async {
-              try {
-                if (formKey.currentState!.validate()) {
-                  final classData = await ClassRepo().getClassByCode(classCodeCtrl.text.trim());
-                  if (classData != null) {
-                    final success = await UserRepo().joinClass(widget.userId, classData['id']);
-                    if (success) {
-                      final user = await UserRepo().getUserById(widget.userId);
-                      if (user != null) {
-                        final email = user['email'];
-                        if (email == null || (email is String && email.trim().isEmpty)) {
-                          _showError("Email is missing. Please update your profile with a valid email before joining a class.");
-                          return;
-                        }
-                        await StudentClassRepo().addStudent(
-                          firstName: user['first_name'],
-                          lastName: user['last_name'],
-                          gender: user['gender'],
-                          email: email,
-                          classId: classData['id'],
-                        );
-=======
             processIndicator: isLoading
                 ? SizedBox(
                     width: 26,
@@ -133,7 +102,6 @@ class _JoinClassScreenState extends State<JoinClassScreen> {
                       if (classData == null) {
                         _showError("លេខកូដថ្នាក់មិនត្រឹមត្រូវ");
                         return;
->>>>>>> 7e97516d40583925bed57b3a3669a97205ae582c
                       }
                       final success = await UserRepo()
                           .joinClass(widget.userId, classData['id']);
