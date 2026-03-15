@@ -154,14 +154,15 @@ class DbHelper {
       );
     ''');
   }
+
   static Future<void> _createTblProfile(Database db) async {
-  await db.execute('''
+    await db.execute('''
     CREATE TABLE IF NOT EXISTS profile(
       id INTEGER PRIMARY KEY,
       image TEXT
     )
   ''');
-}
+  }
 
   static Future<void> _createTblUserClass(Database db) async {
     await db.execute('''
@@ -295,7 +296,8 @@ class DbHelper {
       return db!;
     } else {
       Database database = await _getDatabase();
-      var result = await database.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='profile'");
+      var result = await database.rawQuery(
+          "SELECT name FROM sqlite_master WHERE type='table' AND name='profile'");
       if (result.isEmpty) {
         await _createTblProfile(database);
       }

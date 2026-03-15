@@ -22,9 +22,9 @@ class UserRepo {
       "role": role,
     });
   }
+
   Future<Map<String, dynamic>?> login(
-      String identifier, String password
-    ) async {
+      String identifier, String password) async {
     final db = await DbHelper().initDatabase();
 
     final result = await db.query(
@@ -38,6 +38,7 @@ class UserRepo {
     }
     return null;
   }
+
   Future<Map<String, dynamic>?> getAllUser() async {
     final db = await DbHelper().initDatabase();
     final result = await db.query('tbl_user');
@@ -46,6 +47,7 @@ class UserRepo {
     }
     return null;
   }
+
   Future<Map<String, dynamic>?> getUserById(int id) async {
     final db = await DbHelper().initDatabase();
     final result = await db.query(
@@ -58,6 +60,7 @@ class UserRepo {
     }
     return null;
   }
+
   Future<Map<String, dynamic>?> getUserByPhoneOrEmail(String identifier) async {
     final db = await DbHelper().initDatabase();
     final result = await db.query(
@@ -70,6 +73,7 @@ class UserRepo {
     }
     return null;
   }
+
   Future<Map<String, dynamic>?> getUserByEmail(String email) async {
     final db = await DbHelper().initDatabase();
     final result = await db.query(
@@ -82,6 +86,7 @@ class UserRepo {
     }
     return null;
   }
+
   Future<String?> getRoleById(int id) async {
     final db = await DbHelper().initDatabase();
     final result = await db.query(
@@ -96,6 +101,7 @@ class UserRepo {
     }
     return null;
   }
+
   getUserByPhone(String phone) async {
     final db = await DbHelper().initDatabase();
     final result = await db.query(
@@ -108,25 +114,27 @@ class UserRepo {
     }
     return null;
   }
-  Future<bool> changePassword(int userId, String oldPassword, String newPassword) async {
+
+  Future<bool> changePassword(
+      int userId, String oldPassword, String newPassword) async {
     final db = await DbHelper().initDatabase();
     final result = await db.query(
       'tbl_user',
       where: 'id = ? AND password = ?',
       whereArgs: [userId, oldPassword],
     );
-    
+
     if (result.isEmpty) {
       return false;
     }
-    
+
     final updated = await db.update(
       'tbl_user',
       {'password': newPassword},
       where: 'id = ?',
       whereArgs: [userId],
     );
-    
+
     return updated > 0;
   }
 
@@ -135,6 +143,28 @@ class UserRepo {
     final updated = await db.update(
       'tbl_user',
       {'password': newPassword},
+      where: 'id = ?',
+      whereArgs: [userId],
+    );
+    return updated > 0;
+  }
+
+  Future<bool> updateUser({
+    required int userId,
+    required String firstName,
+    required String lastName,
+    String? phone,
+    String? email,
+  }) async {
+    final db = await DbHelper().initDatabase();
+    final updated = await db.update(
+      'tbl_user',
+      {
+        'first_name': firstName,
+        'last_name': lastName,
+        'phone': phone,
+        'email': email,
+      },
       where: 'id = ?',
       whereArgs: [userId],
     );
@@ -244,5 +274,64 @@ class UserRepo {
       orderBy: 'joined_at ASC',
     );
     return rows.map((r) => r['class_id'] as int).toList();
+  }
+
+  /// Scan tbl_student_class for rows matching this user's phone or email,
+  /// then auto-insert tbl_user_class + link the placeholder.
+  /// Called at signup and login so students see teacher-added classes.
+  Future<void> autoLinkClasses(int userId) async {
+    final db = await DbHelper().initDatabase();
+    final users =
+        await db.query('tbl_user', where: 'id = ?', whereArgs: [userId]);
+    if (users.isEmpty) return;
+    final user = users.first;
+    final role = user['role'] as String? ?? '';
+    if (role != 'student') return;
+
+    final email = user['email'] as String?;
+    final phone = user['phone'] as String?;
+
+    // Find all tbl_student_class rows that match by email or phone
+    List<Map<String, dynamic>> matches = [];
+    if (email != null && email.isNotEmpty) {
+      matches.addAll(await db.query(
+        'tbl_student_class',
+        where: "email = ? AND linked_user_id IS NULL",
+        whereArgs: [email],
+      ));
+    }
+    if (phone != null && phone.isNotEmpty) {
+      final phoneMatches = await db.query(
+        'tbl_student_class',
+        where: "phone = ? AND linked_user_id IS NULL",
+        whereArgs: [phone],
+      );
+      // Avoid duplicates if same row matched by both
+      final existingIds = matches.map((m) => m['id']).toSet();
+      for (final m in phoneMatches) {
+        if (!existingIds.contains(m['id'])) matches.add(m);
+      }
+    }
+
+    for (final sc in matches) {
+      final classId = sc['class_id'] as int;
+      // Insert tbl_user_class (ignore if already exists)
+      await db.insert(
+        'tbl_user_class',
+        {
+          'user_id': userId,
+          'class_id': classId,
+          'joined_at': DateTime.now().toIso8601String(),
+        },
+        conflictAlgorithm: ConflictAlgorithm.ignore,
+      );
+      // Link the placeholder row
+      await db.update(
+        'tbl_student_class',
+        {'linked_user_id': userId},
+        where: 'id = ?',
+        whereArgs: [sc['id']],
+      );
+    }
   }
 }

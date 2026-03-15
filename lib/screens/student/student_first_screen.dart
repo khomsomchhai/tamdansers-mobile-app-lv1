@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
-import 'package:tamdansers_app/repositories/student_class_repo.dart';
 import 'package:tamdansers_app/repositories/user_repo.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/screens/student/widget/student_empty_class.dart';

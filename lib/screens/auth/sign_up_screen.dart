@@ -83,6 +83,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
           role: selectedRole,
         );
 
+        // Auto-link to classes where teacher already added this phone/email
+        if (selectedRole == 'student') {
+          final user = email != null
+              ? await UserRepo().getUserByEmail(email)
+              : await UserRepo().getUserByPhone(phone!);
+          if (user != null) {
+            await UserRepo().autoLinkClasses(user['id'] as int);
+          }
+        }
+
         Navigator.pushNamed(context, AppRoutes.otpScreen,
             arguments: selectedRole);
       }

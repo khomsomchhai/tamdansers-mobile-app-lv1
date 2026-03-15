@@ -3,10 +3,10 @@ import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/routes/app_router.dart';
-import 'package:tamdansers_app/screens/teacher/homework_screen.dart';
-import 'package:tamdansers_app/screens/teacher/manage_all_class.dart';
-import 'package:tamdansers_app/screens/teacher/teacher_dashboard.dart';
-import 'package:tamdansers_app/screens/teacher/teacher_profile_screen.dart';
+import 'package:tamdansers_app/screens/teacher/menu/homework_screen.dart';
+import 'package:tamdansers_app/screens/teacher/menu/manage_all_class.dart';
+import 'package:tamdansers_app/screens/teacher/menu/teacher_dashboard.dart';
+import 'package:tamdansers_app/screens/teacher/menu/teacher_profile_screen.dart';
 
 class TeacherMainScreen extends StatefulWidget {
   final int userId;

@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
-import 'package:tamdansers_app/screens/widget/custom_snackbar.dart';
+import 'package:tamdansers_app/widget/custom_snackbar.dart';
 
 class TeacherNotificationScreen extends StatefulWidget {
   const TeacherNotificationScreen({super.key});
 
   @override
-  State<TeacherNotificationScreen> createState() => _TeacherNotificationScreenState();
+  State<TeacherNotificationScreen> createState() =>
+      _TeacherNotificationScreenState();
 }
 
 class _TeacherNotificationScreenState extends State<TeacherNotificationScreen> {
@@ -22,6 +23,7 @@ class _TeacherNotificationScreenState extends State<TeacherNotificationScreen> {
     _messageController.dispose();
     super.dispose();
   }
+
   void _showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -36,6 +38,7 @@ class _TeacherNotificationScreenState extends State<TeacherNotificationScreen> {
       ),
     );
   }
+
   void _showSuccess(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -50,6 +53,7 @@ class _TeacherNotificationScreenState extends State<TeacherNotificationScreen> {
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,11 +83,17 @@ class _TeacherNotificationScreenState extends State<TeacherNotificationScreen> {
                 items: [
                   DropdownMenuItem(
                     value: 'all_students',
-                    child: Text('សិស្សទាំងអស់',style: AppTextStyle.body,),
+                    child: Text(
+                      'សិស្សទាំងអស់',
+                      style: AppTextStyle.body,
+                    ),
                   ),
                   DropdownMenuItem(
                     value: 'specific_class',
-                    child: Text('ថ្នាក់ទាំងអស់', style: AppTextStyle.body,),
+                    child: Text(
+                      'ថ្នាក់ទាំងអស់',
+                      style: AppTextStyle.body,
+                    ),
                   ),
                   DropdownMenuItem(
                     value: 'parents',
@@ -118,7 +128,6 @@ class _TeacherNotificationScreenState extends State<TeacherNotificationScreen> {
             TextField(
               controller: _messageController,
               maxLines: 5,
-              
               decoration: InputDecoration(
                 hintText: 'បញ្ចូលសារសេចក្តីជូនដំណឹង',
                 hintStyle: AppTextStyle.hintText,
