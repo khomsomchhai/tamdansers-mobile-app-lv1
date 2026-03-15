@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 
@@ -13,6 +16,9 @@ class NewsScreen extends StatefulWidget {
 
 class _NewsScreenState extends State<NewsScreen> {
   int _selectedCategory = 0;
+  int _currentFeaturedIndex = 0;
+  late final PageController _featuredPageController;
+  Timer? _featuredTimer;
 
   final List<String> _categories = [
     "ទាំងអស់",
@@ -60,32 +66,97 @@ class _NewsScreenState extends State<NewsScreen> {
     },
   ];
 
+  final List<Map<String, String>> _featuredSlides = [
+    {
+      "badge": "ថ្មី ចុង",
+      "title": "កិឈវណ៍វិទ្យាសាស្រ្តប្រចាំឆ្នាំ ២០២៥",
+      "description":
+          "ចូលមួយបើកផ្សញ​បម្រាប់នៃថ្ងៃនាក​វ៍ផូទល់មី​​ នីការម​​​រ របឞ្ញ។",
+      "image": AppImages.news1,
+    },
+    {
+      "badge": "ដំណឹង",
+      "title": "ការប្រជុំមាតាបិតា និងគ្រូបង្រៀន",
+      "description":
+          "សូមអញ្ជើញចូលរួមប្រជុំជាមួយថ្នាក់គ្រូនៅសាលាវិទ្យាល័យសប្ដាហ៍នេះ។",
+      "image": AppImages.news2,
+    },
+    {
+      "badge": "ពិសេស",
+      "title": "ការប្រកួតកីឡាប្រចាំខែ",
+      "description":
+          "កម្មវិធីប្រកួតកីឡារបស់សិស្សនឹងចាប់ផ្ដើមនៅថ្ងៃសុក្រ ម៉ោង ៨:០០ ព្រឹក។",
+      "image": AppImages.news3,
+    },
+    {
+      "badge": "សាលា",
+      "title": "ការប្រកួតសិល្បៈប្រចាំខែ",
+      "description":
+          "កម្មវិធីប្រកួតសិល្បៈរបស់សិស្សនឹងចាប់ផ្ដើមនៅថ្ងៃអាទិត្យ ម៉ោង ៩:០០ ព្រឹក។",
+      "image": AppImages.news4,
+    },
+    {
+      "badge": "ព្រឹត្តិការណ៍",
+      "title": "ការប្រកួតកីឡាប្រចាំខែ",
+      "description":
+          "កម្មវិធីប្រកួតកីឡារបស់សិស្សនឹងចាប់ផ្ដើមនៅថ្ងៃសុក្រ ម៉ោង ៨:០០ ព្រឹក។",
+      "image": AppImages.news5,
+    }
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _featuredPageController = PageController(viewportFraction: 1);
+    _featuredTimer = Timer.periodic(const Duration(seconds: 4), (_) {
+      if (!_featuredPageController.hasClients || _featuredSlides.isEmpty) {
+        return;
+      }
+      final next = (_currentFeaturedIndex + 1) % _featuredSlides.length;
+      _featuredPageController.animateToPage(
+        next,
+        duration: const Duration(milliseconds: 450),
+        curve: Curves.easeInOutCubic,
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _featuredTimer?.cancel();
+    _featuredPageController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: AppNumber.screenPadding),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 12),
-                _buildHeader(),
-                const SizedBox(height: 16),
-                _buildSearchBar(),
-                const SizedBox(height: 14),
-                _buildCategoryChips(),
-                const SizedBox(height: 16),
-                _buildFeaturedCard(),
-                const SizedBox(height: 20),
-                _buildLatestUpdatesHeader(),
-                const SizedBox(height: 12),
-                _buildNewsList(),
-                const SizedBox(height: 24),
-              ],
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        backgroundColor: AppColors.backgroundLight,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: AppNumber.screenPadding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 12),
+                  _buildHeader(),
+                  const SizedBox(height: 16),
+                  _buildSearchBar(),
+                  const SizedBox(height: 14),
+                  _buildCategoryChips(),
+                  const SizedBox(height: 16),
+                  _buildFeaturedSlider(),
+                  const SizedBox(height: 20),
+                  _buildLatestUpdatesHeader(),
+                  const SizedBox(height: 12),
+                  _buildNewsList(),
+                  const SizedBox(height: 24),
+                ],
+              ),
             ),
           ),
         ),
@@ -120,22 +191,13 @@ class _NewsScreenState extends State<NewsScreen> {
             border: Border.all(color: AppColors.primaryMain, width: 2),
           ),
           child: ClipOval(
-            child: Image.asset(
-              'assets/images/user_profile.png',
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Icon(
-                Icons.person,
-                color: AppColors.primaryMain,
-                size: 22,
-              ),
-            ),
+            child: Image.asset(AppImages.userProfile, fit: BoxFit.cover),
           ),
         ),
       ],
     );
   }
 
-  // ==================== SEARCH BAR ====================
   Widget _buildSearchBar() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 0),
@@ -198,84 +260,120 @@ class _NewsScreenState extends State<NewsScreen> {
     );
   }
 
-  // ==================== FEATURED CARD ====================
-  Widget _buildFeaturedCard() {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(AppNumber.radiusLarge),
-        color: const Color(0xFF1C1C3A),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Stack(
-        children: [
-          // Background overlay
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.transparent,
-                    Colors.black.withValues(alpha: 0.7),
-                  ],
-                ),
-              ),
+  // ==================== FEATURED SLIDER ====================
+  Widget _buildFeaturedSlider() {
+    return Column(
+      children: [
+        SizedBox(
+          height: 180,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(AppNumber.radiusLarge),
+            child: PageView.builder(
+              controller: _featuredPageController,
+              itemCount: _featuredSlides.length,
+              onPageChanged: (index) {
+                setState(() => _currentFeaturedIndex = index);
+              },
+              itemBuilder: (context, index) {
+                final slide = _featuredSlides[index];
+                return _buildFeaturedSlideCard(slide);
+              },
             ),
           ),
-          // Content
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // "New" badge
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: AppColors.error,
-                    borderRadius:
-                        BorderRadius.circular(AppNumber.radiusRounded),
-                  ),
-                  child: Text(
-                    "ថ្មី ចុង",
-                    style: GoogleFonts.kantumruyPro(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.white,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 50),
-                // Title
-                Text(
-                  "កិឈវណ៍វិទ្យាសាស្រ្តប្រចាំឆ្នាំ ២០២៥",
-                  style: GoogleFonts.kantumruyPro(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.white,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                // Description
-                Text(
-                  "ចូលមួយបើកផ្សញ​បម្រាប់នៃថ្ងៃនាក​វ៍ផូទល់មី​​ នីការម​​​រ របឞ្ញ។",
-                  style: GoogleFonts.kantumruyPro(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white70,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 8),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(_featuredSlides.length, (index) {
+            final isActive = index == _currentFeaturedIndex;
+            return AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              margin: const EdgeInsets.symmetric(horizontal: 3),
+              width: isActive ? 18 : 7,
+              height: 7,
+              decoration: BoxDecoration(
+                color: isActive
+                    ? AppColors.primaryMain
+                    : AppColors.secondaryText.withValues(alpha: 0.35),
+                borderRadius: BorderRadius.circular(99),
+              ),
+            );
+          }),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFeaturedSlideCard(Map<String, String> slide) {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Image.asset(
+          slide["image"]!,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return Container(color: const Color(0xFF1C1C3A));
+          },
+        ),
+        Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.black.withValues(alpha: 0.12),
+                Colors.black.withValues(alpha: 0.78),
               ],
             ),
           ),
-        ],
-      ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.error,
+                  borderRadius: BorderRadius.circular(AppNumber.radiusRounded),
+                ),
+                child: Text(
+                  slide["badge"]!,
+                  style: GoogleFonts.kantumruyPro(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.white,
+                  ),
+                ),
+              ),
+              const Spacer(),
+              Text(
+                slide["title"]!,
+                style: GoogleFonts.kantumruyPro(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.white,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 6),
+              Text(
+                slide["description"]!,
+                style: GoogleFonts.kantumruyPro(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.white.withValues(alpha: 0.9),
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 
 class HomeworkQuizeScreen extends StatefulWidget {
   const HomeworkQuizeScreen({super.key});
-
   @override
   State<HomeworkQuizeScreen> createState() => _HomeworkQuizeScreenState();
 }
@@ -18,39 +18,53 @@ class _HomeworkQuizeScreenState extends State<HomeworkQuizeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundLight,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 12),
-                _buildProfileHeader(),
-                const SizedBox(height: 16),
-                _buildTabSelector(),
-                const SizedBox(height: 16),
-                _buildStatsRow(),
+      appBar: AppBar(
+        backgroundColor: AppColors.backgroundLight,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        title: Text('កិច្ចការផ្ទះ', style: AppTextStyle.screenTitle24),
+        actions: const [
+          Padding(
+            padding: EdgeInsets.only(right: 12),
+            child:
+                Icon(Icons.notifications_sharp, color: AppColors.primaryText),
+          ),
+        ],
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.primaryText),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 12),
+              _buildProfileHeader(),
+              const SizedBox(height: 16),
+              _buildTabSelector(),
+              const SizedBox(height: 16),
+              _buildStatsRow(),
+              const SizedBox(height: 20),
+              if (_selectedTab == 0) ...[
+                _buildTodaySection(),
                 const SizedBox(height: 20),
-                if (_selectedTab == 0) ...[
-                  _buildTodaySection(),
-                  const SizedBox(height: 20),
-                  _buildRecentSection(),
-                  const SizedBox(height: 20),
-                  _buildNewQuizzesSection(),
-                ] else ...[
-                  _buildNewQuizzesSection(),
-                ],
-                const SizedBox(height: 24),
+                _buildRecentSection(),
+                const SizedBox(height: 20),
+                _buildNewQuizzesSection(),
+              ] else ...[
+                _buildNewQuizzesSection(),
               ],
-            ),
+              const SizedBox(height: 24),
+            ],
           ),
         ),
       ),
     );
   }
 
-  // ==================== PROFILE HEADER ====================
   Widget _buildProfileHeader() {
     return Row(
       children: [
@@ -63,15 +77,7 @@ class _HomeworkQuizeScreenState extends State<HomeworkQuizeScreen> {
             border: Border.all(color: AppColors.primaryMain, width: 2),
           ),
           child: ClipOval(
-            child: Image.asset(
-              'assets/images/user_profile.png',
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Icon(
-                Icons.person,
-                color: AppColors.primaryMain,
-                size: 28,
-              ),
-            ),
+            child: Image.asset(AppImages.userProfile, fit: BoxFit.cover),
           ),
         ),
         const SizedBox(width: 12),
@@ -110,7 +116,6 @@ class _HomeworkQuizeScreenState extends State<HomeworkQuizeScreen> {
     );
   }
 
-  // ==================== TAB SELECTOR ====================
   Widget _buildTabSelector() {
     return Container(
       padding: const EdgeInsets.all(4),
@@ -152,7 +157,6 @@ class _HomeworkQuizeScreenState extends State<HomeworkQuizeScreen> {
     );
   }
 
-  // ==================== STATS ROW ====================
   Widget _buildStatsRow() {
     return Row(
       children: [
@@ -254,7 +258,6 @@ class _HomeworkQuizeScreenState extends State<HomeworkQuizeScreen> {
     );
   }
 
-  // ==================== TODAY SECTION ====================
   Widget _buildTodaySection() {
     return Column(
       children: [
@@ -301,7 +304,6 @@ class _HomeworkQuizeScreenState extends State<HomeworkQuizeScreen> {
     );
   }
 
-  // ==================== RECENT SECTION ====================
   Widget _buildRecentSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

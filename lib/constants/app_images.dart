@@ -23,6 +23,13 @@ class AppImages {
   static const String addStudent = "assets/icons/add_student.png";
   static const String studentMale = "assets/icons/student_male.svg";
   static const String studentMale2 = "assets/icons/student_male2.png";
-
   static const String imgParent = "assets/images/parent.svg";
+  
+  //news
+  static const String news1 = "assets/images/image_news1.jpg";
+  static const String news2 = "assets/images/image_news2.jpg";
+  static const String news3 = "assets/images/image_news3.jpg";
+  static const String news4 = "assets/images/image_news4.jpg";
+  static const String news5 = "assets/images/image_news5.jpg";
+  
 }

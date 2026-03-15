@@ -51,6 +51,7 @@ class AppRoutes {
   //parent
   static const String parentDashboardScreen = "/parent_dashboard_screen";
 
+  // static const String parentDashboardScreen = "/parent_dashboard_screen";
   static const String parentFirstScreen = "/parent_first_screen";
   static const String parentConnectStudent = "/parent_connect_student";
   static const String parentPendingRequests = "/parent_pending_requests";
@@ -62,5 +63,6 @@ class AppRoutes {
   static const String AttandanceScreen = "/parent_attendance_screen";
   static const String HomeworkQuizeScreen = "/parent_homework_quiz_screen";
   static const String NewsScreen = "/parent_news_screen";
-  
+  static const String parent_setting = "/parent_settings";
+  static const String CustomScreen = "/custom_screen";
 }
