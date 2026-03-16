@@ -86,7 +86,7 @@ class _StudentHasJoinedClassState extends State<StudentHasJoinedClass> {
                 (cls['color_hex'] as String).replaceFirst('#', '0xFF'))),
             classCode: cls['class_code'] as String? ?? '',
             onTap: widget.onClassTap ?? () {
-              Navigator.pushNamed(context, AppRoutes.studentDashboard);
+              Navigator.pushNamed(context, AppRoutes.studentDashboard, arguments: widget.userId);
             },
             teacherName: '',
           ),
