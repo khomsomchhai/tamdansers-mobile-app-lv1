@@ -255,8 +255,8 @@ class _ImageProfileState extends State<ImageProfile> {
         const SizedBox(height: 10),
         Text(
           (() {
-            final first = user?['last_name'] ?? '';
-            final last = user?['first_name'] ?? '';
+            final first = user?['first_name'] ?? '';
+            final last = user?['last_name'] ?? '';
             final full = ('$first $last').trim();
             return full.isNotEmpty ? full : 'រុន​ លីមហុង';
           })(),
@@ -313,6 +313,17 @@ Widget _buildInfoSection(Map<String, dynamic>? user) {
           ),
           child: Column(
             children: [
+              _settingsTile(
+                icon: Icons.link_outlined, 
+                title: "សំណើភ្ជាប់របស់ឪពុកម្តាយ", 
+                onTap: (){
+                  Navigator.pushNamed(
+                    context, 
+                    AppRoutes.connectRequest
+                  );
+                }, 
+                showDivider: true
+              ),
               _settingsTile(
                 icon: Icons.lock_outline_rounded,
                 title: "ផ្លាស់ប្តូរពាក្យសម្ងាត់",

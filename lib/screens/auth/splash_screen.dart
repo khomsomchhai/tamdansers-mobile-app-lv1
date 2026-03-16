@@ -27,7 +27,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
     switch (role) {
       case "teacher":
-        // use the main screen which contains the bottom navigation bar
         Navigator.pushReplacementNamed(
           context,
           AppRoutes.teacherMainScreen,

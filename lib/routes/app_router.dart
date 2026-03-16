@@ -9,13 +9,20 @@ import 'package:tamdansers_app/screens/auth/reset_password_screen.dart';
 import 'package:tamdansers_app/screens/auth/role_selection_screen.dart';
 import 'package:tamdansers_app/screens/auth/sign_up_screen.dart';
 import 'package:tamdansers_app/screens/auth/splash_screen.dart';
+import 'package:tamdansers_app/screens/parents/menu/Comment_signature .dart';
+import 'package:tamdansers_app/screens/parents/menu/Monthy_result_Ranking.dart';
 import 'package:tamdansers_app/screens/parents/menu/attandance_child.dart';
 import 'package:tamdansers_app/screens/parents/menu/homework_quize_child.dart';
 import 'package:tamdansers_app/screens/parents/menu/news.dart';
+import 'package:tamdansers_app/screens/parents/menu/nothication.dart';
 import 'package:tamdansers_app/screens/parents/menu/parents_dashboard.dart';
+import 'package:tamdansers_app/screens/parents/menu/setting.dart';
 import 'package:tamdansers_app/screens/parents/parent_connect_student.dart';
 import 'package:tamdansers_app/screens/parents/parent_first_screen.dart';
+import 'package:tamdansers_app/screens/parents/parent_list_stu_class.dart';
+import 'package:tamdansers_app/screens/parents/parent_pending_requests.dart';
 import 'package:tamdansers_app/screens/student/join_class_screen.dart';
+import 'package:tamdansers_app/screens/student/menu/connection_requests.dart';
 import 'package:tamdansers_app/screens/student/menu/deatil_teacher.dart';
 import 'package:tamdansers_app/screens/student/menu/deatilscreen.dart';
 import 'package:tamdansers_app/screens/student/menu/homepage.dart';
@@ -135,8 +142,9 @@ class AppRouter {
           transition: PageTransitionType.iosPush,
         );
       case AppRoutes.linkParentScreen:
+        final student = settings.arguments as Map<String, dynamic>?;
         return PageTransition.build(
-          page: LinkParentScreen(),
+          page: LinkParentScreen(student: student),
           settings: settings,
           transition: PageTransitionType.iosPush,
         );
@@ -232,6 +240,8 @@ class AppRouter {
           settings: settings,
           transition: PageTransitionType.fadeThrough,
         );
+      case AppRoutes.connectRequest:
+        return _slideRoute(ConnectionRequests());
       case AppRoutes.joinClassSreen:
         final userId = settings.arguments as int;
         return PageTransition.build(
@@ -310,6 +320,11 @@ class AppRouter {
           settings: settings,
           transition: PageTransitionType.fadeThrough,
         );
+      case AppRoutes.parentPendingRequests:
+        return _slideRoute(ParentPendingRequests());
+      case AppRoutes.parentListStuClass:
+        final student = settings.arguments as Map<String, dynamic>?;
+        return _slideRoute(ParentListStuClass(student: student));
       case AppRoutes.parentConnectStudent:
         return PageTransition.build(
           page: ParentConnectStudent(),
@@ -334,6 +349,14 @@ class AppRouter {
           settings: settings,
           transition: PageTransitionType.iosPush,
         );
+      case AppRoutes.parent_nothi:
+        return _slideRoute(Nothication());
+      case AppRoutes.commentScreen:
+        return _slideRoute(CommentSignature());
+      case AppRoutes.parent_setting:
+        return _slideRoute(ParentSetting());
+      case AppRoutes.CustomScreen:
+        return _slideRoute(CustomScreen());
       case AppRoutes.NewsScreen:
         return PageTransition.build(
           page: NewsScreen(),

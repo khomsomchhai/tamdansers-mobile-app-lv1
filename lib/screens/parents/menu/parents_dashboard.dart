@@ -1,10 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_images.dart';
+import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/repositories/user_repo.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
+import 'package:tamdansers_app/screens/parents/menu/Comment_signature .dart';
+import 'package:tamdansers_app/screens/parents/menu/news.dart';
+import 'package:tamdansers_app/screens/parents/menu/setting.dart';
+import 'package:tamdansers_app/screens/parents/widget/parent_profile_header.dart';
 
-class ParentsDashboard extends StatelessWidget {
+class ParentsDashboard extends StatefulWidget {
   const ParentsDashboard({super.key});
+
+  @override
+  State<ParentsDashboard> createState() => _ParentsDashboardState();
+}
+
+class _ParentsDashboardState extends State<ParentsDashboard>
+    with SingleTickerProviderStateMixin {
+  int _currentIndex = 0;
+  Map<String, dynamic>? _currentParent;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadParentUser();
+  }
+
+  Future<void> _loadParentUser() async {
+    try {
+      final pref = await SharedPreferences.getInstance();
+      final userId = pref.getInt("userId");
+      if (userId != null) {
+        _currentParent = await UserRepo().getUserById(userId);
+        setState(() {});
+      }
+    } catch (e) {
+      debugPrint("Error loading parent user: $e");
+    }
+  }
+
   double _fs(double base, BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     return base * (width / 390).clamp(0.78, 1.15);
@@ -14,152 +51,115 @@ class ParentsDashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundLight,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              clipBehavior: Clip.none,
+      body: _buildTabBody(context),
+      bottomNavigationBar: _bottomNav(context),
+    );
+  }
+
+  Widget _buildTabBody(BuildContext context) {
+    switch (_currentIndex) {
+      case 1:
+        return const CommentSignature();
+      case 2:
+        return const NewsScreen();
+      case 3:
+        return const ParentSetting();
+      default:
+        return _buildHomeTab(context);
+    }
+  }
+
+  Widget _buildHomeTab(BuildContext context) {
+    const double cardBottomOffset = -125;
+    const double contentTopSpacing = 135;
+
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              ParentProfileHeader(
+                name: _currentParent?["first_name"] ?? "Parent",
+                gender: _currentParent?["gender"] ?? "male",
+              ),
+              Positioned(
+                left: 24,
+                right: 24,
+                bottom: cardBottomOffset,
+                child: _studentCard(context),
+              ),
+            ],
+          ),
+          const SizedBox(height: contentTopSpacing),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).padding.top + 12,
-                    left: 16,
-                    right: 16,
-                    bottom: 70,
-                  ),
-                  decoration: const BoxDecoration(
-                    color: AppColors.primary300,
-                    borderRadius:
-                        BorderRadius.vertical(bottom: Radius.circular(24)),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              "ថ្ងៃចន្ទ ទី5 ខែមករា ឆ្នាំ2026",
-                              style: AppTextStyle.body18White
-                                  .copyWith(fontSize: _fs(12, context)),
-                            ),
-                          ),
-                          _circleIcon(Icons.notifications_none, context),
-                          const SizedBox(width: 10),
-                          Container(
-                            width: 38,
-                            height: 38,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border:
-                                  Border.all(color: AppColors.white, width: 2),
-                            ),
-                            child: ClipOval(
-                              child: Image.asset(
-                                'assets/images/profile_placeholder.png',
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) =>
-                                    Icon(Icons.person,
-                                        color: AppColors.white, size: 22),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        "អរុណសួស្តី",
-                        style: AppTextStyle.title28White.copyWith(
-                            fontSize: _fs(22, context),
-                            fontWeight: FontWeight.w600),
-                      ),
-                      Text(
-                        "លោក ឡាយ",
-                        style: AppTextStyle.title28White.copyWith(
-                            fontSize: _fs(22, context),
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  left: 24,
-                  right: 24,
-                  bottom: -100,
-                  child: _studentCard(context),
-                ),
+                Text("សកម្មភាពលឿន",
+                    style: AppTextStyle.sectionTitle20
+                        .copyWith(fontSize: _fs(16, context))),
+                Text("មើលទាំងអស់",
+                    style: AppTextStyle.body.copyWith(
+                      color: AppColors.primaryMain,
+                      fontSize: _fs(13, context),
+                      fontWeight: FontWeight.w500,
+                    )),
               ],
             ),
-            const SizedBox(height: 116),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("សកម្មភាពលឿន",
-                      style: AppTextStyle.sectionTitle20
-                          .copyWith(fontSize: _fs(16, context))),
-                  Text("មើលទាំងអស់",
-                      style: AppTextStyle.body.copyWith(
-                        color: AppColors.primaryMain,
-                        fontSize: _fs(13, context),
-                        fontWeight: FontWeight.w500,
-                      )),
-                ],
+          ),
+          const SizedBox(height: 12),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: [
+                _quickActionTile(
+                    "វត្តមាន", Icons.date_range, AppColors.primaryMain, context,
+                    onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.AttandanceScreen);
+                }),
+                const SizedBox(width: 8),
+                _quickActionTile(
+                    "លទ្ធផល", Icons.assessment, AppColors.success, context,
+                    onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.CustomScreen);
+                }),
+                const SizedBox(width: 8),
+                _quickActionTile(
+                    "កិច្ចការផ្ទះ", Icons.home_work, AppColors.pepure, context,
+                    onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.HomeworkQuizeScreen);
+                }),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text("សកម្មភាពថ្មីៗ",
+                style: AppTextStyle.sectionTitle20
+                    .copyWith(fontSize: _fs(16, context))),
+          ),
+          const SizedBox(height: 12),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: _recentActivity(context),
+          ),
+          const SizedBox(height: 16),
+          Center(
+            child: Text(
+              "មើលការផ្សេងៗដែលពាក់ព័ន្ធ",
+              style: AppTextStyle.body.copyWith(
+                color: AppColors.secondaryText,
+                fontSize: _fs(13, context),
               ),
             ),
-            const SizedBox(height: 12),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _quickActionTile("វត្តមាន", Icons.date_range,
-                      AppColors.primaryMain, context, onTap: () {
-                    Navigator.pushNamed(context, AppRoutes.AttandanceScreen);
-                  }),
-                  _quickActionTile(
-                      "លទ្ធផល", Icons.assessment, AppColors.success, context,
-                      onTap: () {
-                    Navigator.pushNamed(context, AppRoutes.HomeworkQuizeScreen);
-                  }),
-                  _quickActionTile(
-                      "ព័ត៌មាន", Icons.campaign, AppColors.pepure, context,
-                      onTap: () {
-                    Navigator.pushNamed(context, AppRoutes.NewsScreen);
-                  }),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text("សកម្មភាពថ្មីៗ",
-                  style: AppTextStyle.sectionTitle20
-                      .copyWith(fontSize: _fs(16, context))),
-            ),
-            const SizedBox(height: 12),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: _recentActivity(context),
-            ),
-            const SizedBox(height: 16),
-            Center(
-              child: Text(
-                "មើលការផ្សេងៗដែលពាក់ព័ន្ធ",
-                style: AppTextStyle.body.copyWith(
-                  color: AppColors.secondaryText,
-                  fontSize: _fs(13, context),
-                ),
-              ),
-            ),
-            const SizedBox(height: 24),
-          ],
-        ),
+          ),
+          const SizedBox(height: 24),
+        ],
       ),
-      bottomNavigationBar: _bottomNav(context),
     );
   }
 
@@ -193,14 +193,8 @@ class ParentsDashboard extends StatelessWidget {
                       color: AppColors.primaryBg,
                     ),
                     child: ClipOval(
-                      child: Image.asset(
-                        'assets/images/profile_placeholder.png',
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => Icon(
-                            Icons.person,
-                            size: 36,
-                            color: AppColors.primaryMain),
-                      ),
+                      child:
+                          Image.asset(AppImages.userProfile, fit: BoxFit.cover),
                     ),
                   ),
                   Positioned(
@@ -231,7 +225,7 @@ class ParentsDashboard extends StatelessWidget {
                         )),
                     const SizedBox(height: 2),
                     Text("ថ្នាក់ទី 5A ID: #29384",
-                        style: AppTextStyle.body.copyWith(
+                        style: AppTextStyle.buttonText15Primary.copyWith(
                           fontSize: _fs(13, context),
                           color: AppColors.secondaryText,
                         )),
@@ -250,7 +244,7 @@ class ParentsDashboard extends StatelessWidget {
                               color: AppColors.success, size: 14),
                           const SizedBox(width: 4),
                           Text("ចូលនិស្សិត- 7:45 AM",
-                              style: AppTextStyle.body.copyWith(
+                              style: AppTextStyle.buttonText15Primary.copyWith(
                                 color: AppColors.success,
                                 fontSize: _fs(12, context),
                                 fontWeight: FontWeight.w600,
@@ -267,17 +261,23 @@ class ParentsDashboard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _statItem("៩៨%", "វត្តមាន", AppColors.success, context),
+              _statItem("៩៨%", "វត្តមាន", AppColors.success,
+                  AppTextStyle.caption12Primary, context,
+                  valueFontSize: 30, labelFontSize: 16),
               Container(
                   width: 1,
                   height: 30,
                   color: AppColors.neutral500.withOpacity(0.3)),
-              _statItem("A", "និទ្ទេស", AppColors.primaryMain, context),
+              _statItem("A", "និទ្ទេស", AppColors.success,
+                  AppTextStyle.caption12Primary, context,
+                  valueFontSize: 30, labelFontSize: 16),
               Container(
                   width: 1,
                   height: 30,
                   color: AppColors.neutral500.withOpacity(0.3)),
-              _statItem("ល", "អត្តចរិត", AppColors.success, context),
+              _statItem("ល្អ", "អត្តចរិត", AppColors.success,
+                  AppTextStyle.caption12Primary, context,
+                  valueFontSize: 30, labelFontSize: 16),
             ],
           ),
         ],
@@ -292,36 +292,41 @@ class ParentsDashboard extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
+          height: 106,
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(14),
+            border:
+                Border.all(color: AppColors.lightgrey.withValues(alpha: 0.7)),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 6,
-                offset: const Offset(0, 2),
+                color: Colors.black.withValues(alpha: 0.04),
+                blurRadius: 8,
+                offset: const Offset(0, 1),
               ),
             ],
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                padding: const EdgeInsets.all(10),
+                width: 42,
+                height: 42,
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(10),
+                  color: color.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(icon, color: color, size: 28),
+                child: Icon(icon, color: color, size: 20),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               Text(
                 title,
                 textAlign: TextAlign.center,
                 style: AppTextStyle.body.copyWith(
-                  fontSize: _fs(13, context),
-                  fontWeight: FontWeight.w600,
+                  fontSize: _fs(12, context),
+                  fontWeight: FontWeight.w500,
                   color: AppColors.primaryText,
                 ),
               ),
@@ -422,52 +427,158 @@ class ParentsDashboard extends StatelessWidget {
     );
   }
 
-  Widget _statItem(
-      String value, String label, Color color, BuildContext context) {
+  Widget _statItem(String value, String label, Color color,
+      TextStyle? labelStyle, BuildContext context,
+      {double valueFontSize = 18, double labelFontSize = 11}) {
     return Column(
       children: [
         Text(value,
             style: AppTextStyle.stat32Bold.copyWith(
-              fontSize: _fs(18, context),
+              fontSize: _fs(valueFontSize, context),
               color: color,
             )),
         const SizedBox(height: 2),
         Text(label,
-            style: AppTextStyle.body.copyWith(
-              fontSize: _fs(11, context),
-              color: AppColors.secondaryText,
+            style: (labelStyle ?? AppTextStyle.caption12Secondary).copyWith(
+              fontSize: _fs(labelFontSize, context),
             )),
       ],
     );
   }
 
-  Widget _circleIcon(IconData icon, BuildContext context) {
-    return Container(
-      width: 36,
-      height: 36,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: AppColors.white.withOpacity(0.2),
+  Widget _bottomNav(BuildContext context) {
+    const tabs = [
+      _NavItem(
+        icon: Icons.home_outlined,
+        activeIcon: Icons.home_rounded,
+        label: 'ផ្ទះ',
       ),
-      child: Icon(icon, color: AppColors.white, size: 20),
+      _NavItem(
+        icon: Icons.mail_outline,
+        activeIcon: Icons.mail_rounded,
+        label: 'សារ',
+      ),
+      _NavItem(
+        icon: Icons.newspaper_outlined,
+        activeIcon: Icons.newspaper,
+        label: 'ពត៌មាន',
+      ),
+      _NavItem(
+        icon: Icons.person_outline,
+        activeIcon: Icons.person,
+        label: 'ប្រវត្តិ',
+      ),
+    ];
+
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(AppNumber.radiusRounded),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primaryMain.withValues(alpha: 0.12),
+            blurRadius: 20,
+            offset: const Offset(0, -4),
+          ),
+        ],
+      ),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppNumber.screenPadding,
+            vertical: 10,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: List.generate(
+              tabs.length,
+              (i) => _NavTabItem(
+                item: tabs[i],
+                isActive: _currentIndex == i,
+                onTap: () => setState(() => _currentIndex = i),
+                fs: _fs,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
+}
 
-  Widget _bottomNav(BuildContext context) {
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      currentIndex: 0,
-      selectedItemColor: AppColors.primaryMain,
-      unselectedItemColor: AppColors.secondaryText,
-      selectedFontSize: _fs(12, context),
-      unselectedFontSize: _fs(12, context),
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: "ផ្ទះ"),
-        BottomNavigationBarItem(icon: Icon(Icons.mail), label: "សារ"),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today), label: "ប្រតិទិន"),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: "ប្រវត្តិ"),
-      ],
+class _NavItem {
+  final IconData icon;
+  final IconData activeIcon;
+  final String label;
+
+  const _NavItem({
+    required this.icon,
+    required this.activeIcon,
+    required this.label,
+  });
+}
+
+class _NavTabItem extends StatelessWidget {
+  final _NavItem item;
+  final bool isActive;
+  final VoidCallback onTap;
+  final double Function(double, BuildContext) fs;
+
+  const _NavTabItem({
+    required this.item,
+    required this.isActive,
+    required this.onTap,
+    required this.fs,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: SizedBox(
+        width: 72,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.easeInOut,
+              width: isActive ? 52 : 40,
+              height: 36,
+              decoration: BoxDecoration(
+                color: isActive
+                    ? AppColors.primaryMain.withValues(alpha: 0.12)
+                    : AppColors.transparent,
+                borderRadius: BorderRadius.circular(AppNumber.radiusPill),
+              ),
+              child: Icon(
+                isActive ? item.activeIcon : item.icon,
+                size: 24,
+                color:
+                    isActive ? AppColors.primaryMain : AppColors.secondaryText,
+              ),
+            ),
+            const SizedBox(height: 4),
+            AnimatedDefaultTextStyle(
+              duration: const Duration(milliseconds: 200),
+              style: isActive
+                  ? AppTextStyle.caption12Secondary.copyWith(
+                      color: AppColors.primaryMain,
+                      fontWeight: FontWeight.w700,
+                      fontSize: fs(12, context),
+                    )
+                  : AppTextStyle.caption12Secondary.copyWith(
+                      fontSize: fs(12, context),
+                    ),
+              child: Text(item.label, maxLines: 1),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

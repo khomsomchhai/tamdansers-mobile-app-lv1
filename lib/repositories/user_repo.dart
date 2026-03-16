@@ -74,6 +74,37 @@ class UserRepo {
     return null;
   }
 
+  Future<List<Map<String, dynamic>>> searchParents(String query) async {
+    final db = await DbHelper().initDatabase();
+
+    // Normalize query for partial matching
+    final normalized = query.trim();
+
+    // Search parents by phone, email, or name fields.
+    final result = await db.rawQuery(
+      '''
+      SELECT *
+      FROM tbl_user
+      WHERE role = 'parent'
+        AND (
+          phone LIKE ?
+          OR email LIKE ?
+          OR first_name LIKE ?
+          OR last_name LIKE ?
+        )
+      ORDER BY first_name ASC
+      ''',
+      [
+        '%$normalized%',
+        '%$normalized%',
+        '%$normalized%',
+        '%$normalized%',
+      ],
+    );
+
+    return result;
+  }
+
   Future<Map<String, dynamic>?> getUserByEmail(String email) async {
     final db = await DbHelper().initDatabase();
     final result = await db.query(

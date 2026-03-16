@@ -3,12 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
-import 'package:tamdansers_app/constants/app_images.dart';
+import 'package:tamdansers_app/constants/app_icon.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/database/db_helper.dart';
 import 'package:tamdansers_app/repositories/student_class_repo.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
+import 'package:tamdansers_app/widget/custom_snackbar.dart';
 
 class StudentDetailScreen extends StatefulWidget {
   final int studentId;
@@ -218,7 +219,7 @@ class _StudentDetailScreenState extends State<StudentDetailScreen> {
               : null,
           child: (photoPath == null || !File(photoPath).existsSync())
               ? Image.asset(
-                  isMale ? AppImages.studentMale2 : AppImages.userProfile,
+                  isMale ? AppIcon.maleAvatar : AppIcon.femaleAvatar,
                   width: 70)
               : null,
         ),
@@ -283,26 +284,26 @@ class _StudentDetailScreenState extends State<StudentDetailScreen> {
                 final result = await Navigator.pushNamed(
                   context,
                   AppRoutes.linkParentScreen,
+                  arguments: _student,
                 );
 
-                if (!context.mounted) return;
+                if (!mounted) return;
 
                 if (result == true) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Center(
-                        child: Text(
-                          "ភ្ជាប់អាណាព្យាបាលជោគជ័យ",
-                          style: AppTextStyle.sectionTitle20,
-                        ),
+                      content: CustomSnackbar(
+                        title: 'Success',
+                        message: 'ភ្ជាប់អាណាព្យាបាលជោគជ័យ',
+                        icon: Icons.check_circle,
+                        color: Colors.green,
                       ),
-                      backgroundColor: AppColors.success,
+                      behavior: SnackBarBehavior.floating,
                     ),
                   );
                 }
               },
-              icon: const Icon(Icons.person_add_alt_1_rounded,
-                  color: AppColors.white, size: 20),
+              icon: const Icon(Icons.person_add_alt_1_rounded, color: Colors.white, size: 20),
               label: Text("ភ្ជាប់អាណាព្យាបាល", style: AppTextStyle.bodyWhite),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryMain,

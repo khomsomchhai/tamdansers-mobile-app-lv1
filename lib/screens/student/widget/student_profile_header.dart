@@ -92,8 +92,8 @@ class _StudentProfileHeaderState extends State<StudentProfileHeader> {
         SizedBox(width: 10,),
         Text(
           (() {
-            final first = widget.user?['last_name'] ?? '';
-            final last = widget.user?['first_name'] ?? '';
+            final first = widget.user?['first_name'] ?? '';
+            final last = widget.user?['last_name'] ?? '';
             final full = ('$first $last').trim();
             return full.isNotEmpty ? full : 'រុន​ លីមហុង';
           })(),

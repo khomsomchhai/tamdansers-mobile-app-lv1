@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 
@@ -70,89 +71,102 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
       setState(() => _currentMonthIndex++);
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundLight,
       appBar: AppBar(
-        backgroundColor: AppColors.white,
+        backgroundColor: AppColors.backgroundLight,
         elevation: 0,
         scrolledUnderElevation: 0,
+        title: Text('វត្តមាន', style: AppTextStyle.screenTitle24),
+        actions: const [
+          Padding(
+            padding: EdgeInsets.only(right: 12),
+            child:
+                Icon(Icons.notifications_sharp, color: AppColors.primaryText),
+          ),
+        ],
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.primaryText),
           onPressed: () => Navigator.pop(context),
         ),
-        centerTitle: true,
-        title: Text("វត្តមាន", style: AppTextStyle.subtitle18),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: AppNumber.screenPadding),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 16),
-                    _buildProfileCard(),
-                    const SizedBox(height: 20),
-                    _buildMonthSelector(),
-                    const SizedBox(height: 16),
-                    _buildStatsRow(),
-                    const SizedBox(height: 20),
-                    Text("កំណត់សហេតុប្រចាំថ្ងៃ",
-                        style: AppTextStyle.subtitle16),
-                    const SizedBox(height: 12),
-                    _buildAttendanceList(),
-                    const SizedBox(height: 16),
-                  ],
-                ),
-              ),
-            ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding:
+              const EdgeInsets.symmetric(horizontal: AppNumber.screenPadding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 12),
+              _buildProfileHeader(),
+              const SizedBox(height: 16),
+              _buildMonthSelector(),
+              const SizedBox(height: 16),
+              _buildStatsRow(),
+              const SizedBox(height: 20),
+              Text("កំណត់សហេតុប្រចាំថ្ងៃ", style: AppTextStyle.subtitle18),
+              const SizedBox(height: 12),
+              _buildAttendanceList(),
+              const SizedBox(height: 16),
+              _buildRequestLeaveButton(),
+              const SizedBox(height: 24),
+            ],
           ),
-          _buildRequestLeaveButton(),
-        ],
+        ),
       ),
     );
   }
 
-  // ==================== PROFILE CARD ====================
-  Widget _buildProfileCard() {
+  // ==================== PROFILE HEADER ====================
+  Widget _buildProfileHeader() {
     return Row(
       children: [
         Container(
-          width: 56,
-          height: 56,
+          width: 50,
+          height: 50,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: AppColors.primaryBg,
-            border: Border.all(color: AppColors.lightgrey, width: 2),
+            border: Border.all(color: AppColors.primaryMain, width: 2),
           ),
           child: ClipOval(
-            child: Image.asset(
-              'assets/images/user_profile.png',
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Icon(
-                Icons.person,
-                color: AppColors.primaryMain,
-                size: 30,
-              ),
-            ),
+            child: Image.asset(AppImages.userProfile, fit: BoxFit.cover),
           ),
         ),
-        const SizedBox(width: 14),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Sophea Chan", style: AppTextStyle.subtitle18),
-            const SizedBox(height: 2),
-            Text(
-              "ថ្នាក់ទី 5A  -  ID:123456",
-              style: AppTextStyle.caption14Secondary,
-            ),
-          ],
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Text("ហេង ឡូយ", style: AppTextStyle.subtitle18),
+                  const SizedBox(width: 4),
+                  Icon(Icons.keyboard_arrow_down,
+                      size: 20, color: AppColors.secondaryText),
+                ],
+              ),
+              const SizedBox(height: 2),
+              Text(
+                "ថ្នាក់ទី 5A ID: #29384",
+                style: AppTextStyle.caption13Secondary,
+              ),
+            ],
+          ),
+        ),
+        Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: AppColors.backgroundLight,
+            border: Border.all(color: AppColors.lightgrey),
+          ),
+          child: Icon(Icons.person_outline,
+              size: 22, color: AppColors.secondaryText),
         ),
       ],
     );
@@ -321,6 +335,7 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
     Color dotColor;
 
     switch (type) {
+      case "presents":
       case "present":
         statusColor = AppColors.primaryMain;
         statusBgColor = AppColors.primaryBg;
@@ -397,32 +412,26 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
 
   // ==================== REQUEST LEAVE BUTTON ====================
   Widget _buildRequestLeaveButton() {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
-      decoration: const BoxDecoration(
-        color: AppColors.white,
-      ),
-      child: SizedBox(
-        width: double.infinity,
-        child: ElevatedButton.icon(
-          onPressed: () {},
-          icon: const Icon(Icons.edit_calendar_outlined, size: 20),
-          label: Text(
-            "Request Leave",
-            style: GoogleFonts.kantumruyPro(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton.icon(
+        onPressed: () {},
+        icon: const Icon(Icons.edit_calendar_outlined, size: 20),
+        label: Text(
+          "Request Leave",
+          style: GoogleFonts.kantumruyPro(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
           ),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primaryMain,
-            foregroundColor: AppColors.white,
-            padding: const EdgeInsets.symmetric(vertical: 14),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppNumber.radiusPill),
-            ),
-            elevation: 0,
+        ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primaryMain,
+          foregroundColor: AppColors.white,
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppNumber.radiusPill),
           ),
+          elevation: 0,
         ),
       ),
     );

@@ -11,6 +11,7 @@ import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/repositories/activity_repo.dart';
 import 'package:tamdansers_app/repositories/student_class_repo.dart';
 import 'package:tamdansers_app/repositories/user_repo.dart';
+import 'package:tamdansers_app/widget/custom_snackbar.dart';
 import 'package:tamdansers_app/widget/primary_button.dart';
 
 class AddStudent extends StatefulWidget {
@@ -72,13 +73,29 @@ class _AddStudentState extends State<AddStudent> {
     final lastName = _lastNameController.text.trim();
     if (firstName.isEmpty || lastName.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('សូមបំពេញឈ្មោះ')),
+        SnackBar(
+          content: CustomSnackbar(
+            title: 'Error',
+            message: 'សូមបំពេញឈ្មោះ',
+            icon: Icons.error,
+            color: Colors.red,
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
       );
       return;
     }
     if (_classId == null && !_isEditing) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('មិនមានថ្នាក់ត្រូវបានជ្រើស')),
+        SnackBar(
+          content: CustomSnackbar(
+            title: 'Error',
+            message: 'មិនមានថ្នាក់ត្រូវបានជ្រើស',
+            icon: Icons.error,
+            color: Colors.red,
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
       );
       return;
     }
@@ -87,7 +104,15 @@ class _AddStudentState extends State<AddStudent> {
     final phone = _phoneController.text.trim();
     if (phone.isNotEmpty && !_isValidPhone(phone)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('លេខទូរសព្ទមិនត្រឹមត្រូវ (ឧ. 0XX XXX XXXX)')),
+        SnackBar(
+          content: CustomSnackbar(
+            title: 'Error',
+            message: 'លេខទូរសព្ទមិនត្រឹមត្រូវ (ឧ. 0XX XXX XXXX)',
+            icon: Icons.error,
+            color: Colors.red,
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
       );
       return;
     }
@@ -99,8 +124,15 @@ class _AddStudentState extends State<AddStudent> {
       if (existing != null && existing['role'] == 'teacher') {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Text('លេខទូរសព្ទនេះជារបស់គ្រូ មិនអាចបញ្ចូលជាសិស្សបានទេ')),
+            SnackBar(
+              content: CustomSnackbar(
+                title: 'Error',
+                message: 'លេខទូរសព្ទនេះជារបស់គ្រូ មិនអាចបញ្ចូលជាសិស្សបានទេ',
+                icon: Icons.error,
+                color: Colors.red,
+              ),
+              behavior: SnackBarBehavior.floating,
+            ),
           );
         }
         return;
@@ -111,8 +143,15 @@ class _AddStudentState extends State<AddStudent> {
       if (existing != null && existing['role'] == 'teacher') {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Text('អ៊ីម៉ែលនេះជារបស់គ្រូ មិនអាចបញ្ចូលជាសិស្សបានទេ')),
+            SnackBar(
+              content: CustomSnackbar(
+                title: 'Error',
+                message: 'អ៊ីម៉ែលនេះជារបស់គ្រូ មិនអាចបញ្ចូលជាសិស្សបានទេ',
+                icon: Icons.error,
+                color: Colors.red,
+              ),
+              behavior: SnackBarBehavior.floating,
+            ),
           );
         }
         return;
@@ -129,9 +168,14 @@ class _AddStudentState extends State<AddStudent> {
       if (isDuplicate) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('សិស្សនេះមានក្នុងថ្នាក់នេះរួចហើយ'),
-              backgroundColor: Colors.red,
+            SnackBar(
+              content: CustomSnackbar(
+                title: 'Error',
+                message: 'សិស្សនេះមានក្នុងថ្នាក់នេះរួចហើយ',
+                icon: Icons.error,
+                color: Colors.red,
+              ),
+              behavior: SnackBarBehavior.floating,
             ),
           );
         }

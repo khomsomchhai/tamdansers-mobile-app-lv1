@@ -248,9 +248,7 @@ class _InformationState extends State<Information> {
           );
         }).toList(),
       ),
-
       const SizedBox(height: 8),
-
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: images.asMap().entries.map((entry) {

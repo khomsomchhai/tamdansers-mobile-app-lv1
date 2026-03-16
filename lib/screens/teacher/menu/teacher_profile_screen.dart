@@ -361,7 +361,7 @@ class _TeacherProfileScreenState extends State<TeacherProfileScreen> {
     }
 
     final teacherName = _teacherData != null
-        ? "${_teacherData!['last_name']} ${_teacherData!['first_name']}"
+        ? "${_teacherData!['first_name']} ${_teacherData!['last_name']}"
         : "Teacher";
     final gender = _teacherData?['gender'] as String? ?? 'male';
 
@@ -595,6 +595,9 @@ class _TeacherProfileScreenState extends State<TeacherProfileScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppNumber.radiusLarge),
+        ),
         backgroundColor: AppColors.backgroundLight,
         title: Text("ចាកចេញ?", style: AppTextStyle.subtitle18),
         content: Text(

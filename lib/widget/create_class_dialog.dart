@@ -7,6 +7,7 @@ import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/repositories/activity_repo.dart';
 import 'package:tamdansers_app/repositories/class_repo.dart';
+import 'package:tamdansers_app/widget/custom_snackbar.dart';
 
 class CreateClassDialog extends StatefulWidget {
   final List<String> grades;
@@ -57,7 +58,15 @@ class _CreateClassDialogState extends State<CreateClassDialog> {
         _grade == null ||
         _sectionCtrl.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("សូមបំពេញព័ត៌មានទាំងអស់")),
+        SnackBar(
+          content: CustomSnackbar(
+            title: 'Error',
+            message: 'សូមបំពេញព័ត៌មានទាំងអស់',
+            icon: Icons.error,
+            color: Colors.red,
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
       );
       return;
     }
@@ -85,7 +94,15 @@ class _CreateClassDialogState extends State<CreateClassDialog> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("មិនអាចបង្កើតថ្នាក់បាន: $e")),
+          SnackBar(
+            content: CustomSnackbar(
+              title: 'Error',
+              message: 'មិនអាចបង្កើតថ្នាក់បាន: $e',
+              icon: Icons.error,
+              color: Colors.red,
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
         );
       }
     } finally {

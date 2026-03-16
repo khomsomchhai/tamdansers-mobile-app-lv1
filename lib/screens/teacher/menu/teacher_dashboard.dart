@@ -31,6 +31,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
   bool _loading = true;
   String _teacherName = "Teacher";
   String _teacherGender = "";
+  String _firstName = "";
 
   @override
   void initState() {
@@ -69,6 +70,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
         _teacherName = teacherData != null
             ? "${teacherData['first_name']} ${teacherData['last_name']}"
             : "Teacher";
+        _firstName = teacherData?['first_name'] as String? ?? "";
         _teacherGender = teacherData?['gender'] as String? ?? "";
         _classCount = classCount;
         _studentCount = studentCount;
@@ -129,7 +131,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                   style: AppTextStyle.screenTitle24,
                   children: [
                     TextSpan(
-                      text: _teacherName,
+                      text: _firstName,
                       style: AppTextStyle.screenTitle24Main,
                     ),
                   ],
@@ -260,7 +262,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                   .then((_) => _loadData());
             },
             icon: Icon(Icons.event_note_outlined, color: AppColors.primaryMain),
-            label: Text("ត្រូវត្រាថ្នាក់", style: AppTextStyle.bodyPrimary),
+            label: Text("គ្រប់គ្រងថ្នាក់", style: AppTextStyle.bodyPrimary),
             style: OutlinedButton.styleFrom(
               side: BorderSide(color: AppColors.primaryMain),
               padding: const EdgeInsets.symmetric(vertical: 14),
@@ -309,7 +311,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
         ),
         _buildQuickActionItem(
           Icons.campaign_outlined,
-          "ផ្ញើរសេចក្តីជូនដំណឹង",
+          "សេចក្តីជូនដំណឹង",
           Color(0xFFFFF3E0),
           Color(0xFFFF9800),
           onTap: () {

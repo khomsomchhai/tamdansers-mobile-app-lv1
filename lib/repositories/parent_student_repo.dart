@@ -69,6 +69,17 @@ class ParentStudentRepo {
     return null;
   }
 
+  Future<List<Map<String, dynamic>>> getPendingRequestsByParent(int parentId) async {
+    final db = await DbHelper().initDatabase();
+    return await db.rawQuery('''
+      SELECT ps.*, sc.first_name as student_first_name, sc.last_name as student_last_name, sc.email as student_email, c.name as class_name
+      FROM tbl_parent_student ps
+      JOIN tbl_student_class sc ON ps.student_id = sc.id
+      JOIN tbl_class c ON sc.class_id = c.id
+      WHERE ps.parent_id = ? AND ps.status = 'pending'
+    ''', [parentId]);
+  }
+
   Future<bool> isParentConnectedToStudent(int parentId, int studentId) async {
     final db = await DbHelper().initDatabase();
     final result = await db.query(
