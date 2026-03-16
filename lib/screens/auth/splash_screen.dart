@@ -27,7 +27,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
     switch (role) {
       case "teacher":
-        // use the main screen which contains the bottom navigation bar
         Navigator.pushReplacementNamed(
           context,
           AppRoutes.teacherMainScreen,
@@ -83,10 +82,12 @@ void _goToRoleSelection() {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.2,
-            child: SvgPicture.asset(
-              AppImages.appLogoWhite,
+          Center(
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height * 0.2,
+              child: SvgPicture.asset(
+                AppImages.appLogoWhite,
+              ),
             ),
           ),
         ],

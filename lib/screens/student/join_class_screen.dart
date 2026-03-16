@@ -7,9 +7,9 @@ import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/constants/validators.dart';
 import 'package:tamdansers_app/repositories/class_repo.dart';
 import 'package:tamdansers_app/repositories/user_repo.dart';
-import 'package:tamdansers_app/screens/widget/custom_snackbar.dart';
-import 'package:tamdansers_app/screens/widget/primary_button_2.dart';
 import 'package:tamdansers_app/widget/auth_field.dart';
+import 'package:tamdansers_app/widget/custom_snackbar.dart';
+import 'package:tamdansers_app/widget/primary_button_2.dart';
 
 class JoinClassScreen extends StatefulWidget {
   final int userId;
@@ -37,6 +37,7 @@ class _JoinClassScreenState extends State<JoinClassScreen> {
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,49 +81,41 @@ class _JoinClassScreenState extends State<JoinClassScreen> {
             label: isLoading ? "" : "ចូល",
             backgroundColor: AppColors.primaryMain,
             foregroundColor: AppColors.white,
-            processIndicator: isLoading ? SizedBox(
-              width: 26,
-              height: 26,
-              child: CircularProgressIndicator(
-                color: AppColors.white,
-                strokeWidth: 2,
-              ),
-            ):null,
-            onPressed: () async {
-              try {
-                if (formKey.currentState!.validate()) {
-                  // Join class
-                  final classData = await ClassRepo().getClassByCode(classCodeCtrl.text.trim());
-                  if (classData != null) {
-                    final success = await UserRepo().joinClass(widget.userId, classData['id']);
-                    if (success) {
-                      setState(() {
-                        isLoading = true;
-                      });
-                      await Future.delayed(Duration(seconds: 2));
-                      setState(() {
-                        isLoading = false;
-                      });
-                      Navigator.pop(context, true); // Go back to first screen with success
-                    } else {
-                      // Show error
-                      _showError(
-                        "មិនអាចចូលថ្នាក់បាន"
-                      );
+            processIndicator: isLoading
+                ? SizedBox(
+                    width: 26,
+                    height: 26,
+                    child: CircularProgressIndicator(
+                      color: AppColors.white,
+                      strokeWidth: 2,
+                    ),
+                  )
+                : null,
+            onPressed: isLoading
+                ? null
+                : () async {
+                    if (!formKey.currentState!.validate()) return;
+                    setState(() => isLoading = true);
+                    try {
+                      final classData = await ClassRepo()
+                          .getClassByCode(classCodeCtrl.text.trim());
+                      if (classData == null) {
+                        _showError("លេខកូដថ្នាក់មិនត្រឹមត្រូវ");
+                        return;
+                      }
+                      final success = await UserRepo()
+                          .joinClass(widget.userId, classData['id']);
+                      if (success) {
+                        if (mounted) Navigator.pop(context, true);
+                      } else {
+                        _showError("មិនអាចចូលថ្នាក់បាន");
+                      }
+                    } catch (e) {
+                      _showError("កំហុស: $e");
+                    } finally {
+                      if (mounted) setState(() => isLoading = false);
                     }
-                  } else {
-                    // Invalid code
-                    _showError(
-                      "លេខកូដថ្នាក់មិនត្រឹមត្រូវ"
-                    );
-                  }
-                }
-              } catch (e) {
-                _showError(
-                  "កំហុស: $e"
-                );
-              }
-            }),
+                  }),
       ),
     );
   }

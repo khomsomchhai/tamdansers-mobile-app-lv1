@@ -29,7 +29,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   var identifierCtrl = TextEditingController();
   var pwdCtrl = TextEditingController();
   var cfPwdCtrl = TextEditingController();
-  String gender = "male";
+  String gender = "ប្រុស";
   var formKey = GlobalKey<FormState>();
 
   late String selectedRole;
@@ -62,17 +62,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
       if (existingUser != null) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            backgroundColor: AppColors.transparent,
-            elevation: 0,
-            behavior: SnackBarBehavior.floating,
-            margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-            content: CustomSnackbar(
-              title: "មិនអាចចុះឈ្មោះបាន!", 
-              message: "គណនីនេះមានរួចហើយ សូមប្រើអ៊ីម៉ែល ឬ លេខទូរស័ព្ទផ្សេង", 
-              icon: Icons.close, 
-              color: AppColors.error
-            )
-          ),
+              backgroundColor: AppColors.transparent,
+              elevation: 0,
+              behavior: SnackBarBehavior.floating,
+              margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+              content: CustomSnackbar(
+                  title: "មិនអាចចុះឈ្មោះបាន!",
+                  message: "គណនីនេះមានរួចហើយ សូមប្រើអ៊ីម៉ែល ឬ លេខទូរស័ព្ទផ្សេង",
+                  icon: Icons.close,
+                  color: AppColors.error)),
         );
       } else {
         await UserRepo().createUser(
@@ -84,6 +82,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
           password: pwdCtrl.text,
           role: selectedRole,
         );
+
+        // Auto-link to classes where teacher already added this phone/email
+        if (selectedRole == 'student') {
+          final user = email != null
+              ? await UserRepo().getUserByEmail(email)
+              : await UserRepo().getUserByPhone(phone!);
+          if (user != null) {
+            await UserRepo().autoLinkClasses(user['id'] as int);
+          }
+        }
 
         Navigator.pushNamed(context, AppRoutes.otpScreen,
             arguments: selectedRole);
@@ -184,13 +192,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
           Row(
             children: [
               Expanded(
-                child: _buildRadio(label: "ប្រុស", value: "male"),
+                child: _buildRadio(label: "ប្រុស", value: "ប្រុស"),
               ),
               SizedBox(
                 width: 10,
               ),
               Expanded(
-                child: _buildRadio(label: "ស្រី", value: "female"),
+                child: _buildRadio(label: "ស្រី", value: "ស្រី"),
               ),
             ],
           ),

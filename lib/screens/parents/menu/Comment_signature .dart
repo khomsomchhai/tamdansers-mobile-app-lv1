@@ -17,16 +17,16 @@ class _CommentSignatureState extends State<CommentSignature> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(
-          "ការបញ្ជាក់ទទួល",
-          style: AppTextStyle.screenTitle24Main
+          "សារ",
+          style: AppTextStyle.sectionTitle20
               .copyWith(color: AppColors.primaryText),
         ),
         centerTitle: true,
-        backgroundColor: AppColors.white,
+        backgroundColor: AppColors.backgroundLight,
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(20),
           child: Column(
             children: [
               _studentCard(),
@@ -148,7 +148,7 @@ class _CommentSignatureState extends State<CommentSignature> {
             child: Stack(
               children: [
                 Center(
-                  child: Text('Sign Here', style: AppTextStyle.screenTitle24),
+                  child: Text('ស៊ីញ៉េត្រងនេះ', style: AppTextStyle.subtitle18),
                 ),
                 Positioned(
                   top: 15,
@@ -178,7 +178,7 @@ class _CommentSignatureState extends State<CommentSignature> {
         ),
       ),
       child: Text(
-        'Submit',
+        'បញ្ជូន',
         style: AppTextStyle.size18.copyWith(color: AppColors.uploadFile),
       ),
     );

@@ -1,0 +1,92 @@
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/repositories/parent_student_repo.dart';
+
+class ParentPendingRequests extends StatefulWidget {
+  const ParentPendingRequests({super.key});
+
+  @override
+  State<ParentPendingRequests> createState() => _ParentPendingRequestsState();
+}
+
+class _ParentPendingRequestsState extends State<ParentPendingRequests> {
+  List<Map<String, dynamic>> _pendingRequests = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPendingRequests();
+  }
+
+  Future<void> _loadPendingRequests() async {
+    try {
+      final pref = await SharedPreferences.getInstance();
+      final parentId = pref.getInt("userId");
+      if (parentId == null) return;
+
+      final parentStudentRepo = ParentStudentRepo();
+      final requests = await parentStudentRepo.getPendingRequestsByParent(parentId);
+      setState(() {
+        _pendingRequests = requests;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      // Handle error
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('សំណើភ្ជាប់ដែលបានផ្ញើ', style: AppTextStyle.sectionTitle20),
+        centerTitle: true,
+      ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : _pendingRequests.isEmpty
+              ? Center(
+                  child: Text(
+                    'មិនមានសំណើភ្ជាប់ដែលកំពុងរង់ចាំទេ',
+                    style: AppTextStyle.body,
+                  ),
+                )
+              : ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: _pendingRequests.length,
+                  itemBuilder: (context, index) {
+                    final request = _pendingRequests[index];
+                    return Card(
+                      margin: const EdgeInsets.only(bottom: 16),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'អ៊ីម៉ែល: ${request['student_email']}',
+                                  style: AppTextStyle.body,
+                                ),
+                                Text(
+                                  'សំណើររង់ចាំ',
+                                  style: AppTextStyle.body.copyWith(color: Colors.orange),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+    );
+  }
+}

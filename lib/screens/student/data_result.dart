@@ -27,7 +27,6 @@ class MonthResult {
     required this.subjects,
   });
 
-  // ✅ Optional: auto calculate average
   double get calculatedAverage => subjects.isEmpty
       ? 0
       : subjects.map((e) => e.score).reduce((a, b) => a + b) / subjects.length;

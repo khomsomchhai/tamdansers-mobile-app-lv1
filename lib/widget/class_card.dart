@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
-import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 
 class ClassCard extends StatelessWidget {
@@ -8,6 +7,8 @@ class ClassCard extends StatelessWidget {
   final String title;
   final String students;
   final Color color;
+  final String teacherName;
+  final String? classCode;
   final VoidCallback? onTap;
 
   const ClassCard({
@@ -16,6 +17,8 @@ class ClassCard extends StatelessWidget {
     required this.title,
     required this.students,
     required this.color,
+    required this.teacherName,
+    this.classCode,
     this.onTap,
   });
 
@@ -61,7 +64,20 @@ class ClassCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        SizedBox(height: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.25),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            title,
+                            style: AppTextStyle.body
+                                .copyWith(fontSize: 11, color: AppColors.white),
+                          ),
+                        ),
+                        SizedBox(height: 6),
                         Text(className,
                             style: AppTextStyle.sectionTitle20
                                 .copyWith(color: AppColors.white)),
@@ -76,34 +92,21 @@ class ClassCard extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Flexible(
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 14,
-                          backgroundImage: AssetImage(AppImages.userProfile),
-                        ),
-                        SizedBox(width: 8),
-                        Flexible(
-                          child: Text("អ្នកគ្រូ ទេព ធីតា",
-                              style: AppTextStyle.body,
-                              overflow: TextOverflow.ellipsis),
-                        ),
-                        SizedBox(width: 8),
-                        Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: Color(0xFFE3F2FD),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Text(title,
-                              style: AppTextStyle.body.copyWith(
-                                  fontSize: 12, color: AppColors.primaryMain)),
-                        ),
-                      ],
-                    ),
-                  ),
+                  if (classCode != null && classCode!.isNotEmpty)
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Color(0xFFE3F2FD),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(classCode!,
+                          style: AppTextStyle.body.copyWith(
+                              fontSize: 12, color: AppColors.primaryMain)),
+                    )
+                  else
+                    const SizedBox.shrink(),
+                  const SizedBox(width: 8),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                     decoration: BoxDecoration(

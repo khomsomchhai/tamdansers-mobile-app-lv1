@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/screens/student/menu/data_attendance.dart';
-import 'package:tamdansers_app/screens/widget/attendance_db.dart';
+import 'package:tamdansers_app/widget/attendance_db.dart';
 
 class Attendance extends StatefulWidget {
   const Attendance({super.key});
@@ -10,7 +10,8 @@ class Attendance extends StatefulWidget {
   @override
   State<Attendance> createState() => _AttendanceState();
 }
-final summary= attendanceSummary;
+
+final summary = attendanceSummary;
 
 class _AttendanceState extends State<Attendance> {
   @override
@@ -20,29 +21,36 @@ class _AttendanceState extends State<Attendance> {
         automaticallyImplyLeading: false,
         title: Text(
           'វត្តមាន',
-          style: AppTextStyle.screenTitle24,
+          style: AppTextStyle.sectionTitle20,
         ),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CardAttendance(totalDays: summary.totalDays, presentDays: summary.presentDays, absentDays: summary.absentDays,attendanceRate: summary.attendanceRate,monthLabel: 'មករា',),
+              CardAttendance(
+                totalDays: summary.totalDays,
+                presentDays: summary.presentDays,
+                absentDays: summary.absentDays,
+                attendanceRate: summary.attendanceRate,
+                monthLabel: 'មករា',
+              ),
               SizedBox(height: 20),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('ប្រវត្តិវត្តមាន', style: AppTextStyle.sectionTitle20),
+                  Text('ប្រវត្តិវត្តមាន', style: AppTextStyle.subtitle18),
                   SizedBox(height: 10),
                   ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     itemCount: AttendanceEntryModel.attendanceHistory.length,
-                    
                     itemBuilder: (context, index) {
-                      final entry = AttendanceEntryModel.attendanceHistory[index];
+                      final entry =
+                          AttendanceEntryModel.attendanceHistory[index];
                       final isPresent = entry.isPresent;
                       return ListTile(
                         contentPadding: EdgeInsets.zero,
@@ -58,8 +66,7 @@ class _AttendanceState extends State<Attendance> {
                             size: 30,
                           ),
                         ),
-                        title: Text(entry.date,
-                            style: AppTextStyle.sectionTitle20),
+                        title: Text(entry.date, style: AppTextStyle.subtitle16),
                         subtitle: Text(entry.time, style: AppTextStyle.body),
                         trailing: Container(
                           width: 100,

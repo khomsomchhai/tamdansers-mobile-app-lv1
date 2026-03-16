@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart'
     show SharedPreferences;
+import 'package:tamdansers_app/constants/app_icon.dart';
 
 import '../../../constants/app_colors.dart' show AppColors;
-import '../../../constants/app_images.dart' show AppImages;
 import '../../../constants/app_number.dart' show AppNumber;
 import '../../../constants/class_child.dart' show ChildCard;
 import '../../../constants/text_style.dart' show AppTextStyle;
@@ -67,7 +67,7 @@ class _ParentSettingState extends State<ParentSetting> {
                   shape: BoxShape.circle,
                   border: Border.all(color: AppColors.primaryMain, width: 3),
                   image: DecorationImage(
-                    image: AssetImage(AppImages.userProfile),
+                    image: AssetImage(AppIcon.profileParent),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -93,7 +93,7 @@ class _ParentSettingState extends State<ParentSetting> {
           ),
           const SizedBox(height: 12),
           Text(
-            "Heng Lay",
+            "Lay Heng",
             style: AppTextStyle.sectionTitle20.copyWith(
               fontWeight: FontWeight.bold,
             ),
@@ -214,7 +214,7 @@ class _ParentSettingState extends State<ParentSetting> {
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 4, bottom: 10),
-          child: Text("Settings", style: AppTextStyle.sectionTitle20),
+          child: Text("ការកំណត់", style: AppTextStyle.sectionTitle20),
         ),
         Container(
           decoration: BoxDecoration(
@@ -225,19 +225,23 @@ class _ParentSettingState extends State<ParentSetting> {
             children: [
               _settingsTile(
                 icon: Icons.lock_outline_rounded,
-                title: "Change Password",
-                onTap: () {},
+                title: "ប្ដូរពាក្យសម្ងាត់",
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.changePassword);
+                },
                 showDivider: true,
               ),
               _settingsTile(
                 icon: Icons.settings_outlined,
-                title: "App Settings",
-                onTap: () {},
+                title: "ការកំណត់ទូទៅ",
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.notifications);
+                },
                 showDivider: true,
               ),
               _settingsTile(
                 icon: Icons.help_outline_rounded,
-                title: "Help & Support",
+                title: "ជំនួយ & គាំទ្រ",
                 onTap: () {},
                 showDivider: true,
               ),
@@ -318,6 +322,9 @@ class _ParentSettingState extends State<ParentSetting> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppNumber.radiusLarge),
+        ),
         backgroundColor: AppColors.backgroundLight,
         title: Text("ចាកចេញ?", style: AppTextStyle.subtitle18),
         content: Text(

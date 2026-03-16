@@ -8,10 +8,10 @@ import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/constants/validators.dart';
 import 'package:tamdansers_app/repositories/parent_student_repo.dart';
 import 'package:tamdansers_app/repositories/user_repo.dart';
-import 'package:tamdansers_app/screens/widget/custom_snackbar.dart';
-import 'package:tamdansers_app/screens/widget/primary_button_2.dart';
 import 'package:tamdansers_app/widget/auth_field.dart';
 import 'package:tamdansers_app/widget/custom_dialog.dart';
+import 'package:tamdansers_app/widget/custom_snackbar.dart';
+import 'package:tamdansers_app/widget/primary_button_2.dart';
 
 class ParentConnectStudent extends StatefulWidget {
   const ParentConnectStudent({super.key});
@@ -34,11 +34,11 @@ class _ParentConnectStudentState extends State<ParentConnectStudent> {
 
     try {
       final identifier = invCodeCtrl.text.trim();
-      
+
       // Get current parent ID
       final pref = await SharedPreferences.getInstance();
       final parentId = pref.getInt("userId");
-      
+
       if (parentId == null) {
         _showError("User not logged in");
         return;
@@ -47,9 +47,10 @@ class _ParentConnectStudentState extends State<ParentConnectStudent> {
       // Find student by email or phone
       final userRepo = UserRepo();
       final studentUser = await userRepo.getUserByPhoneOrEmail(identifier);
-      
+
       if (studentUser == null) {
-        _showError("សិស្សដែលមានអ៊ីម៉ែល ឬ លេខទូរស័ព្ទនេះមិនមាននៅក្នុងប្រព័ន្ធទេ");
+        _showError(
+            "សិស្សដែលមានអ៊ីម៉ែល ឬ លេខទូរស័ព្ទនេះមិនមាននៅក្នុងប្រព័ន្ធទេ");
         return;
       }
 
@@ -60,18 +61,20 @@ class _ParentConnectStudentState extends State<ParentConnectStudent> {
 
       // Check if already connected
       final parentStudentRepo = ParentStudentRepo();
-      final isConnected = await parentStudentRepo.isParentConnectedToStudent(parentId, studentUser["id"]);
-      
+      final isConnected = await parentStudentRepo.isParentConnectedToStudent(
+          parentId, studentUser["id"]);
+
       if (isConnected) {
         _showError("អ្នកបានភ្ជាប់ទៅកាន់សិស្សនេះរួចហើយ");
         return;
       }
 
       // Create connection request
-      await parentStudentRepo.connectParentToStudent(
+      final result = await parentStudentRepo.connectParentToStudent(
         parentId: parentId,
         studentId: studentUser["id"],
       );
+      debugPrint('connectParentToStudent: parentId=$parentId, studentId=${studentUser["id"]}, insert result=$result');
 
       if (mounted) {
         showDialog(
@@ -83,7 +86,7 @@ class _ParentConnectStudentState extends State<ParentConnectStudent> {
                 "សូមរង់ចាំការទទួលសំណើរពីសិស្ស។ អ្នកនឹងទទួលបានការជូនដំណឹងនៅពេលដែលសំណើរបស់អ្នកត្រូវបានទទួល ឬ បដិសេធ។",
             onPressed: () {
               Navigator.pop(context);
-              Navigator.pop(context); // Go back to parent screen
+              Navigator.pop(context);
             },
           ),
         );
@@ -91,9 +94,11 @@ class _ParentConnectStudentState extends State<ParentConnectStudent> {
     } catch (e) {
       _showError("មានបញ្ហាបច្ចេកទេស សូមព្យាយាមម្ដងទៀត។");
     } finally {
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -110,6 +115,12 @@ class _ParentConnectStudentState extends State<ParentConnectStudent> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    invCodeCtrl.dispose();
+    super.dispose();
   }
 
   @override
@@ -155,15 +166,16 @@ class _ParentConnectStudentState extends State<ParentConnectStudent> {
             label: _isLoading ? "" : "ដាក់ស្នើរ",
             backgroundColor: AppColors.primaryMain,
             foregroundColor: AppColors.white,
-            processIndicator: _isLoading 
-            ? SizedBox(
-              width: 26,
-              height: 26,
-              child: CircularProgressIndicator(
-                color: AppColors.white,
-                strokeWidth: 2,
-              ),
-            ): null,
+            processIndicator: _isLoading
+                ? SizedBox(
+                    width: 26,
+                    height: 26,
+                    child: CircularProgressIndicator(
+                      color: AppColors.white,
+                      strokeWidth: 2,
+                    ),
+                  )
+                : null,
             onPressed: () async {
               setState(() {
                 _isLoading = true;

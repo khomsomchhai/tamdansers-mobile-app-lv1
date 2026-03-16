@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/screens/student/menu/homework.dart';
 
@@ -43,12 +44,13 @@ class _DeatilscreenState extends State<Deatilscreen> {
       appBar: AppBar(
         title: Text(
           "ព័ត៍មានកិច្ចការផ្ទះ",
-          style: AppTextStyle.screenTitle24,
+          style: AppTextStyle.sectionTitle20,
         ),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(4.0),
+          padding: const EdgeInsets.symmetric(vertical: 12),
           child: Column(
             children: [
               SizedBox(height: 100, child: taskList()),
@@ -86,7 +88,7 @@ class _DeatilscreenState extends State<Deatilscreen> {
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.04),
@@ -136,7 +138,7 @@ class _DeatilscreenState extends State<Deatilscreen> {
 
   Widget taskList() {
     return ListView(
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.all(20),
       children: [
         taskCard(
             title: "គណិតវិទ្យា",
@@ -150,13 +152,13 @@ class _DeatilscreenState extends State<Deatilscreen> {
 
   Widget status({required TaskStatus status}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(AppNumber.radiusSmall),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.04),
@@ -183,8 +185,7 @@ class _DeatilscreenState extends State<Deatilscreen> {
               ),
               child: Text(
                 _statusText(status),
-                style: TextStyle(
-                  fontSize: 12,
+                style: AppTextStyle.caption12Secondary.copyWith(
                   fontWeight: FontWeight.bold,
                   color: _statusColor(status),
                 ),
@@ -198,13 +199,13 @@ class _DeatilscreenState extends State<Deatilscreen> {
 
   Widget dashBoard() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.04),
@@ -225,10 +226,7 @@ class _DeatilscreenState extends State<Deatilscreen> {
               'ការធ្វើកិច្ចការផ្ទះគឺជាកាតព្វកិច្ចសំខាន់របស់សិស្ស ដែលជួយបង្កើនការយល់ដឹង និងរំលឹកមេរៀនដែលបានរៀននៅក្នុងថ្នាក់។ '
               'តាមរយៈការធ្វើកិច្ចការផ្ទះ សិស្សអាចអនុវត្តចំណេះដឹង ធ្វើឲ្យមានវិន័យ និងបណ្តុះទម្លាប់ក្នុងការសិក្សាដោយខ្លួនឯង។ '
               'ប្រសិនបើសិស្សធ្វើកិច្ចការផ្ទះទៀងទាត់ នឹងជួយឲ្យមានលទ្ធផលសិក្សាល្អ និងរីកចម្រើនទាំងចំណេះដឹង និងការទទួលខុសត្រូវ។',
-              style: TextStyle(
-                fontSize: 14,
-                height: 1.6, // line spacing (good for Khmer)
-              ),
+              style: AppTextStyle.body.copyWith(height: 1.6),
               textAlign: TextAlign.justify,
             ),
           ],
@@ -239,7 +237,7 @@ class _DeatilscreenState extends State<Deatilscreen> {
 
   Widget fileUpload() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.all(10),
@@ -351,13 +349,13 @@ class _DeatilscreenState extends State<Deatilscreen> {
 
   Widget teaComment() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.04),

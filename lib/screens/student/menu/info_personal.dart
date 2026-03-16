@@ -32,12 +32,12 @@ class _InfoPersonalState extends State<InfoPersonal> {
         centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20.0),
         child: Center(
           child: Column(
             children: [
               SizedBox(height: 20),
-              ImageProfile(),
+              ImageProfile(userId: 1), // TODO: Replace 1 with actual userId
               SizedBox(height: 30),
               Card(
                   shape: RoundedRectangleBorder(

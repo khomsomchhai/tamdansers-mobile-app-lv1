@@ -16,7 +16,6 @@ class Scedeul extends StatefulWidget {
 class _ScedeulState extends State<Scedeul> {
   int selectedDay = 0;
 
-  // ✅ get current day from model
   DayScheduleModel get currentDay => weeklySchedule.dayAt(selectedDay);
 
   @override
@@ -50,17 +49,16 @@ class _ScedeulState extends State<Scedeul> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /// ===== DAYS =====
             SizedBox(
               height: 110,
               child: GridView.builder(
                 physics:
-                    const NeverScrollableScrollPhysics(), // ✅ fix scroll conflict
-                itemCount: weeklySchedule.totalDays, // ✅ from model
+                    const NeverScrollableScrollPhysics(),
+                itemCount: weeklySchedule.totalDays,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 5,
                   crossAxisSpacing: 10,
@@ -68,12 +66,11 @@ class _ScedeulState extends State<Scedeul> {
                 ),
                 itemBuilder: (context, index) {
                   final isSelected = selectedDay == index;
-                  final day = weeklySchedule.dayAt(index); // ✅ from model
+                  final day = weeklySchedule.dayAt(index);
 
                   return GestureDetector(
                     onTap: () => setState(() => selectedDay = index),
                     child: AnimatedContainer(
-                      // ✅ smooth animation
                       duration: const Duration(milliseconds: 200),
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
@@ -95,7 +92,7 @@ class _ScedeulState extends State<Scedeul> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            day.dayName, // ✅ from model
+                            day.dayName,
                             style: AppTextStyle.fontsize18.copyWith(
                               fontSize: 13,
                               color: isSelected
@@ -105,7 +102,7 @@ class _ScedeulState extends State<Scedeul> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            '${day.date}', // ✅ from model
+                            '${day.date}',
                             style: AppTextStyle.fontsize18.copyWith(
                               fontWeight: FontWeight.bold,
                               color: isSelected
@@ -123,24 +120,16 @@ class _ScedeulState extends State<Scedeul> {
 
             const SizedBox(height: 15),
 
-            /// ===== SCHEDULE LIST =====
             Expanded(
               child: ListView(
                 children: [
-                  /// ===== MORNING =====
                   Text('វេនព្រឹក', style: AppTextStyle.sectionTitle20),
                   const SizedBox(height: 10),
-
-                  // ✅ loop real morning data
                   ...currentDay.morning.map((e) => _scheduleItem(e)),
 
                   const SizedBox(height: 30),
-
-                  /// ===== EVENING =====
                   Text('វេនរសៀល', style: AppTextStyle.sectionTitle20),
                   const SizedBox(height: 10),
-
-                  // ✅ loop real evening data
                   ...currentDay.evening.map((e) => _scheduleItem(e)),
                 ],
               ),
@@ -151,19 +140,16 @@ class _ScedeulState extends State<Scedeul> {
     );
   }
 
-  /// ===== REUSABLE SCHEDULE ITEM =====
   Widget _scheduleItem(ScheduleEntryModel entry) {
-    // ✅ takes entry param
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ── Time + Line ──────────────────────────────────
           Column(
             children: [
               Text(
-                entry.timeSlot.shortDisplay, // ✅ e.g. "7:00 AM"
+                entry.timeSlot.shortDisplay, 
                 style: AppTextStyle.hintText.copyWith(
                   color: AppColors.secondaryText,
                   fontSize: 11,
@@ -175,7 +161,7 @@ class _ScedeulState extends State<Scedeul> {
                 width: 3,
                 decoration: BoxDecoration(
                   color: entry.subject.iconColor
-                      .withOpacity(0.4), // ✅ subject color
+                      .withOpacity(0.4),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -183,14 +169,11 @@ class _ScedeulState extends State<Scedeul> {
           ),
 
           const SizedBox(width: 20),
-
-          // ── Card ─────────────────────────────────────────
           Expanded(
             child: Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
                 side: BorderSide(
-                  // ✅ colored border
                   color: entry.subject.iconColor.withOpacity(0.3),
                   width: 1,
                 ),
@@ -200,35 +183,32 @@ class _ScedeulState extends State<Scedeul> {
                 padding: const EdgeInsets.all(12),
                 child: Row(
                   children: [
-                    // ── Subject Icon ────────────────────────
                     Container(
                       width: 60,
                       height: 60,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: entry.subject.bgIconColor, // ✅ bgIconColor
+                        color: entry.subject.bgIconColor,
                       ),
                       child: Icon(
-                        entry.subject.icon, // ✅ subject icon
+                        entry.subject.icon,
                         size: 32,
-                        color: entry.subject.iconColor, // ✅ iconColor
+                        color: entry.subject.iconColor,
                       ),
                     ),
                     const SizedBox(width: 10),
-
-                    // ── Subject Info ────────────────────────
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            entry.subject.name, // ✅ subject name
+                            entry.subject.name, 
                             style: AppTextStyle.sectionTitle20
                                 .copyWith(fontSize: 15),
                           ),
                           const SizedBox(height: 5),
                           Text(
-                            'គ្រូ: ${entry.teacher.name}', // ✅ teacher name
+                            'គ្រូ: ${entry.teacher.name}',
                             style: AppTextStyle.body.copyWith(
                               color: AppColors.secondaryText,
                             ),
@@ -241,7 +221,7 @@ class _ScedeulState extends State<Scedeul> {
                               const SizedBox(width: 5),
                               Flexible(
                                 child: Text(
-                                  entry.timeSlot.display, // ✅ full time range
+                                  entry.timeSlot.display,
                                   style: AppTextStyle.body.copyWith(
                                     color: AppColors.secondaryText,
                                     fontSize: 12,

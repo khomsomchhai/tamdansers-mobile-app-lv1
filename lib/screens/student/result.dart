@@ -1,8 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_icon.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/repositories/profile_repo.dart';
 import 'package:tamdansers_app/screens/student/data_result.dart';
 import 'package:tamdansers_app/screens/student/data_schedule.dart';
+import 'package:tamdansers_app/state/profile_image_state.dart';
 
 class Result extends StatefulWidget {
   const Result({super.key});
@@ -13,12 +19,17 @@ class Result extends StatefulWidget {
 
 class _ResultState extends State<Result> {
   int selectIndex = 0;
+  int? _userId;
+  String? _profileImagePath;
 
+  final ProfileRepo _profileRepo = ProfileRepo();
+  
   late List<MonthResult> monthResults;
 
 @override
 void initState() {
   super.initState();
+  _loadUserAndImage();
 
   monthResults = List.generate(12, (monthIndex) {
     final subjects = [
@@ -71,6 +82,35 @@ void initState() {
     );
   });
 }
+
+Future<void> _loadUserAndImage() async {
+  final pref = await SharedPreferences.getInstance();
+  final id = pref.getInt('userId');
+  if (id == null) return;
+
+  _userId = id;
+  _profileImagePath = await _profileRepo.getImage(id);
+  ProfileImageState.updateImage(id, _profileImagePath);
+
+  ProfileImageState.notifier.addListener(_onProfileImageChanged);
+  if (mounted) setState(() {});
+}
+
+void _onProfileImageChanged() {
+  if (_userId == null) return;
+  final updated = ProfileImageState.getImage(_userId!);
+  if (updated != _profileImagePath && mounted) {
+    setState(() {
+      _profileImagePath = updated;
+    });
+  }
+}
+
+@override
+void dispose() {
+  ProfileImageState.notifier.removeListener(_onProfileImageChanged);
+  super.dispose();
+}
   @override
   Widget build(BuildContext context) {
     final data = monthResults[selectIndex];
@@ -81,7 +121,7 @@ void initState() {
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(20.0),
             child: Column(
               children: [
                 _list_month(),
@@ -171,7 +211,7 @@ void initState() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('វាយតម្លៃពីគ្រូ', style: AppTextStyle.sectionTitle20),
+        Text('វាយតម្លៃពីគ្រូ', style: AppTextStyle.subtitle18),
         SizedBox(height: 10),
         Container(
           padding: EdgeInsets.all(20),
@@ -205,8 +245,15 @@ void initState() {
             width: 100,
             decoration: BoxDecoration(shape: BoxShape.circle),
             clipBehavior: Clip.antiAlias,
-            child: Image.asset('assets/images/user_profile.png',
-                fit: BoxFit.cover),
+            child: _profileImagePath != null && _profileImagePath!.isNotEmpty
+                ? Image.file(
+                    File(_profileImagePath!),
+                    fit: BoxFit.cover,
+                  )
+                : Image.asset(
+                    AppIcon.maleAvatar,
+                    fit: BoxFit.cover,
+                  ),
           ),
           SizedBox(height: 20),
           Row(

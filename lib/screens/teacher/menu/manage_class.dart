@@ -4,9 +4,9 @@ import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/repositories/class_repo.dart';
 import 'package:tamdansers_app/repositories/student_class_repo.dart';
-import 'package:tamdansers_app/screens/teacher/attendance_screen.dart';
-import 'package:tamdansers_app/screens/teacher/homework_screen.dart';
-import 'package:tamdansers_app/screens/teacher/manage_student_screen.dart';
+import 'package:tamdansers_app/screens/teacher/menu/attendance_screen.dart';
+import 'package:tamdansers_app/screens/teacher/menu/homework_screen.dart';
+import 'package:tamdansers_app/screens/teacher/menu/manage_student_screen.dart';
 
 class ManageClass extends StatefulWidget {
   const ManageClass({super.key});

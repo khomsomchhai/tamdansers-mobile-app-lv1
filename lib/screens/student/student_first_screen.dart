@@ -14,10 +14,12 @@ class StudentFirstScreen extends StatefulWidget {
   @override
   State<StudentFirstScreen> createState() => _StudentFirstScreenState();
 }
-class _StudentFirstScreenState extends State<StudentFirstScreen> {
 
-  bool hasJoinedClass = true;
+class _StudentFirstScreenState extends State<StudentFirstScreen> {
   Map<String, dynamic>? user;
+  List<int> joinedClassIds = [];
+
+  bool get hasJoinedClass => joinedClassIds.isNotEmpty;
 
   @override
   void initState() {
@@ -27,73 +29,56 @@ class _StudentFirstScreenState extends State<StudentFirstScreen> {
 
   Future<void> _loadUser() async {
     final fetched = await UserRepo().getUserById(widget.userId);
-    final joined = _determineHasJoined(fetched);
-    setState((){
+    final classIds = await UserRepo().getJoinedClassIds(widget.userId);
+    setState(() {
       user = fetched;
-      hasJoinedClass = joined;
+      joinedClassIds = classIds;
     });
   }
 
-  bool _determineHasJoined(Map<String, dynamic>? u) {
-    if (u == null) return false;
-    final keys = [
-      'class_id',
-      'class',
-      'classCode',
-      'class_code',
-      'joined_class',
-      'has_joined',
-    ];
-    for (var k in keys) {
-      if (u.containsKey(k)) {
-        final v = u[k];
-        if (v is int && v != 0) return true;
-        if (v is String && v.isNotEmpty) return true;
-        if (v is bool && v) return true;
-      }
-    }
-    return false;
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          child: Column(
-            children: [
-              StudentProfileHeader(user: user),
-              SizedBox(height: 20,),
-              Expanded(
-                child: hasJoinedClass
-                    ? StudentHasJoinedClass(userId: widget.userId)
-                    : StudentEmptyClass(userId: widget.userId),
-              ),
-            ],
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: Column(
+              children: [
+                StudentProfileHeader(user: user),
+                SizedBox(
+                  height: 20,
+                ),
+                Expanded(
+                  child: hasJoinedClass
+                      ? StudentHasJoinedClass(
+                          userId: widget.userId,
+                          classIds: joinedClassIds,
+                        )
+                      : StudentEmptyClass(
+                          userId: widget.userId, onJoined: _loadUser),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.primaryMain,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
-        ),
-        onPressed: () async {
-          final result = await Navigator.pushNamed(
-            context,
-            AppRoutes.joinClassSreen,
-            arguments: widget.userId
-          );
-          if (result == true) {
-            _loadUser(); // Refresh user data
-          }
-        },
-        child: Icon(
-          Icons.add,
-          color: AppColors.white,
-          size: AppNumber.iconLarge,
-        ),
-      )
-    );
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: AppColors.primaryMain,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
+          ),
+          onPressed: () async {
+            final result = await Navigator.pushNamed(
+                context, AppRoutes.joinClassSreen,
+                arguments: widget.userId);
+            if (result == true) {
+              _loadUser();
+            }
+          },
+          child: Icon(
+            Icons.add,
+            color: AppColors.white,
+            size: AppNumber.iconLarge,
+          ),
+        ));
   }
 }

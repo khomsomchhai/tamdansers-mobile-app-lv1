@@ -26,11 +26,11 @@ class AppRoutes {
   static const String studentSubmissionScreen = "/student_submission_screen";
   static const String teacherProfile = "/teacher_profile_screen";
   static const String teacherGradeResult = "/teacher_grade_result";
-  static const String teacherNotificationScreen =
-      "/teacher_notification_screen";
+  static const String teacherNotificationScreen ="/teacher_notification_screen";
   //student
   static const String studentFirstScreen = "/student_first_sreen";
   static const String joinClassSreen = "/join_class_screen";
+  static const String connectRequest = "/connect_request";
   static const String studentDashboard = "/student_dashboard";
   static const String scedeul = "/student_scedeul";
   static const String profile = "/student_profile";
@@ -46,13 +46,15 @@ class AppRoutes {
   static const String info = "/student_info_personal";
   static const String subject = "/subject";
   static const String notifications = "/notifications";
-  //parent static const String info="/student_info_personal";
   static const String parent_nothi="/parent_nothi";
 
   //parent
+  static const String parentDashboardScreen = "/parent_dashboard_screen";
+
   // static const String parentDashboardScreen = "/parent_dashboard_screen";
   static const String parentFirstScreen = "/parent_first_screen";
   static const String parentConnectStudent = "/parent_connect_student";
+  static const String parentPendingRequests = "/parent_pending_requests";
   static const String monthly = "/monthly_result_ranking";
   static const String commentScreen = "/comment_screen";
   static const String information = "/information";

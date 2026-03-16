@@ -34,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
     selectedRole = widget.role;
   }
-  
+
   void login() async {
     try {
       var user = await UserRepo().login(
@@ -48,7 +48,8 @@ class _LoginScreenState extends State<LoginScreen> {
       }
 
       if (user["role"] != selectedRole) {
-        _showError("គណនីនេះមិនមែនជា $selectedRole ទេ។ សូមជ្រើសរើសមុខងារឱ្យបានត្រឹមត្រូវ។");
+        _showError(
+            "គណនីនេះមិនមែនជា $selectedRole ទេ។ សូមជ្រើសរើសមុខងារឱ្យបានត្រឹមត្រូវ។");
         return;
       }
       setState(() {
@@ -59,6 +60,11 @@ class _LoginScreenState extends State<LoginScreen> {
       await pref.setString("role", user["role"]);
       await pref.setBool("isLogin", true);
       await pref.setInt("userId", user["id"]);
+
+      // Auto-link to classes where teacher already added this phone/email
+      if (selectedRole == 'student') {
+        await UserRepo().autoLinkClasses(user["id"] as int);
+      }
 
       if (!mounted) return;
 
@@ -81,11 +87,11 @@ class _LoginScreenState extends State<LoginScreen> {
           arguments: user["id"],
         );
       }
-
     } catch (e) {
       _showError("មានបញ្ហាបច្ចេកទេស សូមព្យាយាមម្ដងទៀត។");
     }
   }
+
   void _showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -102,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
- 
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -231,11 +237,8 @@ class _LoginScreenState extends State<LoginScreen> {
               Spacer(),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(
-                    context, 
-                    AppRoutes.forgetPassword1,
-                    arguments: selectedRole
-                  );
+                  Navigator.pushNamed(context, AppRoutes.forgetPassword1,
+                      arguments: selectedRole);
                 },
                 child: Text(
                   "ភ្លេចពាក្យសម្ងាត់?",
@@ -252,17 +255,18 @@ class _LoginScreenState extends State<LoginScreen> {
             label: isLoading ? "" : "ចូលគណនី",
             backgroundColor: AppColors.primaryMain,
             foregroundColor: AppColors.white,
-            processIndicator: isLoading ? SizedBox(
-              width: 26,
-              height: 26,
-              child: CircularProgressIndicator(
-                color: AppColors.white,
-                strokeWidth: 2,
-              ),
-            ): null,
-            onPressed: () async{
+            processIndicator: isLoading
+                ? SizedBox(
+                    width: 26,
+                    height: 26,
+                    child: CircularProgressIndicator(
+                      color: AppColors.white,
+                      strokeWidth: 2,
+                    ),
+                  )
+                : null,
+            onPressed: () async {
               if (formKey.currentState!.validate()) {
-                
                 login();
               }
             },
