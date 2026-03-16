@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/database/db_helper.dart';
+import 'package:tamdansers_app/repositories/parent_student_repo.dart';
+import 'package:tamdansers_app/repositories/user_repo.dart';
+import 'package:tamdansers_app/screens/parents/menu/attendance_student_data.dart';
 
 class AttandanceScreen extends StatefulWidget {
   const AttandanceScreen({super.key});
@@ -13,62 +18,310 @@ class AttandanceScreen extends StatefulWidget {
 }
 
 class _AttandanceScreenState extends State<AttandanceScreen> {
+  final AttendanceStudentData _attendanceRepo = AttendanceStudentData();
+  final ParentStudentRepo _parentStudentRepo = ParentStudentRepo();
+
+  bool _isLoading = true;
+  String? _errorMessage;
+
+  List<Map<String, dynamic>> _students = [];
+  Map<String, dynamic>? _selectedStudent;
+
   int _currentMonthIndex = 0;
+  List<String> _monthKeys = [];
 
-  final List<String> _months = [
-    "តុលា ២០២៣",
-    "វិច្ឆិកា ២០២៣",
-    "ធ្នូ ២០២៣",
-  ];
+  int presentDays = 0;
+  int lateDays = 0;
+  int absentDays = 0;
 
-  // Summary data
-  final int presentDays = 20;
-  final int lateDays = 1;
-  final int absentDays = 0;
+  List<Map<String, dynamic>> _records = [];
 
-  // Attendance records
-  final List<Map<String, dynamic>> _records = [
-    {
-      "day": "ថ្ងៃចន្ទ, ១៦តុលា",
-      "time": "Check-in: 07 : 30 AM",
-      "status": "វត្តមាន",
-      "type": "presents",
-    },
-    {
-      "day": "ថ្ងៃសុក្រ, ១៣តុលា",
-      "time": "Check-in: 07 : 35 AM",
-      "status": "វត្តមាន",
-      "type": "presents",
-    },
-    {
-      "day": "ថ្ងៃព្រហស្បត្តិ៍, ១២តុលា",
-      "time": "Check-in: 08 : 15 AM",
-      "status": "យឺត",
-      "type": "late",
-    },
-    {
-      "day": "ថ្ងៃពុធ, ១១តុលា",
-      "time": "Check-in: 07 : 28 AM",
-      "status": "វត្តមាន",
-      "type": "presents",
-    },
-    {
-      "day": "ថ្ងៃអង្គារ, ១០តុលា",
-      "time": "Sick Leave",
-      "status": "អវត្តមាន",
-      "type": "absent",
-    },
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _loadRoleBasedAttendance();
+  }
+
+  String _currentMonthKey() {
+    final now = DateTime.now();
+    return '${now.year}-${now.month.toString().padLeft(2, '0')}';
+  }
+
+  Future<void> _loadRoleBasedAttendance() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      final pref = await SharedPreferences.getInstance();
+      final userId = pref.getInt('userId');
+      final role = pref.getString('role');
+
+      if (userId == null || role == null) {
+        setState(() {
+          _errorMessage = 'មិនមានព័ត៌មានអ្នកប្រើប្រាស់';
+          _isLoading = false;
+        });
+        return;
+      }
+
+      if (role == 'parent') {
+        _students = await _parentStudentRepo.getStudentsByParent(userId);
+      } else if (role == 'student') {
+        final student = await _resolveStudentFromCurrentUser(userId);
+        _students = student != null ? [student] : [];
+      } else {
+        _students = [];
+      }
+
+      if (_students.isEmpty) {
+        setState(() {
+          _errorMessage = 'មិនមានទិន្នន័យសិស្សសម្រាប់បង្ហាញវត្តមាន';
+          _records = [];
+          presentDays = 0;
+          lateDays = 0;
+          absentDays = 0;
+          _monthKeys = [_currentMonthKey()];
+          _currentMonthIndex = 0;
+          _isLoading = false;
+        });
+        return;
+      }
+
+      _selectedStudent = _students.first;
+      await _loadAttendanceForSelectedStudent(resetMonth: true);
+    } catch (_) {
+      setState(() {
+        _errorMessage = 'មិនអាចទាញយកទិន្នន័យវត្តមានបានទេ';
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<Map<String, dynamic>?> _resolveStudentFromCurrentUser(
+      int userId) async {
+    final user = await UserRepo().getUserById(userId);
+    if (user == null) return null;
+
+    final db = await DbHelper().initDatabase();
+
+    final email = user['email'] as String?;
+    if (email != null && email.trim().isNotEmpty) {
+      final byEmail = await db.rawQuery(
+        '''SELECT sc.id as student_id, sc.first_name, sc.last_name, sc.class_id, c.name as class_name
+           FROM tbl_student_class sc
+           LEFT JOIN tbl_class c ON sc.class_id = c.id
+           WHERE sc.email = ?
+           LIMIT 1''',
+        [email.trim()],
+      );
+      if (byEmail.isNotEmpty) return Map<String, dynamic>.from(byEmail.first);
+    }
+
+    final classId = user['class_id'] as int?;
+    final byNameAndClass = await db.rawQuery(
+      '''SELECT sc.id as student_id, sc.first_name, sc.last_name, sc.class_id, c.name as class_name
+         FROM tbl_student_class sc
+         LEFT JOIN tbl_class c ON sc.class_id = c.id
+         WHERE sc.first_name = ? AND sc.last_name = ?
+           AND (? IS NULL OR sc.class_id = ?)
+         ORDER BY sc.id DESC
+         LIMIT 1''',
+      [user['first_name'], user['last_name'], classId, classId],
+    );
+
+    if (byNameAndClass.isNotEmpty) {
+      return Map<String, dynamic>.from(byNameAndClass.first);
+    }
+
+    return null;
+  }
+
+  Future<void> _loadAttendanceForSelectedStudent(
+      {required bool resetMonth}) async {
+    if (_selectedStudent == null) return;
+
+    final studentId =
+        (_selectedStudent!['student_id'] ?? _selectedStudent!['id']) as int?;
+    if (studentId == null) {
+      setState(() {
+        _errorMessage = 'រកមិនឃើញលេខសម្គាល់សិស្ស';
+        _isLoading = false;
+      });
+      return;
+    }
+
+    final months = await _attendanceRepo.getDistinctMonthsByStudent(studentId);
+    final nowMonth = _currentMonthKey();
+    if (!months.contains(nowMonth)) {
+      months.insert(0, nowMonth);
+    }
+
+    if (resetMonth || _monthKeys.isEmpty) {
+      _monthKeys = months;
+      _currentMonthIndex = 0;
+    } else {
+      _monthKeys = months;
+      if (_currentMonthIndex >= _monthKeys.length) {
+        _currentMonthIndex = 0;
+      }
+    }
+
+    final selectedMonthKey = _monthKeys[_currentMonthIndex];
+    final attendanceRows = await _attendanceRepo.getAttendanceByStudent(
+      studentId,
+      monthPrefix: selectedMonthKey,
+    );
+
+    final summary = await _attendanceRepo.getAttendanceSummaryByStudent(
+      studentId,
+      monthPrefix: selectedMonthKey,
+    );
+
+    final mappedRecords = attendanceRows.map((row) {
+      final date = (row['date'] as String?) ?? '';
+      final status = (row['status'] as String?) ?? 'present';
+
+      final type = switch (status) {
+        'late' => 'late',
+        'absent' => 'absent',
+        _ => 'present',
+      };
+
+      final statusKh = switch (status) {
+        'late' => 'យឺត',
+        'absent' => 'អវត្តមាន',
+        _ => 'វត្តមាន',
+      };
+
+      final noteText = switch (status) {
+        'late' => 'បានចូលរៀនយឺត',
+        'absent' => 'អវត្តមាន',
+        _ => 'បានចូលរៀន',
+      };
+
+      return {
+        'day': _formatDayLabel(date),
+        'time': noteText,
+        'status': statusKh,
+        'type': type,
+      };
+    }).toList();
+
+    if (!mounted) return;
+    setState(() {
+      _records = mappedRecords;
+      presentDays = summary['present'] ?? 0;
+      lateDays = summary['late'] ?? 0;
+      absentDays = summary['absent'] ?? 0;
+      _isLoading = false;
+      _errorMessage = null;
+    });
+  }
+
+  String _formatDayLabel(String isoDate) {
+    final date = DateTime.tryParse(isoDate);
+    if (date == null) return isoDate;
+
+    const weekdays = [
+      'ថ្ងៃចន្ទ',
+      'ថ្ងៃអង្គារ',
+      'ថ្ងៃពុធ',
+      'ថ្ងៃព្រហស្បតិ៍',
+      'ថ្ងៃសុក្រ',
+      'ថ្ងៃសៅរ៍',
+      'ថ្ងៃអាទិត្យ',
+    ];
+
+    final weekday = weekdays[date.weekday - 1];
+    return '$weekday, ${date.day}-${date.month}-${date.year}';
+  }
+
+  String _formatMonthLabel(String monthKey) {
+    final parts = monthKey.split('-');
+    if (parts.length != 2) return monthKey;
+    final year = int.tryParse(parts[0]);
+    final month = int.tryParse(parts[1]);
+    if (year == null || month == null || month < 1 || month > 12) {
+      return monthKey;
+    }
+
+    const khMonths = [
+      'មករា',
+      'កុម្ភៈ',
+      'មីនា',
+      'មេសា',
+      'ឧសភា',
+      'មិថុនា',
+      'កក្កដា',
+      'សីហា',
+      'កញ្ញា',
+      'តុលា',
+      'វិច្ឆិកា',
+      'ធ្នូ',
+    ];
+
+    return '${khMonths[month - 1]} $year';
+  }
+
+  Future<void> _pickStudent() async {
+    if (_students.length <= 1) return;
+
+    final selected = await showModalBottomSheet<Map<String, dynamic>>(
+      context: context,
+      backgroundColor: AppColors.white,
+      builder: (context) {
+        return SafeArea(
+          child: ListView.separated(
+            itemCount: _students.length,
+            separatorBuilder: (_, __) => Divider(color: AppColors.lightgrey),
+            itemBuilder: (context, index) {
+              final student = _students[index];
+              final name =
+                  '${student['first_name'] ?? ''} ${student['last_name'] ?? ''}'
+                      .trim();
+              final className = (student['class_name'] as String?) ?? '';
+
+              return ListTile(
+                title: Text(name.isEmpty ? 'Student' : name,
+                    style: AppTextStyle.subtitle16),
+                subtitle: className.isEmpty ? null : Text(className),
+                onTap: () => Navigator.pop(context, student),
+              );
+            },
+          ),
+        );
+      },
+    );
+
+    if (selected == null) return;
+
+    setState(() {
+      _selectedStudent = selected;
+      _isLoading = true;
+    });
+
+    await _loadAttendanceForSelectedStudent(resetMonth: true);
+  }
 
   void _previousMonth() {
     if (_currentMonthIndex > 0) {
-      setState(() => _currentMonthIndex--);
+      setState(() {
+        _currentMonthIndex--;
+        _isLoading = true;
+      });
+      _loadAttendanceForSelectedStudent(resetMonth: false);
     }
   }
 
   void _nextMonth() {
-    if (_currentMonthIndex < _months.length - 1) {
-      setState(() => _currentMonthIndex++);
+    if (_currentMonthIndex < _monthKeys.length - 1) {
+      setState(() {
+        _currentMonthIndex++;
+        _isLoading = true;
+      });
+      _loadAttendanceForSelectedStudent(resetMonth: false);
     }
   }
 
@@ -93,35 +346,64 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding:
-              const EdgeInsets.symmetric(horizontal: AppNumber.screenPadding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 12),
-              _buildProfileHeader(),
-              const SizedBox(height: 16),
-              _buildMonthSelector(),
-              const SizedBox(height: 16),
-              _buildStatsRow(),
-              const SizedBox(height: 20),
-              Text("កំណត់សហេតុប្រចាំថ្ងៃ", style: AppTextStyle.subtitle18),
-              const SizedBox(height: 12),
-              _buildAttendanceList(),
-              const SizedBox(height: 16),
-              _buildRequestLeaveButton(),
-              const SizedBox(height: 24),
-            ],
-          ),
-        ),
-      ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: AppNumber.screenPadding),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (_errorMessage != null) ...[
+                      const SizedBox(height: 12),
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: AppColors.errorBG,
+                          borderRadius:
+                              BorderRadius.circular(AppNumber.radiusSmall),
+                        ),
+                        child: Text(
+                          _errorMessage!,
+                          style: AppTextStyle.caption14Secondary
+                              .copyWith(color: AppColors.error),
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: 12),
+                    _buildProfileHeader(),
+                    const SizedBox(height: 16),
+                    _buildMonthSelector(),
+                    const SizedBox(height: 16),
+                    _buildStatsRow(),
+                    const SizedBox(height: 20),
+                    Text("កំណត់សហេតុប្រចាំថ្ងៃ",
+                        style: AppTextStyle.subtitle18),
+                    const SizedBox(height: 12),
+                    _buildAttendanceList(),
+                    const SizedBox(height: 16),
+                    _buildRequestLeaveButton(),
+                    const SizedBox(height: 24),
+                  ],
+                ),
+              ),
+            ),
     );
   }
 
   // ==================== PROFILE HEADER ====================
   Widget _buildProfileHeader() {
+    final firstName = (_selectedStudent?['first_name'] as String?) ?? '';
+    final lastName = (_selectedStudent?['last_name'] as String?) ?? '';
+    final className = (_selectedStudent?['class_name'] as String?) ?? '';
+    final studentId =
+        (_selectedStudent?['student_id'] ?? _selectedStudent?['id'])
+                ?.toString() ??
+            '-';
+
     return Row(
       children: [
         Container(
@@ -143,15 +425,23 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
             children: [
               Row(
                 children: [
-                  Text("ហេង ឡូយ", style: AppTextStyle.subtitle18),
+                  Text(
+                    '$firstName $lastName'.trim().isEmpty
+                        ? 'Student'
+                        : '$firstName $lastName'.trim(),
+                    style: AppTextStyle.subtitle18,
+                  ),
                   const SizedBox(width: 4),
-                  Icon(Icons.keyboard_arrow_down,
-                      size: 20, color: AppColors.secondaryText),
+                  GestureDetector(
+                    onTap: _pickStudent,
+                    child: Icon(Icons.keyboard_arrow_down,
+                        size: 20, color: AppColors.secondaryText),
+                  ),
                 ],
               ),
               const SizedBox(height: 2),
               Text(
-                "ថ្នាក់ទី 5A ID: #29384",
+                '${className.isEmpty ? "ថ្នាក់" : className} ID: #$studentId',
                 style: AppTextStyle.caption13Secondary,
               ),
             ],
@@ -191,7 +481,9 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
             ),
             const SizedBox(width: 8),
             Text(
-              _months[_currentMonthIndex],
+              _monthKeys.isEmpty
+                  ? _formatMonthLabel(_currentMonthKey())
+                  : _formatMonthLabel(_monthKeys[_currentMonthIndex]),
               style: AppTextStyle.subtitle18,
             ),
             const SizedBox(width: 6),
@@ -312,6 +604,23 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
 
   // ==================== ATTENDANCE LIST ====================
   Widget _buildAttendanceList() {
+    if (_records.isEmpty) {
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 28),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
+        ),
+        child: Center(
+          child: Text(
+            'មិនមានកំណត់ត្រាវត្តមាន',
+            style: AppTextStyle.caption14Secondary,
+          ),
+        ),
+      );
+    }
+
     return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
