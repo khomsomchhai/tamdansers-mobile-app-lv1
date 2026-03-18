@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/screens/parents/menu/detailnews.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key});
@@ -19,6 +19,11 @@ class _NewsScreenState extends State<NewsScreen> {
   int _currentFeaturedIndex = 0;
   late final PageController _featuredPageController;
   Timer? _featuredTimer;
+
+  double _fs(double base, BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    return base * (width / 390).clamp(0.78, 1.15);
+  }
 
   final List<String> _categories = [
     "ទាំងអស់",
@@ -39,6 +44,11 @@ class _NewsScreenState extends State<NewsScreen> {
       "hasImage": false,
       "icon": Icons.campaign,
       "iconColor": AppColors.primaryMain,
+      "importantPoints": [
+        "កាលបរិច្ឆេទប្រឡងត្រូវបានកំណត់យ៉ាងច្បាស់",
+        "សិស្សត្រូវត្រៀមឯកសារសិក្សាឲ្យបានគ្រប់គ្រាន់",
+        "សូមតាមដានសេចក្ដីជូនដំណឹងបន្ថែមពីសាលា",
+      ],
     },
     {
       "category": "ព្រៃចម្បូទប៍ម៍និទព្រេន",
@@ -51,6 +61,11 @@ class _NewsScreenState extends State<NewsScreen> {
       "hasImage": false,
       "icon": Icons.emoji_events,
       "iconColor": AppColors.pepure,
+      "importantPoints": [
+        "ការប្រកួតមានគោលបំណងបង្កើនស្មារតីកីឡា",
+        "សិស្សគួរចូលរួមតាមកាលវិភាគដែលបានប្រកាស",
+        "មានការរៀបចំសុវត្ថិភាព និងការគ្រប់គ្រងពេញលេញ",
+      ],
     },
     {
       "category": "តារព៍ន៍",
@@ -63,6 +78,11 @@ class _NewsScreenState extends State<NewsScreen> {
       "hasImage": false,
       "icon": Icons.groups,
       "iconColor": AppColors.success,
+      "importantPoints": [
+        "ការប្រជុំផ្តោតលើការសហការរវាងមាតាបិតា និងគ្រូ",
+        "នឹងពិភាក្សាអំពីការរីកចម្រើន និងសកម្មភាពសិស្ស",
+        "សូមមកទាន់ពេលតាមម៉ោងដែលបានជូនដំណឹង",
+      ],
     },
   ];
 
@@ -137,8 +157,7 @@ class _NewsScreenState extends State<NewsScreen> {
         body: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -169,8 +188,11 @@ class _NewsScreenState extends State<NewsScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text("ព័ត៌មាន", style: AppTextStyle.sectionTitle20),
-        
+        Text(
+          "ព័ត៌មាន",
+          style:
+              AppTextStyle.sectionTitle20.copyWith(fontSize: _fs(20, context)),
+        ),
       ],
     );
   }
@@ -191,11 +213,12 @@ class _NewsScreenState extends State<NewsScreen> {
             child: TextField(
               decoration: InputDecoration(
                 hintText: "ស្វែងរកការប្រកាស...",
-                hintStyle: AppTextStyle.hint15,
+                hintStyle:
+                    AppTextStyle.hint15.copyWith(fontSize: _fs(15, context)),
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.symmetric(vertical: 12),
               ),
-              style: AppTextStyle.body,
+              style: AppTextStyle.body.copyWith(fontSize: _fs(14, context)),
             ),
           ),
         ],
@@ -224,8 +247,8 @@ class _NewsScreenState extends State<NewsScreen> {
               ),
               child: Text(
                 _categories[index],
-                style: GoogleFonts.kantumruyPro(
-                  fontSize: 14,
+                style: AppTextStyle.body14.copyWith(
+                  fontSize: _fs(14, context),
                   fontWeight: FontWeight.w500,
                   color: isSelected ? AppColors.white : AppColors.primaryText,
                 ),
@@ -318,8 +341,8 @@ class _NewsScreenState extends State<NewsScreen> {
                 ),
                 child: Text(
                   slide["badge"]!,
-                  style: GoogleFonts.kantumruyPro(
-                    fontSize: 11,
+                  style: AppTextStyle.caption12Secondary.copyWith(
+                    fontSize: _fs(11, context),
                     fontWeight: FontWeight.w600,
                     color: AppColors.white,
                   ),
@@ -328,8 +351,8 @@ class _NewsScreenState extends State<NewsScreen> {
               const Spacer(),
               Text(
                 slide["title"]!,
-                style: GoogleFonts.kantumruyPro(
-                  fontSize: 25,
+                style: AppTextStyle.screenTitle24.copyWith(
+                  fontSize: _fs(25, context),
                   fontWeight: FontWeight.bold,
                   color: AppColors.white,
                 ),
@@ -339,8 +362,8 @@ class _NewsScreenState extends State<NewsScreen> {
               const SizedBox(height: 6),
               Text(
                 slide["description"]!,
-                style: GoogleFonts.kantumruyPro(
-                  fontSize: 13,
+                style: AppTextStyle.body14.copyWith(
+                  fontSize: _fs(13, context),
                   fontWeight: FontWeight.w400,
                   color: Colors.white.withValues(alpha: 0.9),
                 ),
@@ -359,11 +382,14 @@ class _NewsScreenState extends State<NewsScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text("បច្ចុប្បន្នភាពថ្មីៗ", style: AppTextStyle.subtitle18),
+        Text(
+          "បច្ចុប្បន្នភាពថ្មីៗ",
+          style: AppTextStyle.subtitle18.copyWith(fontSize: _fs(18, context)),
+        ),
         Text(
           "សម្ពាល់ពាក្យទាំងអស់",
-          style: GoogleFonts.kantumruyPro(
-            fontSize: 13,
+          style: AppTextStyle.body14.copyWith(
+            fontSize: _fs(13, context),
             fontWeight: FontWeight.w500,
             color: AppColors.primaryMain,
           ),
@@ -387,96 +413,122 @@ class _NewsScreenState extends State<NewsScreen> {
   }
 
   Widget _buildNewsCard(Map<String, dynamic> item) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppNumber.radiusLarge),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              // Icon
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: item["categoryBgColor"],
-                  borderRadius: BorderRadius.circular(AppNumber.radiusSmall),
-                ),
-                child: Icon(item["icon"], color: item["iconColor"], size: 20),
-              ),
-              const SizedBox(width: 10),
-              // Category + Title
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Category badge
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: item["categoryBgColor"],
-                        borderRadius:
-                            BorderRadius.circular(AppNumber.radiusRounded),
-                      ),
-                      child: Text(
-                        item["category"],
-                        style: GoogleFonts.kantumruyPro(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w500,
-                          color: item["categoryColor"],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      item["title"],
-                      style: AppTextStyle.subtitle16,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          // Description
-          Padding(
-            padding: const EdgeInsets.only(left: 46),
-            child: Text(
-              item["description"],
-              style: AppTextStyle.caption13Secondary,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
+    return InkWell(
+      borderRadius: BorderRadius.circular(AppNumber.radiusLarge),
+      onTap: () {
+        final points = (item["importantPoints"] as List<dynamic>? ?? const [])
+            .map((e) => e.toString())
+            .toList();
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => DetailNewsScreen(
+              category: item["category"]?.toString() ?? "-",
+              title: item["title"]?.toString() ?? "-",
+              description: item["description"]?.toString() ?? "-",
+              author: item["author"]?.toString() ?? "-",
+              icon: item["icon"] as IconData? ?? Icons.article_outlined,
+              iconColor: item["iconColor"] as Color? ?? AppColors.primaryMain,
+              importantPoints: points,
             ),
           ),
-          const SizedBox(height: 10),
-          // Author + Read more
-          Padding(
-            padding: const EdgeInsets.only(left: 46),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(AppNumber.radiusLarge),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
               children: [
-                Text(
-                  item["author"],
-                  style: AppTextStyle.caption12Secondary,
+                // Icon
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: item["categoryBgColor"],
+                    borderRadius: BorderRadius.circular(AppNumber.radiusSmall),
+                  ),
+                  child: Icon(item["icon"], color: item["iconColor"], size: 20),
                 ),
-                Text(
-                  "អានបន្ថែម",
-                  style: GoogleFonts.kantumruyPro(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.primaryMain,
+                const SizedBox(width: 10),
+                // Category + Title
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Category badge
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: item["categoryBgColor"],
+                          borderRadius:
+                              BorderRadius.circular(AppNumber.radiusRounded),
+                        ),
+                        child: Text(
+                          item["category"],
+                          style: AppTextStyle.caption12Secondary.copyWith(
+                            fontSize: _fs(11, context),
+                            fontWeight: FontWeight.w500,
+                            color: item["categoryColor"],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        item["title"],
+                        style: AppTextStyle.subtitle16
+                            .copyWith(fontSize: _fs(16, context)),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
-          ),
-        ],
+            const SizedBox(height: 8),
+            // Description
+            Padding(
+              padding: const EdgeInsets.only(left: 46),
+              child: Text(
+                item["description"],
+                style: AppTextStyle.caption13Secondary
+                    .copyWith(fontSize: _fs(13, context)),
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            const SizedBox(height: 10),
+            // Author + Read more
+            Padding(
+              padding: const EdgeInsets.only(left: 46),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    item["author"],
+                    style: AppTextStyle.caption12Secondary
+                        .copyWith(fontSize: _fs(12, context)),
+                  ),
+                  Text(
+                    "អានបន្ថែម",
+                    style: AppTextStyle.body14.copyWith(
+                      fontSize: _fs(13, context),
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.primaryMain,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

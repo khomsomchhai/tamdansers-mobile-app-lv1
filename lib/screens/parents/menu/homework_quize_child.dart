@@ -34,6 +34,11 @@ class _HomeworkQuizeScreenState extends State<HomeworkQuizeScreen> {
     'overdue': 0,
   };
 
+  double _fs(double base, BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    return base * (width / 390).clamp(0.78, 1.15);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -248,7 +253,11 @@ class _HomeworkQuizeScreenState extends State<HomeworkQuizeScreen> {
         backgroundColor: AppColors.backgroundLight,
         elevation: 0,
         scrolledUnderElevation: 0,
-        title: Text('កិច្ចការផ្ទះ', style: AppTextStyle.screenTitle24),
+        title: Text(
+          'កិច្ចការផ្ទះ',
+          style:
+              AppTextStyle.screenTitle24.copyWith(fontSize: _fs(24, context)),
+        ),
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 12),
@@ -373,7 +382,7 @@ class _HomeworkQuizeScreenState extends State<HomeworkQuizeScreen> {
             color: AppColors.backgroundLight,
             border: Border.all(color: AppColors.lightgrey),
           ),
-          child: Icon(Icons.person_outline,
+          child: Icon(Icons.person_outline_rounded,
               size: 22, color: AppColors.secondaryText),
         ),
       ],
@@ -411,7 +420,7 @@ class _HomeworkQuizeScreenState extends State<HomeworkQuizeScreen> {
           child: Text(
             label,
             style: GoogleFonts.kantumruyPro(
-              fontSize: 15,
+              fontSize: _fs(15, context),
               fontWeight: FontWeight.w600,
               color: isSelected ? AppColors.white : AppColors.primaryText,
             ),
@@ -491,7 +500,7 @@ class _HomeworkQuizeScreenState extends State<HomeworkQuizeScreen> {
                 Text(
                   '$completion%',
                   style: GoogleFonts.kantumruyPro(
-                    fontSize: 32,
+                    fontSize: _fs(32, context),
                     fontWeight: FontWeight.bold,
                     color: AppColors.primaryText,
                   ),
@@ -619,7 +628,7 @@ class _HomeworkQuizeScreenState extends State<HomeworkQuizeScreen> {
                 child: Text(
                   'យឺត ${_summary['overdue']}',
                   style: GoogleFonts.kantumruyPro(
-                    fontSize: 12,
+                    fontSize: _fs(12, context),
                     color: AppColors.error,
                     fontWeight: FontWeight.w500,
                   ),
@@ -735,7 +744,7 @@ class _HomeworkQuizeScreenState extends State<HomeworkQuizeScreen> {
                             child: Text(
                               tag,
                               style: GoogleFonts.kantumruyPro(
-                                fontSize: 11,
+                                fontSize: _fs(11, context),
                                 color: tagColor,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -791,7 +800,7 @@ class _HomeworkQuizeScreenState extends State<HomeworkQuizeScreen> {
                       child: Text(
                         buttonText,
                         style: GoogleFonts.kantumruyPro(
-                          fontSize: 14,
+                          fontSize: _fs(14, context),
                           fontWeight: FontWeight.w600,
                           color: AppColors.white,
                         ),
@@ -876,7 +885,7 @@ class _HomeworkQuizeScreenState extends State<HomeworkQuizeScreen> {
                       child: Text(
                         tag,
                         style: GoogleFonts.kantumruyPro(
-                          fontSize: 11,
+                          fontSize: _fs(11, context),
                           color: tagColor,
                           fontWeight: FontWeight.w500,
                         ),
@@ -892,7 +901,7 @@ class _HomeworkQuizeScreenState extends State<HomeworkQuizeScreen> {
           Text(
             score,
             style: GoogleFonts.kantumruyPro(
-              fontSize: 18,
+              fontSize: _fs(18, context),
               fontWeight: FontWeight.bold,
               color: scoreColor,
             ),

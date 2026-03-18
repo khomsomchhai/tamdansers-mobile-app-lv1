@@ -1,7 +1,8 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+
 class Information extends StatefulWidget {
   const Information({super.key});
 
@@ -12,13 +13,20 @@ class Information extends StatefulWidget {
 class _InformationState extends State<Information> {
   int selectedIndex = 0;
   int _currentIndex = 0;
+
+  double _fs(double base, BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    return base * (width / 390).clamp(0.78, 1.15);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
           "ព៌ត៌មាន",
-          style: AppTextStyle.screenTitle24,
+          style:
+              AppTextStyle.screenTitle24.copyWith(fontSize: _fs(24, context)),
         ),
         centerTitle: true,
         backgroundColor: AppColors.white,
@@ -39,17 +47,19 @@ class _InformationState extends State<Information> {
                 children: [
                   Text(
                     "បច្ចុប្បន្នភាពថ្មីៗ",
-                    style: AppTextStyle.fontsize18,
+                    style: AppTextStyle.fontsize18
+                        .copyWith(fontSize: _fs(18, context)),
                   ),
                   const Spacer(),
                   Text(
                     "មើលទាំងអស់",
-                    style: AppTextStyle.til16,
+                    style:
+                        AppTextStyle.til16.copyWith(fontSize: _fs(16, context)),
                   ),
                 ],
               ),
               const SizedBox(height: 15),
-               _listnothicard(),
+              _listnothicard(),
             ],
           ),
         ),
@@ -82,7 +92,8 @@ class _InformationState extends State<Information> {
               ),
               child: Text(
                 names[index],
-                style: TextStyle(
+                style: AppTextStyle.body14.copyWith(
+                  fontSize: _fs(13, context),
                   color: isSelected ? Colors.white : Colors.black,
                   fontWeight: FontWeight.w500,
                 ),
@@ -132,19 +143,22 @@ class _InformationState extends State<Information> {
                 children: [
                   Text(
                     name,
-                    style: AppTextStyle.subtitle16,
+                    style: AppTextStyle.subtitle16
+                        .copyWith(fontSize: _fs(16, context)),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     hour,
-                    style: AppTextStyle.body14,
+                    style: AppTextStyle.body14
+                        .copyWith(fontSize: _fs(14, context)),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     description,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: AppTextStyle.body14,
+                    style: AppTextStyle.body14
+                        .copyWith(fontSize: _fs(14, context)),
                   ),
                 ],
               ),
@@ -153,7 +167,7 @@ class _InformationState extends State<Information> {
               const SizedBox(width: 8),
               Icon(
                 trailingIcon,
-                size: 16,
+                size: _fs(16, context),
                 color: Colors.black38,
               ),
             ],
@@ -170,9 +184,8 @@ class _InformationState extends State<Information> {
         _nothicard(
           name: "ការជូនដំណឺងរបស់សាលា",
           hour: "5 ម៉ោងមុន",
-          description:
-              "សាលានិងបិទនៅថ្ងៃស្អែកដោយសារមានទិវាឈប់សម្រាកបុណ្យជាតិ",
-          icon: Icons.notifications,
+          description: "សាលានិងបិទនៅថ្ងៃស្អែកដោយសារមានទិវាឈប់សម្រាកបុណ្យជាតិ",
+          icon: Icons.notifications_outlined,
           color: AppColors.comment,
           trailingIcon: Icons.arrow_forward_ios,
         ),
@@ -188,8 +201,7 @@ class _InformationState extends State<Information> {
         _nothicard(
           name: "ប្រតិបត្តិពន្ទុថ្មី",
           hour: "2 ម៉ោងមុន",
-          description:
-              "ព្រឺត្តបត្រពិន្ទុសម្រាប់ឆមាសទី១មានសប្រាប់ទាញយកហើយ ។",
+          description: "ព្រឺត្តបត្រពិន្ទុសម្រាប់ឆមាសទី១មានសប្រាប់ទាញយកហើយ ។",
           icon: Icons.bookmark_add_outlined,
           color: AppColors.primaryMain,
           trailingIcon: Icons.arrow_forward_ios,
@@ -208,64 +220,65 @@ class _InformationState extends State<Information> {
           hour: "1 ម៉ោងមុន",
           description:
               "ការប្រជុំនាពេលខាងមុខគ្រោងធ្វើនៅថ្ងៃសុក្រនេះវេលាម៉ោង ២:០០ រសៀល នៅបន្ទប់ 3B។",
-          icon: Icons.notifications,
+          icon: Icons.notifications_outlined,
           color: AppColors.comment,
           trailingIcon: Icons.arrow_forward_ios,
         ),
       ],
     );
   }
-  Widget _buildCarousel() {
-  final List<String> images = [
-    'assets/images/mylove.jpg',
-    'assets/images/mylove.jpg',
-    'assets/images/mylove.jpg',
-  ];
 
-  return Column(
-    children: [
-      CarouselSlider(
-        options: CarouselOptions(
-          height: 200,
-          autoPlay: true,
-          enlargeCenterPage: true,
-          viewportFraction: 0.9,
-          autoPlayInterval: const Duration(seconds: 3),
-          onPageChanged: (index, reason) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
+  Widget _buildCarousel() {
+    final List<String> images = [
+      'assets/images/mylove.jpg',
+      'assets/images/mylove.jpg',
+      'assets/images/mylove.jpg',
+    ];
+
+    return Column(
+      children: [
+        CarouselSlider(
+          options: CarouselOptions(
+            height: 200,
+            autoPlay: true,
+            enlargeCenterPage: true,
+            viewportFraction: 0.9,
+            autoPlayInterval: const Duration(seconds: 3),
+            onPageChanged: (index, reason) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+          ),
+          items: images.map((item) {
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(
+                item,
+                fit: BoxFit.cover,
+                width: double.infinity,
+              ),
+            );
+          }).toList(),
         ),
-        items: images.map((item) {
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.asset(
-              item,
-              fit: BoxFit.cover,
-              width: double.infinity,
-            ),
-          );
-        }).toList(),
-      ),
-      const SizedBox(height: 8),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: images.asMap().entries.map((entry) {
-          return Container(
-            width: _currentIndex == entry.key ? 12 : 8,
-            height: 8,
-            margin: const EdgeInsets.symmetric(horizontal: 4),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
-              color: _currentIndex == entry.key
-                  ? AppColors.primaryMain
-                  : AppColors.secondaryText,
-            ),
-          );
-        }).toList(),
-      ),
-    ],
-  );
-}
+        const SizedBox(height: 8),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: images.asMap().entries.map((entry) {
+            return Container(
+              width: _currentIndex == entry.key ? 12 : 8,
+              height: 8,
+              margin: const EdgeInsets.symmetric(horizontal: 4),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                color: _currentIndex == entry.key
+                    ? AppColors.primaryMain
+                    : AppColors.secondaryText,
+              ),
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
 }

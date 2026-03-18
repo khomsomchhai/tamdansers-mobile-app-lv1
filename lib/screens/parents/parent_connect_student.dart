@@ -74,7 +74,8 @@ class _ParentConnectStudentState extends State<ParentConnectStudent> {
         parentId: parentId,
         studentId: studentUser["id"],
       );
-      debugPrint('connectParentToStudent: parentId=$parentId, studentId=${studentUser["id"]}, insert result=$result');
+      debugPrint(
+          'connectParentToStudent: parentId=$parentId, studentId=${studentUser["id"]}, insert result=$result');
 
       if (mounted) {
         showDialog(
@@ -110,7 +111,7 @@ class _ParentConnectStudentState extends State<ParentConnectStudent> {
         content: CustomSnackbar(
           title: "មិនត្រឹមត្រូវ!",
           message: message,
-          icon: Icons.close,
+          icon: Icons.close_rounded,
           color: AppColors.error,
         ),
       ),

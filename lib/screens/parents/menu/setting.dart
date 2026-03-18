@@ -17,6 +17,11 @@ class ParentSetting extends StatefulWidget {
 }
 
 class _ParentSettingState extends State<ParentSetting> {
+  double _fs(double base, BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    return base * (width / 390).clamp(0.78, 1.15);
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -26,7 +31,11 @@ class _ParentSettingState extends State<ParentSetting> {
         appBar: AppBar(
           backgroundColor: AppColors.backgroundLight,
           elevation: 0,
-          title: Text("ប្រវត្តិរូប", style: AppTextStyle.sectionTitle20),
+          title: Text(
+            "ប្រវត្តិរូប",
+            style: AppTextStyle.sectionTitle20
+                .copyWith(fontSize: _fs(20, context)),
+          ),
           centerTitle: true,
           automaticallyImplyLeading: false,
         ),
@@ -117,8 +126,13 @@ class _ParentSettingState extends State<ParentSetting> {
   }
 
   Widget _rowIconText(String text) {
-    return Text(text,
-        style: AppTextStyle.fontsize18.copyWith(fontWeight: FontWeight.w600));
+    return Text(
+      text,
+      style: AppTextStyle.fontsize18.copyWith(
+        fontWeight: FontWeight.w600,
+        fontSize: _fs(18, context),
+      ),
+    );
   }
 
   Widget _buildChildrenRow() {
@@ -163,12 +177,12 @@ class _ParentSettingState extends State<ParentSetting> {
             color: const Color(0xFFD9D9D9),
           ),
         ),
-        child: const Center(
+        child: Center(
           child: Text(
             "Add",
-            style: TextStyle(
-              fontSize: 16,
-              color: Color(0xFF9CA3AF),
+            style: AppTextStyle.subtitle16.copyWith(
+              color: const Color(0xFF9CA3AF),
+              fontSize: _fs(16, context),
               fontWeight: FontWeight.w600,
             ),
           ),

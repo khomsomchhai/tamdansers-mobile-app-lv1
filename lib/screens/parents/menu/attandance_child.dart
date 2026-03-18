@@ -36,6 +36,11 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
 
   List<Map<String, dynamic>> _records = [];
 
+  double _fs(double base, BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    return base * (width / 390).clamp(0.78, 1.15);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -333,7 +338,11 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
         backgroundColor: AppColors.backgroundLight,
         elevation: 0,
         scrolledUnderElevation: 0,
-        title: Text('វត្តមាន', style: AppTextStyle.screenTitle24),
+        title: Text(
+          'វត្តមាន',
+          style:
+              AppTextStyle.screenTitle24.copyWith(fontSize: _fs(24, context)),
+        ),
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 12),
@@ -455,7 +464,7 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
             color: AppColors.backgroundLight,
             border: Border.all(color: AppColors.lightgrey),
           ),
-          child: Icon(Icons.person_outline,
+          child: Icon(Icons.person_outline_rounded,
               size: 22, color: AppColors.secondaryText),
         ),
       ],
@@ -570,7 +579,7 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
                   child: Text(
                     label,
                     style: GoogleFonts.kantumruyPro(
-                      fontSize: 12,
+                      fontSize: _fs(12, context),
                       fontWeight: FontWeight.w600,
                       color: iconColor,
                     ),
@@ -583,7 +592,7 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
             Text(
               value,
               style: GoogleFonts.kantumruyPro(
-                fontSize: 28,
+                fontSize: _fs(28, context),
                 fontWeight: FontWeight.bold,
                 color: valueColor,
               ),
@@ -592,7 +601,7 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
             Text(
               unit,
               style: GoogleFonts.kantumruyPro(
-                fontSize: 13,
+                fontSize: _fs(13, context),
                 color: valueColor,
               ),
             ),
@@ -708,7 +717,7 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
             child: Text(
               record["status"],
               style: GoogleFonts.kantumruyPro(
-                fontSize: 12,
+                fontSize: _fs(12, context),
                 fontWeight: FontWeight.w600,
                 color: statusColor,
               ),
@@ -729,7 +738,7 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
         label: Text(
           "Request Leave",
           style: GoogleFonts.kantumruyPro(
-            fontSize: 16,
+            fontSize: _fs(16, context),
             fontWeight: FontWeight.w600,
           ),
         ),

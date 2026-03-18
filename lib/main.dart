@@ -6,6 +6,7 @@ import 'package:tamdansers_app/routes/app_routes.dart';
 void main() {
   runApp(const MainApp());
 }
+
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
   @override
@@ -19,7 +20,7 @@ class MainApp extends StatelessWidget {
             elevation: 0,
             surfaceTintColor: AppColors.transparent,
           )),
-      initialRoute: AppRoutes.ParentsDashboard,
+      initialRoute: AppRoutes.splashScreen,
       onGenerateRoute: AppRouter.generateRoute,
     );
   }

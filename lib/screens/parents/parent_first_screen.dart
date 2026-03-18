@@ -17,7 +17,8 @@ class ParentFirstScreen extends StatefulWidget {
   State<ParentFirstScreen> createState() => _ParentFirstScreenState();
 }
 
-class _ParentFirstScreenState extends State<ParentFirstScreen> with WidgetsBindingObserver {
+class _ParentFirstScreenState extends State<ParentFirstScreen>
+    with WidgetsBindingObserver {
   Map<String, dynamic>? _currentUser;
   List<Map<String, dynamic>> _students = [];
   bool _isLoading = true;
@@ -100,7 +101,8 @@ class _ParentFirstScreenState extends State<ParentFirstScreen> with WidgetsBindi
           children: [
             FloatingActionButton(
               onPressed: () async {
-                await Navigator.pushNamed(context, AppRoutes.parentPendingRequests);
+                await Navigator.pushNamed(
+                    context, AppRoutes.parentPendingRequests);
                 _loadData();
               },
               heroTag: "pending",
@@ -108,7 +110,7 @@ class _ParentFirstScreenState extends State<ParentFirstScreen> with WidgetsBindi
                   borderRadius: BorderRadius.circular(AppNumber.radiusMedium)),
               backgroundColor: AppColors.white,
               child: Icon(
-                Icons.pending,
+                Icons.pending_actions_rounded,
                 color: AppColors.primaryMain,
                 size: AppNumber.iconMedium,
               ),
@@ -123,7 +125,7 @@ class _ParentFirstScreenState extends State<ParentFirstScreen> with WidgetsBindi
                   borderRadius: BorderRadius.circular(AppNumber.radiusMedium)),
               backgroundColor: AppColors.primaryMain,
               child: Icon(
-                Icons.add,
+                Icons.add_rounded,
                 color: AppColors.white,
                 size: AppNumber.iconLarge,
               ),

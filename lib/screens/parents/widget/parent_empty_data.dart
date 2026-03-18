@@ -14,54 +14,53 @@ class ParentEmptyData extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          height: MediaQuery.of(context).size.height*0.35,
-          child: SvgPicture.asset(
-            AppImages.noData
-          ),
+          height: MediaQuery.of(context).size.height * 0.35,
+          child: SvgPicture.asset(AppImages.noData),
         ),
         Text(
           "មិនទាន់ភ្ចាប់ទៅកាន់គណនីរបស់សិស្ស",
           style: AppTextStyle.subtitle18,
           overflow: TextOverflow.ellipsis,
         ),
-        SizedBox(height: 20,),
+        SizedBox(
+          height: 20,
+        ),
         Text(
           "សូមភ្ជាប់ទៅកាន់គណនីរបស់សិស្សដើម្បីចាប់ផ្ដើម",
           style: AppTextStyle.body,
         ),
-        SizedBox(height: 30,),
+        SizedBox(
+          height: 30,
+        ),
         SizedBox(
           height: 40,
           width: 120,
           child: ElevatedButton(
-            onPressed: (){
-              Navigator.pushNamed(
-                context, 
-                AppRoutes.parentConnectStudent
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primaryMain,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(AppNumber.radiusSmall)
-              )
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.link,
-                  color: AppColors.white,
-                  size: AppNumber.iconMedium,
-                ),
-                SizedBox(width: 10,),
-                Text(
-                  "ភ្ជាប់",
-                  style: AppTextStyle.buttonText16White,
-                )
-              ],
-            )
-          ),
+              onPressed: () {
+                Navigator.pushNamed(context, AppRoutes.parentConnectStudent);
+              },
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primaryMain,
+                  shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(AppNumber.radiusSmall))),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.link_outlined,
+                    color: AppColors.white,
+                    size: AppNumber.iconMedium,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    "ភ្ជាប់",
+                    style: AppTextStyle.buttonText16White,
+                  )
+                ],
+              )),
         ),
       ],
     );

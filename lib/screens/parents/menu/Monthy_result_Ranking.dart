@@ -14,6 +14,11 @@ class CustomScreen extends StatefulWidget {
 class _CustomScreenState extends State<CustomScreen> {
   String selectedValue = "១២ មករា ២០២៤";
 
+  double _fs(double base, BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    return base * (width / 390).clamp(0.78, 1.15);
+  }
+
   final List<String> items = [
     "១២ មករា ២០២៤",
     "១៣ មករា ២០២៤",
@@ -65,11 +70,11 @@ class _CustomScreenState extends State<CustomScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         centerTitle: true,
-        title: const Text(
+        title: Text(
           "របាយការណ៍",
-          style: TextStyle(
+          style: AppTextStyle.screenTitle24.copyWith(
             color: Colors.black,
-            fontSize: 18,
+            fontSize: _fs(18, context),
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -117,7 +122,10 @@ class _CustomScreenState extends State<CustomScreen> {
           items: items.map((e) {
             return DropdownMenuItem(
               value: e,
-              child: Text(e, style: const TextStyle(fontSize: 14)),
+              child: Text(
+                e,
+                style: AppTextStyle.body14.copyWith(fontSize: _fs(14, context)),
+              ),
             );
           }).toList(),
           onChanged: (value) {
@@ -155,17 +163,18 @@ class _CustomScreenState extends State<CustomScreen> {
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children:[
+              children: [
                 Text(
                   "ប៊ិន​ សុវណ្ណវង្ស",
-                  style: AppTextStyle.subtitle16.copyWith(color: AppColors.grey),
+                  style:
+                      AppTextStyle.subtitle16.copyWith(color: AppColors.grey),
                 ),
                 SizedBox(height: 4),
                 Text(
-                  "ID: STU-2023-89. ថ្នាក់ទី ១២ ក",  
-                  style: TextStyle(
+                  "ID: STU-2023-89. ថ្នាក់ទី ១២ ក",
+                  style: AppTextStyle.body14.copyWith(
                     color: Colors.grey,
-                    fontSize: 14,
+                    fontSize: _fs(14, context),
                   ),
                 ),
               ],

@@ -98,10 +98,16 @@ class ParentProfileHeader extends StatelessWidget {
               Expanded(
                 child: Text(
                   getKhmerDate(),
-                  style: AppTextStyle.body18White.copyWith(fontSize: _fs(12, context)),
+                  style: AppTextStyle.body18White
+                      .copyWith(fontSize: _fs(12, context)),
                 ),
               ),
-              _circleIcon(Icons.notifications_none, context),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.parent_nothi);
+                },
+                child: _circleIcon(Icons.notifications_none_rounded, context),
+              ),
               const SizedBox(width: 10),
               GestureDetector(
                 onTap: () => _confirmLogout(context),
@@ -116,8 +122,10 @@ class ParentProfileHeader extends StatelessWidget {
                     child: Image.asset(
                       AppIcon.profileParent,
                       fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) =>
-                          Icon(Icons.person, color: AppColors.white, size: 22),
+                      errorBuilder: (context, error, stackTrace) => Icon(
+                          Icons.person_rounded,
+                          color: AppColors.white,
+                          size: 22),
                     ),
                   ),
                 ),
