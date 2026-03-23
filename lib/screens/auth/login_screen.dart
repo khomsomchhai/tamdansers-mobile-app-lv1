@@ -148,22 +148,6 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ],
       ),
-
-      // body: SingleChildScrollView(
-      //   child: Padding(
-      //     padding: const EdgeInsets.symmetric(horizontal: 20),
-      //     child: Column(
-      //       children: [
-      //         _buildHeader(size),
-      //         SizedBox(height: 24,),
-      //         _buildForm(),
-      //         SizedBox(height: 24,),
-      //         _buildFooter(),
-      //         SizedBox(height: 20,),
-      //       ],
-      //     ),
-      //   ),
-      // ),
     );
   }
 

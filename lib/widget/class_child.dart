@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_number.dart';
+import 'package:tamdansers_app/constants/text_style.dart';
 
 class ChildCard extends StatelessWidget {
   final String name;
   final String grade;
-  final int attendance;
-  final Color progressColor;
+  final String gender;
   final String imageUrl;
 
   const ChildCard({
     super.key,
     required this.name,
     required this.grade,
-    required this.attendance,
-    required this.progressColor,
+    required this.gender,
     required this.imageUrl,
   });
 
@@ -23,7 +24,7 @@ class ChildCard extends StatelessWidget {
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -36,8 +37,8 @@ class ChildCard extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 36,
-            backgroundColor: const Color(0xFFF5D7B8),
-            backgroundImage: NetworkImage(imageUrl),
+            backgroundColor: AppColors.white,
+            backgroundImage: AssetImage(imageUrl),
           ),
           const SizedBox(height: 14),
           Text(
@@ -48,35 +49,23 @@ class ChildCard extends StatelessWidget {
               fontWeight: FontWeight.w700,
               color: Color(0xFF1F1F1F),
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Text(
             grade,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF4A90E2),
-            ),
+            style: AppTextStyle.caption13Secondary,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
-          const Spacer(),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: LinearProgressIndicator(
-              value: attendance / 100,
-              minHeight: 5,
-              backgroundColor: const Color(0xFFEAEAEA),
-              valueColor: AlwaysStoppedAnimation<Color>(progressColor),
-            ),
-          ),
-          const SizedBox(height: 8),
+          SizedBox(height: 4),
           Text(
-            'Attendance: $attendance%',
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              color: Color(0xFF9E9E9E),
-            ),
-          ),
+            "ភេទ: $gender",
+            style: AppTextStyle.caption13Secondary,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          )
         ],
       ),
     );

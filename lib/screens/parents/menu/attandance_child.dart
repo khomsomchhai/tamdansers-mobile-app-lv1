@@ -1,12 +1,21 @@
+import 'dart:io' as io;
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
-import 'package:tamdansers_app/constants/app_images.dart';
+import 'package:tamdansers_app/constants/app_icon.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/repositories/attendance_repo.dart';
+import 'package:tamdansers_app/repositories/class_repo.dart';
+import 'package:tamdansers_app/repositories/student_class_repo.dart';
+import 'package:tamdansers_app/repositories/user_repo.dart';
 
 class AttandanceScreen extends StatefulWidget {
-  const AttandanceScreen({super.key});
+  final int? studentClassId;
+  final int? classId;
+  
+  const AttandanceScreen({super.key, this.studentClassId, this.classId});
 
   @override
   State<AttandanceScreen> createState() => _AttandanceScreenState();
@@ -14,73 +23,218 @@ class AttandanceScreen extends StatefulWidget {
 
 class _AttandanceScreenState extends State<AttandanceScreen> {
   int _currentMonthIndex = 0;
+  bool _isLoading = true;
+
+  Map<String, dynamic> _student = {};
+  String _teacherName = 'គ្រូ';
+  int presentDays = 0;
+  int lateDays = 0;
+  int absentDays = 0;
+  List<Map<String, dynamic>> _records = [];
 
   final List<String> _months = [
-    "តុលា ២០២៣",
-    "វិច្ឆិកា ២០២៣",
-    "ធ្នូ ២០២៣",
+    'មករា',
+    'កុម្ភៈ',
+    'មីនា',
+    'មេសា',
+    'ឧសភា',
+    'មិថុនា',
+    'កក្កដា',
+    'សីហា',
+    'កញ្ញា',
+    'តុលា',
+    'វិច្ឆិកា',
+    'ធ្នូ',
   ];
 
-  // Summary data
-  final int presentDays = 20;
-  final int lateDays = 1;
-  final int absentDays = 0;
+  @override
+  void initState() {
+    super.initState();
+    _currentMonthIndex = DateTime.now().month - 1;
+    _loadAttendanceData();
+  }
 
-  // Attendance records
-  final List<Map<String, dynamic>> _records = [
-    {
-      "day": "ថ្ងៃចន្ទ, ១៦តុលា",
-      "time": "Check-in: 07 : 30 AM",
-      "status": "វត្តមាន",
-      "type": "presents",
-    },
-    {
-      "day": "ថ្ងៃសុក្រ, ១៣តុលា",
-      "time": "Check-in: 07 : 35 AM",
-      "status": "វត្តមាន",
-      "type": "presents",
-    },
-    {
-      "day": "ថ្ងៃព្រហស្បត្តិ៍, ១២តុលា",
-      "time": "Check-in: 08 : 15 AM",
-      "status": "យឺត",
-      "type": "late",
-    },
-    {
-      "day": "ថ្ងៃពុធ, ១១តុលា",
-      "time": "Check-in: 07 : 28 AM",
-      "status": "វត្តមាន",
-      "type": "presents",
-    },
-    {
-      "day": "ថ្ងៃអង្គារ, ១០តុលា",
-      "time": "Sick Leave",
-      "status": "អវត្តមាន",
-      "type": "absent",
-    },
-  ];
+  String _getYearMonthString(int monthIndex) {
+    final now = DateTime.now();
+    final year = now.year;
+    final month = monthIndex + 1;
+    return '$year-${month.toString().padLeft(2, '0')}';
+  }
+
+  Future<void> _loadAttendanceData() async {
+    try {
+      setState(() => _isLoading = true);
+      
+      if (widget.studentClassId == null || widget.classId == null) {
+        setState(() => _isLoading = false);
+        return;
+      }
+
+      final studentClassRepo = StudentClassRepo();
+      final studentData = await studentClassRepo.getStudentById(widget.studentClassId!);
+      
+      if (studentData != null) {
+        final classRepo = ClassRepo();
+        final classData = await classRepo.getClassById(widget.classId!);
+        
+        String teacherName = 'គ្រូ';
+        if (classData != null && classData['teacher_id'] != null) {
+          try {
+            final userRepo = UserRepo();
+            final teacherData = await userRepo.getUserById(classData['teacher_id'] as int);
+            if (teacherData != null) {
+              final firstName = teacherData['first_name'] as String? ?? '';
+              final lastName = teacherData['last_name'] as String? ?? '';
+              teacherName = '$firstName $lastName'.trim();
+              if (teacherName.isEmpty) teacherName = 'គ្រូប្រឹក្សា';
+            }
+          } catch (e) {
+            debugPrint('Error loading teacher: $e');
+          }
+        }
+        
+        // Add class name to student data
+        final student = {
+          ...studentData,
+          'class_name': classData?['name'] ?? 'មិនបានកំណត់'
+        };
+        
+        setState(() {
+          _student = student;
+          _teacherName = teacherName;
+          _isLoading = false;
+        });
+        
+        await _loadMonthAttendance();
+      } else {
+        setState(() => _isLoading = false);
+      }
+    } catch (e) {
+      debugPrint('Error loading attendance: $e');
+      setState(() => _isLoading = false);
+    }
+  }
+
+  Future<void> _loadMonthAttendance() async {
+    try {
+      if (widget.studentClassId == null || widget.classId == null) return;
+      final currentMonth = _getYearMonthString(_currentMonthIndex);
+      final attendanceRepo = AttendanceRepo();
+      final attendance = await attendanceRepo.getAttendanceByStudentAndMonth(
+          widget.studentClassId!, widget.classId!, currentMonth);
+      
+      int present = 0;
+      int late = 0;
+      int absent = 0;
+      
+      for (var record in attendance) {
+        final status = record['status'] as String?;
+        if (status == 'present') present++;
+        else if (status == 'late') late++;
+        else if (status == 'absent') absent++;
+      }
+      
+      setState(() {
+        presentDays = present;
+        lateDays = late;
+        absentDays = absent;
+        _records = _formatAttendanceRecords(attendance);
+      });
+    } catch (e) {
+      debugPrint('Error loading month attendance: $e');
+    }
+  }
+
+  List<Map<String, dynamic>> _formatAttendanceRecords(List<Map<String, dynamic>> attendance) {
+    return attendance.map((record) {
+      final date = record['date'] as String?;
+      final status = record['status'] as String?;
+      
+      String khmerDate = _formatDateToKhmer(date ?? '');
+      String statusKhmer = 'វត្តមាន';
+      String statusType = 'presents';
+      
+      if (status == 'late') {
+        statusKhmer = 'យឺត';
+        statusType = 'late';
+      } else if (status == 'absent') {
+        statusKhmer = 'អវត្តមាន';
+        statusType = 'absent';
+      }
+      
+      return {
+        'day': khmerDate,
+        'teacher': _teacherName,
+        'status': statusKhmer,  
+        'type': statusType,
+      };
+    }).toList();
+  }
+
+  String _formatDateToKhmer(String date) {
+    if (date.isEmpty) return 'មិនមាន';
+    try {
+      final parts = date.split('-');
+      if (parts.length != 3) return date;
+      
+      final year = parts[0];
+      final month = int.parse(parts[1]);
+      final day = int.parse(parts[2]);
+      
+      final months = [
+        'មករា', 'កុម្ភៈ', 'មីនា', 'មេសា', 'ឧសភា', 'មិថុនា',
+        'កក្កដា', 'សីហា', 'កញ្ញា', 'តុលា', 'វិច្ឆិកា', 'ធ្នូ'
+      ];
+      
+      final monthKhmer = months[month - 1];
+      return 'ថ្ងៃទី$day ខែ$monthKhmer ឆ្នាំ$year';
+    } catch (e) {
+      return date;
+    }
+  }
 
   void _previousMonth() {
     if (_currentMonthIndex > 0) {
       setState(() => _currentMonthIndex--);
+      _loadMonthAttendance();
     }
   }
 
   void _nextMonth() {
-    if (_currentMonthIndex < _months.length - 1) {
+    if (_currentMonthIndex < 11) {
       setState(() => _currentMonthIndex++);
+      _loadMonthAttendance();
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return Scaffold(
+        backgroundColor: AppColors.backgroundLight,
+        appBar: AppBar(
+          backgroundColor: AppColors.backgroundLight,
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          title: Text('វត្តមាន', style: AppTextStyle.sectionTitle20),
+          centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: AppColors.primaryText),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return Scaffold(
       backgroundColor: AppColors.backgroundLight,
       appBar: AppBar(
         backgroundColor: AppColors.backgroundLight,
         elevation: 0,
         scrolledUnderElevation: 0,
-        title: Text('វត្តមាន', style: AppTextStyle.screenTitle24),
+        title: Text('វត្តមាន', style: AppTextStyle.sectionTitle20),
+        centerTitle: true,
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 12),
@@ -96,7 +250,7 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
       body: SingleChildScrollView(
         child: Padding(
           padding:
-              const EdgeInsets.symmetric(horizontal: AppNumber.screenPadding),
+              const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -107,12 +261,9 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
               const SizedBox(height: 16),
               _buildStatsRow(),
               const SizedBox(height: 20),
-              Text("កំណត់សហេតុប្រចាំថ្ងៃ", style: AppTextStyle.subtitle18),
+              Text("វត្តមាន", style: AppTextStyle.subtitle18),
               const SizedBox(height: 12),
               _buildAttendanceList(),
-              const SizedBox(height: 16),
-              _buildRequestLeaveButton(),
-              const SizedBox(height: 24),
             ],
           ),
         ),
@@ -120,8 +271,9 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
     );
   }
 
-  // ==================== PROFILE HEADER ====================
   Widget _buildProfileHeader() {
+    final student = _student;
+    final photoPath = student['photo_path'] as String?;
     return Row(
       children: [
         Container(
@@ -133,7 +285,17 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
             border: Border.all(color: AppColors.primaryMain, width: 2),
           ),
           child: ClipOval(
-            child: Image.asset(AppImages.userProfile, fit: BoxFit.cover),
+            child: (photoPath != null && photoPath.isNotEmpty)
+                ? Image.file(
+                    io.File(photoPath),
+                    fit: BoxFit.cover,
+                  )
+                : Image.asset(
+                    student['gender'] == 'ប្រុស' || student['gender'] == 'male'
+                        ? AppIcon.maleAvatar
+                        : AppIcon.femaleAvatar,
+                    fit: BoxFit.cover,
+                  ),
           ),
         ),
         const SizedBox(width: 12),
@@ -143,7 +305,10 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
             children: [
               Row(
                 children: [
-                  Text("ហេង ឡូយ", style: AppTextStyle.subtitle18),
+                  Text(
+                    '${student['first_name'] ?? ''} ${student['last_name'] ?? ''}',
+                    style: AppTextStyle.subtitle18,
+                  ),
                   const SizedBox(width: 4),
                   Icon(Icons.keyboard_arrow_down,
                       size: 20, color: AppColors.secondaryText),
@@ -151,36 +316,19 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
               ),
               const SizedBox(height: 2),
               Text(
-                "ថ្នាក់ទី 5A ID: #29384",
+                student['class_name'] ?? '',
                 style: AppTextStyle.caption13Secondary,
               ),
             ],
           ),
         ),
-        Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: AppColors.backgroundLight,
-            border: Border.all(color: AppColors.lightgrey),
-          ),
-          child: Icon(Icons.person_outline,
-              size: 22, color: AppColors.secondaryText),
-        ),
       ],
     );
   }
 
-  // ==================== MONTH SELECTOR ====================
   Widget _buildMonthSelector() {
     return Column(
       children: [
-        Text(
-          "បង្ហាញកិច្ចផ្សរសម្រាប់",
-          style: AppTextStyle.caption14Secondary,
-        ),
-        const SizedBox(height: 6),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -209,19 +357,18 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
     );
   }
 
-  // ==================== STATS ROW ====================
   Widget _buildStatsRow() {
     return Row(
       children: [
         _buildStatCard(
           icon: Icons.check_circle_outline,
-          iconColor: AppColors.primaryMain,
+          iconColor: AppColors.success,
           label: "វត្តមាន",
           value: presentDays.toString(),
           unit: "ថ្ងៃ",
           bgColor: AppColors.primaryBg,
           valueBgColor: const Color(0xFFD6E9FF),
-          valueColor: AppColors.primaryMain,
+          valueColor: AppColors.success,
         ),
         const SizedBox(width: 10),
         _buildStatCard(
@@ -310,7 +457,6 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
     );
   }
 
-  // ==================== ATTENDANCE LIST ====================
   Widget _buildAttendanceList() {
     return ListView.separated(
       shrinkWrap: true,
@@ -337,9 +483,9 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
     switch (type) {
       case "presents":
       case "present":
-        statusColor = AppColors.primaryMain;
+        statusColor = AppColors.success;
         statusBgColor = AppColors.primaryBg;
-        dotColor = AppColors.primaryMain;
+        dotColor = AppColors.success;
         break;
       case "late":
         statusColor = AppColors.orange;
@@ -362,7 +508,6 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Dot indicator
           Container(
             width: 10,
             height: 10,
@@ -372,7 +517,6 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
             ),
           ),
           const SizedBox(width: 12),
-          // Day + Check-in time
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -383,13 +527,12 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  record["time"],
+                  "គ្រូបន្ទុកថ្នាក់: ${record["teacher"]}",
                   style: AppTextStyle.caption13Secondary,
                 ),
               ],
             ),
           ),
-          // Status tag
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
@@ -410,30 +553,4 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
     );
   }
 
-  // ==================== REQUEST LEAVE BUTTON ====================
-  Widget _buildRequestLeaveButton() {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton.icon(
-        onPressed: () {},
-        icon: const Icon(Icons.edit_calendar_outlined, size: 20),
-        label: Text(
-          "Request Leave",
-          style: GoogleFonts.kantumruyPro(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryMain,
-          foregroundColor: AppColors.white,
-          padding: const EdgeInsets.symmetric(vertical: 14),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppNumber.radiusPill),
-          ),
-          elevation: 0,
-        ),
-      ),
-    );
-  }
 }

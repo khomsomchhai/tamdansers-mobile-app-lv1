@@ -36,17 +36,14 @@ class _StudentDetailScreenState extends State<StudentDetailScreen> {
   }
 
   Future<void> _loadStudent() async {
-    // Run student + scores in parallel — both are independent
     final db = await DbHelper().initDatabase();
 
-    // Try tbl_student_class first, then fall back to tbl_user
     var studentRows = await db.query('tbl_student_class',
         where: 'id = ?', whereArgs: [widget.studentId]);
     Map<String, dynamic>? student;
     if (studentRows.isNotEmpty) {
       student = studentRows.first;
     } else {
-      // Self-joined student: load from tbl_user
       final userRows = await db
           .query('tbl_user', where: 'id = ?', whereArgs: [widget.studentId]);
       if (userRows.isNotEmpty) {

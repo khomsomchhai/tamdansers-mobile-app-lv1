@@ -28,7 +28,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
         child: Column(
           children: [
             _buildCarousel(size),
-            const Spacer(),
+            Spacer(),
             Text(
               "សូមជ្រើសរើសមុខងារ",
               style: AppTextStyle.title28,
@@ -37,8 +37,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
               "ចូលប្រើប្រាស់",
               style: AppTextStyle.title28,
             ),
-            const Spacer(),
-            //custom widget
+            Spacer(),
             PrimaryButton(
               label: "គ្រូបង្រៀន",
               backgroundColor: AppColors.primaryMain,
@@ -50,7 +49,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                   arguments: "teacher"
                 );
               }),
-            const SizedBox(height: 16,),
+            SizedBox(height: 16,),
             PrimaryButton(
               label: "សិស្ស",
               backgroundColor: AppColors.primaryMain,
@@ -63,7 +62,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                 );
               }
             ),
-            const SizedBox(height: 16,),
+            SizedBox(height: 16,),
             PrimaryButton(
               label: "អាណាព្យាបាលសិស្ស",
               backgroundColor: AppColors.primaryMain,
@@ -76,7 +75,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                 );
               }
             ),
-            const SizedBox(height: 20,)
+            SizedBox(height: 20,)
           ],
         ),
       ),
@@ -109,7 +108,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
             );
           }).toList(),
         ),
-        const SizedBox(height: 15,),
+        SizedBox(height: 15,),
         AnimatedSmoothIndicator(    
           activeIndex: sliderIndex,
           count: 3,    

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tamdansers_app/constants/app_colors.dart';
-import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/repositories/student_class_repo.dart';
 import 'package:tamdansers_app/repositories/user_repo.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/screens/parents/widget/parent_profile_header.dart';
@@ -44,9 +43,9 @@ class _ParentListStuClassState extends State<ParentListStuClass> {
 
   Future<void> _loadJoinedClasses() async {
     if (widget.student != null) {
-      final studentId = widget.student!['id'] as int?;
-      if (studentId != null) {
-        final classIds = await UserRepo().getJoinedClassIds(studentId);
+      final linkedUserId = widget.student!['linked_user_id'] as int?;
+      if (linkedUserId != null) {
+        final classIds = await UserRepo().getJoinedClassIds(linkedUserId);
         setState(() {
           joinedClassIds = classIds;
           _loading = false;
@@ -69,24 +68,9 @@ class _ParentListStuClassState extends State<ParentListStuClass> {
       body: Column(
         children: [
           ParentProfileHeader(
-            name: _currentParent?["first_name"] ?? "Parent",
+            firstName: _currentParent?["first_name"] ?? "Parent",
+            lastName: _currentParent?["last_name"] ?? "",
             gender: _currentParent?["gender"] ?? "male",
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.account_circle_rounded,
-                  size: AppNumber.iconLarge,
-                  color: AppColors.primaryText,
-                ),
-                SizedBox(
-                  width: 8,
-                ),
-                Text("គណនីសិស្ស", style: AppTextStyle.subtitle18),
-              ],
-            ),
           ),
           Expanded(
             child: Padding(
@@ -95,13 +79,36 @@ class _ParentListStuClassState extends State<ParentListStuClass> {
                   ? const Center(child: CircularProgressIndicator())
                   : joinedClassIds.isNotEmpty
                       ? StudentHasJoinedClass(
-                          userId: widget.student?['id'] ?? 0,
+                          userId: widget.student?['linked_user_id'] ?? 0,
                           classIds: joinedClassIds,
-                          onClassTap: () {
-                            Navigator.pushNamed(context, AppRoutes.ParentsDashboard);
+                          onClassTap: (classId) async {
+
+                            final linkedUserId =
+                                widget.student?['linked_user_id'] as int?;
+                            if (linkedUserId != null) {
+                              final studentClassRecord =
+                                  await StudentClassRepo()
+                                      .getStudentClassByUserIdAndClassId(
+                                          linkedUserId, classId);
+                              if (studentClassRecord != null) {
+                                if (mounted) {
+                                  Navigator.pushNamed(
+                                    context,
+                                    AppRoutes.parentsDashboard,
+                                    arguments: {
+                                      'studentClassId':
+                                          studentClassRecord['id'],
+                                      'classId': classId,
+                                    },
+                                  );
+                                }
+                              }
+                            }
                           },
                         )
-                      : const Center(child: Text("No classes joined")),
+                      : Center(
+                          child: Text("មិនមានថ្នាក់រៀន",
+                              style: AppTextStyle.body)),
             ),
           ),
         ],

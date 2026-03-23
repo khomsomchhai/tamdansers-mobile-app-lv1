@@ -26,7 +26,7 @@ class _ManageClassState extends State<ManageClass> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (_classId != null) return; // already loaded, don't re-read
+    if (_classId != null) return;
     final arg = ModalRoute.of(context)?.settings.arguments;
     _classId =
         arg is int ? arg : (arg != null ? int.tryParse(arg.toString()) : null);

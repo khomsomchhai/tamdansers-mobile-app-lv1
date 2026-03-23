@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
-import 'package:tamdansers_app/screens/student/data_schedule.dart'; 
+import 'package:tamdansers_app/screens/student/menu/data_schedule.dart'; 
 
 class Scedeul extends StatefulWidget {
   const Scedeul({super.key});
@@ -100,16 +100,6 @@ class _ScedeulState extends State<Scedeul> {
                                   : AppColors.primaryText,
                             ),
                           ),
-                          const SizedBox(height: 8),
-                          Text(
-                            '${day.date}',
-                            style: AppTextStyle.fontsize18.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: isSelected
-                                  ? AppColors.white
-                                  : AppColors.primaryText,
-                            ),
-                          ),
                         ],
                       ),
                     ),
@@ -171,6 +161,7 @@ class _ScedeulState extends State<Scedeul> {
           const SizedBox(width: 20),
           Expanded(
             child: Card(
+              color: AppColors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
                 side: BorderSide(

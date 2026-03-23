@@ -18,7 +18,6 @@ class AppTextStyle {
     color: AppColors.white,
   );
 
-  // Statistics Display
   static final stat32Bold = GoogleFonts.kantumruyPro(
     fontSize: 32,
     fontWeight: FontWeight.bold,

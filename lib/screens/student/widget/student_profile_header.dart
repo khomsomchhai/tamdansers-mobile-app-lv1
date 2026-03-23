@@ -2,12 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_icon.dart';
 import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/repositories/profile_repo.dart';
+import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/state/profile_image_state.dart';
 
 class StudentProfileHeader extends StatefulWidget {
@@ -67,7 +69,48 @@ class _StudentProfileHeaderState extends State<StudentProfileHeader> {
       ProfileImageState.updateImage(widget.user!['id'], savedImage);
     }
   }
-
+  void _confirmLogout(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.backgroundLight,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppNumber.radiusLarge),
+        ),
+        title: Text("ចាកចេញ?", style: AppTextStyle.subtitle18),
+        content: Text(
+          "តើអ្នកពិតជាចង់ចាកចេញពីគណនីនេះមែនទេ?",
+          style: AppTextStyle.body14,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text("បោះបង់", style: AppTextStyle.bodyPrimary),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(ctx);
+              final pref = await SharedPreferences.getInstance();
+              await pref.setBool("isLogin", false);
+              await pref.remove("role");
+              await pref.remove("userId");
+              if (context.mounted) {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  AppRoutes.roleSelectionScreen,
+                  (route) => false,
+                );
+              }
+            },
+            child: Text(
+              "ចាកចេញ",
+              style: AppTextStyle.subtitle16.copyWith(color: AppColors.error),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     ImageProvider? backgroundImage;
@@ -84,10 +127,13 @@ class _StudentProfileHeaderState extends State<StudentProfileHeader> {
     }
     return Row(
       children: [
-        CircleAvatar(
-          radius: AppNumber.avatarSmall,
-          backgroundColor: AppColors.white,
-          backgroundImage: backgroundImage,
+        GestureDetector(
+          onTap: () => _confirmLogout(context),
+          child: CircleAvatar(
+            radius: AppNumber.avatarSmall,
+            backgroundColor: AppColors.white,
+            backgroundImage: backgroundImage,
+          ),
         ),
         SizedBox(width: 10,),
         Text(

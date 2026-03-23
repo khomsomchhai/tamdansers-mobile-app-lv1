@@ -35,7 +35,6 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
     super.initState();
     _loadHomework();
     widget.refreshTrigger?.addListener(_loadHomework);
-    // Reload whenever any homework is created / edited / deleted anywhere
     if (widget.classId == null) {
       homeworkChanged.addListener(_loadHomework);
     }
@@ -207,7 +206,6 @@ class _HomeworkScreenState extends State<HomeworkScreen> {
                     ],
                   ),
                 ),
-                // tap-to-open hint icon
                 Icon(Icons.chevron_right_rounded,
                     color: AppColors.secondaryText, size: 20),
               ],

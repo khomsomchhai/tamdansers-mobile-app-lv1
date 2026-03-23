@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/routes/app_routes.dart';
 
 class Item {
   final String title;
@@ -24,17 +25,17 @@ final List<Item> items = [
       img: 'assets/icons/schedule.png',
       bgColor: AppColors.primaryBg,
       imgColor: AppColors.primary400,
-      route: '/student_scedeul'),
+      route: AppRoutes.scedeul),
   Item(
       title: 'លទ្ធផល',
       img: 'assets/icons/result.png',
       bgColor: AppColors.errorBG,
       imgColor: AppColors.error,
-      route: '/student_result'),
+      route: AppRoutes.result),
   Item(
       title: 'ដំណឹង',
       img: 'assets/icons/bell.png',
       bgColor: AppColors.lightPink,
       imgColor: AppColors.pepure,
-      route: '/notifications'),
+      route: AppRoutes.notifications),
 ];

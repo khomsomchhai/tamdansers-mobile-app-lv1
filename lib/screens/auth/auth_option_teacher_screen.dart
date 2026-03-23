@@ -42,7 +42,6 @@ class AuthOptionTeacherScreen extends StatelessWidget {
               style: AppTextStyle.title28,
             ),
             Spacer(),
-            //custom widget
             PrimaryButton(
                 label: "ចូលគណនី",
                 backgroundColor: AppColors.primaryMain,

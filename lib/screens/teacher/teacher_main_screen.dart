@@ -73,7 +73,6 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
             currentIndex: _index,
             onTap: (i) {
               if (i == _index) {
-                // Same tab tapped — pop to root if on a sub-screen
                 _navKeys[i].currentState?.popUntil((r) => r.isFirst);
                 return;
               }
@@ -129,7 +128,7 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
   }
 }
 
-// ─── Data model ──────────────────────────────────────────────────────────────
+//Data model
 
 class _NavItem {
   final IconData icon;
@@ -142,8 +141,7 @@ class _NavItem {
   });
 }
 
-// ─── Custom bottom nav bar ────────────────────────────────────────────────────
-
+//Custom bottom nav bar
 class _TeacherBottomNav extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
@@ -195,8 +193,7 @@ class _TeacherBottomNav extends StatelessWidget {
   }
 }
 
-// ─── Single tab item ──────────────────────────────────────────────────────────
-
+//Single tab item
 class _NavTabItem extends StatelessWidget {
   final _NavItem item;
   final bool isActive;

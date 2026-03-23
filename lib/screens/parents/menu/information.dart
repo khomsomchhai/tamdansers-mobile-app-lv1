@@ -1,7 +1,7 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 class Information extends StatefulWidget {
   const Information({super.key});
 
@@ -49,7 +49,7 @@ class _InformationState extends State<Information> {
                 ],
               ),
               const SizedBox(height: 15),
-               _listnothicard(),
+              _listnothicard(),
             ],
           ),
         ),
@@ -57,7 +57,6 @@ class _InformationState extends State<Information> {
     );
   }
 
-  /// ---------------- TAB ----------------
   Widget _tabnoothi({required List<String> names}) {
     return Row(
       children: List.generate(names.length, (index) {
@@ -94,7 +93,6 @@ class _InformationState extends State<Information> {
     );
   }
 
-  /// ---------------- NOTIFICATION CARD ----------------
   Widget _nothicard({
     required String name,
     required String hour,
@@ -162,8 +160,6 @@ class _InformationState extends State<Information> {
       ),
     );
   }
-
-  /// ---------------- LIST ----------------
   Widget _listnothicard() {
     return Column(
       children: [

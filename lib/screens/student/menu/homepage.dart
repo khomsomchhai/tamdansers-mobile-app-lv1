@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/repositories/attendance_repo.dart';
 import 'package:tamdansers_app/repositories/class_repo.dart';
 import 'package:tamdansers_app/repositories/homework_repo.dart';
 import 'package:tamdansers_app/repositories/student_class_repo.dart';
 import 'package:tamdansers_app/repositories/user_repo.dart';
-import 'package:tamdansers_app/screens/student/menu/data_attendance.dart';
+import 'package:tamdansers_app/routes/app_routes.dart';
 import 'package:tamdansers_app/screens/student/menu/data_list_homepage.dart';
 import 'package:tamdansers_app/screens/student/widget/student_profile_header.dart';
 import 'package:tamdansers_app/widget/attendance_db.dart';
 
 class Homepage extends StatefulWidget {
   final int userId;
-  const Homepage({super.key, required this.userId});
+  final int? selectedClassId;
+  const Homepage({super.key, required this.userId, this.selectedClassId});
 
   @override
   State<Homepage> createState() => _HomepageState();
@@ -25,6 +27,11 @@ class _HomepageState extends State<Homepage> {
   Map<String, dynamic>? classData;
   List<Map<String, dynamic>> homeworkData = [];
   List<Map<String, dynamic>> availableClasses = [];
+
+  int? _totalDays;
+  int? _presentDays;
+  int? _absentDays;
+  double? _attendanceRate;
 
   @override
   void initState() {
@@ -55,12 +62,43 @@ class _HomepageState extends State<Homepage> {
 
     Map<String, dynamic>? fetchedClass;
     List<Map<String, dynamic>> fetchedHomework = [];
-    if (enrolledClasses.isNotEmpty) {
+    
+    if (widget.selectedClassId != null) {
+      fetchedClass = enrolledClasses.firstWhere(
+        (cls) => cls['id'] == widget.selectedClassId,
+        orElse: () => enrolledClasses.isNotEmpty ? enrolledClasses.first : {},
+      );
+      if (fetchedClass.isEmpty) {
+        fetchedClass = null;
+      }
+    } else if (enrolledClasses.isNotEmpty) {
       fetchedClass = enrolledClasses.first;
+    }
+    
+    if (fetchedClass != null) {
       fetchedHomework =
           await HomeworkRepo().getHomeworkByClass(fetchedClass['id']);
+      
+      final studentClassRecord = await StudentClassRepo()
+          .getStudentClassByUserIdAndClassId(widget.userId, fetchedClass['id']);
+      
+      if (studentClassRecord != null) {
+        final attendanceRepo = AttendanceRepo();
+        final summary = await attendanceRepo.getAttendanceSummaryForStudent(
+            studentClassRecord['id'], fetchedClass['id'], DateTime.now().toIso8601String().substring(0, 7));
+        final total = summary['total'] ?? 0;
+        final present = summary['present'] ?? 0;
+        final late = summary['late'] ?? 0;
+        final absent = summary['absent'] ?? 0;
+        final presentDays = present + late;
+        setState(() {
+          _totalDays = total;
+          _presentDays = presentDays;
+          _absentDays = absent;
+          _attendanceRate = total == 0 ? 0 : (presentDays / total) * 100;
+        });
+      }
     }
-
     setState(() {
       user = fetchedUser;
       classData = fetchedClass;
@@ -87,17 +125,6 @@ class _HomepageState extends State<Homepage> {
     return months[DateTime.now().month - 1];
   }
 
-  Future<void> _selectClass(Map<String, dynamic> newClass) async {
-    final classId = newClass['id'];
-    await UserRepo().joinClass(widget.userId, classId);
-    final fetchedHomework = await HomeworkRepo().getHomeworkByClass(classId);
-
-    setState(() {
-      classData = newClass;
-      homeworkData = fetchedHomework;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     if (user == null) {
@@ -119,19 +146,17 @@ class _HomepageState extends State<Homepage> {
                 _TitleHeader(
                   user: user,
                   classData: classData,
-                  classes: availableClasses,
-                  onClassSelected: _selectClass,
                 ),
                 SizedBox(height: 20),
                 CardAttendance(
-                  totalDays: attendanceSummary.totalDays,
-                  presentDays: attendanceSummary.presentDays,
-                  absentDays: attendanceSummary.absentDays,
-                  attendanceRate: attendanceSummary.attendanceRate,
+                  totalDays: _totalDays ?? 0,
+                  presentDays: _presentDays ?? 0,
+                  absentDays: _absentDays ?? 0,
+                  attendanceRate: _attendanceRate ?? 0,
                   monthLabel: _currentKhmerMonth(),
                 ),
                 SizedBox(height: 20),
-                _GridInfo(),
+                _GridInfo(userId: widget.userId, selectedClassId: widget.selectedClassId),
                 SizedBox(height: 20),
                 _Classes(classData: classData),
                 SizedBox(height: 20),
@@ -144,18 +169,25 @@ class _HomepageState extends State<Homepage> {
     );
   }
 }
-
+String getGreeting() {
+  final hour = DateTime.now().hour;
+  if (hour < 12) {
+    return "អរុណសួស្តី";
+  } else if (hour < 17) {
+    return "ទិវាសួស្ដី";
+  } else if (hour < 21){
+    return "សាយណ្ហសួស្ដី";
+  } else {
+    return "រាត្រីសួស្ដី";
+  }
+}
 class _TitleHeader extends StatefulWidget {
   final Map<String, dynamic>? user;
   final Map<String, dynamic>? classData;
-  final List<Map<String, dynamic>>? classes;
-  final ValueChanged<Map<String, dynamic>>? onClassSelected;
 
   const _TitleHeader({
     this.user,
     this.classData,
-    this.classes,
-    this.onClassSelected,
   });
 
   @override
@@ -202,7 +234,7 @@ class _TitleHeaderState extends State<_TitleHeader> {
     final firstName = widget.user?['first_name'] ?? '';
     final lastName = widget.user?['last_name'] ?? '';
     final fullName = ('$firstName $lastName').trim();
-    final greeting = fullName.isNotEmpty ? 'សួស្តី $firstName! ' : 'សួស្តី! ';
+    final greeting = fullName.isNotEmpty ? '${getGreeting()} $firstName ' : 'សួស្តី! ';
 
     final className = widget.classData != null
         ? '${widget.classData!['grade']} ${widget.classData!['section']}'
@@ -218,59 +250,10 @@ class _TitleHeaderState extends State<_TitleHeader> {
         SizedBox(height: 12),
         Text(greeting, style: AppTextStyle.title28),
         SizedBox(height: 12),
-        GestureDetector(
-          onTap: () {
-            if (widget.classes != null && widget.classes!.isNotEmpty) {
-              showModalBottomSheet(
-                context: context,
-                backgroundColor: AppColors.white,
-                showDragHandle: true,
-                builder: (context) {
-                  return ListView.separated(
-                    padding: EdgeInsets.symmetric(vertical: 0),
-                    itemCount: widget.classes!.length,
-                    separatorBuilder: (context, index) => Divider(height: 1),
-                    itemBuilder: (context, index) {
-                      final cls = widget.classes![index];
-                      final label = '${cls['grade']} ${cls['section']}';
-                      final isSelected = widget.classData != null &&
-                          cls['id'] == widget.classData!['id'];
-                      return ListTile(
-                        title: Text(label, style: AppTextStyle.body),
-                        trailing: isSelected
-                            ? Icon(Icons.check, color: AppColors.primaryMain)
-                            : null,
-                        onTap: () {
-                          Navigator.pop(context);
-                          widget.onClassSelected?.call(cls);
-                        },
-                      );
-                    },
-                  );
-                },
-              );
-            }
-          },
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                className,
-                style: AppTextStyle.subtitle18
-                    .copyWith(color: AppColors.secondaryText),
-              ),
-              SizedBox(width: 8),
-              CircleAvatar(
-                radius: 14,
-                backgroundColor: AppColors.primaryMain.withOpacity(0.12),
-                child: Icon(
-                  Icons.keyboard_arrow_down,
-                  size: 18,
-                  color: AppColors.primaryMain,
-                ),
-              ),
-            ],
-          ),
+        Text(
+          className,
+          style: AppTextStyle.subtitle18
+              .copyWith(color: AppColors.secondaryText),
         ),
       ],
     );
@@ -342,7 +325,7 @@ class _HomeworkState extends State<_Homework> {
               child: ListTile(
                 leading: CircleAvatar(
                   radius: 30,
-                  child: Icon(Icons.calculate_outlined,
+                  child: Icon(Icons.assignment_outlined,
                       size: 40, color: AppColors.primary400),
                 ),
                 title: Text(subject,
@@ -371,7 +354,7 @@ class _Classes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final teacherName = classData?['teacher_name'] ?? 'មិនបានកំណត់';
+    final teacherName = classData?['teacher_name'] ?? 'Somchhai Khom';
     final subject = 'គណិតវិទ្យា';
 
     return Column(
@@ -409,7 +392,7 @@ class _Classes extends StatelessWidget {
                         style: AppTextStyle.body
                             .copyWith(fontWeight: FontWeight.bold)),
                     Text(
-                      'គ្រូបង្រៀន​: $teacherName',
+                      'គ្រូបង្រៀន​: ${teacherName?? "Somchhai Khom"}',
                       style: AppTextStyle.hint15,
                     ),
                   ],
@@ -424,7 +407,9 @@ class _Classes extends StatelessWidget {
 }
 
 class _GridInfo extends StatelessWidget {
-  const _GridInfo();
+  final int userId;
+  final int? selectedClassId;
+  const _GridInfo({required this.userId, this.selectedClassId});
 
   @override
   Widget build(BuildContext context) {
@@ -438,8 +423,23 @@ class _GridInfo extends StatelessWidget {
       itemBuilder: (context, index) {
         final item = items[index];
         return GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, item.route);
+          onTap: () async {
+            if (item.route == AppRoutes.result && selectedClassId != null) {
+              final studentClassRecord = await StudentClassRepo()
+                  .getStudentClassByUserIdAndClassId(userId, selectedClassId!);
+              if (studentClassRecord != null) {
+                Navigator.pushNamed(
+                  context,
+                  item.route,
+                  arguments: {
+                    'studentClassId': studentClassRecord['id'] as int,
+                    'classId': selectedClassId,
+                  },
+                );
+              }
+            } else {
+              Navigator.pushNamed(context, item.route);
+            }
           },
           child: Container(
             decoration: BoxDecoration(

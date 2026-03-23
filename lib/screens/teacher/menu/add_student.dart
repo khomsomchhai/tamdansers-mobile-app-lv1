@@ -99,8 +99,6 @@ class _AddStudentState extends State<AddStudent> {
       );
       return;
     }
-
-    // ── Phone validation ──────────────────────────────────
     final phone = _phoneController.text.trim();
     if (phone.isNotEmpty && !_isValidPhone(phone)) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -117,7 +115,6 @@ class _AddStudentState extends State<AddStudent> {
       return;
     }
 
-    // ── Block teacher phone / email ───────────────────────
     final email = _emailController.text.trim();
     if (phone.isNotEmpty) {
       final existing = await UserRepo().getUserByPhone(phone);
@@ -158,7 +155,6 @@ class _AddStudentState extends State<AddStudent> {
       }
     }
 
-    // ── Duplicate check in same class ─────────────────────
     if (!_isEditing && _classId != null) {
       final isDuplicate = await StudentClassRepo().isDuplicateInClass(
         _classId!,
@@ -281,14 +277,12 @@ class _AddStudentState extends State<AddStudent> {
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   children: [
-                    // Profile Section
                     Container(
                       width: double.infinity,
                       color: AppColors.backgroundLight,
                       padding: EdgeInsets.only(top: 24),
                       child: Column(
                         children: [
-                          // Profile Image
                           GestureDetector(
                             onTap: _pickImage,
                             child: SizedBox(
@@ -341,7 +335,6 @@ class _AddStudentState extends State<AddStudent> {
                             'ចុចដើម្បីភ្ជាប់រូបថតរបស់សិស្ស',
                             style: AppTextStyle.bodySecondary,
                           ),
-                          // Photo Buttons
                         ],
                       ),
                     ),
@@ -365,7 +358,6 @@ class _AddStudentState extends State<AddStudent> {
                             ],
                           ),
                           SizedBox(height: 16),
-                          // First Name and Last Name
                           Row(
                             children: [
                               Expanded(
@@ -453,7 +445,6 @@ class _AddStudentState extends State<AddStudent> {
                                       ),
                                       style: AppTextStyle.body,
                                       onTap: () async {
-                                        // Show date picker
                                         final DateTime? picked =
                                             await showDatePicker(
                                           context: context,
@@ -568,7 +559,6 @@ class _AddStudentState extends State<AddStudent> {
                             ],
                           ),
                           SizedBox(height: 16),
-                          // Phone
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -597,7 +587,6 @@ class _AddStudentState extends State<AddStudent> {
                             ],
                           ),
                           SizedBox(height: 16),
-                          // Email
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -637,7 +626,6 @@ class _AddStudentState extends State<AddStudent> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Submit Button
                 PrimaryButton(
                   label: _saving
                       ? 'កំពុងរក្សាទុក...'
@@ -651,8 +639,6 @@ class _AddStudentState extends State<AddStudent> {
                   },
                 ),
                 SizedBox(height: AppNumber.spacingSmall),
-
-                // Link Text
                 TextButton(
                   onPressed: () => Navigator.pop(context),
                   child: Text(

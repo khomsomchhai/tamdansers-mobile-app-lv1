@@ -8,7 +8,6 @@ class AttendanceRepo {
     required String status,
   }) async {
     final db = await DbHelper().initDatabase();
-    // Insert or replace (UNIQUE on class_id + student_id + date)
     return await db.rawInsert(
       '''INSERT OR REPLACE INTO tbl_attendance
          (class_id, student_id, date, status)
@@ -57,7 +56,6 @@ class AttendanceRepo {
     for (final row in result) {
       summary[row["status"] as String] = row["count"] as int;
     }
-    // Students with no attendance record are counted as present
     final recorded =
         summary["present"]! + summary["absent"]! + summary["late"]!;
     summary["present"] = summary["present"]! + (totalCount - recorded);
@@ -83,5 +81,54 @@ class AttendanceRepo {
       [classId],
     );
     return result.map((r) => r["date"] as String).toList();
+  }
+
+  Future<List<Map<String, dynamic>>> getAttendanceHistoryForStudent(
+      int studentId, int classId) async {
+    final db = await DbHelper().initDatabase();
+    return await db.rawQuery(
+      '''SELECT a.date, a.status
+         FROM tbl_attendance a
+         WHERE a.student_id = ? AND a.class_id = ?
+         ORDER BY a.date DESC''',
+      [studentId, classId],
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> getAttendanceByStudentAndMonth(
+      int studentId, int classId, String month) async {
+    final db = await DbHelper().initDatabase();
+    return await db.rawQuery(
+      '''SELECT id, date, status
+         FROM tbl_attendance
+         WHERE student_id = ? AND class_id = ? AND date LIKE ?
+         ORDER BY date DESC''',
+      [studentId, classId, '$month%'],
+    );
+  }
+
+  Future<Map<String, int>> getAttendanceSummaryForStudent(
+      int studentId, int classId, String month) async {
+    final db = await DbHelper().initDatabase();
+    final result = await db.rawQuery(
+      '''SELECT status, COUNT(*) as count
+         FROM tbl_attendance
+         WHERE student_id = ? AND class_id = ? AND date LIKE ?
+         GROUP BY status''',
+      [studentId, classId, '$month%'],
+    );
+    final Map<String, int> summary = {
+      "present": 0,
+      "absent": 0,
+      "late": 0,
+      "total": 0,
+    };
+    for (final row in result) {
+      final status = row["status"] as String;
+      final count = row["count"] as int;
+      summary[status] = count;
+      summary["total"] = summary["total"]! + count;
+    }
+    return summary;
   }
 }

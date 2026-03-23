@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart'
     show SharedPreferences;
 import 'package:tamdansers_app/constants/app_icon.dart';
+import 'package:tamdansers_app/repositories/parent_student_repo.dart';
+import 'package:tamdansers_app/repositories/user_repo.dart';
 
 import '../../../constants/app_colors.dart' show AppColors;
 import '../../../constants/app_number.dart' show AppNumber;
-import '../../../constants/class_child.dart' show ChildCard;
 import '../../../constants/text_style.dart' show AppTextStyle;
 import '../../../routes/app_routes.dart' show AppRoutes;
+import '../../../widget/class_child.dart' show ChildCard;
 
 class ParentSetting extends StatefulWidget {
   const ParentSetting({super.key});
@@ -17,6 +19,33 @@ class ParentSetting extends StatefulWidget {
 }
 
 class _ParentSettingState extends State<ParentSetting> {
+  Map<String, dynamic>? _parent;
+  List<Map<String, dynamic>> _children = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadParentAndChildren();
+  }
+
+  Future<void> _loadParentAndChildren() async {
+    setState(() => _isLoading = true);
+    final pref = await SharedPreferences.getInstance();
+    final userId = pref.getInt("userId");
+    if (userId != null) {
+      final parent = await UserRepo().getUserById(userId);
+      final children = await ParentStudentRepo().getStudentsByParent(userId);
+      setState(() {
+        _parent = parent;
+        _children = children;
+        _isLoading = false;
+      });
+    } else {
+      setState(() => _isLoading = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -55,6 +84,10 @@ class _ParentSettingState extends State<ParentSetting> {
   }
 
   Widget _buildProfileHeader() {
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    final parent = _parent;
     return Center(
       child: Column(
         children: [
@@ -75,17 +108,20 @@ class _ParentSettingState extends State<ParentSetting> {
               Positioned(
                 right: 0,
                 bottom: 0,
-                child: Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: AppColors.primaryMain,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 2),
-                  ),
-                  child: const Icon(
-                    Icons.edit,
-                    size: 14,
-                    color: Colors.white,
+                child: GestureDetector(
+                  onTap: _showEditInfoSheet,
+                  child: Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryMain,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.white, width: 2),
+                    ),
+                    child: const Icon(
+                      Icons.edit,
+                      size: 14,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
@@ -93,7 +129,7 @@ class _ParentSettingState extends State<ParentSetting> {
           ),
           const SizedBox(height: 12),
           Text(
-            "Lay Heng",
+            (parent?["first_name"] ?? "") + " " + (parent?["last_name"] ?? ""),
             style: AppTextStyle.sectionTitle20.copyWith(
               fontWeight: FontWeight.bold,
             ),
@@ -107,7 +143,7 @@ class _ParentSettingState extends State<ParentSetting> {
               color: AppColors.primaryMain.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(AppNumber.radiusRounded),
             ),
-            child: Text("Parent / July",
+            child: Text("អាណាព្យាបាលសិស្ស",
                 style: AppTextStyle.caption14Secondary
                     .copyWith(color: AppColors.link)),
           ),
@@ -122,29 +158,32 @@ class _ParentSettingState extends State<ParentSetting> {
   }
 
   Widget _buildChildrenRow() {
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (_children.isEmpty) {
+      return addChildCard();
+    }
     return SizedBox(
-      height: 205,
-      child: ListView(
+      height: 190,
+      child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        children: [
-          const ChildCard(
-            name: "Leo Jenkins",
-            grade: "Grade 5",
-            attendance: 98,
-            progressColor: Color(0xFF1E88E5),
-            imageUrl: "https://cdn-icons-png.flaticon.com/512/4140/4140048.png",
-          ),
-          const SizedBox(width: 16),
-          const ChildCard(
-            name: "Mia Jenkins",
-            grade: "Grade 2",
-            attendance: 92,
-            progressColor: Color(0xFF22C55E),
-            imageUrl: "https://cdn-icons-png.flaticon.com/512/6997/6997662.png",
-          ),
-          const SizedBox(width: 16),
-          addChildCard(),
-        ],
+        itemCount: _children.length + 1,
+        separatorBuilder: (context, i) => const SizedBox(width: 16),
+        itemBuilder: (context, i) {
+          if (i == _children.length) return addChildCard();
+          final child = _children[i];
+          return ChildCard(
+            name: (child['first_name'] ?? '') + ' ' + (child['last_name'] ?? ''),
+            grade: child['email'] ?? '',
+            gender: child['gender'] ?? '',
+            imageUrl: (child['photo_path'] != null && child['photo_path'].toString().isNotEmpty)
+                ? child['photo_path']
+                : (child['gender'] == 'ប្រុស' || child['gender'] == 'male'
+                    ? AppIcon.maleAvatar
+                    : AppIcon.femaleAvatar),
+          );
+        },
       ),
     );
   }
@@ -158,7 +197,7 @@ class _ParentSettingState extends State<ParentSetting> {
         width: 110,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(22),
+          borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
           border: Border.all(
             color: const Color(0xFFD9D9D9),
           ),
@@ -178,6 +217,10 @@ class _ParentSettingState extends State<ParentSetting> {
   }
 
   Widget _buildInfoSection() {
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    final parent = _parent;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(AppNumber.cardPadding),
@@ -188,9 +231,9 @@ class _ParentSettingState extends State<ParentSetting> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _infoRow(Icons.email_outlined, "Henglay@school.edu.kh"),
+          _infoRow(Icons.email_outlined, parent?["email"] ?? "មិនមានអ៊ីមែល"),
           const Divider(height: 24, thickness: 0.5),
-          _infoRow(Icons.phone_outlined, "+855 12 345 678"),
+          _infoRow(Icons.phone_outlined, parent?["phone"] ?? "មិនមានលេខទូរស័ព្ទ"),
         ],
       ),
     );
@@ -223,6 +266,12 @@ class _ParentSettingState extends State<ParentSetting> {
           ),
           child: Column(
             children: [
+              _settingsTile(
+                icon: Icons.person_outline_rounded,
+                title: "កែប្រែព័ត៌មាន",
+                onTap: _showEditInfoSheet,
+                showDivider: true,
+              ),
               _settingsTile(
                 icon: Icons.lock_outline_rounded,
                 title: "ប្ដូរពាក្យសម្ងាត់",
@@ -362,113 +411,226 @@ class _ParentSettingState extends State<ParentSetting> {
     );
   }
 
-  // void showPartnerDialog(BuildContext context) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) {
-  //       return Dialog(
-  //         backgroundColor: AppColors.backgroundLight,
-  //         shape: RoundedRectangleBorder(
-  //           borderRadius: BorderRadius.circular(20),
-  //         ),
-  //         child: Padding(
-  //           padding: const EdgeInsets.all(20),
-  //           child: Column(
-  //             mainAxisSize: MainAxisSize.min,
-  //             children: [
-  //               const Text(
-  //                 "តំណរភ្ជាប់សិស្ស",
-  //                 style: TextStyle(
-  //                   fontSize: 18,
-  //                   fontWeight: FontWeight.bold,
-  //                 ),
-  //               ),
-  //               const SizedBox(height: 20),
-  //               Row(
-  //                 mainAxisAlignment: MainAxisAlignment.center,
-  //                 children: [
-  //                   Column(
-  //                     children: [
-  //                       Container(
-  //                         width: 60,
-  //                         height: 60,
-  //                         decoration: BoxDecoration(
-  //                           color: Colors.green.shade100,
-  //                           borderRadius: BorderRadius.circular(15),
-  //                         ),
-  //                         child: const Icon(Icons.person, size: 35),
-  //                       ),
-  //                       const SizedBox(height: 5),
-  //                       const Text("អ្នក"),
-  //                     ],
-  //                   ),
-  //                   const SizedBox(width: 10),
-  //                   const Icon(Icons.link, color: Colors.blue),
-  //                   const SizedBox(width: 10),
-  //                   Column(
-  //                     children: [
-  //                       Container(
-  //                         width: 60,
-  //                         height: 60,
-  //                         decoration: BoxDecoration(
-  //                           color: Colors.green.shade100,
-  //                           borderRadius: BorderRadius.circular(30),
-  //                         ),
-  //                         child: const Center(
-  //                           child: Text(
-  //                             "S for\nParent",
-  //                             textAlign: TextAlign.center,
-  //                             style: TextStyle(fontSize: 10),
-  //                           ),
-  //                         ),
-  //                       ),
-  //                       const SizedBox(height: 5),
-  //                       const Text("ដៃគូ"),
-  //                     ],
-  //                   ),
-  //                 ],
-  //               ),
-  //               const SizedBox(height: 25),
-  //               SizedBox(
-  //                 width: double.infinity,
-  //                 child: ElevatedButton(
-  //                   onPressed: () {},
-  //                   style: ElevatedButton.styleFrom(
-  //                     backgroundColor: AppColors.error,
-  //                     shape: RoundedRectangleBorder(
-  //                       borderRadius: BorderRadius.circular(12),
-  //                     ),
-  //                   ),
-  //                   child: Text(
-  //                     "ចាកចេញ",
-  //                     style: AppTextStyle.body18White,
-  //                   ),
-  //                 ),
-  //               ),
-  //               const SizedBox(height: 10),
-  //               SizedBox(
-  //                 width: double.infinity,
-  //                 child: TextButton(
-  //                   style: TextButton.styleFrom(
-  //                     backgroundColor: AppColors.link,
-  //                     shape: RoundedRectangleBorder(
-  //                       borderRadius: BorderRadius.circular(12),
-  //                     ),
-  //                   ),
-  //                   onPressed: () {
-  //                     Navigator.pop(context);
-  //                   },
-  //                   child: Text(
-  //                     "បោះបង់",
-  //                     style: AppTextStyle.body18White,
-  //                   ),
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
+  void _showEditInfoSheet() {
+    final firstCtrl = TextEditingController(text: _parent?['first_name'] ?? '');
+    final lastCtrl = TextEditingController(text: _parent?['last_name'] ?? '');
+    final phoneCtrl = TextEditingController(text: _parent?['phone'] ?? '');
+    final emailCtrl = TextEditingController(text: _parent?['email'] ?? '');
+    final formKey = GlobalKey<FormState>();
+    bool saving = false;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        return StatefulBuilder(builder: (ctx, setSheetState) {
+          return Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+            ),
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(ctx).viewInsets.bottom + 24,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 12),
+                Center(
+                  child: Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryMain.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(Icons.edit_outlined,
+                            color: AppColors.primaryMain, size: 20),
+                      ),
+                      const SizedBox(width: 12),
+                      Text("កែប្រែព័ត៌មាន",
+                          style: AppTextStyle.sectionTitle20.copyWith(fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Text(
+                    "ផ្លាស់ប្តូរព័ត៌មានផ្ទាល់ខ្លួនរបស់អ្នក",
+                    style: AppTextStyle.body14.copyWith(color: AppColors.secondaryText),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const Divider(height: 1, thickness: 0.5),
+                const SizedBox(height: 20),
+                Form(
+                  key: formKey,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _editField(
+                                controller: lastCtrl,
+                                label: "នាមត្រកូល",
+                                icon: Icons.badge_outlined,
+                                validator: (v) => (v == null || v.trim().isEmpty) ? "សូមបញ្ចូល" : null,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: _editField(
+                                controller: firstCtrl,
+                                label: "នាមខ្លួន",
+                                icon: Icons.person_outline_rounded,
+                                validator: (v) => (v == null || v.trim().isEmpty) ? "សូមបញ្ចូល" : null,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 14),
+                        _editField(
+                          controller: phoneCtrl,
+                          label: "លេខទូរស័ព្ទ",
+                          icon: Icons.phone_outlined,
+                          keyboardType: TextInputType.phone,
+                        ),
+                        const SizedBox(height: 14),
+                        _editField(
+                          controller: emailCtrl,
+                          label: "អ៊ីមែល",
+                          icon: Icons.email_outlined,
+                          keyboardType: TextInputType.emailAddress,
+                        ),
+                        const SizedBox(height: 24),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: OutlinedButton(
+                                onPressed: () => Navigator.pop(ctx),
+                                style: OutlinedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(vertical: 14),
+                                  side: const BorderSide(color: AppColors.secondaryText, width: 1),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(AppNumber.radiusLarge),
+                                  ),
+                                ),
+                                child: Text("បោះបង់", style: AppTextStyle.subtitle16.copyWith(color: AppColors.secondaryText)),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              flex: 2,
+                              child: ElevatedButton(
+                                onPressed: saving
+                                    ? null
+                                    : () async {
+                                    if (!formKey.currentState!.validate()) return;
+                                    setSheetState(() => saving = true);
+                                    final ok = await UserRepo().updateUser(
+                                      userId: _parent?["id"],
+                                      firstName: firstCtrl.text.trim(),
+                                      lastName: lastCtrl.text.trim(),
+                                      phone: phoneCtrl.text.trim().isEmpty ? null : phoneCtrl.text.trim(),
+                                      email: emailCtrl.text.trim().isEmpty ? null : emailCtrl.text.trim(),
+                                    );
+                                    setSheetState(() => saving = false);
+                                    if (ok && ctx.mounted) {
+                                      Navigator.pop(ctx);
+                                      _loadParentAndChildren();
+                                    }
+                                  },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.primaryMain,
+                                  padding: const EdgeInsets.symmetric(vertical: 14),
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(AppNumber.radiusLarge),
+                                  ),
+                                ),
+                                child: saving
+                                    ? const SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                                      )
+                                    : Text("រក្សាទុក", style: AppTextStyle.subtitle16.copyWith(color: Colors.white)),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
+      },
+    );
+  }
+
+  Widget _editField({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+    TextInputType keyboardType = TextInputType.text,
+    String? Function(String?)? validator,
+  }) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: keyboardType,
+      validator: validator,
+      style: AppTextStyle.body14,
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: AppTextStyle.body14.copyWith(color: AppColors.secondaryText),
+        prefixIcon: Icon(icon, color: AppColors.secondaryText, size: 20),
+        filled: true,
+        fillColor: AppColors.backgroundLight,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
+          borderSide: const BorderSide(color: Color(0xFFE0E0E0), width: 1),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
+          borderSide: const BorderSide(color: Color(0xFFE0E0E0), width: 1),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
+          borderSide: const BorderSide(color: AppColors.primaryMain, width: 1.8),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
+          borderSide: const BorderSide(color: AppColors.error, width: 1.5),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
+          borderSide: const BorderSide(color: AppColors.error, width: 1.5),
+        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      ),
+    );
+  }
+
 }

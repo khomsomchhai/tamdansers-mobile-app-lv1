@@ -10,7 +10,8 @@ import 'package:tamdansers_app/screens/student/menu/profile.dart';
 
 class StudentDashboard extends StatefulWidget {
   final int userId;
-  const StudentDashboard({super.key, required this.userId});
+  final int? classId;
+  const StudentDashboard({super.key, required this.userId, this.classId});
 
   @override
   State<StudentDashboard> createState() => _StudentDashboardState();
@@ -84,11 +85,11 @@ class _StudentDashboardState extends State<StudentDashboard> {
                   return MaterialPageRoute(
                     builder: (_) {
                       if (i == 0) {
-                        return Homepage(userId: widget.userId);
+                        return Homepage(userId: widget.userId, selectedClassId: widget.classId);
                       } else if (i == 1) {
-                        return const Homework();
+                        return Homework(userId: widget.userId, selectedClassId: widget.classId);
                       } else if (i == 2) {
-                        return const Attendance();
+                        return Attendance(userId: widget.userId, classId: widget.classId);
                       } else {
                         return Profile(userId: widget.userId);
                       }

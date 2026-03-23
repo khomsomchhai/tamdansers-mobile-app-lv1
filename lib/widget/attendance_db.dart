@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 
 class CardAttendance extends StatelessWidget {
@@ -43,7 +44,7 @@ class CardAttendance extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
                       color: AppColors.backgroundLight,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(AppNumber.radiusSmall),
                     ),
                     child: Text("វត្តមាន​ $presentDays",
                         style: AppTextStyle.body.copyWith(
@@ -55,7 +56,7 @@ class CardAttendance extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
                       color: AppColors.backgroundLight,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(AppNumber.radiusSmall),
                     ),
                     child: Text("អវត្តមាន​ $absentDays",
                         style: AppTextStyle.body.copyWith(

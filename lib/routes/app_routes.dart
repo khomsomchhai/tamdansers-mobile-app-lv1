@@ -59,10 +59,10 @@ class AppRoutes {
   static const String commentScreen = "/comment_screen";
   static const String information = "/information";
   static const String parentListStuClass = "/parent_list_stu_class";
-  static const String ParentsDashboard = "/parent_dashboard_screen";
-  static const String AttandanceScreen = "/parent_attendance_screen";
-  static const String HomeworkQuizeScreen = "/parent_homework_quiz_screen";
-  static const String NewsScreen = "/parent_news_screen";
-  static const String parent_setting = "/parent_settings";
-  static const String CustomScreen = "/custom_screen";
+  static const String parentsDashboard = "/parent_dashboard_screen";
+  static const String attandanceScreen = "/parent_attendance_screen";
+  static const String homeworkQuizeScreen = "/parent_homework_quiz_screen";
+  static const String newsScreen = "/parent_news_screen";
+  static const String parentSetting = "/parent_settings";
+  static const String customScreen = "/custom_screen";
 }

@@ -44,7 +44,6 @@ class _AddTaskState extends State<AddTask> {
     _initialized = true;
     final args = ModalRoute.of(context)?.settings.arguments;
     if (args is Map<String, dynamic>) {
-      // Edit mode — pre-fill from existing homework map
       _editingHw = args;
       _classId = args['class_id'] as int?;
       _titleController.text = args['title'] as String? ?? '';
@@ -257,7 +256,6 @@ class _AddTaskState extends State<AddTask> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Header
                   Text(
                     _isEditing
                         ? 'កែប្រែព័ត៌មានកិច្ចការ'
@@ -278,13 +276,11 @@ class _AddTaskState extends State<AddTask> {
                   ),
                   const SizedBox(height: 20),
 
-                  // Subject dropdown
                   _buildLabel('មុខវិជ្ជា'),
                   const SizedBox(height: 8),
                   _buildSubjectDropdown(),
                   const SizedBox(height: 20),
 
-                  // Title field
                   _buildLabel('ចំណងជើង'),
                   const SizedBox(height: 8),
                   _buildTextField(
@@ -294,7 +290,6 @@ class _AddTaskState extends State<AddTask> {
                   ),
                   const SizedBox(height: 20),
 
-                  // Instructions field
                   _buildLabel('ការណែនាំ'),
                   const SizedBox(height: 8),
                   _buildTextField(
@@ -304,17 +299,14 @@ class _AddTaskState extends State<AddTask> {
                   ),
                   const SizedBox(height: 20),
 
-                  // Due date/time
                   _buildLabel('កាលបរិច្ឆេទកំណត់'),
                   const SizedBox(height: 8),
                   _buildDateTimeField(context),
                   const SizedBox(height: 20),
 
-                  // File attachment
                   _buildFileAttachment(),
                   const SizedBox(height: 28),
 
-                  // Notifications
                   Text(
                     'ជូនដំណឹង',
                     style: AppTextStyle.subtitle16,
@@ -324,7 +316,6 @@ class _AddTaskState extends State<AddTask> {
                     icon: Icons.school_rounded,
                     iconBgColor: const Color(0xFF4285F4),
                     title: 'ជូនដំណឹងសិស្ស',
-                    // subtitle: 'ម្ចាស់ជូនដំណឹង Push',
                     value: _notifyStudents,
                     onChanged: (v) => setState(() => _notifyStudents = v),
                   ),
@@ -333,7 +324,6 @@ class _AddTaskState extends State<AddTask> {
                     icon: Icons.people_alt_rounded,
                     iconBgColor: const Color(0xFF34C759),
                     title: 'ជូនដំណឹងអាណាព្យាបាល',
-                    // subtitle: 'តាមអ៊ីមែល និង SMS',
                     value: _notifyParents,
                     onChanged: (v) => setState(() => _notifyParents = v),
                   ),
@@ -343,7 +333,6 @@ class _AddTaskState extends State<AddTask> {
             ),
           ),
 
-          // Submit button
           Container(
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
             decoration: BoxDecoration(
