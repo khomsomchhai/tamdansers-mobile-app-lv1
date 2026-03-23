@@ -12,7 +12,7 @@ import 'package:tamdansers_app/screens/auth/splash_screen.dart';
 import 'package:tamdansers_app/screens/parents/menu/attandance_child.dart';
 import 'package:tamdansers_app/screens/parents/menu/comment_signature.dart';
 import 'package:tamdansers_app/screens/parents/menu/homework_quize_child.dart';
-import 'package:tamdansers_app/screens/parents/menu/monthy_result_ranking.dart';
+import 'package:tamdansers_app/screens/parents/menu/monthly_result_ranking.dart';
 import 'package:tamdansers_app/screens/parents/menu/news.dart';
 import 'package:tamdansers_app/screens/parents/menu/nothication.dart';
 import 'package:tamdansers_app/screens/parents/menu/parents_dashboard.dart';
