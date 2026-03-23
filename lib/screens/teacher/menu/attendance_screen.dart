@@ -46,7 +46,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         _classId = arg;
         _initDateAndLoad();
       } else {
-        // No classId provided — load class list for picker
         _loadAllClasses();
       }
     }
@@ -116,7 +115,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   Future<void> _submitAttendance() async {
     if (_classId == null || _selectedDate.isEmpty || _students.isEmpty) return;
 
-    // Show loading dialog
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -144,8 +142,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         ),
       ),
     );
-
-    // Save records
     final repo = AttendanceRepo();
     for (final s in _students) {
       await repo.saveAttendance(
@@ -163,11 +159,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     );
 
     if (!mounted) return;
-
-    // Close loading dialog
     Navigator.of(context, rootNavigator: true).pop();
-
-    // Show success dialog
     await showDialog(
       context: context,
       barrierDismissible: false,
@@ -191,7 +183,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                'រៀបរាល់!',
+                'រួចរាល់!',
                 style: AppTextStyle.sectionTitle20
                     .copyWith(color: AppColors.success),
               ),
@@ -226,7 +218,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       ),
     );
 
-    // Navigate back after dialog is dismissed
     if (mounted) Navigator.of(context).pop();
   }
 
@@ -274,7 +265,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         leading: IconButton(
           onPressed: () {
             if (pickedFromDashboard) {
-              // Go back to class picker
               setState(() {
                 _classId = null;
                 _students = [];
@@ -371,7 +361,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   }
 
   Widget _buildClassPicker() {
-    // rotating accent colors for class cards
     final cardColors = [
       AppColors.primaryMain,
       AppColors.purple,
@@ -401,7 +390,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // ── Hero header ─────────────────────────────────────────
         Stack(
           clipBehavior: Clip.none,
           children: [
@@ -443,7 +431,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 ],
               ),
             ),
-            // wave clip at bottom
+
             Positioned(
               bottom: -1,
               left: 0,
@@ -458,7 +446,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             ),
           ],
         ),
-        // ── Class count label ────────────────────────────────────
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
           child: Row(
@@ -479,7 +466,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             ],
           ),
         ),
-        // ── Class cards ──────────────────────────────────────────
+        //Class cards
         if (_allClasses.isEmpty)
           Expanded(
             child: Center(

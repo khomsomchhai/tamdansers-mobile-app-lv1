@@ -130,6 +130,7 @@ class _NothicationState extends State<Nothication> {
   Widget _listnothicard(){
     return Column(
       children: [
+
         _nothicard(
               name: "ការជូនដំណឺងរបស់សាលា",
               hour: "5 ម៉ោងមុន",
@@ -137,39 +138,39 @@ class _NothicationState extends State<Nothication> {
               icon: Icons.notifications,
               color: AppColors.comment,
               trailingIcon: Icons.arrow_forward_ios,
-          ),
+        ),
         _nothicard(
-          name: "ការជូនដំណឺងរបស់សាលា",
-          hour: "ម្សិលមិញ",
-          description: "ការព្រមានរបស់សាលាទៅកាន់កូនរបស់អ្នក ការលេងទូរសព័នៅក្នុងថ្នាក់រៀនណៅពេល",
-          icon: Icons.warning,
-          color: AppColors.error,
+        name: "ការជូនដំណឺងរបស់សាលា",
+        hour: "ម្សិលមិញ",
+        description: "ការព្រមានរបស់សាលាទៅកាន់កូនរបស់អ្នក ការលេងទូរសព័នៅក្នុងថ្នាក់រៀនណៅពេល",
+        icon: Icons.warning,
+        color: AppColors.error,
+        trailingIcon: Icons.arrow_forward_ios,
+        ) ,
+        _nothicard(
+            name: "ប្រតិបត្តិពន្ទុថ្មី",
+            hour: "2 ម៉ោងមុន",
+            description: "ព្រឺត្តបត្រពិន្ទុសម្រាប់ឆមាសទី១មានសប្រាប់ទាញយកហើយ ។",
+            icon: Icons.bookmark_add_outlined,
+            color: AppColors.primaryMain,
+            trailingIcon: Icons.arrow_forward_ios,
+        ),
+        _nothicard(
+          name: "ការំលឹកថ្លៃសិក្សា",
+          hour: "2 ថ្ងៃមុន",
+          description: "ការរំលឹកដោយមេត្រីភាពសម្រាប់ការបង់ថ្លៃសិក្សានាពេលខាងមុខ ដែលត្រូវនៅសប្តាហ៍ក្រោយ",
+          icon: Icons.money,
+          color: AppColors.secondaryText,
           trailingIcon: Icons.arrow_forward_ios,
           ) ,
-           _nothicard(
-              name: "ប្រតិបត្តិពន្ទុថ្មី",
-              hour: "2 ម៉ោងមុន",
-              description: "ព្រឺត្តបត្រពិន្ទុសម្រាប់ឆមាសទី១មានសប្រាប់ទាញយកហើយ ។",
-              icon: Icons.bookmark_add_outlined,
-              color: AppColors.primaryMain,
-              trailingIcon: Icons.arrow_forward_ios,
-          ),
           _nothicard(
-            name: "ការំលឹកថ្លៃសិក្សា",
-            hour: "2 ថ្ងៃមុន",
-            description: "ការរំលឹកដោយមេត្រីភាពសម្រាប់ការបង់ថ្លៃសិក្សានាពេលខាងមុខ ដែលត្រូវនៅសប្តាហ៍ក្រោយ",
-            icon: Icons.money,
-            color: AppColors.secondaryText,
+            name: "កិច្ចប្រជុំមាតាបីតា-គ្រូ",
+            hour: "1 ម៉ោងមុន",
+            description: "ការប្រជុំនាពេលខាងមុខគ្រោងធ្វើនៅថ្ងៃសុក្រនេះវេលាម៉ោង ២:០០​ រសៀល​ នៅបន្ទប់ 3B។",
+            icon: Icons.notifications,
+            color: AppColors.comment,
             trailingIcon: Icons.arrow_forward_ios,
-            ) ,
-           _nothicard(
-              name: "កិច្ចប្រជុំមាតាបីតា-គ្រូ",
-              hour: "1 ម៉ោងមុន",
-              description: "ការប្រជុំនាពេលខាងមុខគ្រោងធ្វើនៅថ្ងៃសុក្រនេះវេលាម៉ោង ២:០០​ រសៀល​ នៅបន្ទប់ 3B។",
-              icon: Icons.notifications,
-              color: AppColors.comment,
-              trailingIcon: Icons.arrow_forward_ios,
-          ),
+        ),
       ],
     );
   }

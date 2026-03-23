@@ -5,6 +5,7 @@ import 'package:tamdansers_app/constants/app_icon.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/repositories/parent_student_repo.dart';
+import 'package:tamdansers_app/repositories/student_class_repo.dart';
 import 'package:tamdansers_app/widget/custom_snackbar.dart';
 
 class ConnectionRequests extends StatefulWidget {
@@ -18,7 +19,6 @@ class _ConnectionRequestsState extends State<ConnectionRequests> {
   List<Map<String, dynamic>> _pendingRequests = [];
   bool _isLoading = true;
 
-
   @override
   void initState() {
     super.initState();
@@ -28,16 +28,29 @@ class _ConnectionRequestsState extends State<ConnectionRequests> {
   Future<void> _loadPendingRequests() async {
     try {
       final pref = await SharedPreferences.getInstance();
-      final studentId = pref.getInt("userId");
-      if (studentId == null) return;
+      final userId = pref.getInt("userId");
+      if (userId == null) return;
+      final studentClassRepo = StudentClassRepo();
+      var studentRow = await studentClassRepo.getStudentByLinkedUserId(userId);
+
+      if (studentRow == null) {
+        setState(() {
+          _isLoading = false;
+        });
+        return;
+      }
+
+      final studentClassId = studentRow["id"] as int;
 
       final parentStudentRepo = ParentStudentRepo();
-      final requests = await parentStudentRepo.getPendingRequestsForStudent(studentId);
+      final requests =
+          await parentStudentRepo.getPendingRequestsForStudent(studentClassId);
       setState(() {
         _pendingRequests = requests;
         _isLoading = false;
       });
     } catch (e) {
+      debugPrint('Error requests: $e');
       setState(() {
         _isLoading = false;
       });
@@ -47,14 +60,12 @@ class _ConnectionRequestsState extends State<ConnectionRequests> {
   Future<void> _respondToRequest(int connectionId, bool accept) async {
     try {
       final parentStudentRepo = ParentStudentRepo();
-      debugPrint('Responding to request: connectionId=$connectionId, accept=$accept');
       int result = 0;
-      if (accept) {
+      if (accept) { 
         result = await parentStudentRepo.approveConnection(connectionId);
-        debugPrint('approveConnection result: $result');
       } else {
         result = await parentStudentRepo.rejectConnection(connectionId);
-        debugPrint('rejectConnection result: $result');
+        debugPrint('result: $result');
       }
       _loadPendingRequests();
       if (mounted) {
@@ -72,7 +83,7 @@ class _ConnectionRequestsState extends State<ConnectionRequests> {
         );
       }
     } catch (e) {
-      debugPrint('Error responding to request: $e');
+      debugPrint('Error responding: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -114,7 +125,8 @@ class _ConnectionRequestsState extends State<ConnectionRequests> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('សំណើភ្ជាប់ពីឪពុកម្តាយ', style: AppTextStyle.sectionTitle20),
+        title:
+            Text('សំណើភ្ជាប់ពីឪពុកម្តាយ', style: AppTextStyle.sectionTitle20),
         centerTitle: true,
       ),
       body: _isLoading
@@ -135,7 +147,8 @@ class _ConnectionRequestsState extends State<ConnectionRequests> {
                       margin: const EdgeInsets.only(bottom: 16),
                       decoration: BoxDecoration(
                         color: AppColors.white,
-                        borderRadius: BorderRadius.circular(AppNumber.radiusLarge),
+                        borderRadius:
+                            BorderRadius.circular(AppNumber.radiusLarge),
                         boxShadow: [
                           BoxShadow(
                             color: AppColors.primaryText.withOpacity(0.1),
@@ -156,7 +169,8 @@ class _ConnectionRequestsState extends State<ConnectionRequests> {
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     border: Border.all(
-                                      color: AppColors.primaryMain.withOpacity(0.2),
+                                      color: AppColors.primaryMain
+                                          .withOpacity(0.2),
                                       width: 2,
                                     ),
                                   ),
@@ -170,7 +184,8 @@ class _ConnectionRequestsState extends State<ConnectionRequests> {
                                 const SizedBox(width: 16),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         '${request['parent_first_name']} ${request['parent_last_name']}',
@@ -178,14 +193,18 @@ class _ConnectionRequestsState extends State<ConnectionRequests> {
                                       ),
                                       const SizedBox(height: 4),
                                       Container(
-                                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 4),
                                         decoration: BoxDecoration(
-                                          color: AppColors.comment.withOpacity(0.1),
-                                          borderRadius: BorderRadius.circular(12),
+                                          color: AppColors.comment
+                                              .withOpacity(0.1),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
                                         ),
                                         child: Text(
                                           'សំណើភ្ជាប់ពីឪពុកម្តាយ',
-                                          style: AppTextStyle.caption12Secondary.copyWith(
+                                          style: AppTextStyle.caption12Secondary
+                                              .copyWith(
                                             color: AppColors.comment,
                                             fontWeight: FontWeight.w500,
                                           ),
@@ -201,13 +220,16 @@ class _ConnectionRequestsState extends State<ConnectionRequests> {
                               padding: const EdgeInsets.all(16),
                               decoration: BoxDecoration(
                                 color: AppColors.backgroundLight,
-                                borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
+                                borderRadius: BorderRadius.circular(
+                                    AppNumber.radiusMedium),
                               ),
                               child: Column(
                                 children: [
-                                  _contactRow(Icons.email_outlined, 'អ៊ីម៉ែល', request['parent_email']),
+                                  _contactRow(Icons.email_outlined, 'អ៊ីម៉ែល',
+                                      request['parent_email']),
                                   const SizedBox(height: 8),
-                                  _contactRow(Icons.phone_outlined, 'លេខទូរស័ព្ទ', request['parent_phone']),
+                                  _contactRow(Icons.phone_outlined,
+                                      'លេខទូរស័ព្ទ', request['parent_phone']),
                                 ],
                               ),
                             ),
@@ -216,22 +238,30 @@ class _ConnectionRequestsState extends State<ConnectionRequests> {
                               children: [
                                 Expanded(
                                   child: OutlinedButton(
-                                    onPressed: () => _respondToRequest(request['id'], false),
+                                    onPressed: () =>
+                                        _respondToRequest(request['id'], false),
                                     style: OutlinedButton.styleFrom(
-                                      side: const BorderSide(color: AppColors.error),
-                                      padding: const EdgeInsets.symmetric(vertical: 12),
+                                      side: const BorderSide(
+                                          color: AppColors.error),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 12),
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
+                                        borderRadius: BorderRadius.circular(
+                                            AppNumber.radiusMedium),
                                       ),
                                     ),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
-                                        Icon(Icons.close, color: AppColors.error, size: 20),
+                                        Icon(Icons.close,
+                                            color: AppColors.error, size: 20),
                                         const SizedBox(width: 8),
                                         Text(
                                           'បដិសេធ',
-                                          style: AppTextStyle.buttonText15Primary.copyWith(color: AppColors.error),
+                                          style: AppTextStyle
+                                              .buttonText15Primary
+                                              .copyWith(color: AppColors.error),
                                         ),
                                       ],
                                     ),
@@ -240,18 +270,23 @@ class _ConnectionRequestsState extends State<ConnectionRequests> {
                                 const SizedBox(width: 12),
                                 Expanded(
                                   child: ElevatedButton(
-                                    onPressed: () => _respondToRequest(request['id'], true),
+                                    onPressed: () =>
+                                        _respondToRequest(request['id'], true),
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: AppColors.primaryMain,
-                                      padding: const EdgeInsets.symmetric(vertical: 12),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 12),
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
+                                        borderRadius: BorderRadius.circular(
+                                            AppNumber.radiusMedium),
                                       ),
                                     ),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
-                                        Icon(Icons.check, color: AppColors.white, size: 20),
+                                        Icon(Icons.check,
+                                            color: AppColors.white, size: 20),
                                         const SizedBox(width: 8),
                                         Text(
                                           'ទទួលយក',

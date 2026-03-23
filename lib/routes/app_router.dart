@@ -9,10 +9,10 @@ import 'package:tamdansers_app/screens/auth/reset_password_screen.dart';
 import 'package:tamdansers_app/screens/auth/role_selection_screen.dart';
 import 'package:tamdansers_app/screens/auth/sign_up_screen.dart';
 import 'package:tamdansers_app/screens/auth/splash_screen.dart';
-import 'package:tamdansers_app/screens/parents/menu/Comment_signature .dart';
-import 'package:tamdansers_app/screens/parents/menu/Monthy_result_Ranking.dart';
 import 'package:tamdansers_app/screens/parents/menu/attandance_child.dart';
+import 'package:tamdansers_app/screens/parents/menu/comment_signature.dart';
 import 'package:tamdansers_app/screens/parents/menu/homework_quize_child.dart';
+import 'package:tamdansers_app/screens/parents/menu/monthy_result_ranking.dart';
 import 'package:tamdansers_app/screens/parents/menu/news.dart';
 import 'package:tamdansers_app/screens/parents/menu/nothication.dart';
 import 'package:tamdansers_app/screens/parents/menu/parents_dashboard.dart';
@@ -30,12 +30,12 @@ import 'package:tamdansers_app/screens/student/menu/homework.dart';
 import 'package:tamdansers_app/screens/student/menu/info_personal.dart';
 import 'package:tamdansers_app/screens/student/menu/notification.dart';
 import 'package:tamdansers_app/screens/student/menu/profile.dart';
+import 'package:tamdansers_app/screens/student/menu/result.dart';
+import 'package:tamdansers_app/screens/student/menu/scedeul.dart';
+import 'package:tamdansers_app/screens/student/menu/student_dashboard.dart';
+import 'package:tamdansers_app/screens/student/menu/subjects.dart';
 import 'package:tamdansers_app/screens/student/menu/submmit_screen.dart';
-import 'package:tamdansers_app/screens/student/result.dart';
-import 'package:tamdansers_app/screens/student/scedeul.dart';
-import 'package:tamdansers_app/screens/student/student_dashboard.dart';
 import 'package:tamdansers_app/screens/student/student_first_screen.dart';
-import 'package:tamdansers_app/screens/student/subjects.dart';
 import 'package:tamdansers_app/screens/teacher/menu/add_student.dart';
 import 'package:tamdansers_app/screens/teacher/menu/add_task.dart';
 import 'package:tamdansers_app/screens/teacher/menu/attendance_screen.dart';
@@ -250,8 +250,16 @@ class AppRouter {
           transition: PageTransitionType.iosPush,
         );
       case AppRoutes.studentDashboard:
-        final userId = settings.arguments as int?;
-        return _slideRoute(StudentDashboard(userId: userId ?? 1));
+        var args = settings.arguments;
+        int? userId;
+        int? classId;
+        if (args is Map) {
+          userId = args['userId'] as int?;
+          classId = args['classId'] as int?;
+        } else if (args is int) {
+          userId = args;
+        }
+        return _slideRoute(StudentDashboard(userId: userId ?? 1, classId: classId));
       case AppRoutes.submitted:
         return PageTransition.build(
           page: SubmmitScreen(),
@@ -259,8 +267,9 @@ class AppRouter {
           transition: PageTransitionType.slideUpFade,
         );
       case AppRoutes.homework:
+        final userId = settings.arguments as int?;
         return PageTransition.build(
-          page: Homework(),
+          page: Homework(userId: userId),
           settings: settings,
           transition: PageTransitionType.iosPush,
         );
@@ -268,8 +277,11 @@ class AppRouter {
         final userId = settings.arguments as int?;
         return _slideRoute(Profile(userId: userId ?? 1));
       case AppRoutes.detail:
+        final args = settings.arguments as Map<String, dynamic>?;
+        final homework = args?['homework'] as Map<String, dynamic>?;
+        final userId = args?['userId'] as int?;
         return PageTransition.build(
-          page: Deatilscreen(),
+          page: Deatilscreen(homework: homework, userId: userId),
           settings: settings,
           transition: PageTransitionType.iosPush,
         );
@@ -289,8 +301,12 @@ class AppRouter {
           transition: PageTransitionType.iosPush,
         );
       case AppRoutes.result:
+        final resultArgs = settings.arguments as Map<String, dynamic>?;
         return PageTransition.build(
-          page: Result(),
+          page: Result(
+            studentClassId: resultArgs?['studentClassId'] as int?,
+            classId: resultArgs?['classId'] as int?,
+          ),
           settings: settings,
           transition: PageTransitionType.iosPush,
         );
@@ -331,21 +347,33 @@ class AppRouter {
           settings: settings,
           transition: PageTransitionType.iosPush,
         );
-      case AppRoutes.ParentsDashboard:
+      case AppRoutes.parentsDashboard:
+        final args = settings.arguments as Map<String, dynamic>?;
         return PageTransition.build(
-          page: ParentsDashboard(),
+          page: ParentsDashboard(
+            studentClassId: args?['studentClassId'] as int?,
+            classId: args?['classId'] as int?,
+          ),
           settings: settings,
           transition: PageTransitionType.fadeThrough,
         );
-      case AppRoutes.AttandanceScreen:
+      case AppRoutes.attandanceScreen:
+        final args = settings.arguments as Map<String, dynamic>?;
         return PageTransition.build(
-          page: AttandanceScreen(),
+          page: AttandanceScreen(
+            studentClassId: args?['studentClassId'] as int?,
+            classId: args?['classId'] as int?,
+          ),
           settings: settings,
           transition: PageTransitionType.iosPush,
         );
-      case AppRoutes.HomeworkQuizeScreen:
+      case AppRoutes.homeworkQuizeScreen:
+        final args = settings.arguments as Map<String, dynamic>?;
         return PageTransition.build(
-          page: HomeworkQuizeScreen(),
+          page: HomeworkQuizeScreen(
+            studentClassId: args?['studentClassId'] as int?,
+            classId: args?['classId'] as int?,
+          ),
           settings: settings,
           transition: PageTransitionType.iosPush,
         );
@@ -353,11 +381,19 @@ class AppRouter {
         return _slideRoute(Nothication());
       case AppRoutes.commentScreen:
         return _slideRoute(CommentSignature());
-      case AppRoutes.parent_setting:
+      case AppRoutes.parentSetting:
         return _slideRoute(ParentSetting());
-      case AppRoutes.CustomScreen:
-        return _slideRoute(CustomScreen());
-      case AppRoutes.NewsScreen:
+      case AppRoutes.customScreen:
+        final args = settings.arguments as Map<String, dynamic>?;
+        return PageTransition.build(
+          page: CustomScreen(
+            studentClassId: args?['studentClassId'] as int?,
+            classId: args?['classId'] as int?,
+          ),
+          settings: settings,
+          transition: PageTransitionType.iosPush,
+        );
+      case AppRoutes.newsScreen:
         return PageTransition.build(
           page: NewsScreen(),
           settings: settings,

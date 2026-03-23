@@ -412,6 +412,9 @@ Widget _buildInfoSection(Map<String, dynamic>? user) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppNumber.radiusLarge),
+        ),
         backgroundColor: AppColors.backgroundLight,
         title: Text("ចាកចេញ?", style: AppTextStyle.subtitle18),
         content: Text(

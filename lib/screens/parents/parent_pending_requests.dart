@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/repositories/parent_student_repo.dart';
 
@@ -36,7 +38,6 @@ class _ParentPendingRequestsState extends State<ParentPendingRequests> {
       setState(() {
         _isLoading = false;
       });
-      // Handle error
     }
   }
 
@@ -61,8 +62,19 @@ class _ParentPendingRequestsState extends State<ParentPendingRequests> {
                   itemCount: _pendingRequests.length,
                   itemBuilder: (context, index) {
                     final request = _pendingRequests[index];
-                    return Card(
+                    return Container(
                       margin: const EdgeInsets.only(bottom: 16),
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(AppNumber.radiusSmall),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.all(16),
                         child: Column(

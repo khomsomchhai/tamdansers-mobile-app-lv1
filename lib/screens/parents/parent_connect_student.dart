@@ -7,6 +7,7 @@ import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/constants/validators.dart';
 import 'package:tamdansers_app/repositories/parent_student_repo.dart';
+import 'package:tamdansers_app/repositories/student_class_repo.dart';
 import 'package:tamdansers_app/repositories/user_repo.dart';
 import 'package:tamdansers_app/widget/auth_field.dart';
 import 'package:tamdansers_app/widget/custom_dialog.dart';
@@ -34,8 +35,6 @@ class _ParentConnectStudentState extends State<ParentConnectStudent> {
 
     try {
       final identifier = invCodeCtrl.text.trim();
-
-      // Get current parent ID
       final pref = await SharedPreferences.getInstance();
       final parentId = pref.getInt("userId");
 
@@ -43,38 +42,47 @@ class _ParentConnectStudentState extends State<ParentConnectStudent> {
         _showError("User not logged in");
         return;
       }
-
-      // Find student by email or phone
       final userRepo = UserRepo();
       final studentUser = await userRepo.getUserByPhoneOrEmail(identifier);
-
       if (studentUser == null) {
         _showError(
             "សិស្សដែលមានអ៊ីម៉ែល ឬ លេខទូរស័ព្ទនេះមិនមាននៅក្នុងប្រព័ន្ធទេ");
         return;
       }
-
       if (studentUser["role"] != "student") {
         _showError("គណនីនេះមិនមែនជាគណនីសិស្សទេ");
         return;
       }
+      final studentClassRepo = StudentClassRepo();
+      var studentRow = await studentClassRepo
+          .getStudentByLinkedUserId(studentUser["id"] as int);
 
-      // Check if already connected
+      studentRow ??= await studentClassRepo.getStudentByEmailOrPhone(
+          studentUser["email"] as String?,
+          studentUser["phone"] as String?,
+        );
+      if (studentRow == null) {
+        _showError("សិស្សនេះមិនមាននៅក្នុងថ្នាក់ទេ។ សូមព្យាយាមធ្វើការ ម្តងទៀត។");
+        return;
+      }
+
+      final studentClassId = studentRow["id"] as int;
+
       final parentStudentRepo = ParentStudentRepo();
       final isConnected = await parentStudentRepo.isParentConnectedToStudent(
-          parentId, studentUser["id"]);
+          parentId, studentClassId);
 
       if (isConnected) {
         _showError("អ្នកបានភ្ជាប់ទៅកាន់សិស្សនេះរួចហើយ");
         return;
       }
 
-      // Create connection request
       final result = await parentStudentRepo.connectParentToStudent(
         parentId: parentId,
-        studentId: studentUser["id"],
+        studentId: studentClassId,
       );
-      debugPrint('connectParentToStudent: parentId=$parentId, studentId=${studentUser["id"]}, insert result=$result');
+      debugPrint(
+          'parentId=$parentId, studentClassId=$studentClassId, result=$result');
 
       if (mounted) {
         showDialog(

@@ -86,7 +86,8 @@ class _ParentFirstScreenState extends State<ParentFirstScreen> with WidgetsBindi
         body: Column(
           children: [
             ParentProfileHeader(
-              name: _currentUser?["first_name"] ?? "Parent",
+              firstName: _currentUser?["first_name"] ?? "Parent",
+              lastName: _currentUser?["last_name"] ?? "",
               gender: _currentUser?["gender"] ?? "male",
             ),
             Expanded(

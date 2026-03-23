@@ -247,8 +247,6 @@ class _ManageAllClassState extends State<ManageAllClass> {
     );
   }
 
-  // ─── Create Class Dialog ─────────────────────────────────────────────────
-
   Future<void> _showCreateClassDialog() async {
     final gradeList = grades.where((g) => g != "ទាំងអស់").toList();
     await showDialog<bool>(

@@ -54,7 +54,6 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
           .searchStudentsInOtherClasses(widget.classId, query);
     }
 
-    // Load attendance for all students in parallel
     final db = await DbHelper().initDatabase();
     final attendanceRows = await db.query(
       'tbl_attendance',
@@ -81,7 +80,6 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
   }
 
   Future<void> _addGlobalStudentToClass(Map<String, dynamic> s) async {
-    // Check for duplicates before adding
     final phone = s['phone'] as String?;
     final email = s['email'] as String?;
     final isDuplicate = await StudentClassRepo()
@@ -168,9 +166,6 @@ class _ManageStudentScreenState extends State<ManageStudentScreen> {
     }
   }
 
-  /// Removes the student from both tbl_student_class and, if they have a
-  /// linked account, from tbl_user_class — so their account stops showing
-  /// this class immediately.
   Future<void> _deleteStudentFully(Map<String, dynamic> student) async {
     final db = await DbHelper().initDatabase();
     await StudentClassRepo().deleteStudent(student['id'] as int);

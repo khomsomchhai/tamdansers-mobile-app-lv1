@@ -7,12 +7,14 @@ import 'package:tamdansers_app/constants/text_style.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 
 class ParentProfileHeader extends StatelessWidget {
-  final String name;
+  final String firstName;
+  final String lastName;
   final String gender;
 
   const ParentProfileHeader({
     super.key,
-    required this.name,
+    required this.firstName,
+    required this.lastName,
     required this.gender,
   });
 
@@ -24,8 +26,10 @@ class ParentProfileHeader extends StatelessWidget {
   String getPrefix() {
     switch (gender) {
       case "male":
+      case "ប្រុស":
         return "លោក";
       case "female":
+      case "ស្រី":
         return "អ្នកស្រី";
     }
     return "";
@@ -37,8 +41,10 @@ class ParentProfileHeader extends StatelessWidget {
       return "អរុណសួស្តី";
     } else if (hour < 17) {
       return "ទិវាសួស្ដី";
-    } else {
+    } else if (hour < 21){
       return "សាយណ្ហសួស្ដី";
+    } else {
+      return "រាត្រីសួស្ដី";
     }
   }
 
@@ -131,7 +137,7 @@ class ParentProfileHeader extends StatelessWidget {
                 fontSize: _fs(22, context), fontWeight: FontWeight.w600),
           ),
           Text(
-            "${getPrefix()} $name",
+            "${getPrefix()} $firstName $lastName",
             style: AppTextStyle.title28White.copyWith(
                 fontSize: _fs(22, context), fontWeight: FontWeight.bold),
           ),

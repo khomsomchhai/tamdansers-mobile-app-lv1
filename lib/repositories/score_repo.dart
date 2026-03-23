@@ -45,7 +45,6 @@ class ScoreRepo {
     return await db.delete('tbl_score', where: 'id = ?', whereArgs: [id]);
   }
 
-  /// All scores for a given class + subject, joined with student name.
   Future<List<Map<String, dynamic>>> getScoresByClassAndSubject(
       int classId, String subject) async {
     final db = await DbHelper().initDatabase();
@@ -59,7 +58,6 @@ class ScoreRepo {
     ''', [classId, subject]);
   }
 
-  /// Check if a score already exists for a student+class+subject.
   Future<Map<String, dynamic>?> findScore(
       int studentId, int classId, String subject) async {
     final db = await DbHelper().initDatabase();
@@ -72,7 +70,6 @@ class ScoreRepo {
     return rows.isNotEmpty ? rows.first : null;
   }
 
-  /// Insert or update a score for student+class+subject.
   Future<void> upsertScore({
     required int studentId,
     required int classId,
@@ -92,7 +89,6 @@ class ScoreRepo {
     }
   }
 
-  /// Returns average score of each student in a class, used to compute rank.
   Future<int> getRankInClass(int studentId, int classId) async {
     final db = await DbHelper().initDatabase();
     final rows = await db.rawQuery('''
@@ -106,5 +102,37 @@ class ScoreRepo {
       if (rows[i]['student_id'] == studentId) return i + 1;
     }
     return 0;
+  }
+
+  Future<List<Map<String, dynamic>>> getScoresByStudentAndMonth(
+      int studentId, int month) async {
+    final db = await DbHelper().initDatabase();
+    return await db.rawQuery('''
+      SELECT subject, score, created_at
+      FROM tbl_score
+      WHERE student_id = ? AND strftime('%m', created_at) = ?
+      ORDER BY subject ASC
+    ''', [studentId, month.toString().padLeft(2, '0')]);
+  }
+
+  Future<List<int>> getScoreMonthsForStudent(int studentId) async {
+    final db = await DbHelper().initDatabase();
+    final rows = await db.rawQuery('''
+      SELECT DISTINCT strftime('%m', created_at) as month
+      FROM tbl_score
+      WHERE student_id = ?
+      ORDER BY month ASC
+    ''', [studentId]);
+    return rows.map((r) => int.parse(r['month'] as String)).toList();
+  }
+
+  Future<List<Map<String, dynamic>>> getAllScoresByStudent(int studentId) async {
+    final db = await DbHelper().initDatabase();
+    return await db.query(
+      'tbl_score',
+      where: 'student_id = ?',
+      whereArgs: [studentId],
+      orderBy: 'created_at DESC',
+    );
   }
 }

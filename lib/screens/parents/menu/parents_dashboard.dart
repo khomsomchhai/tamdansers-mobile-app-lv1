@@ -1,32 +1,70 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
-import 'package:tamdansers_app/constants/app_images.dart';
+import 'package:tamdansers_app/constants/app_icon.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/repositories/activity_repo.dart';
+import 'package:tamdansers_app/repositories/attendance_repo.dart';
+import 'package:tamdansers_app/repositories/class_repo.dart';
+import 'package:tamdansers_app/repositories/parent_student_repo.dart';
+import 'package:tamdansers_app/repositories/student_class_repo.dart';
+import 'package:tamdansers_app/repositories/student_stat_repo.dart';
 import 'package:tamdansers_app/repositories/user_repo.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
-import 'package:tamdansers_app/screens/parents/menu/Comment_signature .dart';
+import 'package:tamdansers_app/screens/parents/menu/comment_signature.dart';
 import 'package:tamdansers_app/screens/parents/menu/news.dart';
 import 'package:tamdansers_app/screens/parents/menu/setting.dart';
 import 'package:tamdansers_app/screens/parents/widget/parent_profile_header.dart';
 
 class ParentsDashboard extends StatefulWidget {
-  const ParentsDashboard({super.key});
+  final int? studentClassId;
+  final int? classId;
+
+  const ParentsDashboard({super.key, this.studentClassId, this.classId});
 
   @override
   State<ParentsDashboard> createState() => _ParentsDashboardState();
 }
 
 class _ParentsDashboardState extends State<ParentsDashboard>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   int _currentIndex = 0;
   Map<String, dynamic>? _currentParent;
+  Map<String, dynamic>? _selectedStudent;
+  List<Map<String, dynamic>> _students = [];
+  bool _isLoading = true;
+  List<Map<String, dynamic>> _activities = [];
+  double? _attendancePercent;
+  String? _latestScore;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _loadParentUser();
+    _loadStudents();
+    _loadActivities(studentClassId: widget.studentClassId);
+    if (widget.studentClassId != null && widget.classId != null) {
+      _loadSelectedStudentStats(widget.studentClassId!, widget.classId!);
+    } else {
+      _loadStudentStats();
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && _currentIndex == 0) {
+      _loadActivities(studentClassId: widget.studentClassId);
+    }
   }
 
   Future<void> _loadParentUser() async {
@@ -39,6 +77,107 @@ class _ParentsDashboardState extends State<ParentsDashboard>
       }
     } catch (e) {
       debugPrint("Error loading parent user: $e");
+    }
+  }
+
+  Future<void> _loadStudents() async {
+    try {
+      final pref = await SharedPreferences.getInstance();
+      final userId = pref.getInt("userId");
+      if (userId != null) {
+        final students = await ParentStudentRepo().getStudentsByParent(userId);
+        setState(() {
+          _students = students;
+        });
+        await _loadStudentStats();
+      }
+    } catch (e) {
+      debugPrint("Error loading students: $e");
+      setState(() => _isLoading = false);
+    }
+  }
+
+  Future<void> _loadActivities({int? studentClassId}) async {
+    try {
+      final pref = await SharedPreferences.getInstance();
+      final parentId = pref.getInt("userId");
+      if (parentId != null) {
+        List<Map<String, dynamic>> activities;
+        if (studentClassId != null) {
+          activities = await ActivityRepo()
+              .getActivitiesByStudent(parentId, studentClassId, limit: 10);
+        } else {
+          activities =
+              await ActivityRepo().getRecentActivities(parentId, limit: 10);
+        }
+        setState(() {
+          _activities = activities;
+        });
+      }
+    } catch (e) {
+      debugPrint("Error loading activities: $e");
+      setState(() {
+        _activities = [];
+      });
+    }
+  }
+
+  Future<void> _loadSelectedStudentStats(
+      int studentClassId, int classId) async {
+    try {
+      final studentClassRepo = StudentClassRepo();
+      _selectedStudent = await studentClassRepo.getStudentById(studentClassId);
+
+      if (_selectedStudent != null) {
+        final attendanceRepo = AttendanceRepo();
+        final currentMonth =
+            DateTime.now().toIso8601String().substring(0, 7);
+        final summary = await attendanceRepo.getAttendanceSummaryForStudent(
+            studentClassId, classId, currentMonth);
+        final total = summary['total'] ?? 0;
+        final present = summary['present'] ?? 0;
+        final late = summary['late'] ?? 0;
+        final presentDays = present + late;
+        final attendancePercent =
+            total == 0 ? 0.0 : (presentDays / total) * 100;
+
+        final score = await StudentStatRepo().getLatestScore(studentClassId, classId);
+        final classRepo = ClassRepo();
+        final classData = await classRepo.getClassById(classId);
+        if (classData != null && _selectedStudent != null) {
+          _selectedStudent = {
+            ..._selectedStudent!,
+            'class_name': classData['name'] ?? 'មិនបានកំណត់'
+          };
+        }
+
+        setState(() {
+          _selectedStudent = _selectedStudent;
+          _attendancePercent = attendancePercent;
+          _latestScore = score;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() => _isLoading = false);
+    }
+  }
+
+  Future<void> _loadStudentStats() async {
+    if (_students.isNotEmpty) {
+      final student = _students.first;
+      final studentClassId = student['student_id'] as int?;
+      final classId = student['class_id'] as int?;
+      if (studentClassId != null && classId != null) {
+        final statRepo = StudentStatRepo();
+        final percent =
+            await statRepo.getAttendancePercent(studentClassId, classId);
+        final score = await statRepo.getLatestScore(studentClassId, classId);
+        setState(() {
+          _attendancePercent = percent;
+          _latestScore = score;
+        });
+      }
     }
   }
 
@@ -81,7 +220,8 @@ class _ParentsDashboardState extends State<ParentsDashboard>
             clipBehavior: Clip.none,
             children: [
               ParentProfileHeader(
-                name: _currentParent?["first_name"] ?? "Parent",
+                firstName: _currentParent?["first_name"] ?? "Parent",
+                lastName: _currentParent?["last_name"] ?? "",
                 gender: _currentParent?["gender"] ?? "male",
               ),
               Positioned(
@@ -98,15 +238,9 @@ class _ParentsDashboardState extends State<ParentsDashboard>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("សកម្មភាពលឿន",
+                Text("មុខងារ",
                     style: AppTextStyle.sectionTitle20
                         .copyWith(fontSize: _fs(16, context))),
-                Text("មើលទាំងអស់",
-                    style: AppTextStyle.body.copyWith(
-                      color: AppColors.primaryMain,
-                      fontSize: _fs(13, context),
-                      fontWeight: FontWeight.w500,
-                    )),
               ],
             ),
           ),
@@ -118,19 +252,42 @@ class _ParentsDashboardState extends State<ParentsDashboard>
                 _quickActionTile(
                     "វត្តមាន", Icons.date_range, AppColors.primaryMain, context,
                     onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.AttandanceScreen);
+                  if (widget.studentClassId != null && widget.classId != null) {
+                    Navigator.pushNamed(
+                      context,
+                      AppRoutes.attandanceScreen,
+                      arguments: {
+                        'studentClassId': widget.studentClassId,
+                        'classId': widget.classId,
+                      },
+                    );
+                  }
                 }),
                 const SizedBox(width: 8),
                 _quickActionTile(
                     "លទ្ធផល", Icons.assessment, AppColors.success, context,
                     onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.CustomScreen);
+                  Navigator.pushNamed(
+                    context,
+                    AppRoutes.customScreen,
+                    arguments: {
+                      'studentClassId': widget.studentClassId,
+                      'classId': widget.classId,
+                    },
+                  );
                 }),
                 const SizedBox(width: 8),
                 _quickActionTile(
                     "កិច្ចការផ្ទះ", Icons.home_work, AppColors.pepure, context,
                     onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.HomeworkQuizeScreen);
+                  Navigator.pushNamed(
+                    context,
+                    AppRoutes.homeworkQuizeScreen,
+                    arguments: {
+                      'studentClassId': widget.studentClassId,
+                      'classId': widget.classId,
+                    },
+                  );
                 }),
               ],
             ),
@@ -147,23 +304,24 @@ class _ParentsDashboardState extends State<ParentsDashboard>
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: _recentActivity(context),
           ),
-          const SizedBox(height: 16),
-          Center(
-            child: Text(
-              "មើលការផ្សេងៗដែលពាក់ព័ន្ធ",
-              style: AppTextStyle.body.copyWith(
-                color: AppColors.secondaryText,
-                fontSize: _fs(13, context),
-              ),
-            ),
-          ),
-          const SizedBox(height: 24),
         ],
       ),
     );
   }
 
   Widget _studentCard(BuildContext context) {
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (_students.isEmpty && _selectedStudent == null) {
+      return Center(
+        child: Text(
+          "មិនមានសិស្សភ្ជាប់ទេ",
+          style: AppTextStyle.body.copyWith(color: AppColors.secondaryText),
+        ),
+      );
+    }
+    final student = _selectedStudent ?? _students.first;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -193,22 +351,20 @@ class _ParentsDashboardState extends State<ParentsDashboard>
                       color: AppColors.primaryBg,
                     ),
                     child: ClipOval(
-                      child:
-                          Image.asset(AppImages.userProfile, fit: BoxFit.cover),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    child: Container(
-                      padding: const EdgeInsets.all(2),
-                      decoration: BoxDecoration(
-                        color: AppColors.success,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.white, width: 2),
-                      ),
-                      child: const Icon(Icons.check,
-                          color: AppColors.white, size: 12),
+                      child: (student['photo_path'] != null &&
+                              student['photo_path'].toString().isNotEmpty)
+                          ? Image.file(
+                              File(student['photo_path']),
+                              width: 60,
+                              height: 60,
+                              fit: BoxFit.cover,
+                            )
+                          : (student['gender'] == 'ប្រុស' ||
+                                  student['gender'] == 'male'
+                              ? Image.asset(AppIcon.maleAvatar,
+                                  width: 60, height: 60, fit: BoxFit.cover)
+                              : Image.asset(AppIcon.femaleAvatar,
+                                  width: 60, height: 60, fit: BoxFit.cover)),
                     ),
                   ),
                 ],
@@ -218,38 +374,21 @@ class _ParentsDashboardState extends State<ParentsDashboard>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("លោក ឡាយ",
-                        style: AppTextStyle.subtitle16.copyWith(
-                          fontSize: _fs(16, context),
-                          fontWeight: FontWeight.w700,
-                        )),
-                    const SizedBox(height: 2),
-                    Text("ថ្នាក់ទី 5A ID: #29384",
-                        style: AppTextStyle.buttonText15Primary.copyWith(
-                          fontSize: _fs(13, context),
-                          color: AppColors.secondaryText,
-                        )),
-                    const SizedBox(height: 4),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: AppColors.successBG,
-                        borderRadius: BorderRadius.circular(12),
+                    Text(
+                      (student['first_name'] ?? '') +
+                          ' ' +
+                          (student['last_name'] ?? ''),
+                      style: AppTextStyle.subtitle16.copyWith(
+                        fontSize: _fs(16, context),
+                        fontWeight: FontWeight.w700,
                       ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.check_circle,
-                              color: AppColors.success, size: 14),
-                          const SizedBox(width: 4),
-                          Text("ចូលនិស្សិត- 7:45 AM",
-                              style: AppTextStyle.buttonText15Primary.copyWith(
-                                color: AppColors.success,
-                                fontSize: _fs(12, context),
-                                fontWeight: FontWeight.w600,
-                              )),
-                        ],
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      "ថ្នាក់រៀន: ${student['class_name'] ?? 'មិនបានកំណត់'}",
+                      style: AppTextStyle.buttonText15Primary.copyWith(
+                        fontSize: _fs(13, context),
+                        color: AppColors.secondaryText,
                       ),
                     ),
                   ],
@@ -261,16 +400,30 @@ class _ParentsDashboardState extends State<ParentsDashboard>
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _statItem("៩៨%", "វត្តមាន", AppColors.success,
-                  AppTextStyle.caption12Primary, context,
-                  valueFontSize: 30, labelFontSize: 16),
+              _statItem(
+                _attendancePercent != null
+                    ? ("${_attendancePercent!.toStringAsFixed(0)}%")
+                    : "-",
+                "វត្តមាន",
+                AppColors.success,
+                AppTextStyle.caption12Primary,
+                context,
+                valueFontSize: 30,
+                labelFontSize: 16,
+              ),
               Container(
                   width: 1,
                   height: 30,
                   color: AppColors.neutral500.withOpacity(0.3)),
-              _statItem("A", "និទ្ទេស", AppColors.success,
-                  AppTextStyle.caption12Primary, context,
-                  valueFontSize: 30, labelFontSize: 16),
+              _statItem(
+                _latestScore ?? "-",
+                "និទ្ទេស",
+                AppColors.success,
+                AppTextStyle.caption12Primary,
+                context,
+                valueFontSize: 30,
+                labelFontSize: 16,
+              ),
               Container(
                   width: 1,
                   height: 30,
@@ -338,6 +491,14 @@ class _ParentsDashboardState extends State<ParentsDashboard>
   }
 
   Widget _recentActivity(BuildContext context) {
+    if (_activities.isEmpty) {
+      return Center(
+        child: Text(
+          "មិនមានសកម្មភាពថ្មីៗ",
+          style: AppTextStyle.body.copyWith(color: AppColors.secondaryText),
+        ),
+      );
+    }
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
@@ -351,25 +512,23 @@ class _ParentsDashboardState extends State<ParentsDashboard>
         ],
       ),
       child: Column(
-        children: [
-          _activityItem(
-            icon: Icons.assignment,
-            title: "សិស្សលទ្ធផលប្រឡងលម្អិត",
-            subtitle: "សិស្សលទ្ធផល 18/20 នៅលើការសាកល្បងផ្នែក ៤",
-            time: "២ម៉ោង",
-            iconColor: AppColors.orange,
-            context: context,
-          ),
-          Divider(height: 1, color: AppColors.lightgrey),
-          _activityItem(
-            icon: Icons.notifications,
-            title: "សាលបិទថ្ងៃស័ក្តិ្វ",
-            subtitle: "ថ្ងៃឈប់សាធារណៈ",
-            time: "ម្សិលមិញ",
-            iconColor: AppColors.pepure,
-            context: context,
-          ),
-        ],
+        children: List.generate(_activities.length, (i) {
+          final activity = _activities[i];
+          return Column(
+            children: [
+              _activityItem(
+                icon: Icons.notifications,
+                title: activity['title'] ?? 'សកម្មភាព',
+                subtitle: activity['subtitle'] ?? '',
+                time: activity['created_at']?.toString() ?? '',
+                iconColor: AppColors.primaryMain,
+                context: context,
+              ),
+              if (i < _activities.length - 1)
+                Divider(height: 1, color: AppColors.lightgrey),
+            ],
+          );
+        }),
       ),
     );
   }
@@ -451,7 +610,7 @@ class _ParentsDashboardState extends State<ParentsDashboard>
       _NavItem(
         icon: Icons.home_outlined,
         activeIcon: Icons.home_rounded,
-        label: 'ផ្ទះ',
+        label: 'ទំព័រដើម',
       ),
       _NavItem(
         icon: Icons.mail_outline,
@@ -466,7 +625,7 @@ class _ParentsDashboardState extends State<ParentsDashboard>
       _NavItem(
         icon: Icons.person_outline,
         activeIcon: Icons.person,
-        label: 'ប្រវត្តិ',
+        label: 'ប្រវត្តិរូប',
       ),
     ];
 
@@ -498,7 +657,12 @@ class _ParentsDashboardState extends State<ParentsDashboard>
               (i) => _NavTabItem(
                 item: tabs[i],
                 isActive: _currentIndex == i,
-                onTap: () => setState(() => _currentIndex = i),
+                onTap: () {
+                  setState(() => _currentIndex = i);
+                  if (i == 0) {
+                    _loadActivities(studentClassId: widget.studentClassId);
+                  }
+                },
                 fs: _fs,
               ),
             ),

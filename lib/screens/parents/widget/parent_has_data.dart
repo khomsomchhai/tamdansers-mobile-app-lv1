@@ -19,7 +19,7 @@ class _ParentHasDataState extends State<ParentHasData> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: 30,),
+        SizedBox(height: 20,),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Row(
@@ -27,7 +27,7 @@ class _ParentHasDataState extends State<ParentHasData> {
               Icon(
                 Icons.account_circle_rounded,
                 size: AppNumber.iconLarge,
-                color: AppColors.secondaryText,
+                color: AppColors.primaryText,
               ),
               SizedBox(width: 10,),
               Text(

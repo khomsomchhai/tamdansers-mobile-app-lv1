@@ -152,7 +152,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
     );
   }
 
-  // ─── Create Class Dialog ──────────────────────────────────────────────────
+  //Create Class Dialog
 
   static const _grades = [
     "ថ្នាក់ទី 7",
@@ -353,7 +353,6 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
     );
   }
 
-  // ─── Recent Activity ────────────────────────────────────────────────────────
 
   _ActivityMeta _resolveActivityMeta(String type) {
     switch (type) {

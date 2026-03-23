@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:tamdansers_app/constants/app_colors.dart';
 import 'package:tamdansers_app/constants/app_images.dart';
 import 'package:tamdansers_app/constants/app_number.dart';
 import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/repositories/homework_repo.dart';
+import 'package:tamdansers_app/repositories/student_class_repo.dart';
+import 'package:tamdansers_app/repositories/user_repo.dart';
 import 'package:tamdansers_app/routes/app_routes.dart';
 
 enum TaskStatus {
@@ -12,6 +16,37 @@ enum TaskStatus {
   inProgress,
   late,
 }
+
+TaskStatus _determineStatus({
+  required int submitted,
+  required String deadline,
+}) {
+  if (submitted == 1) {
+    return TaskStatus.completed;
+  }
+  
+  try {
+    final deadlineDate = DateTime.parse(deadline);
+    final now = DateTime.now();
+    
+    if (now.isAfter(deadlineDate)) {
+      return TaskStatus.late;
+    }
+    return TaskStatus.inProgress;
+  } catch (e) {
+    return TaskStatus.notSubmitted;
+  }
+}
+
+String _formatDate(String dateString) {
+  try {
+    final date = DateTime.parse(dateString);
+    return DateFormat('dd MMMM yyyy', 'km').format(date);
+  } catch (e) {
+    return dateString;
+  }
+}
+
 Color _statusColor(TaskStatus status) {
   switch (status) {
     case TaskStatus.completed:
@@ -39,14 +74,68 @@ String _statusText(TaskStatus status) {
 }
 
 class Homework extends StatefulWidget {
-  const Homework({super.key});
+  final int? userId;
+  final int? selectedClassId;
+  const Homework({super.key, this.userId, this.selectedClassId});
   
   @override
   State<Homework> createState() => _HomeworkState();
 }
 
 class _HomeworkState extends State<Homework> {
-  int selectedIndex = 0; 
+  int selectedIndex = 0;
+  List<Map<String, dynamic>> homeworkData = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadHomework();
+  }
+
+  @override
+  void didUpdateWidget(Homework oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.selectedClassId != widget.selectedClassId) {
+      _loadHomework();
+    }
+  }
+
+  Future<void> _loadHomework() async {
+    if (widget.userId == null) return;
+    setState(() => isLoading = true);
+    try {
+      final user = await UserRepo().getUserById(widget.userId!);
+      if (user != null) {
+        final email = user['email'] as String?;
+        if (email != null && email.isNotEmpty) {
+          final enrolledClasses = await StudentClassRepo().getEnrolledClassesByEmail(email);
+          if (enrolledClasses.isNotEmpty) {
+            // Use selected class if provided, otherwise use first class
+            final classData = widget.selectedClassId != null
+                ? enrolledClasses.firstWhere(
+                    (cls) => cls['id'] == widget.selectedClassId,
+                    orElse: () => enrolledClasses.first,
+                  )
+                : enrolledClasses.first;
+            
+            final studentClassRecord = await StudentClassRepo()
+                .getStudentClassByUserIdAndClassId(widget.userId!, classData['id']);
+            
+            if (studentClassRecord != null) {
+              final homework = await HomeworkRepo().getHomeworkForStudent(studentClassRecord['id'], classData['id']);
+              setState(() => homeworkData = homework);
+            }
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint("Error loading homework: $e");
+      
+    } finally {
+      setState(() => isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -275,289 +364,142 @@ Widget _buildTabButton({
 }
 
 Widget taskListWidget() {
-  return ListView(
+  if (isLoading) {
+    return const Center(child: CircularProgressIndicator());
+  }
+  
+  if (homeworkData.isEmpty) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.assignment_turned_in, size: 60, color: AppColors.primaryMain),
+            const SizedBox(height: 16),
+            Text(
+              'មិនមានកិច្ចការ',
+              style: AppTextStyle.subtitle16,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  
+  final filteredHomework = homeworkData.where((h) => h['submitted'] == 1).toList();
+  
+  if (filteredHomework.isEmpty) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Text(
+          'មិនមានកិច្ចការដែលបានបញ្ចប់',
+          style: AppTextStyle.body,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+  
+  return ListView.builder(
     padding: const EdgeInsets.all(18),
-    children: [
-      GestureDetector(
+    itemCount: filteredHomework.length,
+    itemBuilder: (context, index) {
+      final homework = filteredHomework[index];
+      final deadline = homework['deadline'] as String? ?? '';
+      final submitted = homework['submitted'] as int? ?? 0;
+      final status = _determineStatus(submitted: submitted, deadline: deadline);
+      
+      return GestureDetector(
         onTap: () {
-          Navigator.pushNamed(context, AppRoutes.detail,);
+          Navigator.pushNamed(
+            context,
+            AppRoutes.detail,
+            arguments: {'homework': homework, 'userId': widget.userId},
+          );
         },
-        child: taskCard(
-          title: "គណិតវិទ្យា",
-          subtitle: "ពិនិត្យឯកសារ ម្តងទៀត",
-          date: "08-01-2026",
-          icon: Icons.grid_view,
-          color: Colors.blue,
-          status: TaskStatus.completed,
-          isClosed: false
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 12.0),
+          child: taskCard(
+            title: homework['title'] ?? 'មិនបានកំណត់',
+            subtitle: homework['instructions'] ?? '',
+            date: _formatDate(deadline),
+            icon: Icons.assignment,
+            color: AppColors.primaryMain,
+            status: status,
+            isClosed: false,
+          ),
         ),
-      ),
-      const SizedBox(height: 15),
-      GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(context, AppRoutes.detail,);
-        },
-        child: taskCard(
-          title: "រូបវិទ្យា",
-          subtitle: "បញ្ចូលទិន្នន័យ តាមឯកសារ",
-          date: "05-01-2026",
-          icon: Icons.science,
-          color: Colors.green,
-          status: TaskStatus.completed,
-          isClosed: false
-        ),
-      ),
-      const SizedBox(height: 15),
-      GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(context, AppRoutes.detail,);
-        },
-        child: taskCard(
-          title: "ភូមវិទ្យា",
-          subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
-          date: "03-01-2026",
-          icon: Icons.public,
-          color: Colors.orange,
-          status: TaskStatus.completed,
-          isClosed: false
-        ),
-      ),
-      const SizedBox(height: 15),
-      GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(context, AppRoutes.detail,);
-        },
-        child: taskCard(
-          title: "ផែនដី",
-          subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
-          date: "03-01-2026",
-          icon: Icons.public,
-          color: AppColors.primary400,
-          status: TaskStatus.completed,
-          isClosed: false
-        ),
-      ),
-      const SizedBox(height: 15),
-      GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(context, AppRoutes.detail,);
-        },
-        child: taskCard(
-          title: "គិំមីវិទ្យា",
-          subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
-          date: "03-01-2026",
-          icon: Icons.science_sharp,
-          color: AppColors.secondaryText,
-          status: TaskStatus.completed,
-          isClosed: false
-        ),
-      ),
-      const SizedBox(height: 15),
-      GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(context, AppRoutes.detail,);
-        },
-        child: taskCard(
-          title: "ប្រវត្តិវិទ្យា",
-          subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
-          date: "03-01-2026",
-          imagePath: "assets/icons/history.jpg",
-          color: Colors.orange,
-          status: TaskStatus.completed,
-          isClosed: false
-        ),
-      ),
-      const SizedBox(height: 15),
-      GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(context, AppRoutes.detail,);
-        },
-        child: taskCard(
-          title: "ភាសាខ្មែរ",
-          subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
-          date: "03-01-2026",
-          imagePath: 'assets/icons/khmer.jpg',
-          color: Colors.orange,
-          status: TaskStatus.completed,
-          isClosed: false
-        ),
-      ),
-      const SizedBox(height: 15),
-      GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(context, AppRoutes.detail,);
-        },
-        child: taskCard(
-          title: "ជីវះវិទ្យា",
-          subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
-          date: "03-01-2026",
-          imagePath: 'assets/icons/biology.jpg',
-          color: Colors.orange,
-          status: TaskStatus.completed,
-          isClosed: false
-        ),
-      ),
-      const SizedBox(height: 15),
-      GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(context, AppRoutes.detail,);
-        },
-        child: taskCard(
-          title: "អង់គ្លេស",
-          subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
-          date: "03-01-2026",
-          imagePath: 'assets/icons/english.jpg',
-          color: Colors.orange,
-          status: TaskStatus.completed,
-          isClosed: false
-        ),
-      ),
-    ],
+      );
+    },
   );
 }
+
 Widget oldTaskListWidget() {
   return taskListWidget(); 
 }
 
 Widget newTaskListWidget() {
-  return ListView(
+  if (isLoading) {
+    return const Center(child: CircularProgressIndicator());
+  }
+  
+  final filteredHomework = homeworkData.where((h) => h['submitted'] != 1).toList();
+  
+  if (filteredHomework.isEmpty) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.check_circle, size: 60, color: AppColors.success),
+            const SizedBox(height: 16),
+            Text(
+              'អ្នកបានបញ្ចប់កិច្ចការទាំងអស់',
+              style: AppTextStyle.subtitle16,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  
+  return ListView.builder(
     padding: const EdgeInsets.all(20),
-    children: [
-      GestureDetector(
+    itemCount: filteredHomework.length,
+    itemBuilder: (context, index) {
+      final homework = filteredHomework[index];
+      final deadline = homework['deadline'] as String? ?? '';
+      final submitted = homework['submitted'] as int? ?? 0;
+      final status = _determineStatus(submitted: submitted, deadline: deadline);
+      final isDeadlinePassed = status == TaskStatus.late;
+      
+      return GestureDetector(
         onTap: () {
-          Navigator.pushNamed(context, AppRoutes.detail,);
+          Navigator.pushNamed(
+            context,
+            AppRoutes.detail,
+            arguments: {'homework': homework, 'userId': widget.userId},
+          );
         },
-        child: taskCard(
-          title: "គណិតវិទ្យា",
-          subtitle: "ពិនិត្យឯកសារ ម្តងទៀត",
-          date: "08-01-2026",
-          icon: Icons.grid_view,
-          color: Colors.blue,
-          status: TaskStatus.inProgress,
-          isClosed: true
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 12.0),
+          child: taskCard(
+            title: homework['title'] ?? 'មិនបានកំណត់',
+            subtitle: homework['instructions'] ?? '',
+            date: _formatDate(deadline),
+            icon: Icons.assignment_late,
+            color: isDeadlinePassed ? AppColors.error : AppColors.primaryMain,
+            status: status,
+            isClosed: isDeadlinePassed,
+          ),
         ),
-      ),
-      const SizedBox(height: 15),
-      GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(context, AppRoutes.detail,);
-        },
-        child: taskCard(
-          title: "រូបវិទ្យា",
-          subtitle: "បញ្ចូលទិន្នន័យ តាមឯកសារ",
-          date: "05-01-2026",
-          icon: Icons.science,
-          color: Colors.green,
-          status: TaskStatus.late,
-          isClosed: true
-        ),
-      ),
-      const SizedBox(height: 15),
-      GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(context, AppRoutes.detail,);
-        },
-        child: taskCard(
-          title: "ភូមវិទ្យា",
-          subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
-          date: "03-01-2026",
-          icon: Icons.public,
-          color: Colors.orange,
-          status: TaskStatus.notSubmitted,
-          isClosed: true
-        ),
-      ),
-      const SizedBox(height: 15),
-      GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(context, AppRoutes.detail,);
-        },
-        child: taskCard(
-          title: "ផែនដី",
-          subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
-          date: "03-01-2026",
-          icon: Icons.public,
-          color: AppColors.primary400,
-          status: TaskStatus.inProgress,
-          isClosed: true
-        ),
-      ),
-      const SizedBox(height: 15),
-      GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(context, AppRoutes.detail,);
-        },
-        child: taskCard(
-          title: "គិំមីវិទ្យា",
-          subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
-          date: "03-01-2026",
-          icon: Icons.science_sharp,
-          color: AppColors.secondaryText,
-          status: TaskStatus.notSubmitted,
-          isClosed: true
-        ),
-      ),
-      const SizedBox(height: 15),
-      GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(context, AppRoutes.detail,);
-        },
-        child: taskCard(
-          title: "ប្រវត្តិវិទ្យា",
-          subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
-          date: "03-01-2026",
-          imagePath: "assets/icons/history.jpg",
-          color: Colors.orange,
-          status: TaskStatus.late,
-          isClosed: true
-        ),
-      ),
-      const SizedBox(height: 15),
-      GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(context, AppRoutes.detail,);
-        },
-        child: taskCard(
-          title: "ភាសាខ្មែរ",
-          subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
-          date: "03-01-2026",
-          imagePath: 'assets/icons/khmer.jpg',
-          color: Colors.orange,
-          status: TaskStatus.inProgress,
-          isClosed: true
-        ),
-      ),
-      const SizedBox(height: 15),
-      GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(context, AppRoutes.detail,);
-        },
-        child: taskCard(
-          title: "ជីវះវិទ្យា",
-          subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
-          date: "03-01-2026",
-          imagePath: 'assets/icons/biology.jpg',
-          color: Colors.orange,
-          status: TaskStatus.notSubmitted,
-          isClosed: true
-        ),
-      ),
-      const SizedBox(height: 15),
-      GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(context, AppRoutes.detail,);
-        },
-        child: taskCard(
-          title: "អង់គ្លេស",
-          subtitle: "ពិនិត្យព័ត៌មាន ស្រុក សង្កាត់",
-          date: "03-01-2026",
-          imagePath: 'assets/icons/english.jpg',
-          color: Colors.orange,
-          status: TaskStatus.inProgress,
-          isClosed: true
-        ),
-      ),
-    ],
+      );
+    },
   );
 }
 }

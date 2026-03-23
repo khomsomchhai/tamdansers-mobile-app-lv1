@@ -164,7 +164,6 @@ class _NewsScreenState extends State<NewsScreen> {
     );
   }
 
-  // ==================== HEADER ====================
   Widget _buildHeader() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -203,7 +202,6 @@ class _NewsScreenState extends State<NewsScreen> {
     );
   }
 
-  // ==================== CATEGORY CHIPS ====================
   Widget _buildCategoryChips() {
     return Row(
       children: List.generate(_categories.length, (index) {
@@ -237,7 +235,6 @@ class _NewsScreenState extends State<NewsScreen> {
     );
   }
 
-  // ==================== FEATURED SLIDER ====================
   Widget _buildFeaturedSlider() {
     return Column(
       children: [
@@ -354,7 +351,6 @@ class _NewsScreenState extends State<NewsScreen> {
     );
   }
 
-  // ==================== LATEST UPDATES HEADER ====================
   Widget _buildLatestUpdatesHeader() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -372,7 +368,6 @@ class _NewsScreenState extends State<NewsScreen> {
     );
   }
 
-  // ==================== NEWS LIST ====================
   Widget _buildNewsList() {
     return ListView.separated(
       shrinkWrap: true,
@@ -398,7 +393,6 @@ class _NewsScreenState extends State<NewsScreen> {
         children: [
           Row(
             children: [
-              // Icon
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
@@ -408,12 +402,10 @@ class _NewsScreenState extends State<NewsScreen> {
                 child: Icon(item["icon"], color: item["iconColor"], size: 20),
               ),
               const SizedBox(width: 10),
-              // Category + Title
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Category badge
                     Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 2),
@@ -444,7 +436,6 @@ class _NewsScreenState extends State<NewsScreen> {
             ],
           ),
           const SizedBox(height: 8),
-          // Description
           Padding(
             padding: const EdgeInsets.only(left: 46),
             child: Text(
@@ -455,7 +446,6 @@ class _NewsScreenState extends State<NewsScreen> {
             ),
           ),
           const SizedBox(height: 10),
-          // Author + Read more
           Padding(
             padding: const EdgeInsets.only(left: 46),
             child: Row(

@@ -1,99 +1,198 @@
-import 'package:flutter/material.dart';
-import 'package:tamdansers_app/constants/app_colors.dart';
+import 'dart:io' as io;
 
-import '../../../constants/text_style.dart';
-import '../../../routes/app_routes.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:tamdansers_app/constants/app_colors.dart';
+import 'package:tamdansers_app/constants/app_icon.dart';
+import 'package:tamdansers_app/constants/app_number.dart';
+import 'package:tamdansers_app/constants/text_style.dart';
+import 'package:tamdansers_app/repositories/class_repo.dart';
+import 'package:tamdansers_app/repositories/score_repo.dart';
+import 'package:tamdansers_app/repositories/student_class_repo.dart';
 
 class CustomScreen extends StatefulWidget {
-  const CustomScreen({super.key});
+  final int? studentClassId;
+  final int? classId;
+  
+  const CustomScreen({super.key, this.studentClassId, this.classId});
 
   @override
   State<CustomScreen> createState() => _CustomScreenState();
 }
 
 class _CustomScreenState extends State<CustomScreen> {
-  String selectedValue = "១២ មករា ២០២៤";
+  int _currentMonthIndex = 0;
+  bool _isLoading = true;
 
-  final List<String> items = [
-    "១២ មករា ២០២៤",
-    "១៣ មករា ២០២៤",
-    "១៤ មករា ២០២៤",
+  Map<String, dynamic> _student = {};
+  String? _className;
+  String? _photoPath;
+  double _totalScore = 0;
+  double _average = 0;
+  int _rank = 0;
+  List<Map<String, dynamic>> _records = [];
+
+  final List<String> _months = [
+    'មករា',
+    'កុម្ភៈ',
+    'មីនា',
+    'មេសា',
+    'ឧសភា',
+    'មិថុនា',
+    'កក្កដា',
+    'សីហា',
+    'កញ្ញា',
+    'តុលា',
+    'វិច្ឆិកា',
+    'ធ្នូ',
   ];
-  final List<Map<String, dynamic>> subjects = [
-    {
-      "name": "គណិតវិទ្យា",
-      "teacher": "លោកគ្រូ. វិបុល",
-      "score": "៩០/១០០",
-      "grade": "ល្អណាស់",
-      "color": AppColors.success,
-      "icon": Icons.calculate,
-    },
-    {
-      "name": "ភាសាខ្មែរ",
-      "teacher": "អ្នកគ្រូ. ស្រីនាង",
-      "score": "៨៥/១០០",
-      "grade": "ល្អ",
-      "color": Colors.orange,
-      "icon": Icons.menu_book,
-    },
-    {
-      "name": "ភាសាអង់គ្លេស",
-      "teacher": "Mr. John",
-      "score": "៩៥/១០០",
-      "grade": "ល្អខ្លាំង",
-      "color": AppColors.success,
-      "icon": Icons.language,
-    },
-    {
-      "name": "រូបវិទ្យា",
-      "teacher": "លោកគ្រូ. ដារ៉ា",
-      "score": "៧៥/១០០",
-      "grade": "មធ្យម",
-      "color": Colors.red,
-      "icon": Icons.science,
-    },
-  ];
+
+  final ScoreRepo _scoreRepo = ScoreRepo();
+  final StudentClassRepo _studentClassRepo = StudentClassRepo();
+  final ClassRepo _classRepo = ClassRepo();
+
+  @override
+  void initState() {
+    super.initState();
+    _currentMonthIndex = DateTime.now().month - 1;
+    _loadScoreData();
+  }
+
+  Future<void> _loadScoreData() async {
+    try {
+      setState(() => _isLoading = true);
+      
+      if (widget.studentClassId == null || widget.classId == null) {
+        setState(() => _isLoading = false);
+        return;
+      }
+
+      final studentData = await _studentClassRepo.getStudentById(widget.studentClassId!);
+      
+      if (studentData != null) {
+        final classData = await _classRepo.getClassById(widget.classId!);
+        
+        setState(() {
+          _student = studentData;
+          _className = classData?['name'] ?? 'មិនបានកំណត់';
+          _photoPath = studentData['photo_path'] as String?;
+          _isLoading = false;
+        });
+        
+        await _loadMonthScores();
+      } else {
+        setState(() => _isLoading = false);
+      }
+    } catch (e) {
+      setState(() => _isLoading = false);
+    }
+  }
+
+  Future<void> _loadMonthScores() async {
+    try {
+      if (widget.studentClassId == null || widget.classId == null) return;
+
+      final scores = await _scoreRepo.getScoresByStudent(widget.studentClassId!);
+      final rank = await _scoreRepo.getRankInClass(widget.studentClassId!, widget.classId!);
+
+      final monthScores = scores.where((score) {
+        final createdAt = score['created_at'] as String?;
+        if (createdAt == null || createdAt.isEmpty) return false;
+        try {
+          final date = DateTime.parse(createdAt);
+          return date.month == _currentMonthIndex + 1;
+        } catch (e) {
+          return false;
+        }
+      }).toList();
+
+      double total = 0;
+      for (var score in monthScores) {
+        total += double.tryParse(score['score'].toString()) ?? 0;
+      }
+
+      double avg = monthScores.isEmpty ? 0 : total / monthScores.length;
+
+      setState(() {
+        _records = monthScores;
+        _rank = rank;
+        _totalScore = total;
+        _average = avg;
+      });
+    } catch (e) {
+      debugPrint('Error loading scores: $e');
+    }
+  }
+
+  void _previousMonth() {
+    if (_currentMonthIndex > 0) {
+      setState(() => _currentMonthIndex--);
+      _loadMonthScores();
+    }
+  }
+
+  void _nextMonth() {
+    if (_currentMonthIndex < 11) {
+      setState(() => _currentMonthIndex++);
+      _loadMonthScores();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[100],
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-        centerTitle: true,
-        title: const Text(
-          "របាយការណ៍",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
+    if (_isLoading) {
+      return Scaffold(
+        backgroundColor: AppColors.backgroundLight,
+        appBar: AppBar(
+          backgroundColor: AppColors.backgroundLight,
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          title: Text('លទ្ធផល', style: AppTextStyle.sectionTitle20),
+          centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: AppColors.primaryText),
+            onPressed: () => Navigator.pop(context),
           ),
+        ),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    return Scaffold(
+      backgroundColor: AppColors.backgroundLight,
+      appBar: AppBar(
+        backgroundColor: AppColors.backgroundLight,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        title: Text('លទ្ធផល', style: AppTextStyle.sectionTitle20),
+        centerTitle: true,
+        actions: const [
+          Padding(
+            padding: EdgeInsets.only(right: 12),
+            child: Icon(Icons.notifications_sharp, color: AppColors.primaryText),
+          ),
+        ],
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.primaryText),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _dateDropdown(),
+              const SizedBox(height: 12),
+              _buildProfileHeader(),
+              const SizedBox(height: 16),
+              _buildMonthSelector(),
+              const SizedBox(height: 16),
+              _buildStatsRow(),
               const SizedBox(height: 20),
-              _studentCard(),
-              const SizedBox(height: 15),
-              _rankDashboard(),
-              const SizedBox(height: 20),
-              _sectionHeader(),
-              const SizedBox(height: 15),
-              _subjectList(),
-              const SizedBox(height: 15),
-              _commentCard(
-                  'ដារ៉ាបង្ហាញពីការរីកចម្រើនគួរអោយកត់សម្គាល់លើមុខវិជ្ជាគណិតវិទ្យាក្នុងខែនេះទោះជាយ៉ាងណាក៏ដោយគាត់ត្រូវផ្ដោតអារម្មណ៍បន្ថែមទៀតលើមុខវិជ្ជាប្រវត្តិវិទ្យាជាទូទៅការសិក្សារបស់គាត់មានភាពល្អប្រសើរ!'),
-              SizedBox(height: 20),
-              _saveCard()
+              Text("ពិន្ទុតាមមុខវិជ្ជា", style: AppTextStyle.subtitle18),
+              const SizedBox(height: 12),
+              _buildScoreList(),
             ],
           ),
         ),
@@ -101,311 +200,307 @@ class _CustomScreenState extends State<CustomScreen> {
     );
   }
 
-  Widget _dateDropdown() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: Colors.grey.shade400),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: selectedValue,
-          isExpanded: true,
-          icon: const Icon(Icons.keyboard_arrow_down),
-          items: items.map((e) {
-            return DropdownMenuItem(
-              value: e,
-              child: Text(e, style: const TextStyle(fontSize: 14)),
-            );
-          }).toList(),
-          onChanged: (value) {
-            setState(() {
-              selectedValue = value!;
-            });
-          },
+  Widget _buildProfileHeader() {
+    final student = _student;
+    final photoPath = _photoPath;
+    return Row(
+      children: [
+        Container(
+          width: 50,
+          height: 50,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: AppColors.primaryBg,
+            border: Border.all(color: AppColors.primaryMain, width: 2),
+          ),
+          child: ClipOval(
+            child: (photoPath != null && photoPath.isNotEmpty)
+                ? Image.file(
+                    io.File(photoPath),
+                    fit: BoxFit.cover,
+                  )
+                : Image.asset(
+                    student['gender'] == 'ប្រុស' || student['gender'] == 'male'
+                        ? AppIcon.maleAvatar
+                        : AppIcon.femaleAvatar,
+                    fit: BoxFit.cover,
+                  ),
+          ),
         ),
-      ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    '${student['first_name'] ?? ''} ${student['last_name'] ?? ''}',
+                    style: AppTextStyle.subtitle18,
+                  ),
+                  const SizedBox(width: 4),
+                  Icon(Icons.keyboard_arrow_down,
+                      size: 20, color: AppColors.secondaryText),
+                ],
+              ),
+              const SizedBox(height: 2),
+              Text(
+                _className ?? '',
+                style: AppTextStyle.caption13Secondary,
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
-  Widget _studentCard() {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 60,
-            height: 60,
-            margin: const EdgeInsets.all(12),
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                image: NetworkImage(
-                    "https://cdn-icons-png.flaticon.com/512/149/149071.png"),
-                fit: BoxFit.cover,
-              ),
+  Widget _buildMonthSelector() {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            GestureDetector(
+              onTap: _previousMonth,
+              child: const Icon(Icons.chevron_left,
+                  size: 28, color: AppColors.primaryText),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children:[
-                Text(
-                  "ប៊ិន​ សុវណ្ណវង្ស",
-                  style: AppTextStyle.subtitle16.copyWith(color: AppColors.grey),
-                ),
-                SizedBox(height: 4),
-                Text(
-                  "ID: STU-2023-89. ថ្នាក់ទី ១២ ក",  
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 14,
+            const SizedBox(width: 8),
+            Text(
+              _months[_currentMonthIndex],
+              style: AppTextStyle.subtitle18,
+            ),
+            const SizedBox(width: 6),
+            Icon(Icons.calendar_today,
+                size: 18, color: AppColors.secondaryText),
+            const SizedBox(width: 8),
+            GestureDetector(
+              onTap: _nextMonth,
+              child: const Icon(Icons.chevron_right,
+                  size: 28, color: AppColors.primaryText),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStatsRow() {
+    return Row(
+      children: [
+        _buildStatCard(
+          icon: Icons.score,
+          iconColor: AppColors.primaryMain,
+          label: "សរុប",
+          value: _totalScore.toStringAsFixed(0),
+          unit: "ពិន្ទុ",
+          bgColor: AppColors.primaryBg,
+          valueBgColor: const Color(0xFFD6E9FF),
+          valueColor: AppColors.primaryMain,
+        ),
+        const SizedBox(width: 10),
+        _buildStatCard(
+          icon: Icons.emoji_events,
+          iconColor: const Color(0xFFFFB700),
+          label: "ឋាន",
+          value: _rank.toString(),
+          unit: "ក្នុងក្រុម",
+          bgColor: const Color(0xFFFFF3E0),
+          valueBgColor: const Color(0xFFFFE0B2),
+          valueColor: const Color(0xFFFFB700),
+        ),
+        const SizedBox(width: 10),
+        _buildStatCard(
+          icon: Icons.trending_up,
+          iconColor: AppColors.success,
+          label: "មធ្យម",
+          value: _average.toStringAsFixed(1),
+          unit: "ពិន្ទុ",
+          bgColor: const Color(0xFFE8F5E9),
+          valueBgColor: const Color(0xFFC8E6C9),
+          valueColor: AppColors.success,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStatCard({
+    required IconData icon,
+    required Color iconColor,
+    required String label,
+    required String value,
+    required String unit,
+    required Color bgColor,
+    required Color valueBgColor,
+    required Color valueColor,
+  }) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(AppNumber.radiusMedium),
+        ),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(icon, size: 16, color: iconColor),
+                const SizedBox(width: 4),
+                Flexible(
+                  child: Text(
+                    label,
+                    style: GoogleFonts.kantumruyPro(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: iconColor,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],
             ),
-          )
-        ],
+            const SizedBox(height: 8),
+            Text(
+              value,
+              style: GoogleFonts.kantumruyPro(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: valueColor,
+              ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              unit,
+              style: GoogleFonts.kantumruyPro(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                color: iconColor,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _sectionHeader() {
-    return Row(
-      children: [
-        Text("មុខវិជ្ជា", style: AppTextStyle.fontsize18),
-        const Spacer(),
-        Text("មើលទាំងអស់", style: AppTextStyle.til16),
-      ],
-    );
-  }
-
-  Widget _subjectList() {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: subjects.length,
-      itemBuilder: (context, index) {
-        final subject = subjects[index];
-
-        return Container(
-          height: 90,
-          margin: const EdgeInsets.only(bottom: 12),
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.blue[100],
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Icon(
-                  subject["icon"],
-                  color: AppColors.primaryMain,
-                  size: 35,
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(subject["name"], style: AppTextStyle.subtitle18),
-                    Text(
-                      "គ្រូបង្រៀន: ${subject["teacher"]}",
-                      style: AppTextStyle.bodySecondary,
-                    ),
-                  ],
-                ),
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(subject["score"], style: AppTextStyle.subtitle18),
-                  Text(
-                    subject["grade"],
-                    style: AppTextStyle.bodySecondary
-                        .copyWith(color: subject["color"]),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _commentCard(String comment) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text("មតិគ្រូបង្រៀន", style: AppTextStyle.subtitle18),
-        SizedBox(height: 15),
-        Container(
-          padding: const EdgeInsets.all(12),
-          margin: const EdgeInsets.only(bottom: 12),
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(6),
-          ),
+  Widget _buildScoreList() {
+    if (_records.isEmpty) {
+      return Container(
+        padding: const EdgeInsets.symmetric(vertical: 40),
+        child: Center(
           child: Text(
-            comment,
+            "គ្មានលទ្ធផលក្នុងខែនេះ",
             style: AppTextStyle.bodySecondary,
           ),
         ),
-      ],
-    );
-  }
+      );
+    }
 
-  Widget _saveCard() {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, AppRoutes.commentScreen);
-      },
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-        decoration: BoxDecoration(
-          color: AppColors.primaryMain,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Text(
-          "រក្សាទុក",
-          style: AppTextStyle.subtitle16.copyWith(color: AppColors.white),
-          textAlign: TextAlign.center,
-        ),
+    return Column(
+      children: List.generate(
+        _records.length,
+        (index) {
+          if (index > 0) {
+            return Column(
+              children: [
+                const SizedBox(height: 10),
+                _buildScoreItem(_records[index]),
+              ],
+            );
+          }
+          return _buildScoreItem(_records[index]);
+        },
       ),
     );
   }
 
-  Widget _rankDashboard() {
+  Widget _buildScoreItem(Map<String, dynamic> scoreData) {
+    final subject = scoreData['subject'] as String? ?? 'មិនបានកំណត់';
+    final scoreValue = double.tryParse(scoreData['score'].toString()) ?? 0;
+    final color = _getScoreColor(scoreValue);
+    
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(18),
+      width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColors.primaryMain,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: color, width: 1),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Row(
+          Container(
+            padding: const EdgeInsets.all(10),
+            height: 50,
+            width: 50,
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Center(
+              child: Text(
+                subject.isNotEmpty ? subject[0] : '?',
+                style: AppTextStyle.sectionTitle20.copyWith(color: color),
+              ),
+            ),
+          ),
+          const SizedBox(width: 15),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(subject, style: AppTextStyle.subtitle16),
+                const SizedBox(height: 5),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: LinearProgressIndicator(
+                    minHeight: 6,
+                    value: scoreValue / 100,
+                    backgroundColor: AppColors.primaryBg,
+                    valueColor: AlwaysStoppedAnimation<Color>(color),
+                  ),
+                )
+              ],
+            ),
+          ),
+          const SizedBox(width: 15),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text("ចំណាត់ថ្នាក់ក្នុងថ្នាក់",
-                  style:
-                      AppTextStyle.subtitle18.copyWith(color: AppColors.white)),
-              Spacer(),
-              Container(
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                  color: AppColors.primary300,
-                  shape: BoxShape.circle,
+              Text(
+                scoreValue.toStringAsFixed(0),
+                style: AppTextStyle.sectionTitle20.copyWith(
+                  color: color,
+                  fontWeight: FontWeight.bold,
                 ),
-                child:
-                    Icon(Icons.emoji_events, color: AppColors.white, size: 30),
+              ),
+              Text(
+                _getScoreGrade(scoreValue),
+                style: AppTextStyle.body.copyWith(color: color),
               )
-            ],
-          ),
-          SizedBox(height: 10),
-          Row(
-            children: [
-              Text("#៨ / ",
-                  style: AppTextStyle.screenTitle24
-                      .copyWith(color: AppColors.white)),
-              Text("៣២",
-                  style:
-                      AppTextStyle.subtitle16.copyWith(color: AppColors.white)),
-            ],
-          ),
-          SizedBox(height: 15),
-          Divider(
-            color: AppColors.white,
-            height: 1,
-          ),
-          SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "មធ្យមភាគ",
-                    style: AppTextStyle.subtitle16
-                        .copyWith(color: AppColors.white),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text("៨៥.៥",
-                      style: AppTextStyle.sectionTitle20
-                          .copyWith(color: AppColors.white))
-                ],
-              ),
-              Container(
-                height: 55,
-                width: 3,
-                decoration: BoxDecoration(
-                  color: AppColors.white,
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "សរុប",
-                    style: AppTextStyle.subtitle16
-                        .copyWith(color: AppColors.white),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text("៤៥០",
-                      style: AppTextStyle.sectionTitle20
-                          .copyWith(color: AppColors.white))
-                ],
-              ),
-              Container(
-                height: 55,
-                width: 3,
-                decoration: BoxDecoration(
-                  color: AppColors.white,
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "និទ្ទេស",
-                    style: AppTextStyle.subtitle16
-                        .copyWith(color: AppColors.white),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text("B",
-                      style: AppTextStyle.sectionTitle20
-                          .copyWith(color: AppColors.white))
-                ],
-              ),
             ],
           )
         ],
       ),
     );
+  }
+
+  Color _getScoreColor(double score) {
+    if (score >= 90) return AppColors.primaryMain;
+    if (score >= 80) return const Color(0xFF8BC34A);
+    if (score >= 70) return const Color(0xFFFFC107);
+    if (score >= 60) return const Color(0xFFFF9800);
+    return const Color(0xFFF44336);
+  }
+
+  String _getScoreGrade(double score) {
+    if (score >= 90) return 'ល្អណាស់';
+    if (score >= 80) return 'ល្អ';
+    if (score >= 70) return 'ល្អ';
+    if (score >= 60) return 'មធ្យម';
+    return 'ខ្សោយ';
   }
 }

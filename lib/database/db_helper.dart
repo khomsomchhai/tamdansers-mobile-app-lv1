@@ -229,7 +229,6 @@ class DbHelper {
         }
         if (oldVersion < 8) {
           await _createTblUserClass(db);
-          // Migrate existing class_id values from tbl_user into tbl_user_class
           final users = await db.query('tbl_user',
               columns: ['id', 'class_id'], where: 'class_id IS NOT NULL');
           for (final u in users) {
@@ -249,12 +248,10 @@ class DbHelper {
               'ALTER TABLE tbl_student_class ADD COLUMN linked_user_id INTEGER');
         }
         if (oldVersion < 10) {
-          // Create tbl_student_class entries for existing self-joined students
-          // who don't already have a linked row
           final userClasses = await db.rawQuery(
             '''
             SELECT uc.user_id, uc.class_id, uc.joined_at,
-                   u.first_name, u.last_name, u.gender, u.phone, u.email
+            u.first_name, u.last_name, u.gender, u.phone, u.email
             FROM tbl_user_class uc
             INNER JOIN tbl_user u ON uc.user_id = u.id
             WHERE NOT EXISTS (

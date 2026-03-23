@@ -77,10 +77,8 @@ class UserRepo {
   Future<List<Map<String, dynamic>>> searchParents(String query) async {
     final db = await DbHelper().initDatabase();
 
-    // Normalize query for partial matching
     final normalized = query.trim();
 
-    // Search parents by phone, email, or name fields.
     final result = await db.rawQuery(
       '''
       SELECT *
@@ -213,10 +211,8 @@ class UserRepo {
       },
       conflictAlgorithm: ConflictAlgorithm.ignore,
     );
-    // Also keep tbl_user.class_id updated to the latest joined class
     await db.update('tbl_user', {'class_id': classId},
         where: 'id = ?', whereArgs: [userId]);
-    // Link any pre-added placeholder in tbl_student_class
     await _linkPlaceholder(db, userId, classId);
     return result != 0;
   }
@@ -229,7 +225,6 @@ class UserRepo {
 
     List<Map<String, dynamic>> match = [];
 
-    // 1. Match by email
     final email = user['email'] as String?;
     if (email != null && email.isNotEmpty) {
       match = await db.query(
@@ -239,7 +234,6 @@ class UserRepo {
       );
     }
 
-    // 2. Match by phone
     if (match.isEmpty) {
       final phone = user['phone'] as String?;
       if (phone != null && phone.isNotEmpty) {
@@ -251,7 +245,6 @@ class UserRepo {
       }
     }
 
-    // 3. Match by full name (case-insensitive)
     if (match.isEmpty) {
       match = await db.rawQuery(
         'SELECT * FROM tbl_student_class WHERE class_id = ? AND LOWER(first_name) = LOWER(?) AND LOWER(last_name) = LOWER(?) AND linked_user_id IS NULL',
@@ -260,7 +253,6 @@ class UserRepo {
     }
 
     if (match.isNotEmpty) {
-      // Link the existing placeholder
       await db.update(
         'tbl_student_class',
         {'linked_user_id': userId},
@@ -268,7 +260,6 @@ class UserRepo {
         whereArgs: [match.first['id']],
       );
     } else {
-      // No placeholder — create one so this student appears in attendance/homework
       final existing = await db.query(
         'tbl_student_class',
         where: 'class_id = ? AND linked_user_id = ?',
@@ -307,9 +298,6 @@ class UserRepo {
     return rows.map((r) => r['class_id'] as int).toList();
   }
 
-  /// Scan tbl_student_class for rows matching this user's phone or email,
-  /// then auto-insert tbl_user_class + link the placeholder.
-  /// Called at signup and login so students see teacher-added classes.
   Future<void> autoLinkClasses(int userId) async {
     final db = await DbHelper().initDatabase();
     final users =
@@ -322,7 +310,6 @@ class UserRepo {
     final email = user['email'] as String?;
     final phone = user['phone'] as String?;
 
-    // Find all tbl_student_class rows that match by email or phone
     List<Map<String, dynamic>> matches = [];
     if (email != null && email.isNotEmpty) {
       matches.addAll(await db.query(
@@ -337,7 +324,6 @@ class UserRepo {
         where: "phone = ? AND linked_user_id IS NULL",
         whereArgs: [phone],
       );
-      // Avoid duplicates if same row matched by both
       final existingIds = matches.map((m) => m['id']).toSet();
       for (final m in phoneMatches) {
         if (!existingIds.contains(m['id'])) matches.add(m);
@@ -346,7 +332,6 @@ class UserRepo {
 
     for (final sc in matches) {
       final classId = sc['class_id'] as int;
-      // Insert tbl_user_class (ignore if already exists)
       await db.insert(
         'tbl_user_class',
         {
@@ -356,7 +341,6 @@ class UserRepo {
         },
         conflictAlgorithm: ConflictAlgorithm.ignore,
       );
-      // Link the placeholder row
       await db.update(
         'tbl_student_class',
         {'linked_user_id': userId},
