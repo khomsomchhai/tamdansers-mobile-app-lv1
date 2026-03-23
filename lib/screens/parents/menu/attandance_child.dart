@@ -92,8 +92,6 @@ class _AttandanceScreenState extends State<AttandanceScreen> {
             debugPrint('Error loading teacher: $e');
           }
         }
-        
-        // Add class name to student data
         final student = {
           ...studentData,
           'class_name': classData?['name'] ?? 'មិនបានកំណត់'
