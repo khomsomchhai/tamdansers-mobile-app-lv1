@@ -10,7 +10,7 @@ The application was built with a **responsive layout**, ensuring a smooth user e
 
 The application supports **three user roles**, each with its own dedicated dashboard and features.
 
-#### 🎓 Student
+#### Student
 
 The Student Dashboard provides quick access to essential academic information, including:
 
@@ -24,7 +24,7 @@ The Student Dashboard provides quick access to essential academic information, i
 
 The interface is designed to help students easily access their daily learning activities and school information.
 
-#### 👨‍🏫 Teacher
+#### Teacher
 
 The Teacher Dashboard is designed to simplify classroom management through features such as:
 
@@ -37,7 +37,7 @@ The Teacher Dashboard is designed to simplify classroom management through featu
 
 These features provide teachers with an organized and efficient workflow for managing their classes.
 
-#### 👨‍👩‍👧 Parent
+#### Parent
 
 The Parent Dashboard enables parents to monitor their child's academic progress by providing access to:
 
